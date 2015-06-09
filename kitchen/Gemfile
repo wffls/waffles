@@ -1,0 +1,4 @@
+gem "test-kitchen"
+gem "kitchen-docker"
+gem "busser-bats"
+gem "busser-bash"

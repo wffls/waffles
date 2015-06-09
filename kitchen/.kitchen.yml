@@ -1,0 +1,25 @@
+---
+driver:
+  name: docker
+
+driver_config:
+  volume: /root/.waffles:/root/.waffles
+  provision_command: curl -L https://www.opscode.com/chef/install.sh | bash
+
+provisioner:
+  name: shell
+
+platforms:
+  - name: ubuntu-12.04
+    provisioner:
+      script: test/provision/shell/ubuntu1204.sh
+  - name: ubuntu-14.04
+    provisioner:
+      script: test/provision/shell/ubuntu1404.sh
+
+
+suites:
+  - name: ubuntu
+    includes:
+      - ubuntu-12.04
+      - ubuntu-14.04
