@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.0 - June 11, 2015
+
+Remote Deployment (push) Updates.
+
+Enhancements were made to the push-based remote deployment:
+
+* Able to handle explicit IPv6 addresses
+* Able to specify a destination directory
+* Able to specify if sudo should be used remotely
+
 ## 0.1.0 - June 9, 2015
 
 Waffles initial release.

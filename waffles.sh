@@ -12,9 +12,12 @@ function help {
   echo "  -d: debug"
   echo "  -n: noop"
   echo "  -r: role, stored in site/roles"
-  echo "  -s: remote server to connect to through SSH"
   echo "  -t: run in test mode. exit 1 if changes were made"
-  echo "  -u: the remote user to connect as through SSH"
+  echo
+  echo "  -s: (push) remote server to connect to through SSH"
+  echo "  -u: (push) the remote user to connect as through SSH. Default: root"
+  echo "  -y: (push) whether or not to use sudo remotely. Default: false"
+  echo "  -z: (push) the remote directory to copy Waffles to. Default: /etc/waffles"
   echo
   echo "Usage:"
   echo "  waffles.sh -r <role>: apply a role to the local server"
@@ -42,7 +45,11 @@ function apply_role_remotely {
 
   local _include
   for i in "${!stdlib_remote_copy[@]}"; do
-    _include="$_include $WAFFLES_DIR/site/$i"
+    if [[ $i =~ sh$ ]]; then
+      _include="$_include --include=site/$i"
+    else
+      _include="$_include --include=site/$i/**"
+    fi
   done
 
   local _args
@@ -54,8 +61,31 @@ function apply_role_remotely {
     _args="$_args -d"
   fi
 
-  rsync -azvR $WAFFLES_DIR/waffles.* "$WAFFLES_DIR/lib" "$WAFFLES_DIR/site/roles/${role}.sh" $_include "$WAFFLES_SSH_USER@$server":/
-  ssh "$WAFFLES_SSH_USER@$server" "cd $WAFFLES_DIR && bash waffles.sh $_args -r $role"
+  # To deploy to explicit IPv6 addresses, use the bracket form ([fd00:abcd::1]) and let the following code take care of the rest.
+  local _rsync_server
+  local _ssh_server
+  if [[ $server =~ [][] ]]; then
+    server="${server/[/}"
+    server="${server/]/}"
+    _rsync_server="[$WAFFLES_SSH_USER@$server]"
+    _ssh_server="$WAFFLES_SSH_USER@$server"
+  else
+    _rsync_server="$WAFFLES_SSH_USER@$server"
+    _ssh_server="$WAFFLES_SSH_USER@$server"
+  fi
+
+  # Determine if "sudo" is required
+  local _remote_waffles_command
+  if [[ $WAFFLES_REMOTE_SUDO == true ]]; then
+    _remote_rsync_path="sudo rsync"
+    _remote_ssh_command="sudo bash waffles.sh"
+  else
+    _remote_rsync_path="rsync"
+    _remote_ssh_command="bash waffles.sh"
+  fi
+
+  rsync -azv --rsync-path="$_remote_rsync_path" --include='**/' --include='waffles.sh' --include='waffles.conf' --include='lib/**' $_include --include="site/roles/${role}.sh" --exclude='*' --prune-empty-dirs $WAFFLES_DIR/ "$_rsync_server:$WAFFLES_REMOTE_DIR"
+  ssh $_ssh_server "cd $WAFFLES_REMOTE_DIR && $_remote_ssh_command $_args -r $role"
 }
 
 # Main Script
@@ -88,7 +118,7 @@ fi
 source "$WAFFLES_DIR/lib/init.sh"
 
 # Parse options
-while getopts :dhnr:s:tu: opt; do
+while getopts :dhnr:s:tu:z:y opt; do
   case $opt in
     d)
       WAFFLES_DEBUG=1
@@ -112,6 +142,12 @@ while getopts :dhnr:s:tu: opt; do
       ;;
     u)
       WAFFLES_SSH_USER="$OPTARG"
+      ;;
+    z)
+      WAFFLES_REMOTE_DIR="$OPTARG"
+      ;;
+    y)
+      WAFFLES_REMOTE_SUDO="true"
       ;;
     :)
       echo "Option -$OPTARG requires an argument." >&2
