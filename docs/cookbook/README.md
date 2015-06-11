@@ -4,6 +4,8 @@
 
 * [Installing Waffles](install.md)
 * [Environment Variables](environment-vars.md)
+* [Waffles and LXC](waffles-and-lxc.md)
+* [Waffles and Terraform](waffles-and-terraform.md)
 
 ## Waffles and Data
 
