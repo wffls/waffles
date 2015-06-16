@@ -75,7 +75,7 @@ function stdlib.apt.read {
   fi
 
   # check to see if it's installed at all
-  stdlib.mute dpkg -s ${options[package]}
+  stdlib.debug_mute dpkg -s ${options[package]}
   if [[ $? == 1 ]]; then
     stdlib_current_state="absent"
     return

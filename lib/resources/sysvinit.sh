@@ -53,7 +53,7 @@ function stdlib.sysvinit.read {
       return 1
     fi
   else
-    stdlib.mute /etc/init.d/${options[name]} status
+    stdlib.debug_mute /etc/init.d/${options[name]} status
     if [[ $? != 0 ]]; then
       stdlib_current_state="stopped"
       return
