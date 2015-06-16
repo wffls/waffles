@@ -61,14 +61,14 @@ function stdlib.file_line.read {
     return
   fi
 
-  stdlib.mute "grep -qx -- '${options[line]}' '${options[file]}'"
+  stdlib.debug_mute "grep -qx -- '${options[line]}' '${options[file]}'"
   if [[ $? == 1 ]]; then
     stdlib_current_state="absent"
     return
   fi
 
   if [[ -n ${options[match]} ]]; then
-    stdlib.mute "sed -n -e '/${options[match]}/p' '${options[file]}'"
+    stdlib.debug_mute "sed -n -e '/${options[match]}/p' '${options[file]}'"
     if [[ $? == 1 ]]; then
       stdlib.error "No match for ${options[match]} in ${options[file]}"
       if [[ $WAFFLES_EXIT_ON_ERROR == true ]]; then

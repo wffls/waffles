@@ -67,11 +67,24 @@ function stdlib.subtitle {
 
 
 # stdlib.mute turns off command output
+# and prints the command being run.
 function stdlib.mute {
   if stdlib.noop? ; then
     stdlib.info "(noop) $@"
   else
     stdlib.info "Running \"$@\""
+    eval $@ &>/dev/null
+    return $?
+  fi
+}
+
+# stdlib.debug_mute turns off command output
+# and prints the command being run at debug level
+function stdlib.debug_mute {
+  if stdlib.noop? ; then
+    stdlib.debug "(noop) $@"
+  else
+    stdlib.debug "Running \"$@\""
     eval $@ &>/dev/null
     return $?
   fi
