@@ -1,6 +1,6 @@
 # == Name
 #
-# policy
+# rabbitmq.policy
 #
 # === Description
 #
@@ -16,7 +16,9 @@
 #
 # === Example
 #
+# ```shell
 # rabbitmq.policy --name openstack-ha --vhost openstack --policy '{"ha-mode":"all"}'
+# ```
 #
 function rabbitmq.policy {
   stdlib.subtitle "rabbitmq.policy"

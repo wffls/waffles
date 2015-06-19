@@ -1,0 +1,33 @@
+site_name: Waffles
+site_url: 'https://waffles.terrarum.net'
+site_description: 'A simple configuration management system written in Bash'
+repo_url: 'https://github.com/jtopjian/waffles'
+theme: 'readthedocs'
+
+pages:
+  - Home: 'index.md'
+  - About: 'about.md'
+  - Quickstart: 'quickstart.md'
+  - Installation: 'cookbook/install.md'
+  - Concepts: 'concepts.md'
+  - Usage: 'usage.md'
+  - Modules: 'modules.md'
+  - Functions:
+    - 'Types': 'functions/types.md'
+    - 'system': 'functions/system.md'
+    - 'catalog': 'functions/catalog.md'
+    - 'options': 'functions/options.md'
+    - 'augeas': 'functions/augeas.md'
+    - 'mysql': 'functions/mysql.md'
+  - Cookbook:
+    - 'Environment Variables': 'cookbook/environment-vars.md'
+    - 'Deploying a MySQL Server': 'cookbook/deploying-a-mysql-server.md'
+    - 'Deploying a MySQL Galera Cluster': 'cookbook/deploying-a-mysql-galera-cluster.md'
+    - 'Deploying a Consul Cluster': 'cookbook/deploying-a-consul-cluster.md'
+    - 'Overriding Data': 'cookbook/override-data.md'
+    - 'Referencing Data from Data': 'cookbook/referencing-data-from-data.md'
+    - 'Testing Waffles with Test Kitchen': 'cookbook/testing-with-test-kitchen.md'
+    - 'Waffles and LXC': 'cookbook/waffles-and-lxc.md'
+    - 'Waffles and Terraform': 'cookbook/waffles-and-terraform.md'
+  - Resources:
+    - Internals: 'resources.md'

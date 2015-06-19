@@ -16,9 +16,11 @@
 #
 # === Example
 #
+# ```shell
 # augeas.json_array --file /root/web.json --path / --key foo --value "1 2 3 4"
 #
 # {"foo":[1,2,3]}
+# ```
 #
 function augeas.json_array {
   stdlib.subtitle "augeas.json_array"

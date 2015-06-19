@@ -1,6 +1,6 @@
 # == Name
 #
-# debconf
+# stdlib.debconf
 #
 # === Description
 #
@@ -18,8 +18,10 @@
 #
 # === Example
 #
+# ```shell
 # stdlib.debconf --package mysql-server --question mysql-server/root_password
 #                --vtype password --value mypassword
+# ```
 #
 function stdlib.debconf {
   stdlib.subtitle "stdlib.debconf_selections"

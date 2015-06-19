@@ -16,7 +16,9 @@
 #
 # === Example
 #
+# ```shell
 # augeas.host --name example.com --ip 192.168.1.1 --aliases www,db
+# ```
 #
 function augeas.host {
   stdlib.subtitle "augeas.host"

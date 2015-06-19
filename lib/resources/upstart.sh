@@ -1,6 +1,6 @@
 # == Name
 #
-# upstart
+# stdlib.upstart
 #
 # === Description
 #
@@ -13,7 +13,9 @@
 #
 # === Example
 #
+# ```shell
 # stdlib.upstart --name memcached
+# ```
 #
 function stdlib.upstart {
   stdlib.subtitle $FUNCNAME

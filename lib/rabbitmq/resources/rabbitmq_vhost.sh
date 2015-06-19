@@ -1,6 +1,6 @@
 # == Name
 #
-# vhost
+# rabbitmq.vhost
 #
 # === Description
 #
@@ -13,7 +13,9 @@
 #
 # === Example
 #
+# ```shell
 # rabbitmq.vhost --vhost openstack
+# ```
 #
 function rabbitmq.vhost {
   stdlib.subtitle "rabbitmq.vhost"

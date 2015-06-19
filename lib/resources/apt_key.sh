@@ -1,6 +1,6 @@
 # == Name
 #
-# apt_key
+# stdlib.apt_key
 #
 # === Description
 #
@@ -16,7 +16,9 @@
 #
 # === Example
 #
+# ```shell
 # stdlib.apt_key --key 1C4CBDCDCD2EFD2A
+# ```
 #
 function stdlib.apt_key {
   stdlib.subtitle "stdlib.apt_key"

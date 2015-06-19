@@ -16,9 +16,11 @@
 #
 # === Example
 #
+# ```shell
 # augeas.json_dict --file /root/web.json --path / --key "foo" --value _dict
 # augeas.json_dict --file /root/web.json --path / --key "foo" --value _array
 # augeas.json_dict --file /root/web.json --path / --key "foo" --value "bar"
+# ```
 #
 function augeas.json_dict {
   stdlib.subtitle "augeas.json_dict"

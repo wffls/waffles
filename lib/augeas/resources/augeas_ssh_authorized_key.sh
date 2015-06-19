@@ -17,7 +17,9 @@
 #
 # === Example
 #
+# ```shell
 # augeas.ssh_authorized_key --name jdoe --key "AAAAB3NzaC1..." --type ssh-rsa --comment "jdoe@laptop"
+# ```
 #
 # === Notes
 #

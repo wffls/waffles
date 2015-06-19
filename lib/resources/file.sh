@@ -1,6 +1,6 @@
 # == Name
 #
-# file
+# stdlib.file
 #
 # === Description
 #
@@ -18,7 +18,9 @@
 #
 # === Example
 #
+# ```shell
 # stdlib.file --file /etc/foobar --content "Hello, World!"
+# ```
 #
 function stdlib.file {
   stdlib.subtitle "stdlib.file"

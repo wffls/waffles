@@ -1,6 +1,6 @@
 # == Name
 #
-# database
+# mysql.database
 #
 # === Description
 #
@@ -15,7 +15,9 @@
 #
 # === Example
 #
+# ```shell
 # mysql.database --name root --password password
+# ```
 #
 function mysql.database {
   stdlib.subtitle "mysql.database"

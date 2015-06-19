@@ -15,7 +15,9 @@
 #
 # === Example
 #
+# ```shell
 # augeas.file_line --file /root/foo.txt --line "Hello, World!"
+# ```
 #
 function augeas.file_line {
   stdlib.subtitle "augeas.file_line"
