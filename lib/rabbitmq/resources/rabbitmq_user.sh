@@ -1,6 +1,6 @@
 # == Name
 #
-# user
+# rabbitmq.user
 #
 # === Description
 #
@@ -15,7 +15,9 @@
 #
 # === Example
 #
+# ```shell
 # rabbitmq.user --user root --password password
+# ```
 #
 function rabbitmq.user {
   stdlib.subtitle "rabbitmq.user"

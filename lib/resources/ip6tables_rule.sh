@@ -1,6 +1,6 @@
 # == Name
 #
-# ip6tables_rule
+# stdlib.ip6tables_rule
 #
 # === Description
 #
@@ -18,7 +18,9 @@
 #
 # === Example
 #
+# ```shell
 # stdlib.ip6tables_rule --priority 100 --name "allow all from 192.168.1.0/24" --rule "-m tcp -s 192.168.1.0/24" --action ACCEPT
+# ```
 #
 function stdlib.ip6tables_rule {
   stdlib.subtitle "stdlib.ip6tables_rule"

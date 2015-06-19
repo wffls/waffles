@@ -1,6 +1,6 @@
 # == Name
 #
-# grant
+# mysql.grant
 #
 # === Description
 #
@@ -16,7 +16,9 @@
 #
 # === Example
 #
+# ```shell
 # mysql.grant --user nova --host localhost --database nova --privileges "SELECT, UPDATE, DELETE"
+# ```
 #
 function mysql.grant {
   stdlib.subtitle "mysql.grant"

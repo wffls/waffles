@@ -15,7 +15,9 @@
 #
 # === Example
 #
+# ```shell
 # augeas.mail_alias --account root --destination /dev/null
+# ```
 #
 function augeas.mail_alias {
   stdlib.subtitle "augeas.mail_alias"

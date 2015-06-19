@@ -1,6 +1,6 @@
 # == Name
 #
-# cron
+# stdlib.cron
 #
 # === Description
 #
@@ -20,7 +20,9 @@
 #
 # === Example
 #
+# ```shell
 # stdlib.cron --name foobar --cmd /path/to/some/report --minute "*/5"
+# ```
 #
 # === TODO
 #

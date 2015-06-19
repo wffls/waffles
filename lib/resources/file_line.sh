@@ -1,6 +1,6 @@
 # == Name
 #
-# file_line
+# stdlib.file_line
 #
 # === Description
 #
@@ -16,8 +16,10 @@
 #
 # === Example
 #
+# ```shell
 # stdlib.file_line --file /etc/memcached.conf \
 #                  --line "-l 0.0.0.0" --match "^-l"
+# ```
 #
 function stdlib.file_line {
   stdlib.subtitle "stdlib.file_line"

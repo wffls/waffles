@@ -15,8 +15,10 @@
 #
 # === Example
 #
+# ```shell
 # augeas.aptconf --setting APT::Periodic::Update-Package-Lists --value 1 --file /etc/apt/apt.conf/20auto-upgrades
 # augeas.aptconf --setting APT::Periodic::Unattended-Upgrade --value 1 --file /etc/apt/apt.conf/20auto-upgrades
+# ```
 #
 function augeas.aptconf {
   stdlib.subtitle "augeas.aptconf"

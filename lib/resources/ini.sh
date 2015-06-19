@@ -1,6 +1,6 @@
 # == Name
 #
-# ini
+# stdlib.ini
 #
 # === Description
 #
@@ -16,7 +16,9 @@
 #
 # === Example
 #
+# ```shell
 # stdlib.ini --file /etc/nova/nova.conf --section DEFAULT --option debug --value True
+# ```
 #
 function stdlib.ini {
   stdlib.subtitle "stdlib.ini"

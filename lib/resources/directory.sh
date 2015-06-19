@@ -1,6 +1,6 @@
 # == Name
 #
-# directory
+# stdlib.directory
 #
 # === Description
 #
@@ -19,7 +19,9 @@
 #
 # === Example
 #
+# ```shell
 # stdlib.directory --source modules/mymod/files/foo --name /var/lib/foo
+# ```
 #
 function stdlib.directory {
   stdlib.subtitle "stdlib.directory"

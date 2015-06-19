@@ -1,6 +1,6 @@
 # == Name
 #
-# user_permissions
+# rabbitmq.user_permissions
 #
 # === Description
 #
@@ -16,7 +16,9 @@
 #
 # === Example
 #
+# ```shell
 # rabbitmq.user_permission --user_permission root --password password
+# ```
 #
 function rabbitmq.user_permissions {
   stdlib.subtitle "rabbitmq.user_permissions"

@@ -1,6 +1,6 @@
 # == Name
 #
-# groupadd
+# stdlib.groupadd
 #
 # === Description
 #
@@ -14,7 +14,9 @@
 #
 # === Example
 #
+# ```shell
 # stdlib.groupadd --group jdoe --gid 999
+# ```
 #
 function stdlib.groupadd {
   stdlib.subtitle "stdlib.groupadd"

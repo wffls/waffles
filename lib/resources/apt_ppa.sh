@@ -1,6 +1,6 @@
 # == Name
 #
-# apt_ppa
+# stdlib.apt_ppa
 #
 # === Description
 #
@@ -14,7 +14,9 @@
 #
 # === Example
 #
+# ```shell
 # stdlib.apt_ppa --ppa ppa:chris-lea/redis-server
+# ```
 #
 function stdlib.apt_ppa {
   stdlib.subtitle "stdlib.apt_ppa"

@@ -1,6 +1,6 @@
 # == Name
 #
-# apt
+# stdlib.apt
 #
 # === Description
 #
@@ -14,7 +14,9 @@
 #
 # === Example
 #
+# ```shell
 # stdlib.apt --package tmux --version latest
+# ```
 #
 function stdlib.apt {
   stdlib.subtitle "stdlib.apt"

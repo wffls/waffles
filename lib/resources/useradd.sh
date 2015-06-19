@@ -1,6 +1,6 @@
 # == Name
 #
-# useradd
+# stdlib.useradd
 #
 # === Description
 #
@@ -22,8 +22,10 @@
 #
 # === Example
 #
+# ```shell
 # stdlib.useradd --user jdoe --uid 999 --createhome true --homedir /home/jdoe
 #                --shell /bin/bash --comment "John Doe"
+# ```
 #
 function stdlib.useradd {
   stdlib.subtitle "stdlib.useradd"

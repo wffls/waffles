@@ -1,6 +1,6 @@
 # == Name
 #
-# user
+# mysql.user
 #
 # === Description
 #
@@ -17,7 +17,9 @@
 #
 # === Example
 #
+# ```shell
 # mysql.user --user root --password password
+# ```
 #
 function mysql.user {
   stdlib.subtitle "mysql.user"

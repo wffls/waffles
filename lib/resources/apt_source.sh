@@ -1,6 +1,6 @@
 # == Name
 #
-# apt_source
+# stdlib.apt_source
 #
 # === Description
 #
@@ -18,8 +18,10 @@
 #
 # === Example
 #
+# ```shell
 # stdlib.apt_source --name lxc --uri http://ppa.launchpad.net/ubuntu-lxc/stable/ubuntu \
 #                   --distribution trusty --component main
+# ```
 #
 function stdlib.apt_source {
   stdlib.subtitle "stdlib.apt_source"

@@ -20,7 +20,9 @@
 #
 # === Example
 #
+# ```shell
 # augeas.cron --name metrics --minute "*/5" --cmd /usr/local/bin/collect_metrics.sh
+# ```
 #
 function augeas.cron {
   stdlib.subtitle "augeas.cron"

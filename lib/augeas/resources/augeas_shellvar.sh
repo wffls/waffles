@@ -15,7 +15,9 @@
 #
 # === Example
 #
+# ```shell
 # augeas.shellvar --key foo --value bar --file /root/vars
+# ```
 #
 function augeas.shellvar {
   stdlib.subtitle "augeas.shellvar"

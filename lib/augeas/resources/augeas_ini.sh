@@ -16,7 +16,9 @@
 #
 # === Example
 #
+# ```shell
 # augeas.ini --key foo --value bar --file /root/vars
+# ```
 #
 function augeas.ini {
   stdlib.subtitle "augeas.ini"

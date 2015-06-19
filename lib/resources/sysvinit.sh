@@ -1,6 +1,6 @@
 # == Name
 #
-# sysvinit
+# stdlib.sysvinit
 #
 # === Description
 #
@@ -13,7 +13,9 @@
 #
 # === Example
 #
+# ```shell
 # stdlib.sysvinit --name memcached
+# ```
 #
 function stdlib.sysvinit {
   stdlib.subtitle $FUNCNAME
