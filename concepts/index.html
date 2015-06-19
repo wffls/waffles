@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Concepts - Waffles</title>
+  
+
+  <link rel="shortcut icon" href="../img/favicon.ico">
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Concepts";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script>
+  <script src="../js/theme.js"></script> 
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Waffles</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="..">Home</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../about/">About</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../quickstart/">Quickstart</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../cookbook/install/">Installation</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Concepts</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#waffles-from-scratch">Waffles from Scratch</a></li>
+                
+                    <li><a class="toctree-l4" href="#lets-create-a-simple-memcached-server-in-bash">Let's Create a Simple memcached Server in Bash</a></li>
+                
+                    <li><a class="toctree-l4" href="#conclusion">Conclusion</a></li>
+                
+            
+            </ul>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../usage/">Usage</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../modules/">Modules</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Functions</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../functions/types/">Types</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../functions/system/">system</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../functions/catalog/">catalog</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../functions/options/">options</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../functions/augeas/">augeas</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../functions/mysql/">mysql</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Cookbook</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cookbook/environment-vars/">Environment Variables</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cookbook/deploying-a-mysql-server/">Deploying a MySQL Server</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cookbook/deploying-a-mysql-galera-cluster/">Deploying a MySQL Galera Cluster</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cookbook/deploying-a-consul-cluster/">Deploying a Consul Cluster</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cookbook/override-data/">Overriding Data</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cookbook/referencing-data-from-data/">Referencing Data from Data</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cookbook/testing-with-test-kitchen/">Testing Waffles with Test Kitchen</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cookbook/waffles-and-lxc/">Waffles and LXC</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cookbook/waffles-and-terraform/">Waffles and Terraform</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Resources</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/">Internals</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.apt_key/">stdlib.apt_key</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.apt_ppa/">stdlib.apt_ppa</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.apt/">stdlib.apt</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.apt_source/">stdlib.apt_source</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.cron/">stdlib.cron</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.debconf/">stdlib.debconf</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.directory/">stdlib.directory</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.file_line/">stdlib.file_line</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.file/">stdlib.file</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.groupadd/">stdlib.groupadd</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.ini/">stdlib.ini</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.ip6tables_rule/">stdlib.ip6tables_rule</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.iptables_rule/">stdlib.iptables_rule</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.sysvinit/">stdlib.sysvinit</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.upstart/">stdlib.upstart</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.useradd/">stdlib.useradd</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/augeas.aptconf/">augeas.aptconf</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/augeas.cron/">augeas.cron</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/augeas.file_line/">augeas.file_line</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/augeas.host/">augeas.host</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/augeas.ini/">augeas.ini</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/augeas.json_array/">augeas.json_array</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/augeas.json_dict/">augeas.json_dict</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/augeas.mail_alias/">augeas.mail_alias</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/augeas.shellvar/">augeas.shellvar</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/augeas.ssh_authorized_key/">augeas.ssh_authorized_key</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/mysql.database/">mysql.database</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/mysql.grant/">mysql.grant</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/mysql.user/">mysql.user</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/rabbitmq.policy/">rabbitmq.policy</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/rabbitmq.user_permissions/">rabbitmq.user_permissions</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/rabbitmq.user/">rabbitmq.user</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/rabbitmq.vhost/">rabbitmq.vhost</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Waffles</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Concepts</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        
+          <a href="https://github.com/jtopjian/waffles" class="icon icon-github"> Edit on GitHub</a>
+        
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="waffles-from-scratch">Waffles from Scratch</h1>
+<p>To illustrate Waffles's design, I'll walk through the creation of a Bash script that can successfully run multiple times on a single server and only make changes to the server when required.</p>
+<h2 id="lets-create-a-simple-memcached-server-in-bash">Let's Create a Simple memcached Server in Bash</h2>
+<p><code>memcached</code> is a very simple service. It's a single daemon with a simple configuration file installed from a single package.</p>
+<p>Let's say we want to create a <code>memcached</code> server on a Linux container or virtual machine. Rather than running the commands manually, we'll create a Bash script to do the work. This will serve two purposes:</p>
+<ol>
+<li>Documentation</li>
+<li>Repeatable process</li>
+</ol>
+<h3 id="the-first-draft">The First Draft</h3>
+<p>The initial Bash script would look something like:</p>
+<pre><code class="shell">#!/bin/bash
+
+apt-get install -y memcached
+</code></pre>
+
+<h3 id="the-second-draft">The Second Draft</h3>
+<p>This works, and doing <code>ps aux</code> shows that <code>memcached</code> is indeed running. But then we notice that <code>memcached</code> is only listening on <code>localhost</code>:</p>
+<pre><code class="shell">$ netstat nap | grep 11211
+</code></pre>
+
+<p>Since this <code>memcached</code> service will be used by other services on the network, we need to change <code>memcached</code>'s interface binding to <code>0.0.0.0</code>. The following should work:</p>
+<pre><code class="shell">$ sed -i -e '/^-l 127.0.0.1$/c -l 0.0.0.0' /etc/memcached.conf
+$ /etc/init.d/memcached restart
+</code></pre>
+
+<p>And once that's tested on the command line, we add it to our script:</p>
+<pre><code class="shell">#!/bin/bash
+
+apt-get install -y memcached
+sed -i -e '/^-l 127.0.0.1$/c -l 0.0.0.0' /etc/memcached.conf
+/etc/init.d/memcached restart
+</code></pre>
+
+<p>Astute readers will see an issue. In order for us to test this script, we need to run it again. However, the script is going to report that <code>memcached</code> is already installed and an unnecessary restart of <code>memcached</code> will take place.</p>
+<p>There are two ways to resolve this issue:</p>
+<p>The first is by starting over from scratch and running the script on a new server. There's a lot of merit to this method. For example, you can be sure that the exact steps work in sequence on new servers. However, the entire process could take a long time for some situations. Also, what if this <code>memcached</code> service was in production? Either you'd have to take the <code>memcached</code> service down temporarily while the new service builds or you'd have to find some way of seamlessly adding in the new service while removing the old. While there's benefit to this (which is similar to the current popularity of "microservices"), it may not always be a possible solution.</p>
+<p>The second way is to alter the script so that changes are only made if required. If a change does not need to be made, nothing happens.</p>
+<p>Let's say it's not possible for us to rebuild from scratch. Therefore, we'll opt for the second option.</p>
+<h3 id="the-third-draft">The Third Draft</h3>
+<p>In order to run our Bash script against a running service without causing (too much of) a disruption, we must ensure that each step is executed only if it needs to be. This means that before any command has run, we must check to see what the current state of the system is, compare it to the change we want to make, and only make the change if the system state does not match.</p>
+<p>By doing this, our Bash script becomes a "state declaration" that describes how the <code>memcached</code> service should be configured when the script is done running. This is known as <a href="http://en.wikipedia.org/wiki/Idempotence">Idempotence</a> in Configuration Management.</p>
+<p>So let's make our basic Bash script more idempotent:</p>
+<pre><code class="shell">dpkg -s memcached &amp;&gt;/dev/null
+if [ $? == 1 ]; then
+  echo &quot;Installing memcached&quot;
+  apt-get install -y memcached
+fi
+
+grep -q '^-l 127.0.0.1' /etc/memcached.conf
+if [ $? == 0 ]; then
+  echo &quot;Updating memcached.conf and restarting it.&quot;
+  sed -i -e '/^-l 127.0.0.1$/c -l 0.0.0.0' /etc/memcached.conf
+  /etc/init.d/memcached restart
+fi
+</code></pre>
+
+<p>With this in place, we can now execute this script multiple times on the same server, virtual machine, or container, and if a step has already been done it will not happen again.</p>
+<h3 id="the-fourth-draft">The Fourth Draft</h3>
+<p>Having to do a bunch of <code>grep</code>s and other checks can become very tedious. Waffles tries to resolve this by including a Standard Library of common tasks. Using the Waffles Standard Library, the above script can be re-written as:</p>
+<pre><code class="shell">#!/bin/bash
+
+source ./waffles.conf
+source ./lib/init.sh
+
+stdlib.apt --package memcached
+stdlib.file_line --name memcached.conf/listen --file /etc/memcached.conf --line &quot;-l 0.0.0.0&quot; --match &quot;^-l&quot;
+stdlib.sysvinit --name memcached
+
+if [ &quot;$stdlib_state_change&quot; == true ]; then
+  /etc/init.d/memcached restart
+fi
+</code></pre>
+
+<p>There's nothing magical about these commands. They're a collection of standard Bash functions that sweep all of the messy <code>grep</code>s under the carpet. You can see the full collection of Standard Library functions in the <code>lib/</code> directory.</p>
+<h3 id="the-fifth-draft">The Fifth Draft</h3>
+<p>The core <code>memcached</code> service is up and running, but there's still a few more tasks that need to be done. For example, maybe we want to create some users:</p>
+<pre><code class="shell">stdlib.groupadd --group jdoe --gid 999
+stdlib.useradd --user jdoe --uid 999 --gid 999 --comment &quot;John&quot; --shell /bin/bash --homedir /home/jdoe --createhome true
+</code></pre>
+
+<p><code>stdlib.useradd</code> is another Waffles Standard Library function that enables an easy way to create and manage a user on a server.</p>
+<p>Looking at the above command, there are a lot of settings that are hard-coded. If we end up creating a <code>redis</code> server that also needs the <code>jdoe</code> user, we could just copy that line verbatim, but what about a scenario where the <code>uid</code> must be changed to <code>500</code>? Then we'd need to change every occurrence of <code>999</code> to <code>500</code>. In large environments, there's a chance some changes would be missed.</p>
+<p>To resolve this issue, Waffles allows settings such as this (known as <em>data</em>) to be stored in data files.</p>
+<p>A simple way of using data is to just throw all settings into a file called <code>site/data/common.sh</code>.</p>
+<p>Let's add a user:</p>
+<pre><code class="shell">data_users=(
+  jdoe
+)
+
+declare -Ag data_user_info
+data_user_info=(
+  [jdoe|uid]=999
+  [jdoe|gid]=999
+  [jdoe|comment]=&quot;John doe&quot;
+  [jdoe|homedir]=&quot;/home/jdoe&quot;
+  [jdoe|shell]=&quot;/bin/bash&quot;
+  [jdoe|create_home]=true
+)
+</code></pre>
+
+<p>Waffles data variables can be named anything, but if you want to follow the project standards, have the variables start with <code>data_</code>.</p>
+<p>With all of this in place, the fifth draft now looks like:</p>
+<pre><code class="shell">#!/bin/bash
+
+source ./waffles.conf
+source ./lib/init.sh
+
+stdlib.data common
+
+for user in &quot;${data_users[@]}&quot;; do
+
+  homedir=&quot;${data_user_info[${user}|homedir]}&quot;
+  uid=&quot;${data_user_info[${user}|uid]}&quot;
+  gid=&quot;${data_user_info[${user}|gid]}&quot;
+  comment=&quot;${data_user_info[${user}|comment]}&quot;
+  shell=&quot;${data_user_info[${user}|shell]}&quot;
+  create_home=&quot;${data_user_info[${user}|create_home]}&quot;
+
+  stdlib.groupadd --group &quot;$user&quot; --gid &quot;$gid&quot;
+  stdlib.useradd --state present --user &quot;$user&quot; --uid &quot;$uid&quot; --gid &quot;$gid&quot; --comment &quot;$comment&quot; --homedir &quot;$homedir&quot; --shell &quot;$shell&quot; --createhome &quot;$createhome&quot;
+
+done
+
+stdlib.apt --package memcached
+stdlib.file_line --name memcached.conf/listen --file /etc/memcached.conf --line &quot;-l 0.0.0.0&quot; --match &quot;^-l&quot;
+stdlib.sysvinit --name memcached
+
+if [ &quot;$stdlib_state_change&quot; == true ]; then
+  /etc/init.d/memcached restart
+fi
+</code></pre>
+
+<h3 id="the-sixth-draft">The Sixth Draft</h3>
+<p>The block of user data can be re-used in other scripts. It'd be best if we just moved it out into its own separate script. By repeating this process, we can create a library of re-usable components. Final scripts then become "compositions" of the collection of scripts.</p>
+<p>Create the directory structure <code>site/profiles/common/scripts</code> and add the following to <code>site/profiles/common/scripts/users.sh</code></p>
+<pre><code class="shell">for user in &quot;${data_users[@]}&quot;; do
+
+  homedir=&quot;${data_user_info[${user}|homedir]}&quot;
+  uid=&quot;${data_user_info[${user}|uid]}&quot;
+  gid=&quot;${data_user_info[${user}|gid]}&quot;
+  comment=&quot;${data_user_info[${user}|comment]}&quot;
+  shell=&quot;${data_user_info[${user}|shell]}&quot;
+  create_home=&quot;${data_user_info[${user}|create_home]}&quot;
+
+  stdlib.groupadd --group &quot;$user&quot; --gid &quot;$gid&quot;
+  stdlib.useradd --state present --user &quot;$user&quot; --uid &quot;$uid&quot; --gid &quot;$gid&quot; --comment &quot;$comment&quot; --homedir &quot;$homedir&quot; --shell &quot;$shell&quot; --createhome &quot;$createhome&quot;
+
+done
+</code></pre>
+
+<p>And so the sixth draft now looks like:</p>
+<pre><code class="shell">#!/bin/bash
+
+source ./waffles.conf
+source ./lib/init.sh
+
+stdlib.data common
+stdlib.profile common/users
+
+stdlib.apt --package memcached
+stdlib.file_line --name memcached.conf/listen --file /etc/memcached.conf --line &quot;-l 0.0.0.0&quot; --match &quot;^-l&quot;
+stdlib.sysvinit --name memcached
+
+if [ &quot;$stdlib_state_change&quot; == true ]; then
+  /etc/init.d/memcached restart
+fi
+</code></pre>
+
+<p>You can create this script inside the Waffles directory (where <code>waffles.conf</code> is located), and run it like so:</p>
+<pre><code class="shell">bash test.sh
+</code></pre>
+
+<p>When you run it for the first time on a new server, it'll add the group, user, and set up <code>memcached</code>. Run it multiple times and note how those same actions were not performed since the script detected that no changes needed to be made.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>At this point, we've effectively recreated the core of Waffles. The rest of controls how Waffles runs and where to find various files that Waffles needs to read.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../usage/" class="btn btn-neutral float-right" title="Usage"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../cookbook/install/" class="btn btn-neutral" title="Installation"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../cookbook/install/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../usage/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Usage - Waffles</title>
+  
+
+  <link rel="shortcut icon" href="../img/favicon.ico">
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Usage";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script>
+  <script src="../js/theme.js"></script> 
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Waffles</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="..">Home</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../about/">About</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../quickstart/">Quickstart</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../cookbook/install/">Installation</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../concepts/">Concepts</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Usage</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#how-to-use-waffles">How to Use Waffles</a></li>
+                
+                    <li><a class="toctree-l4" href="#roles">Roles</a></li>
+                
+                    <li><a class="toctree-l4" href="#data">Data</a></li>
+                
+                    <li><a class="toctree-l4" href="#profiles">Profiles</a></li>
+                
+                    <li><a class="toctree-l4" href="#applying-roles">Applying Roles</a></li>
+                
+            
+            </ul>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../modules/">Modules</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Functions</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../functions/types/">Types</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../functions/system/">system</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../functions/catalog/">catalog</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../functions/options/">options</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../functions/augeas/">augeas</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../functions/mysql/">mysql</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Cookbook</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cookbook/environment-vars/">Environment Variables</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cookbook/deploying-a-mysql-server/">Deploying a MySQL Server</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cookbook/deploying-a-mysql-galera-cluster/">Deploying a MySQL Galera Cluster</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cookbook/deploying-a-consul-cluster/">Deploying a Consul Cluster</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cookbook/override-data/">Overriding Data</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cookbook/referencing-data-from-data/">Referencing Data from Data</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cookbook/testing-with-test-kitchen/">Testing Waffles with Test Kitchen</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cookbook/waffles-and-lxc/">Waffles and LXC</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cookbook/waffles-and-terraform/">Waffles and Terraform</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Resources</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/">Internals</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.apt_key/">stdlib.apt_key</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.apt_ppa/">stdlib.apt_ppa</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.apt/">stdlib.apt</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.apt_source/">stdlib.apt_source</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.cron/">stdlib.cron</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.debconf/">stdlib.debconf</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.directory/">stdlib.directory</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.file_line/">stdlib.file_line</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.file/">stdlib.file</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.groupadd/">stdlib.groupadd</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.ini/">stdlib.ini</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.ip6tables_rule/">stdlib.ip6tables_rule</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.iptables_rule/">stdlib.iptables_rule</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.sysvinit/">stdlib.sysvinit</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.upstart/">stdlib.upstart</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/stdlib.useradd/">stdlib.useradd</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/augeas.aptconf/">augeas.aptconf</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/augeas.cron/">augeas.cron</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/augeas.file_line/">augeas.file_line</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/augeas.host/">augeas.host</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/augeas.ini/">augeas.ini</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/augeas.json_array/">augeas.json_array</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/augeas.json_dict/">augeas.json_dict</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/augeas.mail_alias/">augeas.mail_alias</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/augeas.shellvar/">augeas.shellvar</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/augeas.ssh_authorized_key/">augeas.ssh_authorized_key</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/mysql.database/">mysql.database</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/mysql.grant/">mysql.grant</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/mysql.user/">mysql.user</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/rabbitmq.policy/">rabbitmq.policy</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/rabbitmq.user_permissions/">rabbitmq.user_permissions</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/rabbitmq.user/">rabbitmq.user</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../resources/rabbitmq.vhost/">rabbitmq.vhost</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Waffles</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Usage</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        
+          <a href="https://github.com/jtopjian/waffles" class="icon icon-github"> Edit on GitHub</a>
+        
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="how-to-use-waffles">How to Use Waffles</h1>
+<h2 id="roles">Roles</h2>
+<p>In Waffles, a "role" is a name that identifies a unique configuration set. Examples of roles could be:</p>
+<ul>
+<li><code>memcached</code></li>
+<li><code>memcached_apt</code></li>
+<li><code>memcached_yum</code></li>
+<li><code>memcached_yum_lxc</code></li>
+<li><code>memcached_and_redis</code></li>
+</ul>
+<p>Role names are totally up to you -- just make sure <em>you</em> understand that applying the <code>memcached_yum_lxc</code> role to an Ubuntu-based KVM virtual machine probably won't work.</p>
+<p>For the sake of simplicity, we'll call our role <code>memcached</code>.</p>
+<p>Roles are defined in <code>site/roles</code>. <code>site</code> is a special directory that will hold the configuration for your <em>site</em> or environment. You most likely wouldn't be able to transfer <code>site</code> to a new environment and have it run without some level of modification.</p>
+<p>Note: The location of the <code>site</code> directory can be changed in <code>waffles.conf</code>, but at this time, Waffles requires it to be in the main <code>waffles</code> directory.</p>
+<p>A role is really just a Bash script, and if you'd prefer to just use Waffles to organize a collection of deployment scripts, go for it.</p>
+<p>To use roles most effectively, think of them as glue between <em>data</em> and <em>profiles</em>:</p>
+<ul>
+<li>Data is settings that make your site unique: user IDs, config file settings, package versions, etc.</li>
+<li>Profiles are small snippets of scripts that make up a unique service configuration.</li>
+</ul>
+<p>A very simple role could look like this:</p>
+<pre><code class="shell"># Reads data from site/data/common.sh
+stdlib.data common
+
+# Reads data from site/data/memcached.sh
+stdlib.data memcached
+
+# Reads site/profiles/common/scripts/users.sh
+stdlib.profile common/users
+
+# Reads site/profiles/common/scripts/packages.sh
+stdlib.profile common/packages
+
+# Reads site/profiles/memcached/scripts/init.sh
+stdlib.profile memcached
+</code></pre>
+
+<h2 id="data">Data</h2>
+<p>Scripts stored in <code>site/data</code> are, again, just regular Bash scripts. It's only by convension that you store data, and not programming logic, in these files.</p>
+<p>So what is "data"? It's all of the settings that make your site or environment unique:</p>
+<ul>
+<li>IP Addresses</li>
+<li>Usernames, UIDs, GIDs</li>
+<li>Package versions</li>
+<li>Firewall rules</li>
+</ul>
+<p>Data files looks like this:</p>
+<pre><code class="shell">data_memcached_listen=&quot;0.0.0.0&quot;
+
+declare -Ag data_user_info
+data_user_info=(
+  [jdoe|uid]=999
+  [jdoe|gid]=999
+  [jdoe|comment]=&quot;John doe&quot;
+  [jdoe|homedir]=&quot;/home/jdoe&quot;
+  [jdoe|shell]=&quot;/bin/bash&quot;
+  [jdoe|create_home]=true
+)
+</code></pre>
+
+<p>You can name the variables anything you like, though the Waffles naming convension is to start each variable with <code>data_</code>.</p>
+<p>Note: Bash associative arrays <em>must</em> be declared as global variables. This is because all files are sourced inside a Bash function and, for whatever reason, associative arrays are not visible outside of a function (unlike all other Bash variable types).</p>
+<h3 id="hierarchial-data">Hierarchial Data</h3>
+<p>By declaring multiple data files in your role, you can create a hierarchy of data. For example:</p>
+<pre><code class="shell">stdlib.data common
+stdlib.data memcached
+</code></pre>
+
+<p>In the above, common settings that are applicable to <em>any</em> role are stored in <code>site/data/common.sh</code>. Only data relevant to the <code>memcached</code> service is stored in <code>site/data/memcached.sh</code>.</p>
+<p>You can even declare the same variable in both data files. The data file declared last will overwrite all previous declarations and win.</p>
+<p>Finally, you can reference data from a previously declared data file. You can't, however, reference variables in data files <em>before</em> they were declared. To clarify: <code>site/data/memcached.sh</code> can reference data from <code>site/data/common.sh</code>, but not vice versa.</p>
+<h3 id="data-structure">Data Structure</h3>
+<p>The placement of data files is flexible. You can do any of the following:</p>
+<pre><code class="shell">stdlib.data common =&gt; data/common.sh
+stdlib.data common =&gt; data/common/init.sh
+stdlib.data common/users =&gt; data/common/users.sh
+stdlib.data memcached =&gt; data/memcached.sh
+stdlib.data memcached =&gt; data/memcached/init.sh
+</code></pre>
+
+<h2 id="profiles">Profiles</h2>
+<p>Profiles are small snippets of bash scripts that are called from Roles. These profiles are run in a top-down fashion. Waffles does not support any other method of order.</p>
+<p>It's possible to call Profiles from other Profiles, but that's not an encouraged practice.</p>
+<p>Profiles are meant to be shared among multiple roles. This easily makes sense for profiles like <code>common/users</code>, but when would you re-use <code>memcached</code>? How about between a development and production environment? The same profile could be used in both roles and it would be the job of the data to provide the information that makes each environment different:</p>
+<p><strong>Development Memcached</strong></p>
+<pre><code class="shell">stdlib.data common
+stdlib.data development/memcached
+
+stdlib.profiles common/users
+stdlib.profiles common/packages
+stdlib.profiles memcached
+</code></pre>
+
+<p><strong>Production Memcached</strong></p>
+<pre><code class="shell">stdlib.data common
+stdlib.data production/memcached
+
+stdlib.profiles common/users
+stdlib.profiles common/packages
+stdlib.profiles memcached
+</code></pre>
+
+<p>Waffles does not enforce this pattern -- you are free to design your roles however you like.</p>
+<h3 id="profile-structure">Profile Structure</h3>
+<p>Unlike Data and Roles, Profiles have a standard structure to them:</p>
+<pre><code class="shell">consul/
+├── files
+│   └── consul.conf
+└── scripts
+    ├── install_linux.sh
+    └── server.sh
+</code></pre>
+
+<p>Static files go under <code>files</code> while scripts go under <code>scripts</code>.</p>
+<p>When using the <code>stdlib.file</code> resource, you can use the <code>--source</code> option to copy files to their destination. The <code>--source</code> option is restricted to only being able to copy from the <code>files</code> directory.</p>
+<p>When declaring profiles in roles, the following translations happen:</p>
+<pre><code class="shell">stdlib.profiles common/users =&gt; profiles/common/scripts/users.sh
+stdlib.profiles common/packages =&gt; profiles/common/scripts/packages.sh
+stdlib.profiles memcached =&gt; profiles/memcached/scripts/init.sh
+stdlib.profiles memcached/utils =&gt; profiles/memcached/scripts/utils.sh
+</code></pre>
+
+<h2 id="applying-roles">Applying Roles</h2>
+<p>Waffles supports two ways of applying roles:</p>
+<h3 id="local-execution">Local Execution</h3>
+<p>You can run <code>waffles.sh</code> directly on a node and Waffles will apply the role to that node. This is most useful when you copy the entire contents of the <code>waffles</code> directory to a node.</p>
+<h3 id="remote-execution-push">Remote Execution (push)</h3>
+<p>It's possible to run Waffles on a remote node by pushing the configuration via rsync and SSH. To do this, set the environment variable <code>STREAM=1</code>. For example:</p>
+<pre><code class="shell">$ waffles.sh -s www.example.com -r web
+</code></pre>
+
+<p>Note: at this time, both the Waffles server and destination node must have rsync installed.</p>
+<h3 id="remote-execution-pull">Remote Execution (pull)</h3>
+<p>Waffles does not support pull-based deployment yet.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../modules/" class="btn btn-neutral float-right" title="Modules"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../concepts/" class="btn btn-neutral" title="Concepts"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../concepts/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../modules/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+
+</body>
+</html>

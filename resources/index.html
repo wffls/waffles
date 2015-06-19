@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Internals - Waffles</title>
+  
+
+  <link rel="shortcut icon" href="../img/favicon.ico">
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Internals";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script>
+  <script src="../js/theme.js"></script> 
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Waffles</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="..">Home</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../about/">About</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../quickstart/">Quickstart</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../cookbook/install/">Installation</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../concepts/">Concepts</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../usage/">Usage</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../modules/">Modules</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Functions</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../functions/types/">Types</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../functions/system/">system</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../functions/catalog/">catalog</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../functions/options/">options</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../functions/augeas/">augeas</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../functions/mysql/">mysql</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Cookbook</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cookbook/environment-vars/">Environment Variables</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cookbook/deploying-a-mysql-server/">Deploying a MySQL Server</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cookbook/deploying-a-mysql-galera-cluster/">Deploying a MySQL Galera Cluster</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cookbook/deploying-a-consul-cluster/">Deploying a Consul Cluster</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cookbook/override-data/">Overriding Data</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cookbook/referencing-data-from-data/">Referencing Data from Data</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cookbook/testing-with-test-kitchen/">Testing Waffles with Test Kitchen</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cookbook/waffles-and-lxc/">Waffles and LXC</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cookbook/waffles-and-terraform/">Waffles and Terraform</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Resources</span></li>
+
+        
+            
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Internals</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#waffles-resources">Waffles Resources</a></li>
+                
+                    <li><a class="toctree-l4" href="#location">Location</a></li>
+                
+                    <li><a class="toctree-l4" href="#enabling-non-standard-resources">Enabling Non-Standard Resources</a></li>
+                
+                    <li><a class="toctree-l4" href="#anatomy-of-a-resource">Anatomy of a Resource</a></li>
+                
+                    <li><a class="toctree-l4" href="#state-changes">State Changes</a></li>
+                
+                    <li><a class="toctree-l4" href="#examples">Examples</a></li>
+                
+            
+            </ul>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="stdlib.apt_key/">stdlib.apt_key</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="stdlib.apt_ppa/">stdlib.apt_ppa</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="stdlib.apt/">stdlib.apt</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="stdlib.apt_source/">stdlib.apt_source</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="stdlib.cron/">stdlib.cron</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="stdlib.debconf/">stdlib.debconf</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="stdlib.directory/">stdlib.directory</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="stdlib.file_line/">stdlib.file_line</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="stdlib.file/">stdlib.file</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="stdlib.groupadd/">stdlib.groupadd</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="stdlib.ini/">stdlib.ini</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="stdlib.ip6tables_rule/">stdlib.ip6tables_rule</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="stdlib.iptables_rule/">stdlib.iptables_rule</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="stdlib.sysvinit/">stdlib.sysvinit</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="stdlib.upstart/">stdlib.upstart</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="stdlib.useradd/">stdlib.useradd</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="augeas.aptconf/">augeas.aptconf</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="augeas.cron/">augeas.cron</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="augeas.file_line/">augeas.file_line</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="augeas.host/">augeas.host</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="augeas.ini/">augeas.ini</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="augeas.json_array/">augeas.json_array</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="augeas.json_dict/">augeas.json_dict</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="augeas.mail_alias/">augeas.mail_alias</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="augeas.shellvar/">augeas.shellvar</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="augeas.ssh_authorized_key/">augeas.ssh_authorized_key</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="mysql.database/">mysql.database</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="mysql.grant/">mysql.grant</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="mysql.user/">mysql.user</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="rabbitmq.policy/">rabbitmq.policy</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="rabbitmq.user_permissions/">rabbitmq.user_permissions</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="rabbitmq.user/">rabbitmq.user</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="rabbitmq.vhost/">rabbitmq.vhost</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Waffles</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Resources &raquo;</li>
+        
+      
+    
+    <li>Internals</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        
+          <a href="https://github.com/jtopjian/waffles" class="icon icon-github"> Edit on GitHub</a>
+        
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="waffles-resources">Waffles Resources</h1>
+<p>This document will cover how resources are used in Waffles.</p>
+<h2 id="location">Location</h2>
+<p>All resources are stored in the <code>$WAFFLES_DIR/lib</code> directory:</p>
+<ul>
+<li>The Standard Library of resources is located in <code>$WAFFLES_DIR/lib/resources</code>.</li>
+<li>Augeas-based resources are located in <code>$WAFFLES_DIR/lib/augeas</code>.</li>
+<li>MySQL-based resources are located in <code>$WAFFLES_DIR/lib/mysql</code>.</li>
+<li>RabbitMQ-based resources are located in <code>$WAFFLES_DIR/lib/rabbitmq</code>.</li>
+</ul>
+<h2 id="enabling-non-standard-resources">Enabling Non-Standard Resources</h2>
+<p>By default, only the Standard Library is enabled in Waffles. To enable the other resources, use the following functions:</p>
+<ul>
+<li>Augeas: <code>stdlib.enable_augeas</code></li>
+<li>MySQL: <code>stdlib.enable_mysql</code></li>
+<li>RabbitMQ: <code>stdlib.enable_rabbitmq</code></li>
+</ul>
+<h2 id="anatomy-of-a-resource">Anatomy of a Resource</h2>
+<p>All resources share much of the same code. In the future, resources may be refactored to account for a lot of this shared code.</p>
+<h3 id="header">Header</h3>
+<p>Each resource has a detailed comment header. This header describes what the resource does, what parameters it takes, how to use it, and any comments.</p>
+<h3 id="function-resourcename">function resource.name</h3>
+<p>The next part of a resource is the first "function". This first function is named after the resource name. So any time you use a resource, you're actually just calling a Bash function.</p>
+<p>The first thing done inside this function is to call a "subtitle" with <code>stdlib.subtitle</code>. Subtitles serve two purposes:</p>
+<ol>
+<li>They set the name to be printed when running Waffles.</li>
+<li>They reset an internal flag for changes made in the resource. This flag is called <code>stdlib_resource_change</code>. See the "State Changes" section for more details.</li>
+</ol>
+<p>Next, an <code>options</code> variable is declared. It is important that this variable is declared in each resource. If not, then the resource will share variables with the last called resource. After the <code>options</code> variable is declared, any parameters for the resource are declared. Finally, variables are checked via <code>stdlib.options.parse_options</code>. All logic related to <code>options</code> can be found in <code>$WAFFLES_DIR/lib/options.sh</code>.</p>
+<p>After options, a catalog entry is made.</p>
+<p>Next, any optional custom logic is defined. This usually includes local variables just for the resource or ensuring that correctly formatted parameters were given.</p>
+<p>The last section of this function determines the state of the resource by calling <code>function.name.read</code> and comparing it against the declared state of the resource. For example, if the state of the resource is "absent" but it should be "present", or if the resource is "present" but it should be "absent".</p>
+<p>The rest of the resource is made up of four standard functions:</p>
+<ul>
+<li>function.name.read</li>
+<li>function.name.create</li>
+<li>function.name.update</li>
+<li>function.name.delete</li>
+</ul>
+<p>Some resources contain extra functions, but they always tie back into those standard four. Sometimes <code>function.name.update</code> doesn't exist, and the call in the <code>stdlib_current_state</code> case statement just points to <code>fuction.name.create</code>. Or it's possible to combine a <code>function.name.delete</code> with <code>function.name.create</code> for an update.</p>
+<p>So in summary, the skeleton of a function is really just:</p>
+<ul>
+<li>function.name</li>
+<li>function.name.read</li>
+<li>function.name.create</li>
+<li>function.name.update (optional)</li>
+<li>function.name.delete</li>
+</ul>
+<p>If you create a resource that conforms to those five functions, it'll work just fine in Waffles.</p>
+<h3 id="function-resourcenameread">function resource.name.read</h3>
+<p>The <code>read</code> function determines the current state of the resource. For example, <code>stdlib.apt.read</code> determines if the package is installed, and if so, what version is installed.</p>
+<h3 id="function-resourcenamecreate">function resource.name.create</h3>
+<p>The <code>create</code> function does whatever is required to create the the resource. For example, <code>stdlib.apt.create</code> installs a package via <code>apt</code> and <code>stdlib.file_line.create</code> adds a line to a given file either by <code>echo</code> or <code>sed</code>.</p>
+<p>It's important to try to stick with a core philosophy of Waffles: use standard nix utilities for the creation of resources.</p>
+<h3 id="function-resourcenameupdate">function resource.name.update</h3>
+<p>If the work required to update a resource is different than creating a resource, use the <code>update</code> function. However, if it's easier to simply delete the resource and recreate it, then do that instead of an update function. Just don't use that method as an excuse.</p>
+<h3 id="function-resourcenamedelete">function resource.name.delete</h3>
+<p>This function deletes the resource. For example, <code>stdlib.apt.delete</code> will actually remove the package.</p>
+<h2 id="state-changes">State Changes</h2>
+<p>After you call a resource, you can check the status of the <code>stdlib_resource_change</code> flag. If it is true, then a change happened when you called the resource. For example:</p>
+<pre><code class="shell">stdlib.apt --package sl --version latest
+
+if [[ $stdlib_resource_change == &quot;true&quot; ]]; then
+  stdlib.info &quot;Package sl was installed or upgraded.&quot;
+fi
+</code></pre>
+
+<p>Similar to <code>stdlib_resource_change</code> is <code>stdlib_state_change</code>. <code>stdlib_state_change</code> works in the exact same way, but it is reset when a call to <code>stdlib.title</code> is made. You usually use <code>stdlib.title</code> at the beginning of Profiles.</p>
+<h2 id="examples">Examples</h2>
+<p>Use the Standard Library, Augeas, MySQL, and RabbitMQ resources as examples of how resources are built.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="stdlib.apt_key/" class="btn btn-neutral float-right" title="stdlib.apt_key"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../cookbook/waffles-and-terraform/" class="btn btn-neutral" title="Waffles and Terraform"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../cookbook/waffles-and-terraform/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="stdlib.apt_key/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+
+</body>
+</html>
