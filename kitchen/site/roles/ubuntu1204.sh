@@ -33,3 +33,7 @@ stdlib.file_line --name memcached.conf/memory --file /etc/memcached.conf --line 
 
 stdlib.info "sysvinit"
 stdlib.sysvinit --name memcached
+
+stdlib.info "git"
+stdlib.apt --package git-core
+stdlib.git --name /root/.dotfiles --source https://github.com/jtopjian/dotfiles

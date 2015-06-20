@@ -41,6 +41,7 @@ pages:
     - stdlib.directory: 'resources/stdlib.directory.md'
     - stdlib.file_line: 'resources/stdlib.file_line.md'
     - stdlib.file: 'resources/stdlib.file.md'
+    - stdlib.git: 'resources/stdlib.git.md'
     - stdlib.groupadd: 'resources/stdlib.groupadd.md'
     - stdlib.ini: 'resources/stdlib.ini.md'
     - stdlib.ip6tables_rule: 'resources/stdlib.ip6tables_rule.md'
