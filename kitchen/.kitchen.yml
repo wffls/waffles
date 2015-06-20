@@ -19,7 +19,9 @@ platforms:
 
 
 suites:
-  - name: ubuntu
+  - name: ubuntu1204
     includes:
       - ubuntu-12.04
+  - name: ubuntu1404
+    includes:
       - ubuntu-14.04
