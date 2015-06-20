@@ -1,6 +1,7 @@
 site_name: Waffles
 site_url: 'https://waffles.terrarum.net'
 site_description: 'A simple configuration management system written in Bash'
+site_dir: 'mkdocs-site'
 repo_url: 'https://github.com/jtopjian/waffles'
 theme: 'readthedocs'
 
