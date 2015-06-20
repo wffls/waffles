@@ -826,6 +826,36 @@
             "title": "Example"
         }, 
         {
+            "location": "/resources/stdlib.git/", 
+            "text": "stdlib.git\n\n\nDescription\n\n\nManage a git repository\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The name (path) of the git repo destination. Required.\n\n\nsource: The URI of the source git repo. Required.\n\n\nbranch: The branch to checkout. Optional. Default: master.\n\n\ntag: The tag to checkout. Optional.\n\n\ncommit: the commit to checkout. Optional.\n\n\nowner: The owner of the repo. Default: root.\n\n\ngroup: The group owner of the repo. Default: root.\n\n\n\n\nExample\n\n\ngit --state latest --name /root/.dotfiles --source https://github.com/jtopjian/dotfiles\n\n\n\n\nNotes\n\n\nIf state is set to \"latest\", Waffles will do a \ngit pull\n if it's able to.\n\n\nThe order of checkout preferences is:\n\n\n\n\ncommit\n\n\ntag\n\n\nbranch", 
+            "title": "stdlib.git"
+        }, 
+        {
+            "location": "/resources/stdlib.git/#stdlibgit", 
+            "text": "", 
+            "title": "stdlib.git"
+        }, 
+        {
+            "location": "/resources/stdlib.git/#description", 
+            "text": "Manage a git repository", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/stdlib.git/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  name: The name (path) of the git repo destination. Required.  source: The URI of the source git repo. Required.  branch: The branch to checkout. Optional. Default: master.  tag: The tag to checkout. Optional.  commit: the commit to checkout. Optional.  owner: The owner of the repo. Default: root.  group: The group owner of the repo. Default: root.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/stdlib.git/#example", 
+            "text": "git --state latest --name /root/.dotfiles --source https://github.com/jtopjian/dotfiles", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/stdlib.git/#notes", 
+            "text": "If state is set to \"latest\", Waffles will do a  git pull  if it's able to.  The order of checkout preferences is:   commit  tag  branch", 
+            "title": "Notes"
+        }, 
+        {
             "location": "/resources/stdlib.groupadd/", 
             "text": "stdlib.groupadd\n\n\nDescription\n\n\nManages groups\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\ngroup: The group. Required. namevar.\n\n\ngid: The gid of the group. Optional.\n\n\n\n\nExample\n\n\nstdlib.groupadd --group jdoe --gid 999", 
             "title": "stdlib.groupadd"
