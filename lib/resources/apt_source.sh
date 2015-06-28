@@ -27,13 +27,13 @@ function stdlib.apt_source {
   stdlib.subtitle "stdlib.apt_source"
 
   local -A options
-  stdlib.options.set_option state        "present"
-  stdlib.options.set_option name         "__required__"
-  stdlib.options.set_option uri          "__required__"
-  stdlib.options.set_option distribution "__required__"
-  stdlib.options.set_option component    "__required__"
-  stdlib.options.set_option include_src  "false"
-  stdlib.options.set_option refresh      "true"
+  stdlib.options.create_option state        "present"
+  stdlib.options.create_option name         "__required__"
+  stdlib.options.create_option uri          "__required__"
+  stdlib.options.create_option distribution "__required__"
+  stdlib.options.create_option component    "__required__"
+  stdlib.options.create_option include_src  "false"
+  stdlib.options.create_option refresh      "true"
   stdlib.options.parse_options "$@"
 
   stdlib.catalog.add "stdlib.apt_source/${options[name]}"

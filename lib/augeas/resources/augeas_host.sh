@@ -33,11 +33,11 @@ function augeas.host {
   fi
 
   local -A options
-  stdlib.options.set_option state   "present"
-  stdlib.options.set_option name    "__required__"
-  stdlib.options.set_option ip      "__required__"
-  stdlib.options.set_option aliases ""
-  stdlib.options.set_option file    "/etc/hosts"
+  stdlib.options.create_option state   "present"
+  stdlib.options.create_option name    "__required__"
+  stdlib.options.create_option ip      "__required__"
+  stdlib.options.create_option aliases ""
+  stdlib.options.create_option file    "/etc/hosts"
   stdlib.options.parse_options "$@"
 
   stdlib.catalog.add "augeas.host/${options[name]}"

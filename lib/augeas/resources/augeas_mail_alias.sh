@@ -32,10 +32,10 @@ function augeas.mail_alias {
   fi
 
   local -A options
-  stdlib.options.set_option state       "present"
-  stdlib.options.set_option account     "__required__"
-  stdlib.options.set_option destination "__required__"
-  stdlib.options.set_option file        "/etc/aliases"
+  stdlib.options.create_option state       "present"
+  stdlib.options.create_option account     "__required__"
+  stdlib.options.create_option destination "__required__"
+  stdlib.options.create_option file        "/etc/aliases"
   stdlib.options.parse_options "$@"
 
   stdlib.catalog.add "augeas.mail_alias/${options[account]}"

@@ -21,8 +21,8 @@ function rabbitmq.vhost {
   stdlib.subtitle "rabbitmq.vhost"
 
   local -A options
-  stdlib.options.set_option state  "present"
-  stdlib.options.set_option vhost  "__required__"
+  stdlib.options.create_option state  "present"
+  stdlib.options.create_option vhost  "__required__"
   stdlib.options.parse_options "$@"
 
   stdlib.catalog.add "rabbitmq.vhost|${options[vhost]}"

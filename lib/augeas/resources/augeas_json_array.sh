@@ -35,11 +35,11 @@ function augeas.json_array {
   fi
 
   local -A options
-  stdlib.options.set_option state "present"
-  stdlib.options.set_option path  ""
-  stdlib.options.set_option key   ""
-  stdlib.options.set_option value ""
-  stdlib.options.set_option file  "__required__"
+  stdlib.options.create_option state "present"
+  stdlib.options.create_option path  ""
+  stdlib.options.create_option key   ""
+  stdlib.options.create_option value ""
+  stdlib.options.create_option file  "__required__"
   stdlib.options.parse_options "$@"
 
   local _path=$(echo "${options[file]}/${options[path]}/" | sed -e 's@/\+@/@g')

@@ -1,4 +1,4 @@
-function stdlib.options.set_option {
+function stdlib.options.create_option {
   if [[ -n $2 ]]; then
     if [[ $2 == __required__ ]]; then
       options[$1/required]=1

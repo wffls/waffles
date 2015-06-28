@@ -37,14 +37,14 @@ function stdlib.git {
   stdlib.subtitle "stdlib.git"
 
   local -A options
-  stdlib.options.set_option state   "present"
-  stdlib.options.set_option name    "__required__"
-  stdlib.options.set_option source  "__required__"
-  stdlib.options.set_option branch  "master"
-  stdlib.options.set_option commit
-  stdlib.options.set_option tag
-  stdlib.options.set_option owner   "root"
-  stdlib.options.set_option group   "root"
+  stdlib.options.create_option state   "present"
+  stdlib.options.create_option name    "__required__"
+  stdlib.options.create_option source  "__required__"
+  stdlib.options.create_option branch  "master"
+  stdlib.options.create_option commit
+  stdlib.options.create_option tag
+  stdlib.options.create_option owner   "root"
+  stdlib.options.create_option group   "root"
   stdlib.options.parse_options "$@"
 
   stdlib.catalog.add "stdlib.git/${options[name]}"

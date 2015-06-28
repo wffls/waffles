@@ -21,8 +21,8 @@ function stdlib.upstart {
   stdlib.subtitle $FUNCNAME
 
   local -A options
-  stdlib.options.set_option state "running"
-  stdlib.options.set_option name  "__required__"
+  stdlib.options.create_option state "running"
+  stdlib.options.create_option name  "__required__"
   stdlib.options.parse_options "$@"
 
   stdlib.catalog.add "stdlib.upstart/${options[name]}"

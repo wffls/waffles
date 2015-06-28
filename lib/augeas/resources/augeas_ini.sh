@@ -33,11 +33,11 @@ function augeas.ini {
   fi
 
   local -A options
-  stdlib.options.set_option state   "present"
-  stdlib.options.set_option section "__required__"
-  stdlib.options.set_option option  "__required__"
-  stdlib.options.set_option value   "__required__"
-  stdlib.options.set_option file    "__required__"
+  stdlib.options.create_option state   "present"
+  stdlib.options.create_option section "__required__"
+  stdlib.options.create_option option  "__required__"
+  stdlib.options.create_option value   "__required__"
+  stdlib.options.create_option file    "__required__"
   stdlib.options.parse_options "$@"
 
   local _name="${options[file]}.${options[section]}.${options[option]}"

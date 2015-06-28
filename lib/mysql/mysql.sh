@@ -12,12 +12,12 @@ function mysql.admin_password_set? {
 
 function mysql.mycnf {
   local -A options
-  stdlib.options.set_option state    "present"
-  stdlib.options.set_option filename "__required__"
-  stdlib.options.set_option user     "__required__"
-  stdlib.options.set_option host     "localhost"
-  stdlib.options.set_option socket   "/var/run/mysqld/mysqld.sock"
-  stdlib.options.set_option password
+  stdlib.options.create_option state    "present"
+  stdlib.options.create_option filename "__required__"
+  stdlib.options.create_option user     "__required__"
+  stdlib.options.create_option host     "localhost"
+  stdlib.options.create_option socket   "/var/run/mysqld/mysqld.sock"
+  stdlib.options.create_option password
   stdlib.options.parse_options "$@"
 
   stdlib.ini --file "${options[filename]}" --section client --option user --value "${options[user]}"

@@ -24,11 +24,11 @@ function rabbitmq.policy {
   stdlib.subtitle "rabbitmq.policy"
 
   local -A options
-  stdlib.options.set_option state  "present"
-  stdlib.options.set_option name   "__required__"
-  stdlib.options.set_option vhost  "/"
-  stdlib.options.set_option queues ""
-  stdlib.options.set_option policy "__required__"
+  stdlib.options.create_option state  "present"
+  stdlib.options.create_option name   "__required__"
+  stdlib.options.create_option vhost  "/"
+  stdlib.options.create_option queues ""
+  stdlib.options.create_option policy "__required__"
   stdlib.options.parse_options "$@"
 
   stdlib.catalog.add "rabbitmq.policy|${options[name]}"

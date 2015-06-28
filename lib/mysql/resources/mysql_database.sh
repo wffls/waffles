@@ -23,10 +23,10 @@ function mysql.database {
   stdlib.subtitle "mysql.database"
 
   local -A options
-  stdlib.options.set_option state   "present"
-  stdlib.options.set_option name    "__required__"
-  stdlib.options.set_option charset "utf8"
-  stdlib.options.set_option collate "utf8_general_ci"
+  stdlib.options.create_option state   "present"
+  stdlib.options.create_option name    "__required__"
+  stdlib.options.create_option charset "utf8"
+  stdlib.options.create_option collate "utf8_general_ci"
   stdlib.options.parse_options "$@"
 
   stdlib.catalog.add "mysql.database/${options[name]}"

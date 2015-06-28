@@ -38,18 +38,18 @@ function stdlib.useradd {
   stdlib.subtitle "stdlib.useradd"
 
   local -A options
-  stdlib.options.set_option state      "present"
-  stdlib.options.set_option user       "__required__"
-  stdlib.options.set_option createhome "false"
-  stdlib.options.set_option sudo       "false"
-  stdlib.options.set_option shell      "/usr/sbin/nologin"
-  stdlib.options.set_option system     "false"
-  stdlib.options.set_option uid
-  stdlib.options.set_option gid
-  stdlib.options.set_option comment
-  stdlib.options.set_option homedir
-  stdlib.options.set_option passwd
-  stdlib.options.set_option groups
+  stdlib.options.create_option state      "present"
+  stdlib.options.create_option user       "__required__"
+  stdlib.options.create_option createhome "false"
+  stdlib.options.create_option sudo       "false"
+  stdlib.options.create_option shell      "/usr/sbin/nologin"
+  stdlib.options.create_option system     "false"
+  stdlib.options.create_option uid
+  stdlib.options.create_option gid
+  stdlib.options.create_option comment
+  stdlib.options.create_option homedir
+  stdlib.options.create_option passwd
+  stdlib.options.create_option groups
   stdlib.options.parse_options "$@"
 
   stdlib.catalog.add "stdlib.useradd/${options[user]}"

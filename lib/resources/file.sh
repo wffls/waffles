@@ -26,13 +26,13 @@ function stdlib.file {
   stdlib.subtitle "stdlib.file"
 
   local -A options
-  stdlib.options.set_option state   "present"
-  stdlib.options.set_option owner   "root"
-  stdlib.options.set_option group   "root"
-  stdlib.options.set_option mode    "640"
-  stdlib.options.set_option name    "__required__"
-  stdlib.options.set_option content
-  stdlib.options.set_option source
+  stdlib.options.create_option state   "present"
+  stdlib.options.create_option owner   "root"
+  stdlib.options.create_option group   "root"
+  stdlib.options.create_option mode    "640"
+  stdlib.options.create_option name    "__required__"
+  stdlib.options.create_option content
+  stdlib.options.create_option source
   stdlib.options.parse_options "$@"
 
   stdlib.catalog.add "stdlib.file/${options[name]}"

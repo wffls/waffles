@@ -25,11 +25,11 @@ function stdlib.file_line {
   stdlib.subtitle "stdlib.file_line"
 
   local -A options
-  stdlib.options.set_option state  "present"
-  stdlib.options.set_option name   "__required__"
-  stdlib.options.set_option line   "__required__"
-  stdlib.options.set_option file   "__required__"
-  stdlib.options.set_option match
+  stdlib.options.create_option state  "present"
+  stdlib.options.create_option name   "__required__"
+  stdlib.options.create_option line   "__required__"
+  stdlib.options.create_option file   "__required__"
+  stdlib.options.create_option match
   stdlib.options.parse_options "$@"
 
   stdlib.catalog.add "stdlib.file_line/${options[name]}"
