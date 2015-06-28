@@ -9,7 +9,7 @@ stdlib.info "useradd"
 stdlib.useradd --user memcache --gid 999 --uid 999 --homedir /var/lib/memcached
 
 stdlib.info "foobar"
-stdlib.useradd --user memcache --system true
+stdlib.useradd --user foobar --system true
 
 stdlib.info "packages"
 stdlib.apt --package memcached
