@@ -229,8 +229,8 @@ function stdlib.split {
   fi
 
   __split=()
-  string="$1"
-  delim="$2"
+  local string="$1"
+  local delim="$2"
 
   while [[ $string != "" ]]; do
     __split+=("${string%%$delim*}")
@@ -241,6 +241,25 @@ function stdlib.split {
   done
 }
 
+
+# stdlib.join joins an array into a string
+# $1 = delimiter
+# $2+ = array elements
+function stdlib.join {
+  if [[ $# -gt 1 ]]; then
+
+    local delim=$1
+    local string
+    shift
+
+    while [[ "$#" -gt 0 ]]; do
+      string="${string}${delim}${1}"
+      shift
+    done
+
+    echo "$string"
+  fi
+}
 
 function stdlib.trim {
   if [[ $# -gt 0 ]]; then
