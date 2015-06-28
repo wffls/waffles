@@ -130,7 +130,7 @@
         
             <ul>
             
-                <li class="toctree-l3"><a href="#stdliboptionsset_option">stdlib.options.set_option</a></li>
+                <li class="toctree-l3"><a href="#stdliboptionscreate_option">stdlib.options.create_option</a></li>
                 
             
                 <li class="toctree-l3"><a href="#stdliboptionsparse_options">stdlib.options.parse_options</a></li>
@@ -523,19 +523,19 @@
             <div class="section">
               
                 <p><code>lib/options.sh</code> contains functions related to parsing resource options.</p>
-<h2 id="stdliboptionsset_option">stdlib.options.set_option</h2>
-<p>This function creates an option in a resource (perhaps its name will be changed in the future).</p>
+<h2 id="stdliboptionscreate_option">stdlib.options.create_option</h2>
+<p>This function creates an option in a resource.</p>
 <pre><code class="shell">  local -A options
-  stdlib.options.set_option state   &quot;present&quot;
-  stdlib.options.set_option package &quot;__required__&quot;
-  stdlib.options.set_option version
+  stdlib.options.create_option state   &quot;present&quot;
+  stdlib.options.create_option package &quot;__required__&quot;
+  stdlib.options.create_option version
   stdlib.options.parse_options &quot;$@&quot;
 </code></pre>
 
 <p>To successfully create a set of options:</p>
 <ul>
 <li>A local <code>options</code> variable must be created. If not, the options will be appended to the last resource declared.</li>
-<li><code>stdlib.options.set_option</code> is used with the first argument being the option name and the second argument being an optional default value.</li>
+<li><code>stdlib.options.create_option</code> is used with the first argument being the option name and the second argument being an optional default value.</li>
 <li>If the default value is <code>__required__</code>, Waffles will error and halt if the option was not set.</li>
 </ul>
 <h2 id="stdliboptionsparse_options">stdlib.options.parse_options</h2>

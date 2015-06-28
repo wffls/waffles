@@ -277,13 +277,13 @@
         }, 
         {
             "location": "/functions/options/", 
-            "text": "lib/options.sh\n contains functions related to parsing resource options.\n\n\nstdlib.options.set_option\n\n\nThis function creates an option in a resource (perhaps its name will be changed in the future).\n\n\n  local -A options\n  stdlib.options.set_option state   \npresent\n\n  stdlib.options.set_option package \n__required__\n\n  stdlib.options.set_option version\n  stdlib.options.parse_options \n$@\n\n\n\n\n\nTo successfully create a set of options:\n\n\n\n\nA local \noptions\n variable must be created. If not, the options will be appended to the last resource declared.\n\n\nstdlib.options.set_option\n is used with the first argument being the option name and the second argument being an optional default value.\n\n\nIf the default value is \n__required__\n, Waffles will error and halt if the option was not set.\n\n\n\n\nstdlib.options.parse_options\n\n\nThis function cycles through all options that were given in a declared resource. It will report if any required options were not set.", 
+            "text": "lib/options.sh\n contains functions related to parsing resource options.\n\n\nstdlib.options.create_option\n\n\nThis function creates an option in a resource.\n\n\n  local -A options\n  stdlib.options.create_option state   \npresent\n\n  stdlib.options.create_option package \n__required__\n\n  stdlib.options.create_option version\n  stdlib.options.parse_options \n$@\n\n\n\n\n\nTo successfully create a set of options:\n\n\n\n\nA local \noptions\n variable must be created. If not, the options will be appended to the last resource declared.\n\n\nstdlib.options.create_option\n is used with the first argument being the option name and the second argument being an optional default value.\n\n\nIf the default value is \n__required__\n, Waffles will error and halt if the option was not set.\n\n\n\n\nstdlib.options.parse_options\n\n\nThis function cycles through all options that were given in a declared resource. It will report if any required options were not set.", 
             "title": "options"
         }, 
         {
-            "location": "/functions/options/#stdliboptionsset_option", 
-            "text": "This function creates an option in a resource (perhaps its name will be changed in the future).    local -A options\n  stdlib.options.set_option state    present \n  stdlib.options.set_option package  __required__ \n  stdlib.options.set_option version\n  stdlib.options.parse_options  $@   To successfully create a set of options:   A local  options  variable must be created. If not, the options will be appended to the last resource declared.  stdlib.options.set_option  is used with the first argument being the option name and the second argument being an optional default value.  If the default value is  __required__ , Waffles will error and halt if the option was not set.", 
-            "title": "stdlib.options.set_option"
+            "location": "/functions/options/#stdliboptionscreate_option", 
+            "text": "This function creates an option in a resource.    local -A options\n  stdlib.options.create_option state    present \n  stdlib.options.create_option package  __required__ \n  stdlib.options.create_option version\n  stdlib.options.parse_options  $@   To successfully create a set of options:   A local  options  variable must be created. If not, the options will be appended to the last resource declared.  stdlib.options.create_option  is used with the first argument being the option name and the second argument being an optional default value.  If the default value is  __required__ , Waffles will error and halt if the option was not set.", 
+            "title": "stdlib.options.create_option"
         }, 
         {
             "location": "/functions/options/#stdliboptionsparse_options", 
@@ -1007,7 +1007,7 @@
         }, 
         {
             "location": "/resources/stdlib.useradd/", 
-            "text": "stdlib.useradd\n\n\nDescription\n\n\nManages users\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nuser: The user Required. namevar.\n\n\nuid: The uid of the user Optional.\n\n\ngid: The gid of the user Optional.\n\n\ncreatehome: Whether to create the homedir. Default: false.\n\n\nsudo: Whether to give sudo ability: Default: false.\n\n\nshell: The shell of the user. Default /usr/sbin/nologin.\n\n\ncomment: The comment field. Optional.\n\n\nhomedir: The homedir of the user. Optional.\n\n\npasswd: The password hash. Optional.\n\n\ngroups: Supplemental groups of the user. Optional.\n\n\n\n\nExample\n\n\nstdlib.useradd --user jdoe --uid 999 --createhome true --homedir /home/jdoe\n               --shell /bin/bash --comment \nJohn Doe", 
+            "text": "stdlib.useradd\n\n\nDescription\n\n\nManages users\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nuser: The user Required. namevar.\n\n\nuid: The uid of the user Optional.\n\n\ngid: The gid of the user Optional.\n\n\ncreatehome: Whether to create the homedir. Default: false.\n\n\nsudo: Whether to give sudo ability: Default: false.\n\n\nshell: The shell of the user. Default /usr/sbin/nologin.\n\n\ncomment: The comment field. Optional.\n\n\nhomedir: The homedir of the user. Optional.\n\n\npasswd: The password hash. Optional.\n\n\ngroups: Supplemental groups of the user. Optional.\n\n\nsystem: Whether the user is a system user or not. Default: false\n\n\n\n\nExample\n\n\nstdlib.useradd --user jdoe --uid 999 --createhome true --homedir /home/jdoe\n               --shell /bin/bash --comment \nJohn Doe\n\n\n\n\n\nNotes\n\n\nThe \n--system true\n flag is only useful during a create. If the user already\nexists and you choose to change it into a system using with the \n--system\n\nflag, it's best to delete the user and recreate it.", 
             "title": "stdlib.useradd"
         }, 
         {
@@ -1022,13 +1022,18 @@
         }, 
         {
             "location": "/resources/stdlib.useradd/#parameters", 
-            "text": "state: The state of the resource. Required. Default: present.  user: The user Required. namevar.  uid: The uid of the user Optional.  gid: The gid of the user Optional.  createhome: Whether to create the homedir. Default: false.  sudo: Whether to give sudo ability: Default: false.  shell: The shell of the user. Default /usr/sbin/nologin.  comment: The comment field. Optional.  homedir: The homedir of the user. Optional.  passwd: The password hash. Optional.  groups: Supplemental groups of the user. Optional.", 
+            "text": "state: The state of the resource. Required. Default: present.  user: The user Required. namevar.  uid: The uid of the user Optional.  gid: The gid of the user Optional.  createhome: Whether to create the homedir. Default: false.  sudo: Whether to give sudo ability: Default: false.  shell: The shell of the user. Default /usr/sbin/nologin.  comment: The comment field. Optional.  homedir: The homedir of the user. Optional.  passwd: The password hash. Optional.  groups: Supplemental groups of the user. Optional.  system: Whether the user is a system user or not. Default: false", 
             "title": "Parameters"
         }, 
         {
             "location": "/resources/stdlib.useradd/#example", 
             "text": "stdlib.useradd --user jdoe --uid 999 --createhome true --homedir /home/jdoe\n               --shell /bin/bash --comment  John Doe", 
             "title": "Example"
+        }, 
+        {
+            "location": "/resources/stdlib.useradd/#notes", 
+            "text": "The  --system true  flag is only useful during a create. If the user already\nexists and you choose to change it into a system using with the  --system \nflag, it's best to delete the user and recreate it.", 
+            "title": "Notes"
         }, 
         {
             "location": "/resources/augeas.aptconf/", 

@@ -357,6 +357,8 @@
                 
                     <li><a class="toctree-l4" href="#example">Example</a></li>
                 
+                    <li><a class="toctree-l4" href="#notes">Notes</a></li>
+                
             
             </ul>
         
@@ -541,11 +543,17 @@
 <li>homedir: The homedir of the user. Optional.</li>
 <li>passwd: The password hash. Optional.</li>
 <li>groups: Supplemental groups of the user. Optional.</li>
+<li>system: Whether the user is a system user or not. Default: false</li>
 </ul>
 <h2 id="example">Example</h2>
 <pre><code class="shell">stdlib.useradd --user jdoe --uid 999 --createhome true --homedir /home/jdoe
                --shell /bin/bash --comment &quot;John Doe&quot;
 </code></pre>
+
+<h2 id="notes">Notes</h2>
+<p>The <code>--system true</code> flag is only useful during a create. If the user already
+exists and you choose to change it into a system using with the <code>--system</code>
+flag, it's best to delete the user and recreate it.</p>
               
             </div>
           </div>
