@@ -25,10 +25,10 @@ function mysql.user {
   stdlib.subtitle "mysql.user"
 
   local -A options
-  stdlib.options.set_option state    "present"
-  stdlib.options.set_option user     ""
-  stdlib.options.set_option host     "__required__"
-  stdlib.options.set_option password ""
+  stdlib.options.create_option state    "present"
+  stdlib.options.create_option user     ""
+  stdlib.options.create_option host     "__required__"
+  stdlib.options.create_option password ""
   stdlib.options.parse_options "$@"
 
   stdlib.catalog.add "mysql.user/${options[user]}@${options[host]}"

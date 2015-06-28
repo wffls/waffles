@@ -23,10 +23,10 @@ function rabbitmq.user {
   stdlib.subtitle "rabbitmq.user"
 
   local -A options
-  stdlib.options.set_option state    "present"
-  stdlib.options.set_option user     "__required__"
-  stdlib.options.set_option admin    "false"
-  stdlib.options.set_option password
+  stdlib.options.create_option state    "present"
+  stdlib.options.create_option user     "__required__"
+  stdlib.options.create_option admin    "false"
+  stdlib.options.create_option password
   stdlib.options.parse_options "$@"
 
   stdlib.catalog.add "rabbitmq.user|${options[user]}"

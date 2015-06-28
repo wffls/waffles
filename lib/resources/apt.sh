@@ -22,9 +22,9 @@ function stdlib.apt {
   stdlib.subtitle "stdlib.apt"
 
   local -A options
-  stdlib.options.set_option state   "present"
-  stdlib.options.set_option package "__required__"
-  stdlib.options.set_option version
+  stdlib.options.create_option state   "present"
+  stdlib.options.create_option package "__required__"
+  stdlib.options.create_option version
   stdlib.options.parse_options "$@"
 
   stdlib.catalog.add "stdlib.apt/${options[package]}"

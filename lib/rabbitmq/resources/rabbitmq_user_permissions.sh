@@ -24,11 +24,11 @@ function rabbitmq.user_permissions {
   stdlib.subtitle "rabbitmq.user_permissions"
 
   local -A options
-  stdlib.options.set_option state  "present"
-  stdlib.options.set_option user   "__required__"
-  stdlib.options.set_option conf   '.*'
-  stdlib.options.set_option write  '.*'
-  stdlib.options.set_option read   '.*'
+  stdlib.options.create_option state  "present"
+  stdlib.options.create_option user   "__required__"
+  stdlib.options.create_option conf   '.*'
+  stdlib.options.create_option write  '.*'
+  stdlib.options.create_option read   '.*'
   stdlib.options.parse_options "$@"
 
   stdlib.catalog.add "rabbitmq.user_permissions|${options[user]}"

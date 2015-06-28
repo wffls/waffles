@@ -24,11 +24,11 @@ function stdlib.apt_key {
   stdlib.subtitle "stdlib.apt_key"
 
   local -A options
-  stdlib.options.set_option state          "present"
-  stdlib.options.set_option name           "__required__"
-  stdlib.options.set_option key
-  stdlib.options.set_option keyserver
-  stdlib.options.set_option remote_keyfile
+  stdlib.options.create_option state          "present"
+  stdlib.options.create_option name           "__required__"
+  stdlib.options.create_option key
+  stdlib.options.create_option keyserver
+  stdlib.options.create_option remote_keyfile
   stdlib.options.parse_options "$@"
 
   stdlib.catalog.add "stdlib.apt_key/${options[name]}"

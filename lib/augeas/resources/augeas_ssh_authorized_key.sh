@@ -38,12 +38,12 @@ function augeas.ssh_authorized_key {
   fi
 
   local -A options
-  stdlib.options.set_option state   "present"
-  stdlib.options.set_option name    "__required__"
-  stdlib.options.set_option key     "__required__"
-  stdlib.options.set_option type    "__required__"
-  stdlib.options.set_option options ""
-  stdlib.options.set_option file    "__required__"
+  stdlib.options.create_option state   "present"
+  stdlib.options.create_option name    "__required__"
+  stdlib.options.create_option key     "__required__"
+  stdlib.options.create_option type    "__required__"
+  stdlib.options.create_option options ""
+  stdlib.options.create_option file    "__required__"
   stdlib.options.parse_options "$@"
 
   stdlib.catalog.add "augeas.ssh_authorized_key/${options[name]}"

@@ -24,11 +24,11 @@ function mysql.grant {
   stdlib.subtitle "mysql.grant"
 
   local -A options
-  stdlib.options.set_option state      "present"
-  stdlib.options.set_option user       "__required__"
-  stdlib.options.set_option host       "__required__"
-  stdlib.options.set_option database   "__required__"
-  stdlib.options.set_option privileges "__required__"
+  stdlib.options.create_option state      "present"
+  stdlib.options.create_option user       "__required__"
+  stdlib.options.create_option host       "__required__"
+  stdlib.options.create_option database   "__required__"
+  stdlib.options.create_option privileges "__required__"
   stdlib.options.parse_options "$@"
 
   local _name="'${options[user]}'@'${options[host]}'"

@@ -26,13 +26,13 @@ function stdlib.ip6tables_rule {
   stdlib.subtitle "stdlib.ip6tables_rule"
 
   local -A options
-  stdlib.options.set_option state    "present"
-  stdlib.options.set_option name     "__required__"
-  stdlib.options.set_option priority "100"
-  stdlib.options.set_option table    "filter"
-  stdlib.options.set_option chain    "INPUT"
-  stdlib.options.set_option rule     "__required__"
-  stdlib.options.set_option action   "ACCEPT"
+  stdlib.options.create_option state    "present"
+  stdlib.options.create_option name     "__required__"
+  stdlib.options.create_option priority "100"
+  stdlib.options.create_option table    "filter"
+  stdlib.options.create_option chain    "INPUT"
+  stdlib.options.create_option rule     "__required__"
+  stdlib.options.create_option action   "ACCEPT"
   stdlib.options.parse_options "$@"
 
   stdlib.catalog.add "stdlib.ip6tables_rule/${options[name]}"

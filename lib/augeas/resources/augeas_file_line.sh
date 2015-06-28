@@ -32,10 +32,10 @@ function augeas.file_line {
   fi
 
   local -A options
-  stdlib.options.set_option state "present"
-  stdlib.options.set_option name  "__required__"
-  stdlib.options.set_option line  "__required__"
-  stdlib.options.set_option file  "__required__"
+  stdlib.options.create_option state "present"
+  stdlib.options.create_option name  "__required__"
+  stdlib.options.create_option line  "__required__"
+  stdlib.options.create_option file  "__required__"
   stdlib.options.parse_options "$@"
 
   stdlib.catalog.add "augeas.file_line/${options[name]}"

@@ -31,9 +31,9 @@ function stdlib.apt_ppa {
   fi
 
   local -A options
-  stdlib.options.set_option state   "present"
-  stdlib.options.set_option ppa     "__required__"
-  stdlib.options.set_option refresh "true"
+  stdlib.options.create_option state   "present"
+  stdlib.options.create_option ppa     "__required__"
+  stdlib.options.create_option refresh "true"
   stdlib.options.parse_options "$@"
 
   stdlib.catalog.add "stdlib.apt_ppa/${options[ppa]}"

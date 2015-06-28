@@ -32,13 +32,13 @@ function stdlib.debconf {
   fi
 
   local -A options
-  stdlib.options.set_option state    "present"
-  stdlib.options.set_option name     "__required__"
-  stdlib.options.set_option package  "__required__"
-  stdlib.options.set_option question "__required__"
-  stdlib.options.set_option vtype    "__required__"
-  stdlib.options.set_option value    "__required__"
-  stdlib.options.set_option unseen
+  stdlib.options.create_option state    "present"
+  stdlib.options.create_option name     "__required__"
+  stdlib.options.create_option package  "__required__"
+  stdlib.options.create_option question "__required__"
+  stdlib.options.create_option vtype    "__required__"
+  stdlib.options.create_option value    "__required__"
+  stdlib.options.create_option unseen
   stdlib.options.parse_options "$@"
 
   stdlib.catalog.add "stdlib.debconf/${options[name]}"

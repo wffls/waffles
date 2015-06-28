@@ -37,15 +37,15 @@ function augeas.cron {
   fi
 
   local -A options
-  stdlib.options.set_option state  "present"
-  stdlib.options.set_option name   "__required__"
-  stdlib.options.set_option user   "root"
-  stdlib.options.set_option minute "*"
-  stdlib.options.set_option hour   "*"
-  stdlib.options.set_option dom    "*"
-  stdlib.options.set_option month  "*"
-  stdlib.options.set_option dow    "*"
-  stdlib.options.set_option cmd    "__required__"
+  stdlib.options.create_option state  "present"
+  stdlib.options.create_option name   "__required__"
+  stdlib.options.create_option user   "root"
+  stdlib.options.create_option minute "*"
+  stdlib.options.create_option hour   "*"
+  stdlib.options.create_option dom    "*"
+  stdlib.options.create_option month  "*"
+  stdlib.options.create_option dow    "*"
+  stdlib.options.create_option cmd    "__required__"
   stdlib.options.parse_options "$@"
 
   stdlib.catalog.add "augeas.cron/${options[name]}"

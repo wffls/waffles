@@ -1,6 +1,6 @@
 function augeas.run {
-  stdlib.options.set_option lens   "__required__"
-  stdlib.options.set_option file   "__required__"
+  stdlib.options.create_option lens   "__required__"
+  stdlib.options.create_option file   "__required__"
   stdlib.options.parse_options "$@"
 
   shift 4
@@ -28,9 +28,9 @@ EOF
 
 function augeas.get {
   local -A options
-  stdlib.options.set_option lens "__required__"
-  stdlib.options.set_option file "__required__"
-  stdlib.options.set_option path "__required__"
+  stdlib.options.create_option lens "__required__"
+  stdlib.options.create_option file "__required__"
+  stdlib.options.create_option path "__required__"
   stdlib.options.parse_options "$@"
 
   local _path=$(echo "${options[file]}/${options[path]}" | sed -e 's@/\+@/@g')
