@@ -8,6 +8,9 @@ stdlib.groupadd --group memcache --gid 999
 stdlib.info "useradd"
 stdlib.useradd --user memcache --gid 999 --uid 999 --homedir /var/lib/memcached
 
+stdlib.info "foobar"
+stdlib.useradd --user memcache --system true
+
 stdlib.info "packages"
 stdlib.apt --package memcached
 stdlib.apt --package cron

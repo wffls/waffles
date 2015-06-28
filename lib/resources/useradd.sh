@@ -19,6 +19,7 @@
 # * homedir: The homedir of the user. Optional.
 # * passwd: The password hash. Optional.
 # * groups: Supplemental groups of the user. Optional.
+# * system: Whether the user is a system user or not. Default: false
 #
 # === Example
 #
@@ -26,6 +27,12 @@
 # stdlib.useradd --user jdoe --uid 999 --createhome true --homedir /home/jdoe
 #                --shell /bin/bash --comment "John Doe"
 # ```
+#
+# === Notes
+#
+# The `--system true` flag is only useful during a create. If the user already
+# exists and you choose to change it into a system using with the `--system`
+# flag, it's best to delete the user and recreate it.
 #
 function stdlib.useradd {
   stdlib.subtitle "stdlib.useradd"
@@ -36,6 +43,7 @@ function stdlib.useradd {
   stdlib.options.set_option createhome "false"
   stdlib.options.set_option sudo       "false"
   stdlib.options.set_option shell      "/usr/sbin/nologin"
+  stdlib.options.set_option system     "false"
   stdlib.options.set_option uid
   stdlib.options.set_option gid
   stdlib.options.set_option comment
@@ -184,6 +192,10 @@ function stdlib.useradd.create {
 
   if [[ -n ${options[groups]} ]]; then
     create_args+=("-G ${options[groups]}")
+  fi
+
+  if [[ ${options[system]} == true ]]; then
+    create_args+=("-r")
   fi
 
   stdlib.debug "Creating user ${options[user]}"

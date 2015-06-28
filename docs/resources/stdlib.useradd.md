@@ -17,6 +17,7 @@ Manages users
 * homedir: The homedir of the user. Optional.
 * passwd: The password hash. Optional.
 * groups: Supplemental groups of the user. Optional.
+* system: Whether the user is a system user or not. Default: false
 
 ## Example
 
@@ -24,4 +25,10 @@ Manages users
 stdlib.useradd --user jdoe --uid 999 --createhome true --homedir /home/jdoe
                --shell /bin/bash --comment "John Doe"
 ```
+
+## Notes
+
+The `--system true` flag is only useful during a create. If the user already
+exists and you choose to change it into a system using with the `--system`
+flag, it's best to delete the user and recreate it.
 
