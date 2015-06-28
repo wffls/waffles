@@ -116,6 +116,21 @@
         
             <ul>
             
+                <li class="toctree-l3"><a href="#stdlibarray_length">stdlib.array_length</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#stdlibarray_pop">stdlib.array_pop</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#stdlibarray_push">stdlib.array_push</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#stdlibarray_shift">stdlib.array_shift</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#stdlibarray_unshift">stdlib.array_unshift</a></li>
+                
+            
                 <li class="toctree-l3"><a href="#stdlibcapture_error">stdlib.capture_error</a></li>
                 
             
@@ -147,6 +162,9 @@
                 
             
                 <li class="toctree-l3"><a href="#stdlibinfo">stdlib.info</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#stdlibjoin">stdlib.join</a></li>
                 
             
                 <li class="toctree-l3"><a href="#stdlibmute">stdlib.mute</a></li>
@@ -574,6 +592,39 @@
             <div class="section">
               
                 <p><code>lib/system.sh</code> contains functions that are considered core to Waffles or do not warrant their own file.</p>
+<h2 id="stdlibarray_length">stdlib.array_length</h2>
+<p>Returns the length of an array.</p>
+<pre><code class="shell">x=(a b c)
+stdlib.array_length x
+=&gt; 3
+</code></pre>
+
+<h2 id="stdlibarray_pop">stdlib.array_pop</h2>
+<p>Removes and returns the last element from an array.</p>
+<pre><code class="shell">x=(a b c)
+stdlib.array_pop x
+=&gt; c
+</code></pre>
+
+<h2 id="stdlibarray_push">stdlib.array_push</h2>
+<p>Adds an element to the end of an array.</p>
+<pre><code class="shell">x=()
+stdlib.array_push x foo
+</code></pre>
+
+<h2 id="stdlibarray_shift">stdlib.array_shift</h2>
+<p>Removes and returns the first element from an array</p>
+<pre><code class="shell">x=(a b c)
+stdlib.array_shift x
+=&gt; a
+</code></pre>
+
+<h2 id="stdlibarray_unshift">stdlib.array_unshift</h2>
+<p>Adds an element to the beginning of the array.</p>
+<pre><code class="shell">x=(b c)
+stdlib.array_unshift x a
+</code></pre>
+
 <h2 id="stdlibcapture_error">stdlib.capture_error</h2>
 <p>Takes a command as input, prints the command, and detects if anything was written to <code>stderr</code>. If there was, the error is printed to <code>stderr</code> again, and if <code>WAFFLES_EXIT_ON_ERROR</code> is set, Waffles halts.</p>
 <pre><code class="shell">stdlib.capture_error apt-get update
@@ -631,6 +682,11 @@ fi
 <pre><code class="shell">stdlib.info &quot;Foobar&quot;
 </code></pre>
 
+<h2 id="stdlibjoin">stdlib.join</h2>
+<p>Joins an array into a string.</p>
+<pre><code class="shell">stdlib.join , foo bar baz
+</code></pre>
+
 <h2 id="stdlibmute">stdlib.mute</h2>
 <p>Prints the command being run, but suppresses the command output.</p>
 <pre><code class="shell">stdlib.mute apt-get update
@@ -653,7 +709,7 @@ stdlib.profiles memcached/utils =&gt; profiles/memcached/scripts/utils.sh
 </code></pre>
 
 <h2 id="stdlibsplit">stdlib.split</h2>
-<p>Splits a string into an array. Stores the result in <code>__split</code>.</p>
+<p>Splits a string into an array. Stores the result in <code>__split</code>. The delimiter can be multi-character.</p>
 <pre><code class="shell">stdlib.split &quot;foo/bar&quot;, &quot;/&quot;
 stdlib.info $__split[1] # bar
 </code></pre>
