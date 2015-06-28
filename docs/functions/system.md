@@ -1,5 +1,53 @@
 `lib/system.sh` contains functions that are considered core to Waffles or do not warrant their own file.
 
+## stdlib.array_length
+
+Returns the length of an array.
+
+```shell
+x=(a b c)
+stdlib.array_length x
+=> 3
+```
+
+## stdlib.array_pop
+
+Removes and returns the last element from an array.
+
+```shell
+x=(a b c)
+stdlib.array_pop x
+=> c
+```
+
+## stdlib.array_push
+
+Adds an element to the end of an array.
+
+```shell
+x=()
+stdlib.array_push x foo
+```
+
+## stdlib.array_shift
+
+Removes and returns the first element from an array
+
+```shell
+x=(a b c)
+stdlib.array_shift x
+=> a
+```
+
+## stdlib.array_unshift
+
+Adds an element to the beginning of the array.
+
+```shell
+x=(b c)
+stdlib.array_unshift x a
+```
+
 ## stdlib.capture_error
 
 Takes a command as input, prints the command, and detects if anything was written to `stderr`. If there was, the error is printed to `stderr` again, and if `WAFFLES_EXIT_ON_ERROR` is set, Waffles halts.
@@ -88,6 +136,14 @@ Prints a log message at `info` level.
 stdlib.info "Foobar"
 ```
 
+## stdlib.join
+
+Joins an array into a string.
+
+```shell
+stdlib.join , foo bar baz
+```
+
 ## stdlib.mute
 
 Prints the command being run, but suppresses the command output.
@@ -121,7 +177,7 @@ stdlib.profiles memcached/utils => profiles/memcached/scripts/utils.sh
 
 ## stdlib.split
 
-Splits a string into an array. Stores the result in `__split`.
+Splits a string into an array. Stores the result in `__split`. The delimiter can be multi-character.
 
 ```shell
 stdlib.split "foo/bar", "/"

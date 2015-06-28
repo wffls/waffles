@@ -253,7 +253,11 @@ function stdlib.join {
     shift
 
     while [[ "$#" -gt 0 ]]; do
-      string="${string}${delim}${1}"
+      if [[ -z $string ]]; then
+        string="${1}"
+      else
+        string="${string}${delim}${1}"
+      fi
       shift
     done
 
@@ -261,6 +265,8 @@ function stdlib.join {
   fi
 }
 
+# stdlib.trim trims whitespace from a string
+# $1 = string
 function stdlib.trim {
   if [[ $# -gt 0 ]]; then
     shopt -s extglob
@@ -271,5 +277,77 @@ function stdlib.trim {
     echo "$_trim"
   else
     echo ""
+  fi
+}
+
+
+# Array functions
+
+# stdlib.array_length returns the length of an array
+# $1 = array
+function stdlib.array_length {
+  local _arr=$1
+  if [[ -n $_arr ]]; then
+    eval "echo \${#$_arr[@]}"
+  fi
+}
+
+# stdlib.array_push adds elements to the end of an array
+# $1 = array
+# $2+ = elements to push
+function stdlib.array_push {
+  local _arr=$1
+  shift
+
+  if [[ -n $_arr ]]; then
+    eval "$_arr=(\"\${$_arr[@]}\" \"\$@\")"
+  fi
+}
+
+# stdlib.array_pop pops the last element from an array
+# $1 = array
+function stdlib.array_pop {
+  local _arr=$1
+  local _arr_length=$(stdlib.array_length $_arr)
+  local _arr_element
+  local _pop
+
+  if [[ -n $_arr ]] && (( $_arr_length >= 1 )); then
+    _arr_element=$(( $_arr_length - 1 ))
+    eval "_pop=\"\$(echo \"\${$_arr[$_arr_element]}\")\""
+    eval "unset $_arr[$_arr_element]"
+
+    echo "$_pop"
+  fi
+}
+
+# stdlib.array_shift pops the first element from an array
+# $1 = array
+function stdlib.array_shift {
+  local _arr=$1
+  local _arr_length=$(stdlib.array_length $_arr)
+  local _pop
+
+  if [[ -n $_arr ]] && (( $_arr_length >= 1 )); then
+    eval "_pop=\"\$(echo \"\${$_arr[0]}\")\""
+    eval "unset $_arr[0]"
+    eval "$_arr=(\"\${$_arr[@]}\")"
+
+    echo "$_pop"
+  fi
+}
+
+# stdlib.array_unshift adds elements to the beginning of an array
+# $1 = array
+# $2+ = elements
+function stdlib.array_unshift {
+  local _arr=$1
+  shift
+
+  if [[ -n $_arr ]]; then
+    while [[ $# -gt 0 ]]; do
+      eval "$_arr=(\"\$1\" \"\${$_arr[@]}\")"
+      shift
+    done
   fi
 }
