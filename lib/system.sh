@@ -227,11 +227,20 @@ function stdlib.split {
   if [[ -z $2 ]]; then
     echo $1
   fi
-  OLDIFS="${IFS}"
-  IFS="${2}"
-  __split=($1)
-  IFS="${OLDIFS}"
+
+  __split=()
+  string="$1"
+  delim="$2"
+
+  while [[ $string != "" ]]; do
+    __split+=("${string%%$delim*}")
+    string="${string#*$delim}"
+    if [[ "${__split[-1]}" == $string ]]; then
+      break
+    fi
+  done
 }
+
 
 function stdlib.trim {
   if [[ $# -gt 0 ]]; then
