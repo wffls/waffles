@@ -5,11 +5,11 @@
 This function creates an option in a resource.
 
 ```shell
-  local -A options
-  stdlib.options.create_option state   "present"
-  stdlib.options.create_option package "__required__"
-  stdlib.options.create_option version
-  stdlib.options.parse_options "$@"
+local -A options
+stdlib.options.create_option state   "present"
+stdlib.options.create_option package "__required__"
+stdlib.options.create_option version
+stdlib.options.parse_options "$@"
 ```
 
 To successfully create a set of options:
@@ -17,6 +17,27 @@ To successfully create a set of options:
 * A local `options` variable must be created. If not, the options will be appended to the last resource declared.
 * `stdlib.options.create_option` is used with the first argument being the option name and the second argument being an optional default value.
 * If the default value is `__required__`, Waffles will error and halt if the option was not set.
+
+## stdlib.options.create_mv_option
+
+This function creates a multi-value option. These types of options can be specified multiple times. In order to use, you must declare
+an array of the same name as the option. For example, the `augeas.mail_alias` resource looks like this:
+
+```shell
+local -A options
+local -a destination
+stdlib.options.create_option    state       "present"
+stdlib.options.create_option    account     "__required__"
+stdlib.options.create_mv_option destination "__required__"
+stdlib.options.create_option    file        "/etc/aliases"
+stdlib.options.parse_options    "$@"
+```
+
+Now when declaring an alias, you can do:
+
+```shell
+augeas.mail_alias --root --destination jdoe --destination jsmith --destination foobar
+```
 
 ## stdlib.options.parse_options
 

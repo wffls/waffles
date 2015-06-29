@@ -9,6 +9,13 @@ function stdlib.options.create_option {
   fi
 }
 
+function stdlib.options.create_mv_option {
+  if [[ -n $2 ]]; then
+    stdlib.options.create_option "$1" "$2"
+    options[$1/mv]=1
+  fi
+}
+
 function stdlib.options.parse_options {
   while [ "$#" -gt 0 ]; do
     stdlib.debug "option $1, value $2"
@@ -17,8 +24,13 @@ function stdlib.options.parse_options {
       exit 1
     fi
 
-    opt_key=$(echo $1 | tr -d -)
-    options[$opt_key]="$2"
+    local _opt_key=$(echo $1 | tr -d -)
+    if [[ "${options[$_opt_key/mv]+isset}" ]]; then
+      stdlib.array_push $_opt_key "$2"
+      options[$_opt_key]="__set__"
+    else
+      options[$_opt_key]="$2"
+    fi
 
     shift; shift
   done
