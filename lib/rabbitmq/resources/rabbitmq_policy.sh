@@ -31,7 +31,7 @@ function rabbitmq.policy {
   stdlib.options.create_option policy "__required__"
   stdlib.options.parse_options "$@"
 
-  stdlib.catalog.add "rabbitmq.policy|${options[name]}"
+  stdlib.catalog.add "rabbitmq.policy/${options[name]}"
 
   local queues
   local policy

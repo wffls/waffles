@@ -25,7 +25,7 @@ function rabbitmq.vhost {
   stdlib.options.create_option vhost  "__required__"
   stdlib.options.parse_options "$@"
 
-  stdlib.catalog.add "rabbitmq.vhost|${options[vhost]}"
+  stdlib.catalog.add "rabbitmq.vhost/${options[vhost]}"
 
   rabbitmq.vhost.read
   if [[ ${options[state]} == absent ]]; then

@@ -31,7 +31,7 @@ function rabbitmq.user_permissions {
   stdlib.options.create_option read   '.*'
   stdlib.options.parse_options "$@"
 
-  stdlib.catalog.add "rabbitmq.user_permissions|${options[user]}"
+  stdlib.catalog.add "rabbitmq.user_permissions/${options[user]}"
 
   stdlib.split "${options[user]}" '@'
   local _user="${__split[0]}"
