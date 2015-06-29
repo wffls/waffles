@@ -133,6 +133,9 @@
                 <li class="toctree-l3"><a href="#stdliboptionscreate_option">stdlib.options.create_option</a></li>
                 
             
+                <li class="toctree-l3"><a href="#stdliboptionscreate_mv_option">stdlib.options.create_mv_option</a></li>
+                
+            
                 <li class="toctree-l3"><a href="#stdliboptionsparse_options">stdlib.options.parse_options</a></li>
                 
             
@@ -525,11 +528,11 @@
                 <p><code>lib/options.sh</code> contains functions related to parsing resource options.</p>
 <h2 id="stdliboptionscreate_option">stdlib.options.create_option</h2>
 <p>This function creates an option in a resource.</p>
-<pre><code class="shell">  local -A options
-  stdlib.options.create_option state   &quot;present&quot;
-  stdlib.options.create_option package &quot;__required__&quot;
-  stdlib.options.create_option version
-  stdlib.options.parse_options &quot;$@&quot;
+<pre><code class="shell">local -A options
+stdlib.options.create_option state   &quot;present&quot;
+stdlib.options.create_option package &quot;__required__&quot;
+stdlib.options.create_option version
+stdlib.options.parse_options &quot;$@&quot;
 </code></pre>
 
 <p>To successfully create a set of options:</p>
@@ -538,6 +541,22 @@
 <li><code>stdlib.options.create_option</code> is used with the first argument being the option name and the second argument being an optional default value.</li>
 <li>If the default value is <code>__required__</code>, Waffles will error and halt if the option was not set.</li>
 </ul>
+<h2 id="stdliboptionscreate_mv_option">stdlib.options.create_mv_option</h2>
+<p>This function creates a multi-value option. These types of options can be specified multiple times. In order to use, you must declare
+an array of the same name as the option. For example, the <code>augeas.mail_alias</code> resource looks like this:</p>
+<pre><code class="shell">local -A options
+local -a destination
+stdlib.options.create_option    state       &quot;present&quot;
+stdlib.options.create_option    account     &quot;__required__&quot;
+stdlib.options.create_mv_option destination &quot;__required__&quot;
+stdlib.options.create_option    file        &quot;/etc/aliases&quot;
+stdlib.options.parse_options    &quot;$@&quot;
+</code></pre>
+
+<p>Now when declaring an alias, you can do:</p>
+<pre><code class="shell">augeas.mail_alias --root --destination jdoe --destination jsmith --destination foobar
+</code></pre>
+
 <h2 id="stdliboptionsparse_options">stdlib.options.parse_options</h2>
 <p>This function cycles through all options that were given in a declared resource. It will report if any required options were not set.</p>
               
