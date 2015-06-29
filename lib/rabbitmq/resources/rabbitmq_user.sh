@@ -29,7 +29,7 @@ function rabbitmq.user {
   stdlib.options.create_option password
   stdlib.options.parse_options "$@"
 
-  stdlib.catalog.add "rabbitmq.user|${options[user]}"
+  stdlib.catalog.add "rabbitmq.user/${options[user]}"
 
   local _admin_status="false"
 
