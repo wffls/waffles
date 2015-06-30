@@ -12,7 +12,7 @@ function gendoc {
     fi
 
     if [[ $line =~ ^# ]]; then
-      _line=$(echo "$line" | sed -e 's/#//g' -e 's/^ //g' -e 's/=//' -e 's/=/#/g')
+      _line=$(echo "$line" | sed -e 's/#//g' -e 's/^ //g' -e 's/^=//' -e 's/==/##/g')
       if [[ $_line_count -eq 3 ]]; then
         echo "# $_name" > "../resources/$_name.md"
       fi
@@ -32,7 +32,7 @@ for file in $(find ../../lib/resources -name \*.sh | sort); do
   gendoc "$_name" "$file"
 done
 
-for category in augeas mysql rabbitmq; do
+for category in augeas mysql nginx rabbitmq; do
   for file in $(find ../../lib/$category/resources -name \*.sh | sort); do
     _name="$(basename $file | sed -e 's/\.sh//g' -e "s/${category}_/${category}./")"
     gendoc "$_name" "$file"

@@ -52,3 +52,15 @@ function stdlib.enable_rabbitmq {
   source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_user.sh"
   source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_vhost.sh"
 }
+
+# Nginx-based Resources and Functions
+function stdlib.enable_nginx {
+  source "$WAFFLES_LIB_DIR/nginx/resources/nginx_events.sh"
+  source "$WAFFLES_LIB_DIR/nginx/resources/nginx_global.sh"
+  source "$WAFFLES_LIB_DIR/nginx/resources/nginx_http.sh"
+  source "$WAFFLES_LIB_DIR/nginx/resources/nginx_if.sh"
+  source "$WAFFLES_LIB_DIR/nginx/resources/nginx_location.sh"
+  source "$WAFFLES_LIB_DIR/nginx/resources/nginx_map.sh"
+  source "$WAFFLES_LIB_DIR/nginx/resources/nginx_server.sh"
+  source "$WAFFLES_LIB_DIR/nginx/resources/nginx_upstream.sh"
+}
