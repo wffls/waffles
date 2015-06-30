@@ -1401,6 +1401,206 @@
             "title": "Example"
         }, 
         {
+            "location": "/resources/nginx.events/", 
+            "text": "nginx.events\n\n\nDescription\n\n\nManages events key/value settings in nginx.conf\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nkey: The key. Required.\n\n\nvalue: A value for the key. Required.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/nginx/nginx.conf.\n\n\n\n\nExample\n\n\nnginx.events --key worker_connections --value 768", 
+            "title": "nginx.events"
+        }, 
+        {
+            "location": "/resources/nginx.events/#nginxevents", 
+            "text": "", 
+            "title": "nginx.events"
+        }, 
+        {
+            "location": "/resources/nginx.events/#description", 
+            "text": "Manages events key/value settings in nginx.conf", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/nginx.events/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  key: The key. Required.  value: A value for the key. Required.  file: The file to store the settings in. Optional. Defaults to /etc/nginx/nginx.conf.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/nginx.events/#example", 
+            "text": "nginx.events --key worker_connections --value 768", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/nginx.global/", 
+            "text": "nginx.global\n\n\nDescription\n\n\nManages global key/value settings in nginx.conf\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nkey: The key. Required.\n\n\nvalue: A value for the key. Required.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/nginx/nginx.conf.\n\n\n\n\nExample\n\n\nnginx.global --key user --value www-data\nnginx.global --key worker_processes --value 4", 
+            "title": "nginx.global"
+        }, 
+        {
+            "location": "/resources/nginx.global/#nginxglobal", 
+            "text": "", 
+            "title": "nginx.global"
+        }, 
+        {
+            "location": "/resources/nginx.global/#description", 
+            "text": "Manages global key/value settings in nginx.conf", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/nginx.global/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  key: The key. Required.  value: A value for the key. Required.  file: The file to store the settings in. Optional. Defaults to /etc/nginx/nginx.conf.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/nginx.global/#example", 
+            "text": "nginx.global --key user --value www-data\nnginx.global --key worker_processes --value 4", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/nginx.http/", 
+            "text": "nginx.http\n\n\nDescription\n\n\nManages http key/value settings in nginx.conf\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nkey: The key. Required.\n\n\nvalue: A value for the key. Required.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/nginx/nginx.conf.\n\n\n\n\nExample\n\n\nnginx.http --key index --value \nindex.html index.htm index.php\n\nlog_format='main \n$remote_addr - $remote_user [$time_local] $status \\\n$request\\\n $body_bytes_sent \\\n$http_referer\\\n \\\n$http_user_agent\\\n \\\n$http_x_forwarded_for\\\n'\nnginx.http --key log_format --value \n$log_format\n\nnginx.http --key access_log --value \n/var/log/nginx/access.log main", 
+            "title": "nginx.http"
+        }, 
+        {
+            "location": "/resources/nginx.http/#nginxhttp", 
+            "text": "", 
+            "title": "nginx.http"
+        }, 
+        {
+            "location": "/resources/nginx.http/#description", 
+            "text": "Manages http key/value settings in nginx.conf", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/nginx.http/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  key: The key. Required.  value: A value for the key. Required.  file: The file to store the settings in. Optional. Defaults to /etc/nginx/nginx.conf.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/nginx.http/#example", 
+            "text": "nginx.http --key index --value  index.html index.htm index.php \nlog_format='main  $remote_addr - $remote_user [$time_local] $status \\ $request\\  $body_bytes_sent \\ $http_referer\\  \\ $http_user_agent\\  \\ $http_x_forwarded_for\\ '\nnginx.http --key log_format --value  $log_format \nnginx.http --key access_log --value  /var/log/nginx/access.log main", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/nginx.if/", 
+            "text": "nginx.if\n\n\nDescription\n\n\nManages key/value settings in an nginx server if block\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The conditional of the if block. Required. namevar.\n\n\nserver_name: The name of the nginx_server resource. Required.\n\n\nkey: The key. Required.\n\n\nvalue: A value for the key. Required.\n\n\nfile: The file to add the variable to. Optional. Defaults to /etc/nginx/sites-enabled/server_name.\n\n\n\n\nExample\n\n\nnginx.if --name '$request_method !~ ^(GET|HEAD|POST)$)' --server_name example.com --key return --value 444", 
+            "title": "nginx.if"
+        }, 
+        {
+            "location": "/resources/nginx.if/#nginxif", 
+            "text": "", 
+            "title": "nginx.if"
+        }, 
+        {
+            "location": "/resources/nginx.if/#description", 
+            "text": "Manages key/value settings in an nginx server if block", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/nginx.if/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  name: The conditional of the if block. Required. namevar.  server_name: The name of the nginx_server resource. Required.  key: The key. Required.  value: A value for the key. Required.  file: The file to add the variable to. Optional. Defaults to /etc/nginx/sites-enabled/server_name.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/nginx.if/#example", 
+            "text": "nginx.if --name '$request_method !~ ^(GET|HEAD|POST)$)' --server_name example.com --key return --value 444", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/nginx.location/", 
+            "text": "nginx.location\n\n\nDescription\n\n\nManages key/value settings in an nginx server location block\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The name of the location block. Required. namevar.\n\n\nserver_name: The name of the nginx_server resource. Required.\n\n\nkey: The key. Required.\n\n\nvalue: A value for the key. Required.\n\n\nfile: The file to add the variable to. Optional. Defaults to /etc/nginx/sites-enabled/server_name.\n\n\n\n\nExample\n\n\nnginx.location --name '~ \\.php$' --server_name example.com --key try_files --value '$uri $uri/ @dw'", 
+            "title": "nginx.location"
+        }, 
+        {
+            "location": "/resources/nginx.location/#nginxlocation", 
+            "text": "", 
+            "title": "nginx.location"
+        }, 
+        {
+            "location": "/resources/nginx.location/#description", 
+            "text": "Manages key/value settings in an nginx server location block", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/nginx.location/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  name: The name of the location block. Required. namevar.  server_name: The name of the nginx_server resource. Required.  key: The key. Required.  value: A value for the key. Required.  file: The file to add the variable to. Optional. Defaults to /etc/nginx/sites-enabled/server_name.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/nginx.location/#example", 
+            "text": "nginx.location --name '~ \\.php$' --server_name example.com --key try_files --value '$uri $uri/ @dw'", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/nginx.map/", 
+            "text": "nginx.map\n\n\nDescription\n\n\nManages entries in an nginx.map block\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The name of the map definition. Required.\n\n\nsource: The source of the map definition. Required.\n\n\nvariable: The variable of the map definition. Required.\n\n\nkey: The key. Required.\n\n\nvalue: A value for the key. Required.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/nginx/conf.d/map_name.\n\n\n\n\nExample\n\n\nnginx.map --name my_map --source '$http_host' --variable '$name' --key default --value 0\nnginx.map --name my_map --source '$http_host' --variable '$name' --key example.com --value 1", 
+            "title": "nginx.map"
+        }, 
+        {
+            "location": "/resources/nginx.map/#nginxmap", 
+            "text": "", 
+            "title": "nginx.map"
+        }, 
+        {
+            "location": "/resources/nginx.map/#description", 
+            "text": "Manages entries in an nginx.map block", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/nginx.map/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  name: The name of the map definition. Required.  source: The source of the map definition. Required.  variable: The variable of the map definition. Required.  key: The key. Required.  value: A value for the key. Required.  file: The file to store the settings in. Optional. Defaults to /etc/nginx/conf.d/map_name.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/nginx.map/#example", 
+            "text": "nginx.map --name my_map --source '$http_host' --variable '$name' --key default --value 0\nnginx.map --name my_map --source '$http_host' --variable '$name' --key example.com --value 1", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/nginx.server/", 
+            "text": "nginx.server\n\n\nDescription\n\n\nManages key/value settings in an nginx server block\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The name of the server. Required. namevar.\n\n\nserver_name: The domain of the server. Optional. Defaults to name.\n\n\nkey: The key. Required.\n\n\nvalue: A value for the key. Required.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/nginx/sites-enabled/name.\n\n\n\n\nExample\n\n\nnginx.server --name example.com --key root --value /var/www/html\nnginx.server --name example.com --key listen --value 80\nnginx.server --name example.com --key index --value index.php", 
+            "title": "nginx.server"
+        }, 
+        {
+            "location": "/resources/nginx.server/#nginxserver", 
+            "text": "", 
+            "title": "nginx.server"
+        }, 
+        {
+            "location": "/resources/nginx.server/#description", 
+            "text": "Manages key/value settings in an nginx server block", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/nginx.server/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  name: The name of the server. Required. namevar.  server_name: The domain of the server. Optional. Defaults to name.  key: The key. Required.  value: A value for the key. Required.  file: The file to store the settings in. Optional. Defaults to /etc/nginx/sites-enabled/name.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/nginx.server/#example", 
+            "text": "nginx.server --name example.com --key root --value /var/www/html\nnginx.server --name example.com --key listen --value 80\nnginx.server --name example.com --key index --value index.php", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/nginx.upstream/", 
+            "text": "nginx.upstream\n\n\nDescription\n\n\nManages entries in an nginx upstream block\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The name of the upstream definition. Required. namevar.\n\n\nkey: The key. Required.\n\n\nvalue: A value for the key. Required.\n\n\noptions: Extra options for the value. Optional.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/nginx/conf.d/upstream_name.\n\n\n\n\nExample\n\n\nnginx.upstream --name example_com --key server --value server1.example.com --options \nweight=5\n\nnginx.upstream --name example_com --key server --value server2.example.com", 
+            "title": "nginx.upstream"
+        }, 
+        {
+            "location": "/resources/nginx.upstream/#nginxupstream", 
+            "text": "", 
+            "title": "nginx.upstream"
+        }, 
+        {
+            "location": "/resources/nginx.upstream/#description", 
+            "text": "Manages entries in an nginx upstream block", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/nginx.upstream/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  name: The name of the upstream definition. Required. namevar.  key: The key. Required.  value: A value for the key. Required.  options: Extra options for the value. Optional.  file: The file to store the settings in. Optional. Defaults to /etc/nginx/conf.d/upstream_name.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/nginx.upstream/#example", 
+            "text": "nginx.upstream --name example_com --key server --value server1.example.com --options  weight=5 \nnginx.upstream --name example_com --key server --value server2.example.com", 
+            "title": "Example"
+        }, 
+        {
             "location": "/resources/rabbitmq.policy/", 
             "text": "rabbitmq.policy\n\n\nDescription\n\n\nManages RabbitMQ policies\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The name of the policy. Required. namevar.\n\n\nvhost: The vhost to apply the policy to. Default: /.\n\n\nqueues: The queues to apply the policy to. Default: all.\n\n\npolicy: The policy. Required.\n\n\n\n\nExample\n\n\nrabbitmq.policy --name openstack-ha --vhost openstack --policy '{\nha-mode\n:\nall\n}'", 
             "title": "rabbitmq.policy"
