@@ -1247,7 +1247,7 @@
         }, 
         {
             "location": "/resources/augeas.mail_alias/", 
-            "text": "augeas.mail_alias\n\n\nDescription\n\n\nManages aliases in /etc/aliases\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\naccount: The mail account. Required. namevar.\n\n\ndestination: The destination for the account. Required.\n\n\nfile: The aliases file. Default: /etc/aliases.\n\n\n\n\nExample\n\n\naugeas.mail_alias --account root --destination /dev/null", 
+            "text": "augeas.mail_alias\n\n\nDescription\n\n\nManages aliases in /etc/aliases\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\naccount: The mail account. Required. namevar.\n\n\ndestination: The destination for the account. Required. Multi-value.\n\n\nfile: The aliases file. Default: /etc/aliases.\n\n\n\n\nExample\n\n\naugeas.mail_alias --account root --destination /dev/null", 
             "title": "augeas.mail_alias"
         }, 
         {
@@ -1262,7 +1262,7 @@
         }, 
         {
             "location": "/resources/augeas.mail_alias/#parameters", 
-            "text": "state: The state of the resource. Required. Default: present.  account: The mail account. Required. namevar.  destination: The destination for the account. Required.  file: The aliases file. Default: /etc/aliases.", 
+            "text": "state: The state of the resource. Required. Default: present.  account: The mail account. Required. namevar.  destination: The destination for the account. Required. Multi-value.  file: The aliases file. Default: /etc/aliases.", 
             "title": "Parameters"
         }, 
         {
@@ -1272,7 +1272,7 @@
         }, 
         {
             "location": "/resources/augeas.shellvar/", 
-            "text": "augeas.shellvar\n\n\nDescription\n\n\nManages simple kv settings in a file.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nkey: The key. Required. namevar.\n\n\nvalue: A value for the key. Required.\n\n\nfile: The file to add the variable to. Required. namevar.\n\n\n\n\nExample\n\n\naugeas.shellvar --key foo --value bar --file /root/vars", 
+            "text": "augeas.shellvar\n\n\nDescription\n\n\nManages simple k=v settings in a file.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nkey: The key. Required. namevar.\n\n\nvalue: A value for the key. Required.\n\n\nfile: The file to add the variable to. Required. namevar.\n\n\n\n\nExample\n\n\naugeas.shellvar --key foo --value bar --file /root/vars", 
             "title": "augeas.shellvar"
         }, 
         {
@@ -1282,7 +1282,7 @@
         }, 
         {
             "location": "/resources/augeas.shellvar/#description", 
-            "text": "Manages simple kv settings in a file.", 
+            "text": "Manages simple k=v settings in a file.", 
             "title": "Description"
         }, 
         {
@@ -1477,7 +1477,7 @@
         }, 
         {
             "location": "/resources/nginx.if/", 
-            "text": "nginx.if\n\n\nDescription\n\n\nManages key/value settings in an nginx server if block\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The conditional of the if block. Required. namevar.\n\n\nserver_name: The name of the nginx_server resource. Required.\n\n\nkey: The key. Required.\n\n\nvalue: A value for the key. Required.\n\n\nfile: The file to add the variable to. Optional. Defaults to /etc/nginx/sites-enabled/server_name.\n\n\n\n\nExample\n\n\nnginx.if --name '$request_method !~ ^(GET|HEAD|POST)$)' --server_name example.com --key return --value 444", 
+            "text": "nginx.if\n\n\nDescription\n\n\nManages key/value settings in an nginx server if block\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The conditional of the if block. Required. namevar.\n\n\nserver_name: The name of the nginx_server resource. Required.\n\n\nkey: The key. Required.\n\n\nvalue: A value for the key. Required.\n\n\nfile: The file to add the variable to. Optional. Defaults to /etc/nginx/sites-enabled/server_name.\n\n\n\n\nExample\n\n\nnginx.if --name '$request_method !~ ^(GET|HEAD|POST)$' --server_name example.com --key return --value 444", 
             "title": "nginx.if"
         }, 
         {
@@ -1497,7 +1497,7 @@
         }, 
         {
             "location": "/resources/nginx.if/#example", 
-            "text": "nginx.if --name '$request_method !~ ^(GET|HEAD|POST)$)' --server_name example.com --key return --value 444", 
+            "text": "nginx.if --name '$request_method !~ ^(GET|HEAD|POST)$' --server_name example.com --key return --value 444", 
             "title": "Example"
         }, 
         {

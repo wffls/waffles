@@ -594,7 +594,7 @@
 <li>file: The file to add the variable to. Optional. Defaults to /etc/nginx/sites-enabled/server_name.</li>
 </ul>
 <h2 id="example">Example</h2>
-<pre><code class="shell">nginx.if --name '$request_method !~ ^(GET|HEAD|POST)$)' --server_name example.com --key return --value 444
+<pre><code class="shell">nginx.if --name '$request_method !~ ^(GET|HEAD|POST)$' --server_name example.com --key return --value 444
 </code></pre>
               
             </div>
