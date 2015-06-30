@@ -18,7 +18,7 @@
 # === Example
 #
 # ```shell
-# nginx.if --name '$request_method !~ ^(GET|HEAD|POST)$)' --server_name example.com --key return --value 444
+# nginx.if --name '$request_method !~ ^(GET|HEAD|POST)$' --server_name example.com --key return --value 444
 # ```
 #
 function nginx.if {

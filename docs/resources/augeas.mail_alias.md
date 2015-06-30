@@ -8,7 +8,7 @@ Manages aliases in /etc/aliases
 
 * state: The state of the resource. Required. Default: present.
 * account: The mail account. Required. namevar.
-* destination: The destination for the account. Required.
+* destination: The destination for the account. Required. Multi-value.
 * file: The aliases file. Default: /etc/aliases.
 
 ## Example

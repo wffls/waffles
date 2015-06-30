@@ -2,7 +2,7 @@
 
 ## Description
 
-Manages simple kv settings in a file.
+Manages simple k=v settings in a file.
 
 ## Parameters
 
