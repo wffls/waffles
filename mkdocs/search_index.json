@@ -1577,7 +1577,7 @@
         }, 
         {
             "location": "/resources/nginx.upstream/", 
-            "text": "nginx.upstream\n\n\nDescription\n\n\nManages entries in an nginx upstream block\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The name of the upstream definition. Required. namevar.\n\n\nkey: The key. Required.\n\n\nvalue: A value for the key. Required.\n\n\noptions: Extra options for the value. Optional.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/nginx/conf.d/upstream_name.\n\n\n\n\nExample\n\n\nnginx.upstream --name example_com --key server --value server1.example.com --options \nweight=5\n\nnginx.upstream --name example_com --key server --value server2.example.com", 
+            "text": "nginx.upstream\n\n\nDescription\n\n\nManages entries in an nginx upstream block\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The name of the upstream definition. Required. namevar.\n\n\nkey: The key. Required.\n\n\nvalue: A value for the key. Required.\n\n\noptions: Extra options for the value. Optional.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/nginx/conf.d/upstream_name.\n\n\n\n\nExample\n\n\nnginx.upstream --name example_com --key server --value server1.example.com --options \nweight=5\n\nnginx.upstream --name example_com --key server --value server2.example.com\n\n\n\n\nNotes\n\n\nThis is broke at the moment due to an issue with the Nginx Augeas lens.\nThis comment will be removed when it's working.", 
             "title": "nginx.upstream"
         }, 
         {
@@ -1599,6 +1599,11 @@
             "location": "/resources/nginx.upstream/#example", 
             "text": "nginx.upstream --name example_com --key server --value server1.example.com --options  weight=5 \nnginx.upstream --name example_com --key server --value server2.example.com", 
             "title": "Example"
+        }, 
+        {
+            "location": "/resources/nginx.upstream/#notes", 
+            "text": "This is broke at the moment due to an issue with the Nginx Augeas lens.\nThis comment will be removed when it's working.", 
+            "title": "Notes"
         }, 
         {
             "location": "/resources/rabbitmq.policy/", 
