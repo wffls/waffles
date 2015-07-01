@@ -20,3 +20,8 @@ nginx.upstream --name example_com --key server --value server1.example.com --opt
 nginx.upstream --name example_com --key server --value server2.example.com
 ```
 
+## Notes
+
+This is broke at the moment due to an issue with the Nginx Augeas lens.
+This comment will be removed when it's working.
+
