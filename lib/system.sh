@@ -229,41 +229,18 @@ function stdlib.split {
   fi
 
   __split=()
-  local string="$1"
-  local delim="$2"
+  local _string="$1"
+  local _delim="$2"
 
-  while [[ $string != "" ]]; do
-    __split+=("${string%%$delim*}")
-    string="${string#*$delim}"
-    if [[ "${__split[-1]}" == $string ]]; then
+  while [[ $_string != "" ]]; do
+    __split+=("${_string%%$_delim*}")
+    _string="${_string#*$_delim}"
+    if [[ "${__split[-1]}" == $_string ]]; then
       break
     fi
   done
 }
 
-
-# stdlib.join joins an array into a string
-# $1 = delimiter
-# $2+ = array elements
-function stdlib.join {
-  if [[ $# -gt 1 ]]; then
-
-    local delim=$1
-    local string
-    shift
-
-    while [[ "$#" -gt 0 ]]; do
-      if [[ -z $string ]]; then
-        string="${1}"
-      else
-        string="${string}${delim}${1}"
-      fi
-      shift
-    done
-
-    echo "$string"
-  fi
-}
 
 # stdlib.trim trims whitespace from a string
 # $1 = string
@@ -349,5 +326,33 @@ function stdlib.array_unshift {
       eval "$_arr=(\"\$1\" \"\${$_arr[@]}\")"
       shift
     done
+  fi
+}
+
+# stdlib.array_join joins an array into a string
+# $1 = array
+# $2 = delimiter
+function stdlib.array_join {
+  if [[ $# -eq 2 ]]; then
+    local _arr="$1"
+    local _delim="$2"
+    local _arr_length
+    local _string _pop
+
+    _arr_length=$(stdlib.array_length $_arr)
+    while [[ $_arr_length -gt 0 ]]; do
+      eval "_pop=\"\$(echo \"\${$_arr[0]}\")\""
+      eval "unset $_arr[0]"
+      eval "$_arr=(\"\${$_arr[@]}\")"
+
+      if [[ -z $_string ]]; then
+        _string="${_pop}"
+      else
+        _string="${_string}${_delim}${_pop}"
+      fi
+      _arr_length=$(stdlib.array_length $_arr)
+    done
+
+    echo "$_string"
   fi
 }
