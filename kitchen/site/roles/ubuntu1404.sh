@@ -2,6 +2,13 @@ stdlib.title ubuntu1204/tests
 
 source /etc/lsb-release
 
+stdlib.info "syntax check"
+stdlib.enable_apache
+stdlib.enable_augeas
+stdlib.enable_mysql
+stdlib.enable_nginx
+stdlib.enable_rabbitmq
+
 stdlib.info "groupadd"
 stdlib.groupadd --group memcache --gid 999
 
