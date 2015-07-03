@@ -1,5 +1,15 @@
 `lib/system.sh` contains functions that are considered core to Waffles or do not warrant their own file.
 
+## stdlib.array_join
+
+Joins an array into a string.
+
+```shell
+x=(foo bar baz)
+stdlib.array_join x ,
+=> foo,bar,baz
+```
+
 ## stdlib.array_length
 
 Returns the length of an array.
@@ -134,14 +144,6 @@ Prints a log message at `info` level.
 
 ```shell
 stdlib.info "Foobar"
-```
-
-## stdlib.join
-
-Joins an array into a string.
-
-```shell
-stdlib.join , foo bar baz
 ```
 
 ## stdlib.mute

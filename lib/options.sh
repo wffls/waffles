@@ -10,7 +10,7 @@ function stdlib.options.create_option {
 }
 
 function stdlib.options.create_mv_option {
-  if [[ -n $2 ]]; then
+  if [[ -n $1 ]]; then
     stdlib.options.create_option "$1" "$2"
     options[$1/mv]=1
   fi
