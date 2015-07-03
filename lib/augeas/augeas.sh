@@ -20,7 +20,7 @@ save
 EOF
 )
 
-  if [[ -n $_result ]]; then
+  if [[ -n "$_result" ]]; then
     echo "error: $_result"
     return
   fi
@@ -43,7 +43,7 @@ match /files${_path}
 EOF
 )
 
-  if [[ $_result =~ "no matches" ]]; then
+  if [[ "$_result" =~ "no matches" ]]; then
     echo "absent"
     return
   fi

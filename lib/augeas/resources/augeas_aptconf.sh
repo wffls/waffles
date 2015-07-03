@@ -25,7 +25,7 @@ function augeas.aptconf {
 
   if ! stdlib.command_exists augtool ; then
     stdlib.error "Cannot find augtool."
-    if [[ $WAFFLES_EXIT_ON_ERROR == true ]]; then
+    if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
       exit 1
     else
       return 1
@@ -44,8 +44,8 @@ function augeas.aptconf {
   stdlib.catalog.add "augeas.aptconf/${options[setting]}"
 
   augeas.aptconf.read
-  if [[ ${options[state]} == absent ]]; then
-    if [[ $stdlib_current_state != absent ]]; then
+  if [[ "${options[state]}" == "absent" ]]; then
+    if [[ "$stdlib_current_state" != "absent" ]]; then
       stdlib.info "$_name state: $stdlib_current_state, should be absent."
       augeas.aptconf.delete
     fi
@@ -72,13 +72,13 @@ function augeas.aptconf.read {
 
   # Check if the setting exists
   stdlib_current_state=$(augeas.get --lens Aptconf --file "${options[file]}" --path "/$_path")
-  if [[ $stdlib_current_state == absent ]]; then
+  if [[ "$stdlib_current_state" == "absent" ]]; then
     return
   fi
 
   # Check if the value matches
   _result=$(augeas.get --lens Aptconf --file "${options[file]}" --path "/${_path}[. = '${options[value]}']")
-  if [[ $_result == "absent" ]]; then
+  if [[ "$_result" == "absent" ]]; then
     stdlib_current_state="update"
   fi
 }
@@ -89,7 +89,7 @@ function augeas.aptconf.create {
 
   local _result=$(augeas.run --lens Aptconf --file "${options[file]}" "${_augeas_commands[@]}")
 
-  if [[ $_result =~ ^error ]]; then
+  if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error adding aptconf $_name with augeas: $_result"
     return
   fi
@@ -100,7 +100,7 @@ function augeas.aptconf.delete {
   _augeas_commands+=("rm /files${options[file]}/$_path")
   local _result=$(augeas.run --lens Aptconf --file ${options[file]} "${_augeas_commands[@]}")
 
-  if [[ $_result =~ "^error" ]]; then
+  if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error deleting aptconf $_name with augeas: $_result"
     return
   fi

@@ -25,7 +25,7 @@ function augeas.ini {
 
   if ! stdlib.command_exists augtool ; then
     stdlib.error "Cannot find augtool."
-    if [[ $WAFFLES_EXIT_ON_ERROR == true ]]; then
+    if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
       exit 1
     else
       return 1
@@ -44,8 +44,8 @@ function augeas.ini {
   stdlib.catalog.add "augeas.ini/$_name"
 
   augeas.ini.read
-  if [[ ${options[state]} == absent ]]; then
-    if [[ $stdlib_current_state != absent ]]; then
+  if [[ "${options[state]}" == "absent" ]]; then
+    if [[ "$stdlib_current_state" != "absent" ]]; then
       stdlib.info "$_name state: $stdlib_current_state, should be absent."
       augeas.ini.delete
     fi
@@ -72,13 +72,13 @@ function augeas.ini.read {
 
   # Check if the section/option
   stdlib_current_state=$(augeas.get --lens Puppet --file "${options[file]}" --path "/${options[section]}/${options[option]}")
-  if [[ $stdlib_current_state == absent ]]; then
+  if [[ "$stdlib_current_state" == "absent" ]]; then
     return
   fi
 
   # Check if the value matches
   _result=$(augeas.get --lens Puppet --file "${options[file]}" --path "/${options[section]}/${options[option]}[. = '${options[value]}']")
-  if [[ $_result == "absent" ]]; then
+  if [[ "$_result" == "absent" ]]; then
     stdlib_current_state="update"
   fi
 }
@@ -89,7 +89,7 @@ function augeas.ini.create {
 
   local _result=$(augeas.run --lens Puppet --file "${options[file]}" "${_augeas_commands[@]}")
 
-  if [[ $_result =~ ^error ]]; then
+  if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error adding ini $_name with augeas: $_result"
     return
   fi
@@ -100,7 +100,7 @@ function augeas.ini.delete {
   _augeas_commands+=("rm /files${options[file]}/${options[section]}/${options[option]}")
   local _result=$(augeas.run --lens Puppet --file ${options[file]} "${_augeas_commands[@]}")
 
-  if [[ $_result =~ "^error" ]]; then
+  if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error deleting ini $_name with augeas: $_result"
     return
   fi

@@ -28,7 +28,7 @@ function nginx.map {
 
   if ! stdlib.command_exists augtool ; then
     stdlib.error "Cannot find augtool."
-    if [[ $WAFFLES_EXIT_ON_ERROR == true ]]; then
+    if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
       exit 1
     else
       return 1
@@ -58,8 +58,8 @@ function nginx.map {
   fi
 
   nginx.map.read
-  if [[ ${options[state]} == absent ]]; then
-    if [[ $stdlib_current_state != absent ]]; then
+  if [[ "${options[state]}" == "absent" ]]; then
+    if [[ "$stdlib_current_state" != "absent" ]]; then
       stdlib.info "$_name state: $stdlib_current_state, should be absent."
       nginx.map.delete
     fi
@@ -90,19 +90,19 @@ function nginx.map.read {
 
   # Check if the server_name exists
   stdlib_current_state=$(augeas.get --lens Nginx --file "$_file" --path "/map/#source[. = '${options[source]}']")
-  if [[ $stdlib_current_state == absent ]]; then
+  if [[ "$stdlib_current_state" == "absent" ]]; then
     return
   fi
 
   # Check if the variable exists and matches
   _result=$(augeas.get --lens Nginx --file "$_file" --path "/map/#source[. = '${options[source]}']/../#variable[. = '${options[variable]}']")
-  if [[ $_result == "absent" ]]; then
+  if [[ "$_result" == "absent" ]]; then
     stdlib_current_state="update"
   fi
 
   # Check if the key exists and the value matches
   _result=$(augeas.get --lens Nginx --file "$_file" --path "/map/#source[. = '${options[source]}']/../${options[key]}[. = '${options[value]}']")
-  if [[ $_result == "absent" ]]; then
+  if [[ "$_result" == "absent" ]]; then
     stdlib_current_state="update"
   fi
 
@@ -119,7 +119,7 @@ function nginx.map.create {
 
   local _result=$(augeas.run --lens Nginx --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ $_result =~ ^error ]]; then
+  if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error adding nginx.map $_name with augeas: $_result"
     return
   fi
@@ -132,7 +132,7 @@ function nginx.map.update {
 
   local _result=$(augeas.run --lens Nginx --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ $_result =~ ^error ]]; then
+  if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error adding nginx.map $_name with augeas: $_result"
     return
   fi
@@ -144,7 +144,7 @@ function nginx.map.delete {
 
   local _result=$(augeas.run --lens Nginx --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ $_result =~ "^error" ]]; then
+  if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error deleting nginx.map $_name with augeas: $_result"
     return
   fi

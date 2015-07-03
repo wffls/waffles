@@ -24,7 +24,7 @@ function augeas.mail_alias {
 
   if ! stdlib.command_exists augtool ; then
     stdlib.error "Cannot find augtool."
-    if [[ $WAFFLES_EXIT_ON_ERROR == true ]]; then
+    if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
       exit 1
     else
       return 1
@@ -44,8 +44,8 @@ function augeas.mail_alias {
   done
 
   augeas.mail_alias.read
-  if [[ ${options[state]} == absent ]]; then
-    if [[ $stdlib_current_state != absent ]]; then
+  if [[ "${options[state]}" == "absent" ]]; then
+    if [[ "$stdlib_current_state" != "absent" ]]; then
       stdlib.info "${options[account]} state: $stdlib_current_state, should be absent."
       augeas.mail_alias.delete
     fi
@@ -70,13 +70,13 @@ function augeas.mail_alias.read {
   local _result
 
   stdlib_current_state=$(augeas.get --lens Aliases --file "${options[file]}" --path "*/name[. = '${options[account]}']")
-  if [[ $stdlib_current_state == absent ]]; then
+  if [[ "$stdlib_current_state" == "absent" ]]; then
     return
   fi
 
   for d in "${destination[@]}"; do
     _result=$(augeas.get --lens Aliases --file "${options[file]}" --path "*/name[. = '${options[account]}']/../value[. = '$d']")
-    if [[ $_result == absent ]]; then
+    if [[ "$_result" == "absent" ]]; then
       stdlib_current_state="update"
     fi
   done
@@ -92,7 +92,7 @@ function augeas.mail_alias.create {
 
   local _result=$(augeas.run --lens Aliases --file "${options[file]}" "${_augeas_commands[@]}")
 
-  if [[ $_result =~ ^error ]]; then
+  if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error creating mail alias with augeas: $_result"
     return
   fi
@@ -107,7 +107,7 @@ function augeas.mail_alias.update {
 
   local _result=$(augeas.run --lens Aliases --file "${options[file]}" "${_augeas_commands[@]}")
 
-  if [[ $_result =~ ^error ]]; then
+  if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error creating mail alias with augeas: $_result"
     return
   fi
@@ -121,7 +121,7 @@ function augeas.mail_alias.delete {
 
   local _result=$(augeas.run --lens Aliases --file ${options[file]} "${_augeas_commands[@]}")
 
-  if [[ $_result =~ "^error" ]]; then
+  if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error deleting resource with augeas: $_result"
     return
   fi

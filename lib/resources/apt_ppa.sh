@@ -23,7 +23,7 @@ function stdlib.apt_ppa {
 
   if ! stdlib.command_exists apt-add-repository ; then
     stdlib.error "Cannot find apt-add-repository command."
-    if [[ $WAFFLES_EXIT_ON_ERROR == true ]]; then
+    if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
       exit 1
     else
       return 1
@@ -39,8 +39,8 @@ function stdlib.apt_ppa {
   stdlib.catalog.add "stdlib.apt_ppa/${options[ppa]}"
 
   stdlib.apt_ppa.read
-  if [[ ${options[state]} == absent ]]; then
-    if [[ $stdlib_current_state != absent ]]; then
+  if [[ "${options[state]}" == "absent" ]]; then
+    if [[ "$stdlib_current_state" != "absent" ]]; then
       stdlib.info "${options[ppa]} state: $stdlib_current_state, should be absent."
       stdlib.apt_ppa.delete
     fi
@@ -59,7 +59,7 @@ function stdlib.apt_ppa {
 
 function stdlib.apt_ppa.read {
   local _repo_file_name="$(echo ${options[ppa]} | sed -e "s|[/:]|-|" -e "s|\.|_|")-*.list"
-  if [ -f /etc/apt/sources.list.d/$_repo_file_name ]; then
+  if [ -f "/etc/apt/sources.list.d/$_repo_file_name" ]; then
     stdlib_current_state="present"
     return
   fi
@@ -70,7 +70,7 @@ function stdlib.apt_ppa.read {
 function stdlib.apt_ppa.create {
   stdlib.mute apt-add-repository -y ppa:${options[ppa]}
 
-  if [[ ${options[refresh]} == true ]]; then
+  if [[ "${options[refresh]}" == "true" ]]; then
     stdlib.mute apt-get update
   fi
 
@@ -82,7 +82,7 @@ function stdlib.apt_ppa.create {
 function stdlib.apt_ppa.delete {
   stdlib.mute apt-add-repository -y -r ppa:${options[ppa]}
 
-  if [[ ${options[refresh]} == true ]]; then
+  if [[ "${options[refresh]}" == "true" ]]; then
     stdlib.mute apt-get update
   fi
 

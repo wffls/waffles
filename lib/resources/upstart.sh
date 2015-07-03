@@ -28,7 +28,7 @@ function stdlib.upstart {
   stdlib.catalog.add "stdlib.upstart/${options[name]}"
 
   stdlib.upstart.read
-  if [[ ${options[state]} == stopped ]]; then
+  if [[ "${options[state]}" == "stopped" ]]; then
     if [[ $stdlib_current_state != stopped ]]; then
       stdlib.info "${options[name]} state: $stdlib_current_state, should be stopped."
       stdlib.upstart.delete
@@ -47,16 +47,16 @@ function stdlib.upstart {
 }
 
 function stdlib.upstart.read {
-  if [[ ! -f /etc/init/${options[name]}.conf ]]; then
+  if [[ ! -f "/etc/init/${options[name]}.conf" ]]; then
     stdlib.error "/etc/init/${options[name]}.conf does not exist."
-    if [[ $WAFFLES_EXIT_ON_ERROR == true ]]; then
+    if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
       exit 1
     else
       return 1
     fi
   else
     local _status=$(status ${options[name]})
-    if [[ $_status =~ stop ]]; then
+    if [[ "$_status" =~ "stop" ]]; then
       stdlib_current_state="stopped"
       return
     fi

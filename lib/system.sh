@@ -43,11 +43,11 @@ function stdlib.error {
 
 # These commands are simple helpers to detect how Waffles was run.
 function stdlib.noop? {
-  [[ -n $WAFFLES_NOOP ]]
+  [[ -n "$WAFFLES_NOOP" ]]
 }
 
 function stdlib.debug? {
-  [[ -n $WAFFLES_DEBUG ]]
+  [[ -n "$WAFFLES_DEBUG" ]]
 }
 
 
@@ -116,7 +116,7 @@ function stdlib.capture_error {
     if [[ $? != 0 ]]; then
       stdlib.error "Errors occurred:"
       stdlib.error "$_err"
-      if [[ $WAFFLES_EXIT_ON_ERROR == true ]]; then
+      if [[ "$WAFFLES_EXIT_ON_ERROR" == true ]]; then
         stdlib.error "Halting run."
         exit 1
       fi
@@ -152,7 +152,7 @@ function stdlib.profile {
   if [[ $# -gt 0 ]]; then
     local _script_path
     local _profile
-    if [[ $1 =~ [/] ]]; then
+    if [[ "$1" =~ [/] ]]; then
       stdlib.split $1 '/'
       _profile="${__split[0]}"
       local _file="${__split[1]}"
@@ -164,8 +164,8 @@ function stdlib.profile {
       fi
     fi
 
-    if [[ -n $_profile && -n $_script_path ]]; then
-      if [[ -n $WAFFLES_REMOTE ]]; then
+    if [[ -n "$_profile" && -n "$_script_path" ]]; then
+      if [[ -n "$WAFFLES_REMOTE" ]]; then
         stdlib_remote_copy["profiles/$_profile"]=1
       else
         stdlib.include "$_script_path"
@@ -182,7 +182,7 @@ function stdlib.data {
   if [[ $# -gt 0 ]]; then
     local _script_path
     local _data
-    if [[ $1 =~ [/] ]]; then
+    if [[ "$1" =~ [/] ]]; then
       stdlib.split $1 '/'
       _data="${__split[0]}"
       local _file="${__split[1]}"
@@ -197,8 +197,8 @@ function stdlib.data {
       fi
     fi
 
-    if [[ -n $_data && -n $_script_path ]]; then
-      if [[ -n $WAFFLES_REMOTE ]]; then
+    if [[ -n "$_data" && -n "$_script_path" ]]; then
+      if [[ -n "$WAFFLES_REMOTE" ]]; then
         stdlib_remote_copy[$_data]=1
       else
         stdlib.include "$_script_path"
@@ -224,15 +224,15 @@ function stdlib.command_exists {
 # $2 = delimiter
 declare -ax __split
 function stdlib.split {
-  if [[ -z $2 ]]; then
-    echo $1
+  if [[ -z "$2" ]]; then
+    echo "$1"
   fi
 
   __split=()
   local _string="$1"
   local _delim="$2"
 
-  while [[ $_string != "" ]]; do
+  while [[ "$_string" != "" ]]; do
     __split+=("${_string%%$_delim*}")
     _string="${_string#*$_delim}"
     if [[ "${__split[-1]}" == $_string ]]; then
@@ -263,8 +263,8 @@ function stdlib.trim {
 # stdlib.array_length returns the length of an array
 # $1 = array
 function stdlib.array_length {
-  local _arr=$1
-  if [[ -n $_arr ]]; then
+  local _arr="$1"
+  if [[ -n "$_arr" ]]; then
     eval "echo \${#$_arr[@]}"
   fi
 }
@@ -273,10 +273,10 @@ function stdlib.array_length {
 # $1 = array
 # $2+ = elements to push
 function stdlib.array_push {
-  local _arr=$1
+  local _arr="$1"
   shift
 
-  if [[ -n $_arr ]]; then
+  if [[ -n "$_arr" ]]; then
     eval "$_arr=(\"\${$_arr[@]}\" \"\$@\")"
   fi
 }
@@ -284,12 +284,12 @@ function stdlib.array_push {
 # stdlib.array_pop pops the last element from an array
 # $1 = array
 function stdlib.array_pop {
-  local _arr=$1
+  local _arr="$1"
   local _arr_length=$(stdlib.array_length $_arr)
   local _arr_element
   local _pop
 
-  if [[ -n $_arr ]] && (( $_arr_length >= 1 )); then
+  if [[ -n "$_arr" ]] && (( $_arr_length >= 1 )); then
     _arr_element=$(( $_arr_length - 1 ))
     eval "_pop=\"\$(echo \"\${$_arr[$_arr_element]}\")\""
     eval "unset $_arr[$_arr_element]"
@@ -301,11 +301,11 @@ function stdlib.array_pop {
 # stdlib.array_shift pops the first element from an array
 # $1 = array
 function stdlib.array_shift {
-  local _arr=$1
+  local _arr="$1"
   local _arr_length=$(stdlib.array_length $_arr)
   local _pop
 
-  if [[ -n $_arr ]] && (( $_arr_length >= 1 )); then
+  if [[ -n "$_arr" ]] && (( $_arr_length >= 1 )); then
     eval "_pop=\"\$(echo \"\${$_arr[0]}\")\""
     eval "unset $_arr[0]"
     eval "$_arr=(\"\${$_arr[@]}\")"
@@ -318,10 +318,10 @@ function stdlib.array_shift {
 # $1 = array
 # $2+ = elements
 function stdlib.array_unshift {
-  local _arr=$1
+  local _arr="$1"
   shift
 
-  if [[ -n $_arr ]]; then
+  if [[ -n "$_arr" ]]; then
     while [[ $# -gt 0 ]]; do
       eval "$_arr=(\"\$1\" \"\${$_arr[@]}\")"
       shift
@@ -340,12 +340,12 @@ function stdlib.array_join {
     local _string _pop
 
     _arr_length=$(stdlib.array_length $_arr)
-    while [[ $_arr_length -gt 0 ]]; do
+    while [[ "$_arr_length" -gt 0 ]]; do
       eval "_pop=\"\$(echo \"\${$_arr[0]}\")\""
       eval "unset $_arr[0]"
       eval "$_arr=(\"\${$_arr[@]}\")"
 
-      if [[ -z $_string ]]; then
+      if [[ -z "$_string" ]]; then
         _string="${_pop}"
       else
         _string="${_string}${_delim}${_pop}"

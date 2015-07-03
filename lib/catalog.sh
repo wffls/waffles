@@ -3,9 +3,9 @@
 declare -Ag stdlib_global_catalog
 
 function stdlib.catalog.add {
-  if [[ -n $1 ]]; then
+  if [[ -n "$1" ]]; then
     if [[ ${stdlib_global_catalog[$1]+exists} ]]; then
-      if [[ $WAFFLES_EXIT_ON_DUPLICATE_RESOURCE == true ]]; then
+      if [[ -n "$WAFFLES_EXIT_ON_DUPLICATE_RESOURCE" ]]; then
         stdlib.error "Duplicate resource detected: $1"
         exit 1
       else

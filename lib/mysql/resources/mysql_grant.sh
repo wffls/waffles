@@ -38,8 +38,8 @@ function mysql.grant {
   local grant="GRANT ${options[privileges]} ON \`${options[database]}\`.* TO $_name"
 
   mysql.grant.read
-  if [[ ${options[state]} == absent ]]; then
-    if [[ $stdlib_current_state != absent ]]; then
+  if [[ "${options[state]}" == "absent" ]]; then
+    if [[ "$stdlib_current_state" != "absent" ]]; then
       stdlib.info "${options[user]} state: $stdlib_current_state, should be absent."
       mysql.grant.delete
     fi
@@ -67,12 +67,12 @@ function mysql.grant.read {
 
   local _grant_query="SHOW GRANTS FOR $_name"
   local _grant_result=$(mysql -NBe "${_grant_query}" 2>/dev/null | grep -v USAGE | grep -v PROXY)
-  if [[ -z $_grant_result ]]; then
+  if [[ -z "$_grant_result" ]]; then
     stdlib_current_state="absent"
     return
   fi
 
-  if [[ $_grant_result != $grant ]]; then
+  if [[ "$_grant_result" != "$grant" ]]; then
     stdlib_current_state="update"
     return
   fi

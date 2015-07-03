@@ -32,8 +32,8 @@ function stdlib.groupadd {
   local group_info _gid
 
   stdlib.groupadd.read
-  if [[ ${options[state]} == absent ]]; then
-    if [[ $stdlib_current_state != absent ]]; then
+  if [[ "${options[state]}" == "absent" ]]; then
+    if [[ "$stdlib_current_state" != "absent" ]]; then
       stdlib.info "${options[group]} state: $stdlib_current_state, should be absent."
       stdlib.groupadd.delete
     fi
@@ -63,7 +63,7 @@ function stdlib.groupadd.read {
   stdlib.split "$group_info" ':'
   _gid="${__split[2]}"
 
-  if [[ -n ${options[gid]} && ${options[gid]} != $_gid ]]; then
+  if [[ -n "${options[gid]}" && "${options[gid]}" != "$_gid" ]]; then
     stdlib_current_state="update"
     return
   fi
@@ -74,7 +74,7 @@ function stdlib.groupadd.read {
 function stdlib.groupadd.create {
   declare -a create_args
 
-  if [[ -n ${options[gid]} ]]; then
+  if [[ -n "${options[gid]}" ]]; then
     create_args+=("-g ${options[gid]}")
   fi
 
@@ -88,7 +88,7 @@ function stdlib.groupadd.create {
 function stdlib.groupadd.update {
   declare -a update_args
 
-  if [[ -n ${options[gid]} && ${options[gid]} != $_gid ]]; then
+  if [[ -n "${options[gid]}" && "${options[gid]}" != "$_gid" ]]; then
     update_args+=("-g ${options[gid]}")
   fi
 

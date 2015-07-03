@@ -41,21 +41,21 @@ function stdlib.directory {
 
   local _owner _group _mode _source _directory _recurse _rsync _parent
 
-  if [[ ${options[recurse]} == true ]]; then
+  if [[ "${options[recurse]}" == "true" ]]; then
     _recurse="-R"
   else
     _recurse=""
   fi
 
-  if [[ ${options[parent]} == true ]]; then
+  if [[ "${options[parent]}" == "true" ]]; then
     _parent="-p"
   else
     _parent=""
   fi
 
   stdlib.directory.read
-  if [[ ${options[state]} == absent ]]; then
-    if [[ $stdlib_current_state != absent ]]; then
+  if [[ "${options[state]}" == "absent" ]]; then
+    if [[ "$stdlib_current_state" != "absent" ]]; then
       stdlib.info "${options[name]} state: $stdlib_current_state, should be absent."
       stdlib.directory.delete
     fi
@@ -80,7 +80,7 @@ function stdlib.directory {
 }
 
 function stdlib.directory.read {
-  if [[ ! -d ${options[name]} ]]; then
+  if [[ ! -d "${options[name]}" ]]; then
     stdlib_current_state="absent"
     return
   fi
@@ -92,27 +92,27 @@ function stdlib.directory.read {
   _mode="${__split[2]}"
   _type="${__split[3]}"
 
-  if [[ $_type != directory ]]; then
+  if [[ "$_type" != "directory" ]]; then
     stdlib_current_state="type_error"
     return
   fi
 
-  if [[ ${options[owner]} != $_owner ]]; then
+  if [[ "${options[owner]}" != "$_owner" ]]; then
     stdlib_current_state="update"
     return
   fi
 
-  if [[ ${options[group]} != $_group ]]; then
+  if [[ "${options[group]}" != "$_group" ]]; then
     stdlib_current_state="update"
     return
   fi
 
-  if [[ ${options[mode]} != $_mode ]]; then
+  if [[ "${options[mode]}" != "$_mode" ]]; then
     stdlib_current_state="update"
     return
   fi
 
-  if [[ -n ${options[source]} ]]; then
+  if [[ -n "${options[source]}" ]]; then
     _rsync=$(rsync -ani "${options[source]}/" "${options[name]}")
     if [[ -n $_rsync ]]; then
       stdlib_current_state="update"
@@ -124,14 +124,14 @@ function stdlib.directory.read {
 }
 
 function stdlib.directory.create {
-  if [[ -n ${options[source]} ]]; then
+  if [[ -n "${options[source]}" ]]; then
     stdlib.capture_error rsync -a "${options[source]}/" "${options[name]}"
     stdlib.capture_error chmod ${options[recurse]} ${options[mode]} "${options[name]}"
     stdlib.capture_error chown ${options[recurse]} ${options[owner]}:${options[group]} "${options[name]}"
   else
     stdlib.capture_error mkdir $_parent "${options[name]}"
     stdlib.capture_error chmod ${options[mode]} "${options[name]}"
-    stdlib.capture_error chown ${options[group]}:${options[group]} "${options[name]}"
+    stdlib.capture_error chown ${options[owner]}:${options[group]} "${options[name]}"
   fi
 
   stdlib_state_change="true"

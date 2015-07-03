@@ -51,7 +51,7 @@ function stdlib.git {
 
   if ! stdlib.command_exists git ; then
     stdlib.error "Cannot find git command."
-    if [[ $WAFFLES_EXIT_ON_ERROR == true ]]; then
+    if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
       exit 1
     else
       return 1
@@ -61,7 +61,7 @@ function stdlib.git {
   # Check and make sure owner and group exist
   local _uid _gid
   local _user_info=$(getent passwd "${options[owner]}")
-  if [[ -n $_user_info ]]; then
+  if [[ -n "$_user_info" ]]; then
     stdlib.split "$_user_info" ':'
     _uid="${__split[2]}"
   else
@@ -70,7 +70,7 @@ function stdlib.git {
   fi
 
   local _group_info=$(getent group "${options[group]}")
-  if [[ -n $_group_info ]]; then
+  if [[ -n "$_group_info" ]]; then
     stdlib.split "$_group_info" ':'
     _gid="${__split[2]}"
   else
@@ -79,8 +79,8 @@ function stdlib.git {
   fi
 
   stdlib.git.read
-  if [[ ${options[state]} == absent ]]; then
-    if [[ $stdlib_current_state != absent ]]; then
+  if [[ "${options[state]}" == "absent" ]]; then
+    if [[ "$stdlib_current_state" != "absent" ]]; then
       stdlib.info "${options[name]} state: $stdlib_current_state, should be absent."
       stdlib.git.delete
     fi
@@ -102,11 +102,11 @@ function stdlib.git {
 }
 
 function stdlib.git.read {
-  if [[ -f ${options[name]}/.git/config ]]; then
+  if [[ -f "${options[name]}/.git/config" ]]; then
     stdlib.debug_mute pushd "${options[name]}"
 
     # First check if state is set to "latest"
-    if [[ ${options[state]} == "latest" ]]; then
+    if [[ "${options[state]}" == "latest" ]]; then
       stdlib.debug_mute git remote update
       git status -uno | grep -q up-to-date
       if [[ $? -eq 0 ]]; then
@@ -119,9 +119,9 @@ function stdlib.git.read {
 
     # Next check if a commit was specified.
     # See if the repo is currently at that commit
-    elif [[ -n ${options[commit]} ]]; then
+    elif [[ -n "${options[commit]}" ]]; then
       local _commit=$(git rev-parse HEAD)
-      if [[ ${options[commit]} =~ ^${_commit} ]]; then
+      if [[ "${options[commit]}" =~ ^${_commit} ]]; then
         stdlib_current_state="present"
         return
       else
@@ -130,9 +130,9 @@ function stdlib.git.read {
       fi
 
     # If a commit was not specified, check for a tag
-    elif [[ -n ${options[tag]} ]]; then
+    elif [[ -n "${options[tag]}" ]]; then
       local _tag=$(git describe --always --tag)
-      if [[ ${options[tag]} == $_tag ]]; then
+      if [[ "${options[tag]}" == "$_tag" ]]; then
         stdlib_current_state="present"
         return
       else
@@ -143,7 +143,7 @@ function stdlib.git.read {
     # Finally, check for a branch, defaulting to "master"
     else
       local _branch=$(git rev-parse --abbrev-ref HEAD)
-      if [[ ${options[branch]} == $_branch ]]; then
+      if [[ "${options[branch]}" == "$_branch" ]]; then
         stdlib_current_state="present"
         return
       else
@@ -156,13 +156,13 @@ function stdlib.git.read {
     user_info=$(getent passwd "${options[owner]}")
 
     local _user_check=$(find "${options[name]}" ! -uid $_uid 2> /dev/null)
-    if [[ -n $_user_check ]]; then
+    if [[ -n "$_user_check" ]]; then
       stdlib_current_state="update"
       return
     fi
 
     local _group_check=$(find "${options[name]}" ! -gid $_gid 2> /dev/null)
-    if [[ -n $_group_check ]]; then
+    if [[ -n "$_group_check" ]]; then
       stdlib_current_state="update"
       return
     fi
@@ -176,11 +176,11 @@ function stdlib.git.create {
   stdlib.debug_mute pushd "${options[name]}"
 
   # if a commit was given, check it out
-  if [[ -n ${options[commit]} ]]; then
+  if [[ -n "${options[commit]}" ]]; then
     stdlib.capture_error git checkout "${options[commit]}"
 
   # if a tag was given, check it out
-  elif [[ -n ${options[tag]} ]]; then
+  elif [[ -n "${options[tag]}" ]]; then
     stdlib.capture_error git checkout "tags/${options[tag]}"
 
   # if a branch was given, check it out
@@ -198,19 +198,19 @@ function stdlib.git.create {
 function stdlib.git.update {
   # If state is set to "latest", do a git pull
   stdlib.debug_mute pushd "${options[name]}"
-  if [[ ${options[state]} == "latest" ]]; then
-    if [[ -n ${options[branch]} ]]; then
+  if [[ "${options[state]}" == "latest" ]]; then
+    if [[ -n "${options[branch]}" ]]; then
       stdlib.capture_error git checkout "${options[branch]}"
     fi
 
     stdlib.capture_error git pull
 
   # If a commit was given, check it out
-  elif [[ -n ${options[commit]} ]]; then
+  elif [[ -n "${options[commit]}" ]]; then
     stdlib.capture_error git checkout "${options[commit]}"
 
   # If a tag was given, check it out
-  elif [[ -n ${options[tag]} ]]; then
+  elif [[ -n "${options[tag]}" ]]; then
     stdlib.capture_error git checkout "tags/${options[tag]}"
 
   # If a branch was given, check it out

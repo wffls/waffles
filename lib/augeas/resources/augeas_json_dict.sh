@@ -27,7 +27,7 @@ function augeas.json_dict {
 
   if ! stdlib.command_exists augtool ; then
     stdlib.error "Cannot find augtool."
-    if [[ $WAFFLES_EXIT_ON_ERROR == true ]]; then
+    if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
       exit 1
     else
       return 1
@@ -48,8 +48,8 @@ function augeas.json_dict {
   stdlib.catalog.add "augeas.json_dict/$_name"
 
   augeas.json_dict.read
-  if [[ ${options[state]} == absent ]]; then
-    if [[ $stdlib_current_state != absent ]]; then
+  if [[ "${options[state]}" == "absent" ]]; then
+    if [[ "$stdlib_current_state" != "absent" ]]; then
       stdlib.info "$_name state: $stdlib_current_state, should be absent."
       augeas.json_dict.delete
     fi
@@ -73,21 +73,22 @@ function augeas.json_dict {
 function augeas.json_dict.read {
   local _result
 
-  if [[ ! -f ${options[file]} ]]; then
+  if [[ ! -f "${options[file]}" ]]; then
     stdlib_current_state="absent"
     return
   fi
 
   # Check if the path exists
   stdlib_current_state=$(augeas.get --lens Json --file "${options[file]}" --path "${options[path]}")
-  if [[ $stdlib_current_state == absent ]]; then
+  if [[ "$stdlib_current_state" == "absent" ]]; then
     return
   fi
 
   # Check if the key matches
   _result=$(augeas.get --lens Json --file "${options[file]}" --path "${options[path]}/dict/entry[. = '${options[key]}']")
-  if [[ $_result == "absent" ]]; then
+  if [[ "$_result" == "absent" ]]; then
     stdlib_current_state="update"
+    return
   fi
 
   # Check if the value matches
@@ -103,9 +104,12 @@ function augeas.json_dict.read {
       ;;
   esac
 
-  if [[ $_result == "absent" ]]; then
+  if [[ "$_result" == "absent" ]]; then
     stdlib_current_state="update"
+    return
   fi
+
+  stdlib_current_state="present"
 }
 
 function augeas.json_dict.create {
@@ -126,9 +130,9 @@ function augeas.json_dict.create {
       _augeas_commands+=("touch /files${_path}dict/entry[. = '${options[key]}']/array")
       ;;
     *)
-      if [[ ${options[value]} =~ ^-?[0-9]+$ ]]; then
+      if [[ "${options[value]}" =~ ^-?[0-9]+$ ]]; then
         _type="number"
-      elif [[ ${options[value]} == true || ${options[value]} == false ]]; then
+      elif [[ "${options[value]}" == "true" || "${options[value]}" == "false" ]]; then
         _type="const"
       else
         _type="string"
@@ -139,7 +143,7 @@ function augeas.json_dict.create {
 
   local _result=$(augeas.run --lens Json --file "${options[file]}" "${_augeas_commands[@]}")
 
-  if [[ $_result =~ ^error ]]; then
+  if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error adding json ${options[name]} with augeas: $_result"
     return
   fi
@@ -150,7 +154,7 @@ function augeas.json.delete {
   _augeas_commands+=("rm /files${_path}dict/entry[. = '${options[key]}'")
   local _result=$(augeas.run --lens Json --file ${options[file]} "${_augeas_commands[@]}")
 
-  if [[ $_result =~ "^error" ]]; then
+  if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error deleting json ${options[name]} with augeas: $_result"
     return
   fi

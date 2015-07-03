@@ -24,7 +24,7 @@ function nginx.events {
 
   if ! stdlib.command_exists augtool ; then
     stdlib.error "Cannot find augtool."
-    if [[ $WAFFLES_EXIT_ON_ERROR == true ]]; then
+    if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
       exit 1
     else
       return 1
@@ -51,8 +51,8 @@ function nginx.events {
   fi
 
   nginx.events.read
-  if [[ ${options[state]} == absent ]]; then
-    if [[ $stdlib_current_state != absent ]]; then
+  if [[ "${options[state]}" == "absent" ]]; then
+    if [[ "$stdlib_current_state" != "absent" ]]; then
       stdlib.info "$_name state: $stdlib_current_state, should be absent."
       nginx.events.delete
     fi
@@ -84,12 +84,12 @@ function nginx.events.read {
 
   # Check if the key exists and the value matches
   stdlib_current_state=$(augeas.get --lens Nginx --file "$_file" --path "/events/${options[key]}")
-  if [[ $stdlib_current_state == absent ]]; then
+  if [[ "$stdlib_current_state" == "absent" ]]; then
     return
   fi
 
   _result=$(augeas.get --lens Nginx --file "$_file" --path "/events/${options[key]}[. = '${options[value]}']")
-  if [[ $_result == "absent" ]]; then
+  if [[ "$_result" == "absent" ]]; then
     stdlib_current_state="update"
     return
   fi
@@ -105,7 +105,7 @@ function nginx.events.create {
 
   local _result=$(augeas.run --lens Nginx --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ $_result =~ ^error ]]; then
+  if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error adding nginx.http $_name with augeas: $_result"
     return
   fi
@@ -116,7 +116,7 @@ function nginx.events.delete {
   _augeas_commands+=("rm /files$_file/events/${options[key]}[. = '${options[value]}']")
   local _result=$(augeas.run --lens Nginx --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ $_result =~ "^error" ]]; then
+  if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error deleting nginx.events $_name with augeas: $_result"
     return
   fi

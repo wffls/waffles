@@ -28,8 +28,8 @@ function stdlib.sysvinit {
   stdlib.catalog.add "stdlib.sysvinit/${options[name]}"
 
   stdlib.sysvinit.read
-  if [[ ${options[state]} == stopped ]]; then
-    if [[ $stdlib_current_state != stopped ]]; then
+  if [[ "${options[state]}" == "stopped" ]]; then
+    if [[ "$stdlib_current_state" != "stopped" ]]; then
       stdlib.info "${options[name]} state: $stdlib_current_state, should be stopped."
       stdlib.sysvinit.delete
     fi
@@ -47,9 +47,9 @@ function stdlib.sysvinit {
 }
 
 function stdlib.sysvinit.read {
-  if [[ ! -f /etc/init.d/${options[name]} ]]; then
+  if [[ ! -f "/etc/init.d/${options[name]}" ]]; then
     stdlib.error "/etc/init.d/${options[name]} does not exist."
-    if [[ $WAFFLES_EXIT_ON_ERROR == true ]]; then
+    if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
       exit 1
     else
       return 1

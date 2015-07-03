@@ -40,8 +40,8 @@ function stdlib.ip6tables_rule {
   local rule="${options[chain]} ${options[rule]} -m comment --comment \"${options[priority]} ${options[name]}\" -j ${options[action]}"
 
   stdlib.ip6tables_rule.read
-  if [[ ${options[state]} == absent ]]; then
-    if [[ $stdlib_current_state != absent ]]; then
+  if [[ "${options[state]}" == "absent" ]]; then
+    if [[ "$stdlib_current_state" != "absent" ]]; then
       stdlib.info "${options[name]} state: $stdlib_current_state, should be absent."
       stdlib.ip6tables_rule.delete
     fi
@@ -91,7 +91,7 @@ function stdlib.ip6tables_rule.create {
     for oldrule in "${oldrules[@]}"; do
       rulenum=$((rulenum+1))
       local oldcomment=$(echo $oldrule | sed -e 's/.*--comment "\(.*\)".*/\1/')
-      if [[ ! $oldcomment =~ ^- ]]; then
+      if [[ ! "$oldcomment" =~ ^- ]]; then
         local priority=$(echo $oldcomment | cut -d' ' -f1)
         if [[ $priority > ${options[priority]} ]]; then
           stdlib.capture_error "ip6tables -t ${options[table]} -I $rulenum $oldrule"
@@ -102,7 +102,7 @@ function stdlib.ip6tables_rule.create {
     done
   fi
 
-  if [[ $added == false ]]; then
+  if [[ "$added" == "false" ]]; then
     stdlib.capture_error "ip6tables -t ${options[table]} -A $rule"
   fi
 

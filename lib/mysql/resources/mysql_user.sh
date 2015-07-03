@@ -41,8 +41,8 @@ function mysql.user {
   fi
 
   mysql.user.read
-  if [[ ${options[state]} == absent ]]; then
-    if [[ $stdlib_current_state != absent ]]; then
+  if [[ "${options[state]}" == "absent" ]]; then
+    if [[ "$stdlib_current_state" != "absent" ]]; then
       stdlib.info "${options[user]} state: $stdlib_current_state, should be absent."
       mysql.user.delete
     fi
@@ -70,14 +70,14 @@ function mysql.user.read {
 
   local _user_query="SELECT count(*) FROM mysql.user WHERE CONCAT(user, '@', host) = '${options[user]}@${options[host]}'"
   local _user_count=$(mysql -NBe "${_user_query}")
-  if [[ $_user_count == 0 ]]; then
+  if [[ "$_user_count" == 0 ]]; then
     stdlib_current_state="absent"
     return
   fi
 
   local _password_query="SELECT PASSWORD FROM mysql.user WHERE CONCAT(user, '@', host) = '${options[user]}@${options[host]}'"
   local _password=$(mysql -NBe "${_password_query}")
-  if [[ $_password != $password ]]; then
+  if [[ "$_password" != "$password" ]]; then
     stdlib_current_state="update"
     return
   fi

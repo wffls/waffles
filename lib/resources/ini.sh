@@ -36,8 +36,8 @@ function stdlib.ini {
   stdlib.catalog.add "stdlib.ini/$name"
 
   stdlib.ini.read
-  if [[ ${options[state]} == absent ]]; then
-    if [[ $stdlib_current_state != absent ]]; then
+  if [[ "${options[state]}" == "absent" ]]; then
+    if [[ "$stdlib_current_state" != "absent" ]]; then
       stdlib.info "$name state: $stdlib_current_state, should be absent."
       stdlib.ini.delete
     fi
@@ -59,7 +59,7 @@ function stdlib.ini {
 }
 
 function stdlib.ini.read {
-  if [[ ! -f ${options[file]} ]]; then
+  if [[ ! -f "${options[file]}" ]]; then
     stdlib_current_state="absent"
     return
   fi
@@ -117,7 +117,7 @@ function stdlib.ini.delete {
 # https://raw.githubusercontent.com/openstack-dev/devstack/master/inc/ini-config
 function stdlib.ini.ini_get {
   local _line
-  if [[ -n ${options[section]} ]]; then
+  if [[ -n "${options[section]}" ]]; then
     _line=$(sed -ne "/^\[${options[section]}\]/,/^\[.*\]/ { /^${options[option]}[ \t]*=/ p; }" "${options[file]}")
   else
     _line=$(sed -ne "/^${options[option]}[ \t]*=/ p;"  "${options[file]}")
@@ -130,7 +130,7 @@ function stdlib.ini.ini_get {
 function stdlib.ini.ini_has_option {
   local _line
   local _value=$(echo ${options[value]} | sed -e 's/[\/&]/\\&/g')
-  if [[ -n ${options[section]} ]]; then
+  if [[ -n "${options[section]}" ]]; then
     _line=$(sed -ne "/^\[${options[section]}\]/,/^\[.*\]/ { /^${options[option]}[ \t]*=[ \t]*${_value}$/ p; }" "${options[file]}")
   else
     _line=$(sed -ne "/^${options[option]}[ \t]*=[ \t]*${_value}$/ p;" "${options[file]}")
@@ -140,8 +140,8 @@ function stdlib.ini.ini_has_option {
 }
 
 function stdlib.ini.inidelete {
-  [[ -z ${options[option]} ]] && return
-  if [[ -n ${options[section]} ]]; then
+  [[ -z "${options[option]}" ]] && return
+  if [[ -n "${options[section]}" ]]; then
     sed -i -e "/^\[${options[section]}\]/,/^\[.*\]/ { /^${options[option]}[ \t]*=/ d; }" "${options[file]}"
   else
     sed -i -e "/^${options[option]}[ \t]*=/ d;" "${options[file]}"
@@ -149,16 +149,16 @@ function stdlib.ini.inidelete {
 }
 
 function stdlib.ini.iniset {
-  [[ -z ${options[option]} ]] && return
-  if [[ -n ${options[section]} ]]; then
-    [[ -z ${options[option]} ]] && return
+  [[ -z "${options[option]}" ]] && return
+  if [[ -n "${options[section]}" ]]; then
+    [[ -z "${options[option]}" ]] && return
 
     # Add the section if it doesn't exist
     if ! grep -q "^\[${options[section]}\]" "${options[file]}" 2>/dev/null; then
       echo -e "\n[${options[section]}]" >>"${options[file]}"
     fi
 
-    if [[ $stdlib_current_state == absent ]]; then
+    if [[ "$stdlib_current_state" == "absent" ]]; then
       # Add it
       sed -i -e "/^\[${options[section]}\]/ a\\
 ${options[option]} = ${options[value]}
@@ -169,7 +169,7 @@ ${options[option]} = ${options[value]}
       sed -i -e '/^\['${options[section]}'\]/,/^\[.*\]/ s'${sep}'^\('${options[option]}'[ \t]*=[ \t]*\).*$'${sep}'\1'"${options[value]}"${sep} "${options[file]}"
     fi
   else
-    if [[ $stdlib_current_state == absent ]]; then
+    if [[ "$stdlib_current_state" == "absent" ]]; then
       # Add it
       echo -e "${options[option]} = ${options[value]}" >> "${options[file]}"
     else

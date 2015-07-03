@@ -28,7 +28,7 @@ function apache.setting {
 
   if ! stdlib.command_exists augtool ; then
     stdlib.error "Cannot find augtool."
-    if [[ $WAFFLES_EXIT_ON_ERROR == true ]]; then
+    if [[ -n $WAFFLES_EXIT_ON_ERROR ]]; then
       exit 1
     else
       return 1
@@ -66,8 +66,8 @@ function apache.setting {
   stdlib.catalog.add "apache.setting/$_name"
 
   apache.setting.read
-  if [[ ${options[state]} == absent ]]; then
-    if [[ $stdlib_current_state != absent ]]; then
+  if [[ "${options[state]}" == "absent" ]]; then
+    if [[ "$stdlib_current_state" != "absent" ]]; then
       stdlib.info "$_name state: $stdlib_current_state, should be absent."
       apache.setting.delete
     fi
@@ -103,7 +103,7 @@ function apache.setting.read {
   # Check if the parent key/value exists
   if [[ -n "$_path" ]]; then
     _result=$(augeas.get --lens Httpd --file "$_file" --path "$_parent_path")
-    if [[ $_result == "absent" ]]; then
+    if [[ "$_result" == "absent" ]]; then
       stdlib_current_state="error"
       return
     fi
@@ -111,14 +111,14 @@ function apache.setting.read {
 
   # Check if the key exists
   stdlib_current_state=$(augeas.get --lens Httpd --file "$_file" --path "$_path/directive[. = '${options[key]}']")
-  if [[ $stdlib_current_state == "absent" ]]; then
+  if [[ "$stdlib_current_state" == "absent" ]]; then
     return
   fi
 
   # Check if the value exists
   for v in "${_values[@]}"; do
     _result=$(augeas.get --lens Httpd --file "$_file" --path "$_path/directive[. = '${options[key]}']/arg[. = '$v']")
-    if [[ $_result == "absent" ]]; then
+    if [[ "$_result" == "absent" ]]; then
       stdlib_current_state="update"
       return
     fi
@@ -141,7 +141,7 @@ function apache.setting.create {
 
   local _result=$(augeas.run --lens Httpd --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ $_result =~ ^error ]]; then
+  if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error adding apache.setting $_name with augeas: $_result"
     return
   fi
@@ -156,7 +156,7 @@ function apache.setting.update {
 
   local _result=$(augeas.run --lens Httpd --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ $_result =~ ^error ]]; then
+  if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error adding apache.setting $_name with augeas: $_result"
     return
   fi
@@ -168,7 +168,7 @@ function apache.setting.delete {
 
   local _result=$(augeas.run --lens Httpd --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ $_result =~ "^error" ]]; then
+  if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error deleting apache.setting $_name with augeas: $_result"
     return
   fi

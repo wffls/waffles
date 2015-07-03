@@ -46,8 +46,8 @@ function rabbitmq.user_permissions {
   fi
 
   rabbitmq.user_permissions.read
-  if [[ ${options[state]} == absent ]]; then
-    if [[ $stdlib_current_state != absent ]]; then
+  if [[ "${options[state]}" == "absent" ]]; then
+    if [[ "$stdlib_current_state" != "absent" ]]; then
       stdlib.info "${options[user]} state: $stdlib_current_state, should be absent."
       rabbitmq.user_permissions.delete
     fi
@@ -71,25 +71,25 @@ function rabbitmq.user_permissions {
 function rabbitmq.user_permissions.read {
 
   local _permissions=$(rabbitmqctl -q list_permissions -p $_vhost 2>/dev/null | grep $_user)
-  if [[ -z $_permissions ]]; then
+  if [[ -z "$_permissions" ]]; then
     stdlib_current_state="absent"
     return
   fi
 
   _conf=$(echo "$_permissions" | awk '{print $2}')
-  if [[ ${options[conf]} != $_conf ]]; then
+  if [[ "${options[conf]}" != "$_conf" ]]; then
     stdlib_current_state="update"
     return
   fi
 
   _write=$(echo "$_permissions" | awk '{print $3}')
-  if [[ ${options[write]} != $_write ]]; then
+  if [[ "${options[write]}" != "$_write" ]]; then
     stdlib_current_state="update"
     return
   fi
 
   _read=$(echo "$_permissions" | awk '{print $4}')
-  if [[ ${options[read]} != $_read ]]; then
+  if [[ "${options[read]}" != "$_read" ]]; then
     stdlib_current_state="update"
     return
   fi
