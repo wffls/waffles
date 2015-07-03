@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>mysql.database - Waffles</title>
+  <title>apache.setting - Waffles</title>
   
 
   <link rel="shortcut icon" href="../../img/favicon.ico">
@@ -20,7 +20,7 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "mysql.database";
+    var mkdocs_page_name = "apache.setting";
   </script>
   
   <script src="../../js/jquery-2.1.1.min.js"></script>
@@ -358,8 +358,21 @@
 
         
             
-    <li class="toctree-l1 ">
-        <a class="" href="../apache.setting/">apache.setting</a>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">apache.setting</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#apachesetting">apache.setting</a></li>
+                
+                    <li><a class="toctree-l4" href="#description">Description</a></li>
+                
+                    <li><a class="toctree-l4" href="#parameters">Parameters</a></li>
+                
+                    <li><a class="toctree-l4" href="#example">Example</a></li>
+                
+            
+            </ul>
         
     </li>
 
@@ -435,21 +448,8 @@
 
         
             
-    <li class="toctree-l1 current">
-        <a class="current" href="./">mysql.database</a>
-        
-            <ul>
-            
-                <li class="toctree-l3"><a href="#mysqldatabase">mysql.database</a></li>
-                
-                    <li><a class="toctree-l4" href="#description">Description</a></li>
-                
-                    <li><a class="toctree-l4" href="#parameters">Parameters</a></li>
-                
-                    <li><a class="toctree-l4" href="#example">Example</a></li>
-                
-            
-            </ul>
+    <li class="toctree-l1 ">
+        <a class="" href="../mysql.database/">mysql.database</a>
         
     </li>
 
@@ -581,7 +581,7 @@
         
       
     
-    <li>mysql.database</li>
+    <li>apache.setting</li>
     <li class="wy-breadcrumbs-aside">
       
         
@@ -595,18 +595,22 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="mysqldatabase">mysql.database</h1>
+                <h1 id="apachesetting">apache.setting</h1>
 <h2 id="description">Description</h2>
-<p>Manages MySQL databases</p>
+<p>Manages key/value settings in an Apache config file.</p>
 <h2 id="parameters">Parameters</h2>
 <ul>
 <li>state: The state of the resource. Required. Default: present.</li>
-<li>name: The name of the database. Required. namevar.</li>
-<li>charset: The character set of the database.</li>
-<li>collate: The collation of the database.</li>
+<li>key: The name of the setting. Required. namevar.</li>
+<li>value: The value of the setting. Required. namevar.</li>
+<li>path: The path leading up to the key. Optional. Multi. namevar.</li>
+<li>file: The file to store the settings in. Optional. Defaults to /etc/apache2/apache2.conf. namevar.</li>
 </ul>
 <h2 id="example">Example</h2>
-<pre><code class="shell">mysql.database --name root --password password
+<pre><code class="shell">apache.setting --path &quot;VirtualHost=*:80&quot; \
+               --path &quot;Directory=/&quot; \
+               --key Require --value valid-user \
+               --file /etc/apache2/sites-enabled/000-default.conf
 </code></pre>
               
             </div>
@@ -615,10 +619,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../mysql.grant/" class="btn btn-neutral float-right" title="mysql.grant"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../augeas.aptconf/" class="btn btn-neutral float-right" title="augeas.aptconf"/>Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../augeas.ssh_authorized_key/" class="btn btn-neutral" title="augeas.ssh_authorized_key"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../apache.section/" class="btn btn-neutral" title="apache.section"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -646,10 +650,10 @@
           <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../augeas.ssh_authorized_key/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../apache.section/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../mysql.grant/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../augeas.aptconf/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

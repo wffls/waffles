@@ -162,8 +162,13 @@
         }, 
         {
             "location": "/functions/system/", 
-            "text": "lib/system.sh\n contains functions that are considered core to Waffles or do not warrant their own file.\n\n\nstdlib.array_length\n\n\nReturns the length of an array.\n\n\nx=(a b c)\nstdlib.array_length x\n=\n 3\n\n\n\n\nstdlib.array_pop\n\n\nRemoves and returns the last element from an array.\n\n\nx=(a b c)\nstdlib.array_pop x\n=\n c\n\n\n\n\nstdlib.array_push\n\n\nAdds an element to the end of an array.\n\n\nx=()\nstdlib.array_push x foo\n\n\n\n\nstdlib.array_shift\n\n\nRemoves and returns the first element from an array\n\n\nx=(a b c)\nstdlib.array_shift x\n=\n a\n\n\n\n\nstdlib.array_unshift\n\n\nAdds an element to the beginning of the array.\n\n\nx=(b c)\nstdlib.array_unshift x a\n\n\n\n\nstdlib.capture_error\n\n\nTakes a command as input, prints the command, and detects if anything was written to \nstderr\n. If there was, the error is printed to \nstderr\n again, and if \nWAFFLES_EXIT_ON_ERROR\n is set, Waffles halts.\n\n\nstdlib.capture_error apt-get update\n\n\n\n\nstdlib.command_exists\n\n\nA simple wrapper around \nwhich\n.\n\n\nif [[ stdlib.command_exists apt-get ]]; then\n  stdlib.info \nWe're on a Debian-based system.\n\nfi\n\n\n\n\nstdlib.data\n\n\nThe same as \nstdlib.profiles\n but the shell scripts can be placed differently:\n\n\nstdlib.data common =\n data/common.sh\nstdlib.data common =\n data/common/init.sh\nstdlib.data common/users =\n data/common/users.sh\nstdlib.data memcached =\n data/memcached.sh\nstdlib.data memcached =\n data/memcached/init.sh\n\n\n\n\nstdlib.debug\n\n\nPrints a log message at \ndebug\n level.\n\n\nstdlib.debug \nFoobar\n\n\n\n\n\nstdlib.debug?\n\n\nDetermines if Waffles is being run in \ndebug\n mode.\n\n\nif stdlib.debug? ; then\n  stdlib.debug \nWe're in debug mode.\n\nfi\n\n\n\n\nstdlib.debug_mute\n\n\nLike \nstdlib.mute\n but messages only appear in \ndebug\n mode.\n\n\nstdlib.debug_mute apt-get update\n\n\n\n\nstdlib.dir\n\n\nA simple function that returns the current directory of the script currently being run.\n\n\nstdlib.error\n\n\nPrints an error message to \nstderr\n.\n\n\nstdlib.error \nFoobar\n\n\n\n\n\nstdlib.exec\n\n\nA simple function that takes a command as input, prints the command, and then executes it.\n\n\nstdlib.exec apt-get update\n\n\n\n\nstdlib.include\n\n\nA more intelligent \nsource\n. It checks if the file being sourced / included exists, and if not, prints a warning and moves on.\n\n\nstdlib.info\n\n\nPrints a log message at \ninfo\n level.\n\n\nstdlib.info \nFoobar\n\n\n\n\n\nstdlib.join\n\n\nJoins an array into a string.\n\n\nstdlib.join , foo bar baz\n\n\n\n\nstdlib.mute\n\n\nPrints the command being run, but suppresses the command output.\n\n\nstdlib.mute apt-get update\n\n\n\n\nstdlib.noop?\n\n\nDetermines if Waffles is being run in \nnoop\n mode.\n\n\nif stdlib.noop? ; then\n  stdlib.info \nWe're in noop mode.\n\nfi\n\n\n\n\nstdlib.profile\n\n\nTakes a profile as input and determines the shell script attached to the profile.\n\n\nIf Waffles is being run locally, then \nstdlib.include\n is run on the script. If Waffles is being run in push-based mode, then the profile is marked to be copied to the remote node.\n\n\nstdlib.profiles common/users =\n profiles/common/scripts/users.sh\nstdlib.profiles common/packages =\n profiles/common/scripts/packages.sh\nstdlib.profiles memcached =\n profiles/memcached/scripts/init.sh\nstdlib.profiles memcached/utils =\n profiles/memcached/scripts/utils.sh\n\n\n\n\nstdlib.split\n\n\nSplits a string into an array. Stores the result in \n__split\n. The delimiter can be multi-character.\n\n\nstdlib.split \nfoo/bar\n, \n/\n\nstdlib.info $__split[1] # bar\n\n\n\n\nstdlib.subtitle\n\n\nSets a subtitle context. This is usually used internally by resources. An internal counter to determine if the resource was changed:\n\n\n$ cat profiles/common/scripts/package.sh\nstdlib.title \nprofiles/common/packages\n\nstdlib.apt --package sl\n\nif [[ $stdlib_resource_change == true ]]; then\n  stdlib.info \nThe state of package sl changed\n\nfi\n\nstdlib.apt --package cowsay\n\nif [[ $stdlib_resource_change == true ]]; then\n  stdlib.info \nThe state of package cowsay changed\n\nfi\n\n\n\n\nstdlib.title\n\n\nSets a title context. A title is a major section of Waffles being run; for example, a profile. You usually being profiles by setting a title:\n\n\n$ cat profiles/common/scripts/package.sh\nstdlib.title \nprofiles/common/packages\n\nstdlib.apt --package sl\n\n\n\n\nInternal counters are reset whenever \nstdlib.title\n is used. This is useful for determining if any changes were made to a resource or the profile as a whole:\n\n\n$ cat profiles/common/scripts/package.sh\nstdlib.title \nprofiles/common/packages\n\nstdlib.apt --package sl\nstdlib.apt --package cowsay\n\nif [[ $stdlib_state_change == true ]]; then\n  stdlib.info \nOne of the above packages were updated.\n\nfi\n\n\n\n\nstdlib.trim\n\n\nTrims the whitespace on both sides of a string.\n\n\ntrimmed=$(stdlib.trim \n   foobar   \n\n\n\n\n\nstdlib.warn\n\n\nPrints a warning message.\n\n\nstdlib.warn \nFoobar", 
+            "text": "lib/system.sh\n contains functions that are considered core to Waffles or do not warrant their own file.\n\n\nstdlib.array_join\n\n\nJoins an array into a string.\n\n\nx=(foo bar baz)\nstdlib.array_join x ,\n=\n foo,bar,baz\n\n\n\n\nstdlib.array_length\n\n\nReturns the length of an array.\n\n\nx=(a b c)\nstdlib.array_length x\n=\n 3\n\n\n\n\nstdlib.array_pop\n\n\nRemoves and returns the last element from an array.\n\n\nx=(a b c)\nstdlib.array_pop x\n=\n c\n\n\n\n\nstdlib.array_push\n\n\nAdds an element to the end of an array.\n\n\nx=()\nstdlib.array_push x foo\n\n\n\n\nstdlib.array_shift\n\n\nRemoves and returns the first element from an array\n\n\nx=(a b c)\nstdlib.array_shift x\n=\n a\n\n\n\n\nstdlib.array_unshift\n\n\nAdds an element to the beginning of the array.\n\n\nx=(b c)\nstdlib.array_unshift x a\n\n\n\n\nstdlib.capture_error\n\n\nTakes a command as input, prints the command, and detects if anything was written to \nstderr\n. If there was, the error is printed to \nstderr\n again, and if \nWAFFLES_EXIT_ON_ERROR\n is set, Waffles halts.\n\n\nstdlib.capture_error apt-get update\n\n\n\n\nstdlib.command_exists\n\n\nA simple wrapper around \nwhich\n.\n\n\nif [[ stdlib.command_exists apt-get ]]; then\n  stdlib.info \nWe're on a Debian-based system.\n\nfi\n\n\n\n\nstdlib.data\n\n\nThe same as \nstdlib.profiles\n but the shell scripts can be placed differently:\n\n\nstdlib.data common =\n data/common.sh\nstdlib.data common =\n data/common/init.sh\nstdlib.data common/users =\n data/common/users.sh\nstdlib.data memcached =\n data/memcached.sh\nstdlib.data memcached =\n data/memcached/init.sh\n\n\n\n\nstdlib.debug\n\n\nPrints a log message at \ndebug\n level.\n\n\nstdlib.debug \nFoobar\n\n\n\n\n\nstdlib.debug?\n\n\nDetermines if Waffles is being run in \ndebug\n mode.\n\n\nif stdlib.debug? ; then\n  stdlib.debug \nWe're in debug mode.\n\nfi\n\n\n\n\nstdlib.debug_mute\n\n\nLike \nstdlib.mute\n but messages only appear in \ndebug\n mode.\n\n\nstdlib.debug_mute apt-get update\n\n\n\n\nstdlib.dir\n\n\nA simple function that returns the current directory of the script currently being run.\n\n\nstdlib.error\n\n\nPrints an error message to \nstderr\n.\n\n\nstdlib.error \nFoobar\n\n\n\n\n\nstdlib.exec\n\n\nA simple function that takes a command as input, prints the command, and then executes it.\n\n\nstdlib.exec apt-get update\n\n\n\n\nstdlib.include\n\n\nA more intelligent \nsource\n. It checks if the file being sourced / included exists, and if not, prints a warning and moves on.\n\n\nstdlib.info\n\n\nPrints a log message at \ninfo\n level.\n\n\nstdlib.info \nFoobar\n\n\n\n\n\nstdlib.mute\n\n\nPrints the command being run, but suppresses the command output.\n\n\nstdlib.mute apt-get update\n\n\n\n\nstdlib.noop?\n\n\nDetermines if Waffles is being run in \nnoop\n mode.\n\n\nif stdlib.noop? ; then\n  stdlib.info \nWe're in noop mode.\n\nfi\n\n\n\n\nstdlib.profile\n\n\nTakes a profile as input and determines the shell script attached to the profile.\n\n\nIf Waffles is being run locally, then \nstdlib.include\n is run on the script. If Waffles is being run in push-based mode, then the profile is marked to be copied to the remote node.\n\n\nstdlib.profiles common/users =\n profiles/common/scripts/users.sh\nstdlib.profiles common/packages =\n profiles/common/scripts/packages.sh\nstdlib.profiles memcached =\n profiles/memcached/scripts/init.sh\nstdlib.profiles memcached/utils =\n profiles/memcached/scripts/utils.sh\n\n\n\n\nstdlib.split\n\n\nSplits a string into an array. Stores the result in \n__split\n. The delimiter can be multi-character.\n\n\nstdlib.split \nfoo/bar\n, \n/\n\nstdlib.info $__split[1] # bar\n\n\n\n\nstdlib.subtitle\n\n\nSets a subtitle context. This is usually used internally by resources. An internal counter to determine if the resource was changed:\n\n\n$ cat profiles/common/scripts/package.sh\nstdlib.title \nprofiles/common/packages\n\nstdlib.apt --package sl\n\nif [[ $stdlib_resource_change == true ]]; then\n  stdlib.info \nThe state of package sl changed\n\nfi\n\nstdlib.apt --package cowsay\n\nif [[ $stdlib_resource_change == true ]]; then\n  stdlib.info \nThe state of package cowsay changed\n\nfi\n\n\n\n\nstdlib.title\n\n\nSets a title context. A title is a major section of Waffles being run; for example, a profile. You usually being profiles by setting a title:\n\n\n$ cat profiles/common/scripts/package.sh\nstdlib.title \nprofiles/common/packages\n\nstdlib.apt --package sl\n\n\n\n\nInternal counters are reset whenever \nstdlib.title\n is used. This is useful for determining if any changes were made to a resource or the profile as a whole:\n\n\n$ cat profiles/common/scripts/package.sh\nstdlib.title \nprofiles/common/packages\n\nstdlib.apt --package sl\nstdlib.apt --package cowsay\n\nif [[ $stdlib_state_change == true ]]; then\n  stdlib.info \nOne of the above packages were updated.\n\nfi\n\n\n\n\nstdlib.trim\n\n\nTrims the whitespace on both sides of a string.\n\n\ntrimmed=$(stdlib.trim \n   foobar   \n\n\n\n\n\nstdlib.warn\n\n\nPrints a warning message.\n\n\nstdlib.warn \nFoobar", 
             "title": "system"
+        }, 
+        {
+            "location": "/functions/system/#stdlibarray_join", 
+            "text": "Joins an array into a string.  x=(foo bar baz)\nstdlib.array_join x ,\n=  foo,bar,baz", 
+            "title": "stdlib.array_join"
         }, 
         {
             "location": "/functions/system/#stdlibarray_length", 
@@ -244,11 +249,6 @@
             "location": "/functions/system/#stdlibinfo", 
             "text": "Prints a log message at  info  level.  stdlib.info  Foobar", 
             "title": "stdlib.info"
-        }, 
-        {
-            "location": "/functions/system/#stdlibjoin", 
-            "text": "Joins an array into a string.  stdlib.join , foo bar baz", 
-            "title": "stdlib.join"
         }, 
         {
             "location": "/functions/system/#stdlibmute", 
@@ -1069,6 +1069,56 @@
             "location": "/resources/stdlib.useradd/#notes", 
             "text": "The  --system true  flag is only useful during a create. If the user already\nexists and you choose to change it into a system using with the  --system \nflag, it's best to delete the user and recreate it.", 
             "title": "Notes"
+        }, 
+        {
+            "location": "/resources/apache.section/", 
+            "text": "apache.section\n\n\nDescription\n\n\nManages an apache section.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\ntype: The type of the section Required. namevar.\n\n\nname: The name of the section Required. namevar.\n\n\npath: The path leading up to the type. Optional. Multi. namevar.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/apache2/apache2.conf. namevar.\n\n\n\n\nExample\n\n\napache.section --type Directory --name /\napache.section --path \nVirtualHost=*:80\n --type Directory --name /", 
+            "title": "apache.section"
+        }, 
+        {
+            "location": "/resources/apache.section/#apachesection", 
+            "text": "", 
+            "title": "apache.section"
+        }, 
+        {
+            "location": "/resources/apache.section/#description", 
+            "text": "Manages an apache section.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/apache.section/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  type: The type of the section Required. namevar.  name: The name of the section Required. namevar.  path: The path leading up to the type. Optional. Multi. namevar.  file: The file to store the settings in. Optional. Defaults to /etc/apache2/apache2.conf. namevar.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/apache.section/#example", 
+            "text": "apache.section --type Directory --name /\napache.section --path  VirtualHost=*:80  --type Directory --name /", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/apache.setting/", 
+            "text": "apache.setting\n\n\nDescription\n\n\nManages key/value settings in an Apache config file.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nkey: The name of the setting. Required. namevar.\n\n\nvalue: The value of the setting. Required. namevar.\n\n\npath: The path leading up to the key. Optional. Multi. namevar.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/apache2/apache2.conf. namevar.\n\n\n\n\nExample\n\n\napache.setting --path \nVirtualHost=*:80\n \\\n               --path \nDirectory=/\n \\\n               --key Require --value valid-user \\\n               --file /etc/apache2/sites-enabled/000-default.conf", 
+            "title": "apache.setting"
+        }, 
+        {
+            "location": "/resources/apache.setting/#apachesetting", 
+            "text": "", 
+            "title": "apache.setting"
+        }, 
+        {
+            "location": "/resources/apache.setting/#description", 
+            "text": "Manages key/value settings in an Apache config file.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/apache.setting/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  key: The name of the setting. Required. namevar.  value: The value of the setting. Required. namevar.  path: The path leading up to the key. Optional. Multi. namevar.  file: The file to store the settings in. Optional. Defaults to /etc/apache2/apache2.conf. namevar.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/apache.setting/#example", 
+            "text": "apache.setting --path  VirtualHost=*:80  \\\n               --path  Directory=/  \\\n               --key Require --value valid-user \\\n               --file /etc/apache2/sites-enabled/000-default.conf", 
+            "title": "Example"
         }, 
         {
             "location": "/resources/augeas.aptconf/", 

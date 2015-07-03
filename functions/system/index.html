@@ -116,6 +116,9 @@
         
             <ul>
             
+                <li class="toctree-l3"><a href="#stdlibarray_join">stdlib.array_join</a></li>
+                
+            
                 <li class="toctree-l3"><a href="#stdlibarray_length">stdlib.array_length</a></li>
                 
             
@@ -162,9 +165,6 @@
                 
             
                 <li class="toctree-l3"><a href="#stdlibinfo">stdlib.info</a></li>
-                
-            
-                <li class="toctree-l3"><a href="#stdlibjoin">stdlib.join</a></li>
                 
             
                 <li class="toctree-l3"><a href="#stdlibmute">stdlib.mute</a></li>
@@ -431,6 +431,20 @@
         
             
     <li class="toctree-l1 ">
+        <a class="" href="../../resources/apache.section/">apache.section</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../resources/apache.setting/">apache.setting</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
         <a class="" href="../../resources/augeas.aptconf/">augeas.aptconf</a>
         
     </li>
@@ -648,6 +662,13 @@
             <div class="section">
               
                 <p><code>lib/system.sh</code> contains functions that are considered core to Waffles or do not warrant their own file.</p>
+<h2 id="stdlibarray_join">stdlib.array_join</h2>
+<p>Joins an array into a string.</p>
+<pre><code class="shell">x=(foo bar baz)
+stdlib.array_join x ,
+=&gt; foo,bar,baz
+</code></pre>
+
 <h2 id="stdlibarray_length">stdlib.array_length</h2>
 <p>Returns the length of an array.</p>
 <pre><code class="shell">x=(a b c)
@@ -736,11 +757,6 @@ fi
 <h2 id="stdlibinfo">stdlib.info</h2>
 <p>Prints a log message at <code>info</code> level.</p>
 <pre><code class="shell">stdlib.info &quot;Foobar&quot;
-</code></pre>
-
-<h2 id="stdlibjoin">stdlib.join</h2>
-<p>Joins an array into a string.</p>
-<pre><code class="shell">stdlib.join , foo bar baz
 </code></pre>
 
 <h2 id="stdlibmute">stdlib.mute</h2>
