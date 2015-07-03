@@ -35,8 +35,8 @@ function mysql.database {
   local _collate
 
   mysql.database.read
-  if [[ ${options[state]} == absent ]]; then
-    if [[ $stdlib_current_state != absent ]]; then
+  if [[ "${options[state]}" == "absent" ]]; then
+    if [[ "$stdlib_current_state" != "absent" ]]; then
       stdlib.info "${options[name]} state: $stdlib_current_state, should be absent."
       mysql.database.delete
     fi
@@ -64,7 +64,7 @@ function mysql.database.read {
 
   local _database_query="SELECT DEFAULT_CHARACTER_SET_NAME, DEFAULT_COLLATION_NAME FROM information_schema.schemata WHERE information_schema.schemata.schema_name = '${options[name]}'"
   local _database_result=$(mysql -NBe "${_database_query}")
-  if [[ -z $_database_result ]]; then
+  if [[ -z "$_database_result" ]]; then
     stdlib_current_state="absent"
     return
   fi
@@ -73,11 +73,11 @@ function mysql.database.read {
   _charset="${__split[0]}"
   _collate="${__split[1]}"
 
-  if [[ $_charset != ${options[charset]} ]]; then
+  if [[ "$_charset" != "${options[charset]}" ]]; then
     stdlib_current_state="update"
   fi
 
-  if [[ $_collate != ${options[collate]} ]]; then
+  if [[ "$_collate" != "${options[collate]}" ]]; then
     stdlib_current_state="update"
   fi
 
@@ -93,11 +93,11 @@ function mysql.database.create {
 }
 
 function mysql.database.update {
-  if [[ $_charset != ${options[charset]} ]]; then
+  if [[ "$_charset" != "${options[charset]}" ]]; then
     stdlib.capture_error "mysql -NBe \"ALTER DATABASE \`${options[name]}\` CHARACTER SET \`${options[charset]}\`\""
   fi
 
-  if [[ $_collate != ${options[collate]} ]]; then
+  if [[ "$_collate" != "${options[collate]}" ]]; then
     stdlib.capture_error "mysql -NBe \"ALTER DATABASE \`${options[name]}\` COLLATE \`${options[collate]}\`\""
   fi
 

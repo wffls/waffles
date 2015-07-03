@@ -24,7 +24,7 @@ function augeas.file_line {
 
   if ! stdlib.command_exists augtool ; then
     stdlib.error "Cannot find augtool."
-    if [[ $WAFFLES_EXIT_ON_ERROR == true ]]; then
+    if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
       exit 1
     else
       return 1
@@ -41,8 +41,8 @@ function augeas.file_line {
   stdlib.catalog.add "augeas.file_line/${options[name]}"
 
   augeas.file_line.read
-  if [[ ${options[state]} == absent ]]; then
-    if [[ $stdlib_current_state != absent ]]; then
+  if [[ "${options[state]}" == "absent" ]]; then
+    if [[ "$stdlib_current_state" != "absent" ]]; then
       stdlib.info "$_name state: $stdlib_current_state, should be absent."
       augeas.file_line.delete
     fi
@@ -77,7 +77,7 @@ function augeas.file_line.create {
 
   local _result=$(augeas.run --lens Simplelines --file "${options[file]}" "${_augeas_commands[@]}")
 
-  if [[ $_result =~ ^error ]]; then
+  if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error adding file_line ${options[name]} with augeas: $_result"
     return
   fi
@@ -88,7 +88,7 @@ function augeas.file_line.delete {
   _augeas_commands+=("rm /files${options[file]}/*[. = '${options[line]}']")
   local _result=$(augeas.run --lens Simplelines --file ${options[file]} "${_augeas_commands[@]}")
 
-  if [[ $_result =~ "^error" ]]; then
+  if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error deleting file_line ${options[name]} with augeas: $_result"
     return
   fi

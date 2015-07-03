@@ -24,7 +24,7 @@ function mysql.mycnf {
   stdlib.ini --file "${options[filename]}" --section client --option host --value "${options[host]}"
   stdlib.ini --file "${options[filename]}" --section client --option socket --value "${options[socket]}"
 
-  if [[ -n ${options[password]} ]]; then
+  if [[ -n "${options[password]}" ]]; then
     stdlib.ini --file "${options[filename]}" --section client --option password --value "${options[password]}"
   fi
 }

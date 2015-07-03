@@ -48,7 +48,7 @@ function stdlib.enable_mysql {
 # RabbitMQ-based Resources and Functions
 function stdlib.enable_rabbitmq {
   source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_policy.sh"
-  source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_user_permission.sh"
+  source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_user_permissions.sh"
   source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_user.sh"
   source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_vhost.sh"
 }

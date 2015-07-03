@@ -34,8 +34,8 @@ function stdlib.apt_key {
   stdlib.catalog.add "stdlib.apt_key/${options[name]}"
 
   stdlib.apt_key.read
-  if [[ ${options[state]} == absent ]]; then
-    if [[ $stdlib_current_state != absent ]]; then
+  if [[ "${options[state]}" == "absent" ]]; then
+    if [[ "$stdlib_current_state" != "absent" ]]; then
       stdlib.info "${options[name]} state: $stdlib_current_state, should be absent."
       stdlib.apt_key.delete
     fi
@@ -63,7 +63,7 @@ function stdlib.apt_key.read {
 }
 
 function stdlib.apt_key.create {
-  if [[ -n ${options[remote_keyfile]} ]]; then
+  if [[ -n "${options[remote_keyfile]}" ]]; then
     if ! stdlib.command_exists wget ; then
       stdlib.error "wget not installed. Unable to obtain remote keyfile."
     else

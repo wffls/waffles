@@ -39,8 +39,8 @@ function stdlib.apt_source {
   stdlib.catalog.add "stdlib.apt_source/${options[name]}"
 
   stdlib.apt_source.read
-  if [[ ${options[state]} == absent ]]; then
-    if [[ $stdlib_current_state != absent ]]; then
+  if [[ "${options[state]}" == "absent" ]]; then
+    if [[ "$stdlib_current_state" != "absent" ]]; then
       stdlib.info "${options[name]} state: $stdlib_current_state, should be absent."
       stdlib.apt_source.delete
     fi
@@ -58,7 +58,7 @@ function stdlib.apt_source {
 }
 
 function stdlib.apt_source.read {
-  if [[ -f /etc/apt/sources.list.d/${options[name]}.list ]]; then
+  if [[ -f "/etc/apt/sources.list.d/${options[name]}.list" ]]; then
     stdlib_current_state="present"
     return
   fi
@@ -68,11 +68,11 @@ function stdlib.apt_source.read {
 
 function stdlib.apt_source.create {
   stdlib.file --name /etc/apt/sources.list.d/${options[name]}.list --content "deb ${options[uri]} ${options[distribution]} ${options[component]}" --owner root --group root
-  if [[ $options[include_src] == true ]]; then
+  if [[ "$options[include_src]" == "true" ]]; then
     stdlib.file --name /etc/apt/sources.list.d/${options[name]}.list --content "deb-src ${options[uri]} ${options[distribution]} ${options[component]}" --owner root --group root
   fi
 
-  if [[ ${options[refresh]} == true ]]; then
+  if [[ "${options[refresh]}" == "true" ]]; then
     stdlib.mute apt-get update
   fi
 
@@ -84,7 +84,7 @@ function stdlib.apt_source.create {
 function stdlib.apt_source.delete {
   stdlib.mute rm "/etc/apt/sources.list.d/${options[name]}.list"
 
-  if [[ ${options[refresh]} == true ]]; then
+  if [[ "${options[refresh]}" == "true" ]]; then
     stdlib.mute apt-get update
   fi
 

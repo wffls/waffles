@@ -31,17 +31,17 @@ function stdlib.apt {
 
   local _installed _candidate _version
 
-  if [[ -z ${options[version]} ]]; then
+  if [[ -z "${options[version]}" ]]; then
     _version=""
-  elif [[ ${options[version]} == latest ]]; then
+  elif [[ "${options[version]}" == latest ]]; then
     _version=""
   else
     _version="=${options[version]}"
   fi
 
   stdlib.apt.read
-  if [[ ${options[state]} == absent ]]; then
-    if [[ $stdlib_current_state != absent ]]; then
+  if [[ "${options[state]}" == "absent" ]]; then
+    if [[ "$stdlib_current_state" != "absent" ]]; then
       stdlib.info "$package state: $stdlib_current_state, should be absent."
       stdlib.apt.delete
     fi
@@ -70,7 +70,7 @@ function stdlib.apt.read {
   # apt-cache is handling stderr weird
   # return 1 so installation attempt does not happen
   exist=$(apt-cache policy ${options[package]})
-  if [[ -z $exist ]]; then
+  if [[ -z "$exist" ]]; then
     stdlib.info "No such package: ${options[package]}"
     stdlib_current_state="unknown"
     return
@@ -87,26 +87,26 @@ function stdlib.apt.read {
   _candidate=$(/usr/bin/apt-cache policy ${options[package]} | grep Candidate | cut -d: -f2- | sed -e 's/^[[:space:]]//g')
 
   # If the package is installed, but version is set to "", then the requirement is satisfied
-  if [[ -n $_installed && -z ${options[version]} ]]; then
+  if [[ -n "$_installed" && -z "${options[version]}" ]]; then
     stdlib_current_state="present"
     return
   fi
 
   # if version == latest, install if there's a newer version available
-  if [[ ${options[version]} == latest && $_installed != $_candidate ]]; then
+  if [[ "${options[version]}" == "latest" && "$_installed" != "$_candidate" ]]; then
     stdlib_current_state="update"
     _version="$_candidate"
     return
   fi
 
   # if installed != version, install the package
-  if [[ ${options[version]} != latest && $_installed != ${options[version]} ]]; then
+  if [[ "${options[version]}" != "latest" && "$_installed" != "${options[version]}" ]]; then
     stdlib_current_state="update"
     return
   fi
 
   # if installed and candidate differ, report a new version available.
-  if [[ $_installed != $_candidate ]]; then
+  if [[ "$_installed" != "$_candidate" ]]; then
     stdlib_current_state="update"
     return
   fi

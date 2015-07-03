@@ -52,8 +52,8 @@ function stdlib.debconf {
   fi
 
   stdlib.debconf.read
-  if [[ ${options[state]} == absent ]]; then
-    if [[ $stdlib_current_state != absent ]]; then
+  if [[ "${options[state]}" == "absent" ]]; then
+    if [[ "$stdlib_current_state" != "absent" ]]; then
       stdlib.info "$name state: $stdlib_current_state, should be absent."
       stdlib.debconf.delete
     fi
@@ -76,13 +76,13 @@ function stdlib.debconf {
 
 function stdlib.debconf.read {
   local _dc=$(debconf-show "${options[package]}" | grep "${options[question]}:")
-  if [[ -z $_dc ]]; then
+  if [[ -z "$_dc" ]]; then
     stdlib_current_state="absent"
     return
   fi
 
   _value=$(echo $_dc | cut -d: -f2 | tr -d ' ')
-  if [[ ${options[value]} != $_value ]]; then
+  if [[ "${options[value]}" != "$_value" ]]; then
     stdlib_current_state="update"
     return
   fi

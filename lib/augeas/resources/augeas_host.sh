@@ -25,7 +25,7 @@ function augeas.host {
 
   if ! stdlib.command_exists augtool ; then
     stdlib.error "Cannot find augtool."
-    if [[ $WAFFLES_EXIT_ON_ERROR == true ]]; then
+    if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
       exit 1
     else
       return 1
@@ -43,8 +43,8 @@ function augeas.host {
   stdlib.catalog.add "augeas.host/${options[name]}"
 
   augeas.host.read
-  if [[ ${options[state]} == absent ]]; then
-    if [[ $stdlib_current_state != absent ]]; then
+  if [[ "${options[state]}" == "absent" ]]; then
+    if [[ "$stdlib_current_state" != "absent" ]]; then
       stdlib.info "${options[name]} state: $stdlib_current_state, should be absent."
       augeas.host.delete
     fi
@@ -68,20 +68,22 @@ function augeas.host {
 
 function augeas.host.read {
   stdlib_current_state=$(augeas.get --lens Hosts --file "${options[file]}" --path "*/canonical[. = '${options[name]}']/../ipaddr")
-  if [[ $stdlib_current_state != present ]]; then
+  if [[ "$stdlib_current_state" != "present" ]]; then
     return
   fi
 
-  if [[ -n ${options[aliases]} ]]; then
+  if [[ -n "${options[aliases]}" ]]; then
     stdlib.split ${options[aliases]} ","
     for a in "${__split[@]}"; do
-      stdlib_current_state=$(augeas.get --lens Hosts --file "${options[file]}" --path "*/canonical[. = '${options[name]}']/alias[. = '${a}']")
-      if [[ $stdlib_current_state != "present" ]]; then
+      _result=$(augeas.get --lens Hosts --file "${options[file]}" --path "*/canonical[. = '${options[name]}']/alias[. = '${a}']")
+      if [[ "$_result" != "present" ]]; then
         stdlib_current_state="update"
         return
       fi
     done
   fi
+
+  stdlib_current_state="present"
 }
 
 function augeas.host.create {
@@ -89,7 +91,7 @@ function augeas.host.create {
   _augeas_commands+=("set /files${options[file]}/01/ipaddr '${options[ip]}'")
   _augeas_commands+=("set /files${options[file]}/01/canonical '${options[name]}'")
 
-  if [[ -n ${options[aliases]} ]]; then
+  if [[ -n "${options[aliases]}" ]]; then
     stdlib.split ${options[aliases]} ","
     for a in "${__split[@]}"; do
       _augeas_commands+=("set /files${options[file]}/01/alias[last()+1] '${a}'")
@@ -98,7 +100,7 @@ function augeas.host.create {
 
   local _result=$(augeas.run --lens Hosts --file "${options[file]}" "${_augeas_commands[@]}")
 
-  if [[ $_result =~ ^error ]]; then
+  if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error adding creating alias with augeas: $_result"
     return
   fi
@@ -110,7 +112,7 @@ function augeas.host.delete {
 
   local _result=$(augeas.run --lens Hosts --file ${options[file]} "${_augeas_commands[@]}")
 
-  if [[ $_result =~ "^error" ]]; then
+  if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error deleting resource with augeas: $_result"
     return
   fi

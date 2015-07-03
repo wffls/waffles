@@ -28,7 +28,7 @@ function nginx.server {
 
   if ! stdlib.command_exists augtool ; then
     stdlib.error "Cannot find augtool."
-    if [[ $WAFFLES_EXIT_ON_ERROR == true ]]; then
+    if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
       exit 1
     else
       return 1
@@ -63,8 +63,8 @@ function nginx.server {
   fi
 
   nginx.server.read
-  if [[ ${options[state]} == absent ]]; then
-    if [[ $stdlib_current_state != absent ]]; then
+  if [[ "${options[state]}" == "absent" ]]; then
+    if [[ "$stdlib_current_state" != "absent" ]]; then
       stdlib.info "$_name state: $stdlib_current_state, should be absent."
       nginx.server.delete
     fi
@@ -95,13 +95,13 @@ function nginx.server.read {
 
   # Check if the server_name exists
   stdlib_current_state=$(augeas.get --lens Nginx --file "$_file" --path "/server/server_name[. = '$_server_name']")
-  if [[ $stdlib_current_state == absent ]]; then
+  if [[ "$stdlib_current_state" == "absent" ]]; then
     return
   fi
 
   # Check if the key exists and the value matches
   _result=$(augeas.get --lens Nginx --file "$_file" --path "/server/server_name[. = '$_server_name']/../${options[key]}[. = '${options[value]}']")
-  if [[ $_result == "absent" ]]; then
+  if [[ "$_result" == "absent" ]]; then
     stdlib_current_state="update"
   fi
 }
@@ -115,7 +115,7 @@ function nginx.server.create {
 
   local _result=$(augeas.run --lens Nginx --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ $_result =~ ^error ]]; then
+  if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error adding nginx_server $_name with augeas: $_result"
     return
   fi
@@ -127,7 +127,7 @@ function nginx.server.update {
 
   local _result=$(augeas.run --lens Nginx --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ $_result =~ ^error ]]; then
+  if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error adding nginx_server $_name with augeas: $_result"
     return
   fi
@@ -139,7 +139,7 @@ function nginx.server.delete {
 
   local _result=$(augeas.run --lens Nginx --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ $_result =~ "^error" ]]; then
+  if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error deleting nginx_server $_name with augeas: $_result"
     return
   fi

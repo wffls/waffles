@@ -29,7 +29,7 @@ function augeas.cron {
 
   if ! stdlib.command_exists augtool ; then
     stdlib.error "Cannot find augtool."
-    if [[ $WAFFLES_EXIT_ON_ERROR == true ]]; then
+    if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
       exit 1
     else
       return 1
@@ -53,8 +53,8 @@ function augeas.cron {
   local _file="/etc/cron.d/${options[name]}"
 
   augeas.cron.read
-  if [[ ${options[state]} == absent ]]; then
-    if [[ $stdlib_current_state != absent ]]; then
+  if [[ "${options[state]}" == "absent" ]]; then
+    if [[ "$stdlib_current_state" != "absent" ]]; then
       stdlib.info "$_name state: $stdlib_current_state, should be absent."
       augeas.cron.delete
     fi
@@ -81,43 +81,43 @@ function augeas.cron.read {
 
   # Check if the cron command exists
   stdlib_current_state=$(augeas.get --lens Cron --file "$_file" --path "/entry[. = '${options[cmd]}']")
-  if [[ $stdlib_current_state == absent ]]; then
+  if [[ "$stdlib_current_state" == "absent" ]]; then
     return
   fi
 
   # If so, check if the other attributes match
   _result=$(augeas.get --lens Cron --file "$_file" --path "/entry[. = '${options[cmd]}']/time/minute[. = '${options[minute]}']")
-  if [[ $_result == absent ]]; then
+  if [[ "$_result" == "absent" ]]; then
     stdlib_current_state="update"
     return
   fi
 
   _result=$(augeas.get --lens Cron --file "$_file" --path "/entry[. = '${options[cmd]}']/time/hour[. = '${options[hour]}']")
-  if [[ $_result == absent ]]; then
+  if [[ "$_result" == "absent" ]]; then
     stdlib_current_state="update"
     return
   fi
 
   _result=$(augeas.get --lens Cron --file "$_file" --path "/entry[. = '${options[cmd]}']/time/dayofmonth[. = '${options[dom]}']")
-  if [[ $_result == absent ]]; then
+  if [[ "$_result" == "absent" ]]; then
     stdlib_current_state="update"
     return
   fi
 
   _result=$(augeas.get --lens Cron --file "$_file" --path "/entry[. = '${options[cmd]}']/time/month[. = '${options[month]}']")
-  if [[ $_result == absent ]]; then
+  if [[ "$_result" == "absent" ]]; then
     stdlib_current_state="update"
     return
   fi
 
   _result=$(augeas.get --lens Cron --file "$_file" --path "/entry[. = '${options[cmd]}']/time/dayofweek[. = '${options[dow]}']")
-  if [[ $_result == absent ]]; then
+  if [[ "$_result" == "absent" ]]; then
     stdlib_current_state="update"
     return
   fi
 
   _result=$(augeas.get --lens Cron --file "$_file" --path "/entry[. = '${options[cmd]}']/user[. = '${options[user]}']")
-  if [[ $_result == absent ]]; then
+  if [[ "$_result" == "absent" ]]; then
     stdlib_current_state="update"
     return
   fi
@@ -135,7 +135,7 @@ function augeas.cron.create {
 
   local _result=$(augeas.run --lens Cron --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ $_result =~ ^error ]]; then
+  if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error adding cron ${options[name]} with augeas: $_result"
     return
   fi
@@ -146,7 +146,7 @@ function augeas.cron.delete {
   _augeas_commands+=("rm /files${_file}/entry[. = '${options[cmd]}']")
   local _result=$(augeas.run --lens Cron --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ $_result =~ "^error" ]]; then
+  if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error deleting cron ${options[name]} with augeas: $_result"
     return
   fi

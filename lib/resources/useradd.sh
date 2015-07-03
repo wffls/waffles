@@ -66,8 +66,8 @@ function stdlib.useradd {
   fi
 
   stdlib.useradd.read
-  if [[ ${options[state]} == absent ]]; then
-    if [[ $stdlib_current_state != absent ]]; then
+  if [[ "${options[state]}" == "absent" ]]; then
+    if [[ "$stdlib_current_state" != "absent" ]]; then
       stdlib.info "${options[user]} state: $stdlib_current_state, should be absent."
       stdlib.useradd.delete
     fi
@@ -96,7 +96,7 @@ function stdlib.useradd.read {
   fi
 
   user_info=$(getent passwd "${options[user]}")
-  if [[ -n $user_info ]]; then
+  if [[ -n "$user_info" ]]; then
     stdlib.split "$user_info" ':'
     _uid="${__split[2]}"
     _gid="${__split[3]}"
@@ -117,27 +117,27 @@ function stdlib.useradd.read {
     _groups=$(id -nG "${options[user]}")
   fi
 
-  if [[ -n ${options[uid]} && ${options[uid]} != $_uid ]]; then
+  if [[ -n "${options[uid]}" && "${options[uid]}" != "$_uid" ]]; then
     stdlib_current_state="update"
     return
   fi
 
-  if [[ -n ${options[gid]} && ${options[gid]} != $_gid ]]; then
+  if [[ -n "${options[gid]}" && "${options[gid]}" != "$_gid" ]]; then
     stdlib_current_state="update"
     return
   fi
 
-  if [[ -n ${options[homedir]} && ${options[homedir]} != $_homedir ]]; then
+  if [[ -n "${options[homedir]}" && "${options[homedir]}" != "$_homedir" ]]; then
     stdlib_current_state="update"
     return
   fi
 
-  if [[ -n ${options[shell]} && ${options[shell]} != $_shell ]]; then
+  if [[ -n "${options[shell]}" && "${options[shell]}" != "$_shell" ]]; then
     stdlib_current_state="update"
     return
   fi
 
-  if [[ -n ${options[passwd]} && ${options[passwd]} != $_passwd ]]; then
+  if [[ -n "${options[passwd]}" && "${options[passwd]}" != "$_passwd" ]]; then
     stdlib_current_state="update"
     return
   fi
@@ -151,12 +151,12 @@ function stdlib.useradd.read {
     fi
   done
 
-  if [[ $group_update == true ]]; then
+  if [[ "$group_update" == "true" ]]; then
     stdlib_current_state="update"
     return
   fi
 
-  if [[ ${options[sudo]} == true && ! -f /etc/sudoers.d/${options[user]} ]]; then
+  if [[ "${options[sudo]}" == "true" && ! -f "/etc/sudoers.d/${options[user]}" ]]; then
     stdlib_current_state="update"
     return
   fi
@@ -166,35 +166,35 @@ function stdlib.useradd.read {
 
 function stdlib.useradd.create {
   declare -a create_args
-  if [[ -n ${options[uid]} ]]; then
+  if [[ -n "${options[uid]}" ]]; then
     create_args+=("-u ${options[uid]}")
   fi
 
-  if [[ -n ${options[gid]} ]]; then
+  if [[ -n "${options[gid]}" ]]; then
     create_args+=("-g ${options[gid]}")
   fi
 
-  if [[ -n ${options[homedir]} ]]; then
+  if [[ -n "${options[homedir]}" ]]; then
     create_args+=("-d ${options[homedir]}")
   fi
 
-  if [[ -n ${options[shell]} ]]; then
+  if [[ -n "${options[shell]}" ]]; then
     create_args+=("-s ${options[shell]}")
   fi
 
-  if [[ -n ${options[passwd]} ]]; then
+  if [[ -n "${options[passwd]}" ]]; then
     create_args+=("-p \"${options[passwd]}\"")
   fi
 
-  if [[ -n ${options[comment]} ]]; then
+  if [[ -n "${options[comment]}" ]]; then
     create_args+=("-c \"${options[comment]}\"")
   fi
 
-  if [[ -n ${options[groups]} ]]; then
+  if [[ -n "${options[groups]}" ]]; then
     create_args+=("-G ${options[groups]}")
   fi
 
-  if [[ ${options[system]} == true ]]; then
+  if [[ "${options[system]}" == "true" ]]; then
     create_args+=("-r")
   fi
 
@@ -205,7 +205,7 @@ function stdlib.useradd.create {
     stdlib.capture_error useradd $_createhome ${create_args[@]} "${options[user]}"
   fi
 
-  if [[ -n ${options[sudo]} && ${options[sudo]} == true ]]; then
+  if [[ -n "${options[sudo]}" && "${options[sudo]}" == "true" ]]; then
     if stdlib.noop? ; then
       stdlib.info "(noop) would have added ${options[user]} to sudoers"
     else
@@ -220,23 +220,23 @@ function stdlib.useradd.create {
 
 function stdlib.useradd.update {
   declare -a update_args
-  if [[ -n ${options[uid]} && ${options[uid]} != $_uid ]]; then
+  if [[ -n "${options[uid]}" && "${options[uid]}" != "$_uid" ]]; then
     update_args+=("-u ${options[uid]}")
   fi
 
-  if [[ -n ${options[gid]} && ${options[gid]} != $_gid ]]; then
+  if [[ -n "${options[gid]}" && "${options[gid]}" != "$_gid" ]]; then
     update_args+=("-g ${options[gid]}")
   fi
 
-  if [[ -n ${options[homedir]} && ${options[homedir]} != $_homedir ]]; then
+  if [[ -n "${options[homedir]}" && "${options[homedir]}" != "$_homedir" ]]; then
     update_args+=("-d ${options[homedir]}")
   fi
 
-  if [[ -n ${options[shell]} && ${options[shell]} != $_shell ]]; then
+  if [[ -n "${options[shell]}" && "${options[shell]}" != "$_shell" ]]; then
     update_args+=("-s ${options[shell]}")
   fi
 
-  if [[ -n ${options[passwd]} && ${options[passwd]} != $_passwd ]]; then
+  if [[ -n "${options[passwd]}" && "${options[passwd]}" != "$_passwd" ]]; then
     update_args+=("-p ${options[passwd]}")
   fi
 
@@ -249,7 +249,7 @@ function stdlib.useradd.update {
     fi
   done
 
-  if [[ $group_update == true ]]; then
+  if [[ "$group_update" == "true" ]]; then
     update_args+=("-G ${options[groups]}")
   fi
 
@@ -260,7 +260,7 @@ function stdlib.useradd.update {
     stdlib.capture_error usermod "${update_args[@]}" "${options[user]}"
   fi
 
-  if [[ ${options[sudo]} == true && ! -f /etc/sudoers.d/${options[user]} ]]; then
+  if [[ "${options[sudo]}" == "true" && ! -f "/etc/sudoers.d/${options[user]}" ]]; then
     if stdlib.noop? ; then
       stdlib.info "(noop) would have added ${options[user]} to sudoers"
     else

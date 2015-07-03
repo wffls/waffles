@@ -51,8 +51,8 @@ function stdlib.cron {
   entry="${options[minute]} ${options[hour]} ${options[dom]} ${options[month]} ${options[dow]} ${options[cmd]} # ${options[name]}"
 
   stdlib.cron.read
-  if [[ ${options[state]} == absent ]]; then
-    if [[ $stdlib_current_state != absent ]]; then
+  if [[ "${options[state]}" == "absent" ]]; then
+    if [[ "$stdlib_current_state" != "absent" ]]; then
       stdlib.info "${options[name]} state: $stdlib_current_state, should be absent."
       stdlib.cron.delete
     fi
@@ -75,12 +75,12 @@ function stdlib.cron {
 
 function stdlib.cron.read {
   _entry=$(crontab -u "${options[user]}" -l 2> /dev/null | grep "# ${options[name]}$")
-  if [[ -z $_entry ]]; then
+  if [[ -z "$_entry" ]]; then
     stdlib_current_state="absent"
     return
   fi
 
-  if [[ $entry != $_entry ]]; then
+  if [[ "$entry" != "$_entry" ]]; then
     stdlib_current_state="update"
     return
   fi

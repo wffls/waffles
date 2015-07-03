@@ -26,7 +26,7 @@ function apache.section {
 
   if ! stdlib.command_exists augtool ; then
     stdlib.error "Cannot find augtool."
-    if [[ $WAFFLES_EXIT_ON_ERROR == true ]]; then
+    if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
       exit 1
     else
       return 1
@@ -63,8 +63,8 @@ function apache.section {
   stdlib.catalog.add "apache.section/$_name"
 
   apache.section.read
-  if [[ ${options[state]} == absent ]]; then
-    if [[ $stdlib_current_state != absent ]]; then
+  if [[ "${options[state]}" == "absent" ]]; then
+    if [[ "$stdlib_current_state" != "absent" ]]; then
       stdlib.info "$_name state: $stdlib_current_state, should be absent."
       apache.section.delete
     fi
@@ -96,7 +96,7 @@ function apache.section.read {
   # Check if the parent type/name exists
   if [[ -n "$_path" ]]; then
     _result=$(augeas.get --lens Httpd --file "$_file" --path "$_parent_path")
-    if [[ $_result == "absent" ]]; then
+    if [[ "$_result" == "absent" ]]; then
       stdlib_current_state="error"
       return
     fi
@@ -104,7 +104,7 @@ function apache.section.read {
 
   # Check if the type exists
   stdlib_current_state=$(augeas.get --lens Httpd --file "$_file" --path "$_path/${options[type]}/arg[. = '${options[name]}']")
-  if [[ $stdlib_current_state == "absent" ]]; then
+  if [[ "$stdlib_current_state" == "absent" ]]; then
     return
   fi
 
@@ -121,7 +121,7 @@ function apache.section.create {
   _augeas_commands+=("set /files$_file/$_path/${options[type]}/arg '${options[name]}'")
   local _result=$(augeas.run --lens Httpd --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ $_result =~ ^error ]]; then
+  if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error adding apache.section $_name with augeas: $_result"
     return
   fi
@@ -133,7 +133,7 @@ function apache.section.delete {
 
   local _result=$(augeas.run --lens Httpd --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ $_result =~ "^error" ]]; then
+  if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error deleting apache.section $_name with augeas: $_result"
     return
   fi

@@ -28,8 +28,8 @@ function rabbitmq.vhost {
   stdlib.catalog.add "rabbitmq.vhost/${options[vhost]}"
 
   rabbitmq.vhost.read
-  if [[ ${options[state]} == absent ]]; then
-    if [[ $stdlib_current_state != absent ]]; then
+  if [[ "${options[state]}" == "absent" ]]; then
+    if [[ "$stdlib_current_state" != "absent" ]]; then
       stdlib.info "${options[vhost]} state: $stdlib_current_state, should be absent."
       rabbitmq.vhost.delete
     fi

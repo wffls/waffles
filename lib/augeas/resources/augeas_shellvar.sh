@@ -24,7 +24,7 @@ function augeas.shellvar {
 
   if ! stdlib.command_exists augtool ; then
     stdlib.error "Cannot find augtool."
-    if [[ $WAFFLES_EXIT_ON_ERROR == true ]]; then
+    if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
       exit 1
     else
       return 1
@@ -42,8 +42,8 @@ function augeas.shellvar {
   stdlib.catalog.add "augeas.shellvar/$_name"
 
   augeas.shellvar.read
-  if [[ ${options[state]} == absent ]]; then
-    if [[ $stdlib_current_state != absent ]]; then
+  if [[ "${options[state]}" == "absent" ]]; then
+    if [[ "$stdlib_current_state" != "absent" ]]; then
       stdlib.info "$_name state: $stdlib_current_state, should be absent."
       augeas.shellvar.delete
     fi
@@ -70,13 +70,13 @@ function augeas.shellvar.read {
 
   # Check if the key exists
   stdlib_current_state=$(augeas.get --lens Shellvars --file "${options[file]}" --path "/${options[key]}")
-  if [[ $stdlib_current_state == absent ]]; then
+  if [[ "$stdlib_current_state" == "absent" ]]; then
     return
   fi
 
   # Check if the value matches
   _result=$(augeas.get --lens Shellvars --file "${options[file]}" --path "/${options[key]}[. = '${options[value]}']")
-  if [[ $_result == "absent" ]]; then
+  if [[ "$_result" == "absent" ]]; then
     stdlib_current_state="update"
   fi
 }
@@ -87,7 +87,7 @@ function augeas.shellvar.create {
 
   local _result=$(augeas.run --lens Shellvars --file "${options[file]}" "${_augeas_commands[@]}")
 
-  if [[ $_result =~ ^error ]]; then
+  if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error adding shellvar $_name with augeas: $_result"
     return
   fi
@@ -98,7 +98,7 @@ function augeas.shellvar.delete {
   _augeas_commands+=("rm /files${options[file]}/${options[key]}")
   local _result=$(augeas.run --lens Shellvars --file ${options[file]} "${_augeas_commands[@]}")
 
-  if [[ $_result =~ "^error" ]]; then
+  if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error deleting shellvar $_name with augeas: $_result"
     return
   fi
