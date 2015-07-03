@@ -64,3 +64,9 @@ function stdlib.enable_nginx {
   source "$WAFFLES_LIB_DIR/nginx/resources/nginx_server.sh"
   source "$WAFFLES_LIB_DIR/nginx/resources/nginx_upstream.sh"
 }
+
+# Apache-based Resources and Functions
+function stdlib.enable_apache {
+  source "$WAFFLES_LIB_DIR/apache/resources/apache_section.sh"
+  source "$WAFFLES_LIB_DIR/apache/resources/apache_setting.sh"
+}

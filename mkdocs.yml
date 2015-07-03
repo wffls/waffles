@@ -49,6 +49,8 @@ pages:
     - stdlib.sysvinit: 'resources/stdlib.sysvinit.md'
     - stdlib.upstart: 'resources/stdlib.upstart.md'
     - stdlib.useradd: 'resources/stdlib.useradd.md'
+    - apache.section: 'resources/apache.section.md'
+    - apache.setting: 'resources/apache.setting.md'
     - augeas.aptconf: 'resources/augeas.aptconf.md'
     - augeas.cron: 'resources/augeas.cron.md'
     - augeas.file_line: 'resources/augeas.file_line.md'
