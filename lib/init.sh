@@ -47,10 +47,34 @@ function stdlib.enable_mysql {
 
 # RabbitMQ-based Resources and Functions
 function stdlib.enable_rabbitmq {
+  source "$WAFFLES_LIB_DIR/rabbitmq/rabbitmq.sh"
+  source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_auth_backend.sh"
+  source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_auth_mechanism.sh"
+  source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_backing_queue_module.sh"
+  source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_cluster_nodes.sh"
+  source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_collect_statistics_interval.sh"
+  source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_collect_statistics.sh"
+  source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_default_permissions.sh"
+  source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_default_user.sh"
+  source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_default_user_tags.sh"
+  source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_default_vhost.sh"
+  source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_delegate_count.sh"
+  source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_disk_free_limit.sh"
+  source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_frame_max.sh"
+  source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_heartbeat.sh"
+  source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_hipe_compile.sh"
+  source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_log_levels.sh"
+  source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_msg_store_file_size_limit.sh"
+  source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_msg_store_index_module.sh"
   source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_policy.sh"
+  source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_queue_index_max_journal_entries.sh"
+  source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_ssl_listeners.sh"
+  source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_ssl_options.sh"
+  source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_tcp_listeners.sh"
   source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_user_permissions.sh"
   source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_user.sh"
   source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_vhost.sh"
+  source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_vm_memory_high_watermark.sh"
 }
 
 # Nginx-based Resources and Functions
