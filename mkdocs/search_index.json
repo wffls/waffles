@@ -1656,6 +1656,456 @@
             "title": "Notes"
         }, 
         {
+            "location": "/resources/rabbitmq.auth_backend/", 
+            "text": "rabbitmq.auth_backend\n\n\nDescription\n\n\nManages auth_backend settings in a rabbitmq.config file.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nbackend: The auth backend. Required. namevar.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.\n\n\n\n\nExample\n\n\nrabbitmq.auth_backend --backend PLAIN", 
+            "title": "rabbitmq.auth_backend"
+        }, 
+        {
+            "location": "/resources/rabbitmq.auth_backend/#rabbitmqauth_backend", 
+            "text": "", 
+            "title": "rabbitmq.auth_backend"
+        }, 
+        {
+            "location": "/resources/rabbitmq.auth_backend/#description", 
+            "text": "Manages auth_backend settings in a rabbitmq.config file.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/rabbitmq.auth_backend/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  backend: The auth backend. Required. namevar.  file: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/rabbitmq.auth_backend/#example", 
+            "text": "rabbitmq.auth_backend --backend PLAIN", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/rabbitmq.auth_mechanism/", 
+            "text": "rabbitmq.auth_mechanism\n\n\nDescription\n\n\nManages auth_mechanism settings in a rabbitmq.config file.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nmechanism: The auth mechanism. Required. namevar.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.\n\n\n\n\nExample\n\n\nrabbitmq.auth_mechanism --mechanism PLAIN", 
+            "title": "rabbitmq.auth_mechanism"
+        }, 
+        {
+            "location": "/resources/rabbitmq.auth_mechanism/#rabbitmqauth_mechanism", 
+            "text": "", 
+            "title": "rabbitmq.auth_mechanism"
+        }, 
+        {
+            "location": "/resources/rabbitmq.auth_mechanism/#description", 
+            "text": "Manages auth_mechanism settings in a rabbitmq.config file.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/rabbitmq.auth_mechanism/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  mechanism: The auth mechanism. Required. namevar.  file: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/rabbitmq.auth_mechanism/#example", 
+            "text": "rabbitmq.auth_mechanism --mechanism PLAIN", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/rabbitmq.backing_queue_module/", 
+            "text": "rabbitmq.backing_queue_module\n\n\nDescription\n\n\nManages backing_queue_module settings in a rabbitmq.config file.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nvalue: The default value. Required. namevar.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.\n\n\n\n\nExample\n\n\nrabbitmq.backing_queue_module --value /", 
+            "title": "rabbitmq.backing_queue_module"
+        }, 
+        {
+            "location": "/resources/rabbitmq.backing_queue_module/#rabbitmqbacking_queue_module", 
+            "text": "", 
+            "title": "rabbitmq.backing_queue_module"
+        }, 
+        {
+            "location": "/resources/rabbitmq.backing_queue_module/#description", 
+            "text": "Manages backing_queue_module settings in a rabbitmq.config file.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/rabbitmq.backing_queue_module/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  value: The default value. Required. namevar.  file: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/rabbitmq.backing_queue_module/#example", 
+            "text": "rabbitmq.backing_queue_module --value /", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/rabbitmq.cluster_nodes/", 
+            "text": "rabbitmq.cluster_nodes\n\n\nDescription\n\n\nManages cluster_nodes settings in a rabbitmq.config file.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nnode: A node. Required. Multi-var.\n\n\ncluster_type: The cluster type. Optional. Defaults to disc.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.\n\n\n\n\nExample\n\n\nrabbitmq.cluster_nodes --node rabbit@my.host.com --node rabbit@my2.host.com --cluster_type ram", 
+            "title": "rabbitmq.cluster_nodes"
+        }, 
+        {
+            "location": "/resources/rabbitmq.cluster_nodes/#rabbitmqcluster_nodes", 
+            "text": "", 
+            "title": "rabbitmq.cluster_nodes"
+        }, 
+        {
+            "location": "/resources/rabbitmq.cluster_nodes/#description", 
+            "text": "Manages cluster_nodes settings in a rabbitmq.config file.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/rabbitmq.cluster_nodes/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  node: A node. Required. Multi-var.  cluster_type: The cluster type. Optional. Defaults to disc.  file: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/rabbitmq.cluster_nodes/#example", 
+            "text": "rabbitmq.cluster_nodes --node rabbit@my.host.com --node rabbit@my2.host.com --cluster_type ram", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/rabbitmq.collect_statistics_interval/", 
+            "text": "rabbitmq.collect_statistics_interval\n\n\nDescription\n\n\nManages collect_statistics_interval settings in a rabbitmq.config file.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\ninterval: The default interval. Required. namevar.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.\n\n\n\n\nExample\n\n\nrabbitmq.collect_statistics_interval --interval /", 
+            "title": "rabbitmq.collect_statistics_interval"
+        }, 
+        {
+            "location": "/resources/rabbitmq.collect_statistics_interval/#rabbitmqcollect_statistics_interval", 
+            "text": "", 
+            "title": "rabbitmq.collect_statistics_interval"
+        }, 
+        {
+            "location": "/resources/rabbitmq.collect_statistics_interval/#description", 
+            "text": "Manages collect_statistics_interval settings in a rabbitmq.config file.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/rabbitmq.collect_statistics_interval/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  interval: The default interval. Required. namevar.  file: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/rabbitmq.collect_statistics_interval/#example", 
+            "text": "rabbitmq.collect_statistics_interval --interval /", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/rabbitmq.collect_statistics/", 
+            "text": "rabbitmq.collect_statistics\n\n\nDescription\n\n\nManages collect_statistics settings in a rabbitmq.config file.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nvalue: The default value. Required. namevar.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.\n\n\n\n\nExample\n\n\nrabbitmq.collect_statistics --value /", 
+            "title": "rabbitmq.collect_statistics"
+        }, 
+        {
+            "location": "/resources/rabbitmq.collect_statistics/#rabbitmqcollect_statistics", 
+            "text": "", 
+            "title": "rabbitmq.collect_statistics"
+        }, 
+        {
+            "location": "/resources/rabbitmq.collect_statistics/#description", 
+            "text": "Manages collect_statistics settings in a rabbitmq.config file.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/rabbitmq.collect_statistics/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  value: The default value. Required. namevar.  file: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/rabbitmq.collect_statistics/#example", 
+            "text": "rabbitmq.collect_statistics --value /", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/rabbitmq.default_permissions/", 
+            "text": "rabbitmq.default_permissions\n\n\nDescription\n\n\nManages default_permissions settings in a rabbitmq.config file.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nconf: The conf permission. Required.\n\n\nread: The read permission. Required.\n\n\nwrite: The write permission. Required.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.\n\n\n\n\nExample\n\n\nrabbitmq.default_permissions --conf \n.*\n --read \n.*\n --write \n.*", 
+            "title": "rabbitmq.default_permissions"
+        }, 
+        {
+            "location": "/resources/rabbitmq.default_permissions/#rabbitmqdefault_permissions", 
+            "text": "", 
+            "title": "rabbitmq.default_permissions"
+        }, 
+        {
+            "location": "/resources/rabbitmq.default_permissions/#description", 
+            "text": "Manages default_permissions settings in a rabbitmq.config file.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/rabbitmq.default_permissions/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  conf: The conf permission. Required.  read: The read permission. Required.  write: The write permission. Required.  file: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/rabbitmq.default_permissions/#example", 
+            "text": "rabbitmq.default_permissions --conf  .*  --read  .*  --write  .*", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/rabbitmq.default_user/", 
+            "text": "rabbitmq.default_user\n\n\nDescription\n\n\nManages default_user settings in a rabbitmq.config file.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nuser: The default user. Required. namevar.\n\n\npass: The default password. Required. namevar.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.\n\n\n\n\nExample\n\n\nrabbitmq.default_user --user guest --pass guest", 
+            "title": "rabbitmq.default_user"
+        }, 
+        {
+            "location": "/resources/rabbitmq.default_user/#rabbitmqdefault_user", 
+            "text": "", 
+            "title": "rabbitmq.default_user"
+        }, 
+        {
+            "location": "/resources/rabbitmq.default_user/#description", 
+            "text": "Manages default_user settings in a rabbitmq.config file.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/rabbitmq.default_user/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  user: The default user. Required. namevar.  pass: The default password. Required. namevar.  file: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/rabbitmq.default_user/#example", 
+            "text": "rabbitmq.default_user --user guest --pass guest", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/rabbitmq.default_user_tags/", 
+            "text": "rabbitmq.default_user_tags\n\n\nDescription\n\n\nManages default_user_tags settings in a rabbitmq.config file.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\ntag: The auth tag. Required. namevar.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.\n\n\n\n\nExample\n\n\nrabbitmq.default_user_tags --tag PLAIN", 
+            "title": "rabbitmq.default_user_tags"
+        }, 
+        {
+            "location": "/resources/rabbitmq.default_user_tags/#rabbitmqdefault_user_tags", 
+            "text": "", 
+            "title": "rabbitmq.default_user_tags"
+        }, 
+        {
+            "location": "/resources/rabbitmq.default_user_tags/#description", 
+            "text": "Manages default_user_tags settings in a rabbitmq.config file.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/rabbitmq.default_user_tags/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  tag: The auth tag. Required. namevar.  file: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/rabbitmq.default_user_tags/#example", 
+            "text": "rabbitmq.default_user_tags --tag PLAIN", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/rabbitmq.default_vhost/", 
+            "text": "rabbitmq.default_vhost\n\n\nDescription\n\n\nManages default_vhost settings in a rabbitmq.config file.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nvhost: The default vhost. Required. namevar.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.\n\n\n\n\nExample\n\n\nrabbitmq.default_vhost --vhost /", 
+            "title": "rabbitmq.default_vhost"
+        }, 
+        {
+            "location": "/resources/rabbitmq.default_vhost/#rabbitmqdefault_vhost", 
+            "text": "", 
+            "title": "rabbitmq.default_vhost"
+        }, 
+        {
+            "location": "/resources/rabbitmq.default_vhost/#description", 
+            "text": "Manages default_vhost settings in a rabbitmq.config file.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/rabbitmq.default_vhost/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  vhost: The default vhost. Required. namevar.  file: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/rabbitmq.default_vhost/#example", 
+            "text": "rabbitmq.default_vhost --vhost /", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/rabbitmq.delegate_count/", 
+            "text": "rabbitmq.delegate_count\n\n\nDescription\n\n\nManages delegate_count settings in a rabbitmq.config file.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nvalue: The default value. Required. namevar.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.\n\n\n\n\nExample\n\n\nrabbitmq.delegate_count --value /", 
+            "title": "rabbitmq.delegate_count"
+        }, 
+        {
+            "location": "/resources/rabbitmq.delegate_count/#rabbitmqdelegate_count", 
+            "text": "", 
+            "title": "rabbitmq.delegate_count"
+        }, 
+        {
+            "location": "/resources/rabbitmq.delegate_count/#description", 
+            "text": "Manages delegate_count settings in a rabbitmq.config file.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/rabbitmq.delegate_count/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  value: The default value. Required. namevar.  file: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/rabbitmq.delegate_count/#example", 
+            "text": "rabbitmq.delegate_count --value /", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/rabbitmq.disk_free_limit/", 
+            "text": "rabbitmq.disk_free_limit\n\n\nDescription\n\n\nManages disk_free_limit settings in a rabbitmq.config file.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nlimit_type: Whether mem_relative or absolute Required.\n\n\nvalue: The value of the limit_type. Required.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.\n\n\n\n\nExample\n\n\nrabbitmq.disk_free_limit --limit_type mem_relative --value 1.0", 
+            "title": "rabbitmq.disk_free_limit"
+        }, 
+        {
+            "location": "/resources/rabbitmq.disk_free_limit/#rabbitmqdisk_free_limit", 
+            "text": "", 
+            "title": "rabbitmq.disk_free_limit"
+        }, 
+        {
+            "location": "/resources/rabbitmq.disk_free_limit/#description", 
+            "text": "Manages disk_free_limit settings in a rabbitmq.config file.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/rabbitmq.disk_free_limit/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  limit_type: Whether mem_relative or absolute Required.  value: The value of the limit_type. Required.  file: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/rabbitmq.disk_free_limit/#example", 
+            "text": "rabbitmq.disk_free_limit --limit_type mem_relative --value 1.0", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/rabbitmq.frame_max/", 
+            "text": "rabbitmq.frame_max\n\n\nDescription\n\n\nManages frame_max settings in a rabbitmq.config file.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nvalue: The default value. Required. namevar.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.\n\n\n\n\nExample\n\n\nrabbitmq.frame_max --value /", 
+            "title": "rabbitmq.frame_max"
+        }, 
+        {
+            "location": "/resources/rabbitmq.frame_max/#rabbitmqframe_max", 
+            "text": "", 
+            "title": "rabbitmq.frame_max"
+        }, 
+        {
+            "location": "/resources/rabbitmq.frame_max/#description", 
+            "text": "Manages frame_max settings in a rabbitmq.config file.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/rabbitmq.frame_max/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  value: The default value. Required. namevar.  file: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/rabbitmq.frame_max/#example", 
+            "text": "rabbitmq.frame_max --value /", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/rabbitmq.heartbeat/", 
+            "text": "rabbitmq.heartbeat\n\n\nDescription\n\n\nManages heartbeat settings in a rabbitmq.config file.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nvalue: The default value. Required. namevar.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.\n\n\n\n\nExample\n\n\nrabbitmq.heartbeat --value /", 
+            "title": "rabbitmq.heartbeat"
+        }, 
+        {
+            "location": "/resources/rabbitmq.heartbeat/#rabbitmqheartbeat", 
+            "text": "", 
+            "title": "rabbitmq.heartbeat"
+        }, 
+        {
+            "location": "/resources/rabbitmq.heartbeat/#description", 
+            "text": "Manages heartbeat settings in a rabbitmq.config file.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/rabbitmq.heartbeat/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  value: The default value. Required. namevar.  file: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/rabbitmq.heartbeat/#example", 
+            "text": "rabbitmq.heartbeat --value /", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/rabbitmq.hipe_compile/", 
+            "text": "rabbitmq.hipe_compile\n\n\nDescription\n\n\nManages hipe_compile settings in a rabbitmq.config file.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nvalue: The default value. Required. namevar.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.\n\n\n\n\nExample\n\n\nrabbitmq.hipe_compile --value /", 
+            "title": "rabbitmq.hipe_compile"
+        }, 
+        {
+            "location": "/resources/rabbitmq.hipe_compile/#rabbitmqhipe_compile", 
+            "text": "", 
+            "title": "rabbitmq.hipe_compile"
+        }, 
+        {
+            "location": "/resources/rabbitmq.hipe_compile/#description", 
+            "text": "Manages hipe_compile settings in a rabbitmq.config file.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/rabbitmq.hipe_compile/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  value: The default value. Required. namevar.  file: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/rabbitmq.hipe_compile/#example", 
+            "text": "rabbitmq.hipe_compile --value /", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/rabbitmq.log_levels/", 
+            "text": "rabbitmq.log_levels\n\n\nDescription\n\n\nManages log_levels settings in a rabbitmq.config file.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\ncategory: The log category. Required. namevar.\n\n\nlevel: The log level. Optional. Defaults to info\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.\n\n\n\n\nExample\n\n\nrabbitmq.log_levels --category connection --level debug\nrabbitmq.log_levels --category channel --level error", 
+            "title": "rabbitmq.log_levels"
+        }, 
+        {
+            "location": "/resources/rabbitmq.log_levels/#rabbitmqlog_levels", 
+            "text": "", 
+            "title": "rabbitmq.log_levels"
+        }, 
+        {
+            "location": "/resources/rabbitmq.log_levels/#description", 
+            "text": "Manages log_levels settings in a rabbitmq.config file.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/rabbitmq.log_levels/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  category: The log category. Required. namevar.  level: The log level. Optional. Defaults to info  file: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/rabbitmq.log_levels/#example", 
+            "text": "rabbitmq.log_levels --category connection --level debug\nrabbitmq.log_levels --category channel --level error", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/rabbitmq.msg_store_file_size_limit/", 
+            "text": "rabbitmq.msg_store_file_size_limit\n\n\nDescription\n\n\nManages msg_store_file_size_limit settings in a rabbitmq.config file.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nvalue: The default value. Required. namevar.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.\n\n\n\n\nExample\n\n\nrabbitmq.msg_store_file_size_limit --value /", 
+            "title": "rabbitmq.msg_store_file_size_limit"
+        }, 
+        {
+            "location": "/resources/rabbitmq.msg_store_file_size_limit/#rabbitmqmsg_store_file_size_limit", 
+            "text": "", 
+            "title": "rabbitmq.msg_store_file_size_limit"
+        }, 
+        {
+            "location": "/resources/rabbitmq.msg_store_file_size_limit/#description", 
+            "text": "Manages msg_store_file_size_limit settings in a rabbitmq.config file.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/rabbitmq.msg_store_file_size_limit/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  value: The default value. Required. namevar.  file: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/rabbitmq.msg_store_file_size_limit/#example", 
+            "text": "rabbitmq.msg_store_file_size_limit --value /", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/rabbitmq.msg_store_index_module/", 
+            "text": "rabbitmq.msg_store_index_module\n\n\nDescription\n\n\nManages msg_store_index_module settings in a rabbitmq.config file.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nvalue: The default value. Required. namevar.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.\n\n\n\n\nExample\n\n\nrabbitmq.msg_store_index_module --value /", 
+            "title": "rabbitmq.msg_store_index_module"
+        }, 
+        {
+            "location": "/resources/rabbitmq.msg_store_index_module/#rabbitmqmsg_store_index_module", 
+            "text": "", 
+            "title": "rabbitmq.msg_store_index_module"
+        }, 
+        {
+            "location": "/resources/rabbitmq.msg_store_index_module/#description", 
+            "text": "Manages msg_store_index_module settings in a rabbitmq.config file.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/rabbitmq.msg_store_index_module/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  value: The default value. Required. namevar.  file: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/rabbitmq.msg_store_index_module/#example", 
+            "text": "rabbitmq.msg_store_index_module --value /", 
+            "title": "Example"
+        }, 
+        {
             "location": "/resources/rabbitmq.policy/", 
             "text": "rabbitmq.policy\n\n\nDescription\n\n\nManages RabbitMQ policies\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The name of the policy. Required. namevar.\n\n\nvhost: The vhost to apply the policy to. Default: /.\n\n\nqueues: The queues to apply the policy to. Default: all.\n\n\npolicy: The policy. Required.\n\n\n\n\nExample\n\n\nrabbitmq.policy --name openstack-ha --vhost openstack --policy '{\nha-mode\n:\nall\n}'", 
             "title": "rabbitmq.policy"
@@ -1678,6 +2128,106 @@
         {
             "location": "/resources/rabbitmq.policy/#example", 
             "text": "rabbitmq.policy --name openstack-ha --vhost openstack --policy '{ ha-mode : all }'", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/rabbitmq.queue_index_max_journal_entries/", 
+            "text": "rabbitmq.queue_index_max_journal_entries\n\n\nDescription\n\n\nManages queue_index_max_journal_entries settings in a rabbitmq.config file.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nvalue: The default value. Required. namevar.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.\n\n\n\n\nExample\n\n\nrabbitmq.queue_index_max_journal_entries --value /", 
+            "title": "rabbitmq.queue_index_max_journal_entries"
+        }, 
+        {
+            "location": "/resources/rabbitmq.queue_index_max_journal_entries/#rabbitmqqueue_index_max_journal_entries", 
+            "text": "", 
+            "title": "rabbitmq.queue_index_max_journal_entries"
+        }, 
+        {
+            "location": "/resources/rabbitmq.queue_index_max_journal_entries/#description", 
+            "text": "Manages queue_index_max_journal_entries settings in a rabbitmq.config file.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/rabbitmq.queue_index_max_journal_entries/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  value: The default value. Required. namevar.  file: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/rabbitmq.queue_index_max_journal_entries/#example", 
+            "text": "rabbitmq.queue_index_max_journal_entries --value /", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/rabbitmq.ssl_listeners/", 
+            "text": "rabbitmq.ssl_listeners\n\n\nDescription\n\n\nManages ssl_listeners settings in a rabbitmq.config file.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nport: The port to listen on. Required. namevar.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.\n\n\n\n\nExample\n\n\nrabbitmq.ssl_listeners --port 5671", 
+            "title": "rabbitmq.ssl_listeners"
+        }, 
+        {
+            "location": "/resources/rabbitmq.ssl_listeners/#rabbitmqssl_listeners", 
+            "text": "", 
+            "title": "rabbitmq.ssl_listeners"
+        }, 
+        {
+            "location": "/resources/rabbitmq.ssl_listeners/#description", 
+            "text": "Manages ssl_listeners settings in a rabbitmq.config file.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/rabbitmq.ssl_listeners/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  port: The port to listen on. Required. namevar.  file: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/rabbitmq.ssl_listeners/#example", 
+            "text": "rabbitmq.ssl_listeners --port 5671", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/rabbitmq.ssl_options/", 
+            "text": "rabbitmq.ssl_options\n\n\nDescription\n\n\nManages ssl_options settings in a rabbitmq.config file.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nkeyfile: The certificate key. Required.\n\n\ncertfile: The certificate. Required.\n\n\ncacertfile: The ca cert. Optional.\n\n\nverify: Verify the peer certificate. Optional.\n\n\nfail_if_no_peer_cert: Fail if no peer cert. Optional.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.\n\n\n\n\nExample\n\n\nrabbitmq.ssl_options --certfile /path/to/server/cert.pem --keyfile /path/to/server/key.pem", 
+            "title": "rabbitmq.ssl_options"
+        }, 
+        {
+            "location": "/resources/rabbitmq.ssl_options/#rabbitmqssl_options", 
+            "text": "", 
+            "title": "rabbitmq.ssl_options"
+        }, 
+        {
+            "location": "/resources/rabbitmq.ssl_options/#description", 
+            "text": "Manages ssl_options settings in a rabbitmq.config file.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/rabbitmq.ssl_options/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  keyfile: The certificate key. Required.  certfile: The certificate. Required.  cacertfile: The ca cert. Optional.  verify: Verify the peer certificate. Optional.  fail_if_no_peer_cert: Fail if no peer cert. Optional.  file: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/rabbitmq.ssl_options/#example", 
+            "text": "rabbitmq.ssl_options --certfile /path/to/server/cert.pem --keyfile /path/to/server/key.pem", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/rabbitmq.tcp_listeners/", 
+            "text": "rabbitmq.tcp_listeners\n\n\nDescription\n\n\nManages tcp_listeners settings in a rabbitmq.config file.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\naddress: The address to listen on. Required. namevar.\n\n\nport: The port to listen on. Optional. Defaults to 5672.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.\n\n\n\n\nExample\n\n\nrabbitmq.tcp_listeners --address 127.0.0.1 --port 5672\nrabbitmq.tcp_listeners --address ::1 --port 5672", 
+            "title": "rabbitmq.tcp_listeners"
+        }, 
+        {
+            "location": "/resources/rabbitmq.tcp_listeners/#rabbitmqtcp_listeners", 
+            "text": "", 
+            "title": "rabbitmq.tcp_listeners"
+        }, 
+        {
+            "location": "/resources/rabbitmq.tcp_listeners/#description", 
+            "text": "Manages tcp_listeners settings in a rabbitmq.config file.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/rabbitmq.tcp_listeners/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  address: The address to listen on. Required. namevar.  port: The port to listen on. Optional. Defaults to 5672.  file: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/rabbitmq.tcp_listeners/#example", 
+            "text": "rabbitmq.tcp_listeners --address 127.0.0.1 --port 5672\nrabbitmq.tcp_listeners --address ::1 --port 5672", 
             "title": "Example"
         }, 
         {
@@ -1753,6 +2303,31 @@
         {
             "location": "/resources/rabbitmq.vhost/#example", 
             "text": "rabbitmq.vhost --vhost openstack", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/rabbitmq.vm_memory_high_watermark/", 
+            "text": "rabbitmq.vm_memory_high_watermark\n\n\nDescription\n\n\nManages vm_memory_high_watermark settings in a rabbitmq.config file.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nvalue: The default value. Required. namevar.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.\n\n\n\n\nExample\n\n\nrabbitmq.vm_memory_high_watermark --value /", 
+            "title": "rabbitmq.vm_memory_high_watermark"
+        }, 
+        {
+            "location": "/resources/rabbitmq.vm_memory_high_watermark/#rabbitmqvm_memory_high_watermark", 
+            "text": "", 
+            "title": "rabbitmq.vm_memory_high_watermark"
+        }, 
+        {
+            "location": "/resources/rabbitmq.vm_memory_high_watermark/#description", 
+            "text": "Manages vm_memory_high_watermark settings in a rabbitmq.config file.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/rabbitmq.vm_memory_high_watermark/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  value: The default value. Required. namevar.  file: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/rabbitmq.vm_memory_high_watermark/#example", 
+            "text": "rabbitmq.vm_memory_high_watermark --value /", 
             "title": "Example"
         }
     ]
