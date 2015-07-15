@@ -1376,6 +1376,106 @@
             "title": "Notes"
         }, 
         {
+            "location": "/resources/keepalived.global_defs/", 
+            "text": "keepalived.global_defs\n\n\nDescription\n\n\nManages global_defs section in keepalived.conf\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nnotification_email: Email address to send notifications. Optional. Multi-var.\n\n\nnotification_email_from: The From address on email notifications. Optional.\n\n\nsmtp_server: The smtp server to send notifications. Optional.\n\n\nsmtp_connect_timeout: Connect timeout for sending notifications. Optional.\n\n\nrouter_id: The router ID. Optional.\n\n\nvrrp_mcast_group4: VRRP multicast group for IPv4. Optional.\n\n\nvrrp_mcast_group6: VRRP multicast group for IPv6. Optional.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/keepalived/keepalived.conf.\n\n\n\n\nExample\n\n\nkeepalived.global_defs --notification_email root@localhost \\\n                       --notification_email jdoe@example.com \\\n                       --smtp_server smtp.example.com \\\n                       --router_id 42", 
+            "title": "keepalived.global_defs"
+        }, 
+        {
+            "location": "/resources/keepalived.global_defs/#keepalivedglobal_defs", 
+            "text": "", 
+            "title": "keepalived.global_defs"
+        }, 
+        {
+            "location": "/resources/keepalived.global_defs/#description", 
+            "text": "Manages global_defs section in keepalived.conf", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/keepalived.global_defs/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  notification_email: Email address to send notifications. Optional. Multi-var.  notification_email_from: The From address on email notifications. Optional.  smtp_server: The smtp server to send notifications. Optional.  smtp_connect_timeout: Connect timeout for sending notifications. Optional.  router_id: The router ID. Optional.  vrrp_mcast_group4: VRRP multicast group for IPv4. Optional.  vrrp_mcast_group6: VRRP multicast group for IPv6. Optional.  file: The file to store the settings in. Optional. Defaults to /etc/keepalived/keepalived.conf.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/keepalived.global_defs/#example", 
+            "text": "keepalived.global_defs --notification_email root@localhost \\\n                       --notification_email jdoe@example.com \\\n                       --smtp_server smtp.example.com \\\n                       --router_id 42", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/keepalived.vrrp_instance/", 
+            "text": "keepalived.vrrp_instance\n\n\nDescription\n\n\nManages vrrp_instance section in keepalived.conf\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The name of the VRRP instance. Required. namevar.\n\n\nvrrp_state: The state of the VRRP instance. Required.\n\n\ninterface: The interface to monitor. Required.\n\n\nvirtual_router_id: The virtual router ID. Required.\n\n\npriority: The priority. Required.\n\n\nadvert_int: The advert interval. Optional.\n\n\nauth_type: The authentication type. Optional.\n\n\nauth_pass: The authentication password. Optional.\n\n\nvirtual_ipaddress: A virtual IP address. Optional. Multi-var.\n\n\nsmtp_alert: Send an email during transition. Optional. Defaults to false.\n\n\nunicast_src_ip: Source IP for unicast packets. Optional.\n\n\nunicast_peer: A peer in a unicast group. Optional. Multi-var.\n\n\nnative_ipv6: Force IPv6. Optional. Defaults to false.\n\n\nnotify_master: The notify_master script. Optional.\n\n\nnotify_backup: The notify_backup script. Optional.\n\n\nnotify_fault: The notify_fault script. Optional.\n\n\nnotify: The notify script. Optional.\n\n\ndebug: Enable debugging. Optional. Defaults to false.\n\n\nfile: The file to store the settings in. Required. Defaults to /etc/keepalived/keepalived.conf.\n\n\n\n\nExample\n\n\nkeepalived.vrrp_instance --name VI_1 \\\n                         --vrrp_state MASTER \\\n                         --interface eth0 \\\n                         --virtual_router_id 42 \\\n                         --priority 100 \\\n                         --virtual_ipaddress 192.168.1.10", 
+            "title": "keepalived.vrrp_instance"
+        }, 
+        {
+            "location": "/resources/keepalived.vrrp_instance/#keepalivedvrrp_instance", 
+            "text": "", 
+            "title": "keepalived.vrrp_instance"
+        }, 
+        {
+            "location": "/resources/keepalived.vrrp_instance/#description", 
+            "text": "Manages vrrp_instance section in keepalived.conf", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/keepalived.vrrp_instance/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  name: The name of the VRRP instance. Required. namevar.  vrrp_state: The state of the VRRP instance. Required.  interface: The interface to monitor. Required.  virtual_router_id: The virtual router ID. Required.  priority: The priority. Required.  advert_int: The advert interval. Optional.  auth_type: The authentication type. Optional.  auth_pass: The authentication password. Optional.  virtual_ipaddress: A virtual IP address. Optional. Multi-var.  smtp_alert: Send an email during transition. Optional. Defaults to false.  unicast_src_ip: Source IP for unicast packets. Optional.  unicast_peer: A peer in a unicast group. Optional. Multi-var.  native_ipv6: Force IPv6. Optional. Defaults to false.  notify_master: The notify_master script. Optional.  notify_backup: The notify_backup script. Optional.  notify_fault: The notify_fault script. Optional.  notify: The notify script. Optional.  debug: Enable debugging. Optional. Defaults to false.  file: The file to store the settings in. Required. Defaults to /etc/keepalived/keepalived.conf.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/keepalived.vrrp_instance/#example", 
+            "text": "keepalived.vrrp_instance --name VI_1 \\\n                         --vrrp_state MASTER \\\n                         --interface eth0 \\\n                         --virtual_router_id 42 \\\n                         --priority 100 \\\n                         --virtual_ipaddress 192.168.1.10", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/keepalived.vrrp_script/", 
+            "text": "keepalived.vrrp_script\n\n\nDescription\n\n\nManages vrrp_script section in keepalived.conf\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The name of the VRRP instance. Required. namevar.\n\n\nscript: The script to define. Required.\n\n\ninterval: The interval to run the script. Optional.\n\n\nweight: The points for priority. Optional.\n\n\nfall: Number of failures for KO. Optional.\n\n\nraise: Number of successes for OK. Optional.\n\n\nfile: The file to store the settings in. Required. Defaults to /etc/keepalived/keepalived.conf.\n\n\n\n\nExample\n\n\nkeepalived.vrrp_script --name check_apache2 \\\n                       --script \nkillall -0 apache2", 
+            "title": "keepalived.vrrp_script"
+        }, 
+        {
+            "location": "/resources/keepalived.vrrp_script/#keepalivedvrrp_script", 
+            "text": "", 
+            "title": "keepalived.vrrp_script"
+        }, 
+        {
+            "location": "/resources/keepalived.vrrp_script/#description", 
+            "text": "Manages vrrp_script section in keepalived.conf", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/keepalived.vrrp_script/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  name: The name of the VRRP instance. Required. namevar.  script: The script to define. Required.  interval: The interval to run the script. Optional.  weight: The points for priority. Optional.  fall: Number of failures for KO. Optional.  raise: Number of successes for OK. Optional.  file: The file to store the settings in. Required. Defaults to /etc/keepalived/keepalived.conf.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/keepalived.vrrp_script/#example", 
+            "text": "keepalived.vrrp_script --name check_apache2 \\\n                       --script  killall -0 apache2", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/keepalived.vrrp_sync_group/", 
+            "text": "keepalived.vrrp_sync_group\n\n\nDescription\n\n\nManages vrrp_sync_group section in keepalived.conf\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The name of the VRRP instance. Required. namevar.\n\n\ngroup: The name of a VRRP instance. Required. Multi-var.\n\n\nfile: The file to store the settings in. Required. Defaults to /etc/keepalived/keepalived.conf.\n\n\n\n\nExample\n\n\nkeepalived.vrrp_sync_group --name VSG_1 \\\n                           --group VI_1 \\\n                           --group VI_2 \\", 
+            "title": "keepalived.vrrp_sync_group"
+        }, 
+        {
+            "location": "/resources/keepalived.vrrp_sync_group/#keepalivedvrrp_sync_group", 
+            "text": "", 
+            "title": "keepalived.vrrp_sync_group"
+        }, 
+        {
+            "location": "/resources/keepalived.vrrp_sync_group/#description", 
+            "text": "Manages vrrp_sync_group section in keepalived.conf", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/keepalived.vrrp_sync_group/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  name: The name of the VRRP instance. Required. namevar.  group: The name of a VRRP instance. Required. Multi-var.  file: The file to store the settings in. Required. Defaults to /etc/keepalived/keepalived.conf.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/keepalived.vrrp_sync_group/#example", 
+            "text": "keepalived.vrrp_sync_group --name VSG_1 \\\n                           --group VI_1 \\\n                           --group VI_2 \\", 
+            "title": "Example"
+        }, 
+        {
             "location": "/resources/mysql.database/", 
             "text": "mysql.database\n\n\nDescription\n\n\nManages MySQL databases\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The name of the database. Required. namevar.\n\n\ncharset: The character set of the database.\n\n\ncollate: The collation of the database.\n\n\n\n\nExample\n\n\nmysql.database --name root --password password", 
             "title": "mysql.database"

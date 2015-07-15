@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>options - Waffles</title>
+  <title>keepalived.vrrp_script - Waffles</title>
   
 
   <link rel="shortcut icon" href="../../img/favicon.ico">
@@ -20,7 +20,7 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "options";
+    var mkdocs_page_name = "keepalived.vrrp_script";
   </script>
   
   <script src="../../js/jquery-2.1.1.min.js"></script>
@@ -105,55 +105,42 @@
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../types/">Types</a>
+        <a class="" href="../../functions/types/">Types</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../system/">system</a>
+        <a class="" href="../../functions/system/">system</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../catalog/">catalog</a>
-        
-    </li>
-
-        
-            
-    <li class="toctree-l1 current">
-        <a class="current" href="./">options</a>
-        
-            <ul>
-            
-                <li class="toctree-l3"><a href="#stdliboptionscreate_option">stdlib.options.create_option</a></li>
-                
-            
-                <li class="toctree-l3"><a href="#stdliboptionscreate_mv_option">stdlib.options.create_mv_option</a></li>
-                
-            
-                <li class="toctree-l3"><a href="#stdliboptionsparse_options">stdlib.options.parse_options</a></li>
-                
-            
-            </ul>
+        <a class="" href="../../functions/catalog/">catalog</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../augeas/">augeas</a>
+        <a class="" href="../../functions/options/">options</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../mysql/">mysql</a>
+        <a class="" href="../../functions/augeas/">augeas</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../functions/mysql/">mysql</a>
         
     </li>
 
@@ -239,504 +226,517 @@
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/">Internals</a>
+        <a class="" href="../">Internals</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/stdlib.apt_key/">stdlib.apt_key</a>
+        <a class="" href="../stdlib.apt_key/">stdlib.apt_key</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/stdlib.apt_ppa/">stdlib.apt_ppa</a>
+        <a class="" href="../stdlib.apt_ppa/">stdlib.apt_ppa</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/stdlib.apt/">stdlib.apt</a>
+        <a class="" href="../stdlib.apt/">stdlib.apt</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/stdlib.apt_source/">stdlib.apt_source</a>
+        <a class="" href="../stdlib.apt_source/">stdlib.apt_source</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/stdlib.cron/">stdlib.cron</a>
+        <a class="" href="../stdlib.cron/">stdlib.cron</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/stdlib.debconf/">stdlib.debconf</a>
+        <a class="" href="../stdlib.debconf/">stdlib.debconf</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/stdlib.directory/">stdlib.directory</a>
+        <a class="" href="../stdlib.directory/">stdlib.directory</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/stdlib.file_line/">stdlib.file_line</a>
+        <a class="" href="../stdlib.file_line/">stdlib.file_line</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/stdlib.file/">stdlib.file</a>
+        <a class="" href="../stdlib.file/">stdlib.file</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/stdlib.git/">stdlib.git</a>
+        <a class="" href="../stdlib.git/">stdlib.git</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/stdlib.groupadd/">stdlib.groupadd</a>
+        <a class="" href="../stdlib.groupadd/">stdlib.groupadd</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/stdlib.ini/">stdlib.ini</a>
+        <a class="" href="../stdlib.ini/">stdlib.ini</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/stdlib.ip6tables_rule/">stdlib.ip6tables_rule</a>
+        <a class="" href="../stdlib.ip6tables_rule/">stdlib.ip6tables_rule</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/stdlib.iptables_rule/">stdlib.iptables_rule</a>
+        <a class="" href="../stdlib.iptables_rule/">stdlib.iptables_rule</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/stdlib.sysvinit/">stdlib.sysvinit</a>
+        <a class="" href="../stdlib.sysvinit/">stdlib.sysvinit</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/stdlib.upstart/">stdlib.upstart</a>
+        <a class="" href="../stdlib.upstart/">stdlib.upstart</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/stdlib.useradd/">stdlib.useradd</a>
+        <a class="" href="../stdlib.useradd/">stdlib.useradd</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/apache.section/">apache.section</a>
+        <a class="" href="../apache.section/">apache.section</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/apache.setting/">apache.setting</a>
+        <a class="" href="../apache.setting/">apache.setting</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/augeas.aptconf/">augeas.aptconf</a>
+        <a class="" href="../augeas.aptconf/">augeas.aptconf</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/augeas.cron/">augeas.cron</a>
+        <a class="" href="../augeas.cron/">augeas.cron</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/augeas.file_line/">augeas.file_line</a>
+        <a class="" href="../augeas.file_line/">augeas.file_line</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/augeas.host/">augeas.host</a>
+        <a class="" href="../augeas.host/">augeas.host</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/augeas.ini/">augeas.ini</a>
+        <a class="" href="../augeas.ini/">augeas.ini</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/augeas.json_array/">augeas.json_array</a>
+        <a class="" href="../augeas.json_array/">augeas.json_array</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/augeas.json_dict/">augeas.json_dict</a>
+        <a class="" href="../augeas.json_dict/">augeas.json_dict</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/augeas.mail_alias/">augeas.mail_alias</a>
+        <a class="" href="../augeas.mail_alias/">augeas.mail_alias</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/augeas.shellvar/">augeas.shellvar</a>
+        <a class="" href="../augeas.shellvar/">augeas.shellvar</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/augeas.ssh_authorized_key/">augeas.ssh_authorized_key</a>
+        <a class="" href="../augeas.ssh_authorized_key/">augeas.ssh_authorized_key</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/keepalived.global_defs/">keepalived.global_defs</a>
+        <a class="" href="../keepalived.global_defs/">keepalived.global_defs</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/keepalived.vrrp_instance/">keepalived.vrrp_instance</a>
+        <a class="" href="../keepalived.vrrp_instance/">keepalived.vrrp_instance</a>
         
     </li>
 
         
             
-    <li class="toctree-l1 ">
-        <a class="" href="../../resources/keepalived.vrrp_script/">keepalived.vrrp_script</a>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">keepalived.vrrp_script</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#keepalivedvrrp_script">keepalived.vrrp_script</a></li>
+                
+                    <li><a class="toctree-l4" href="#description">Description</a></li>
+                
+                    <li><a class="toctree-l4" href="#parameters">Parameters</a></li>
+                
+                    <li><a class="toctree-l4" href="#example">Example</a></li>
+                
+            
+            </ul>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/keepalived.vrrp_sync_group/">keepalived.vrrp_sync_group</a>
+        <a class="" href="../keepalived.vrrp_sync_group/">keepalived.vrrp_sync_group</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/mysql.database/">mysql.database</a>
+        <a class="" href="../mysql.database/">mysql.database</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/mysql.grant/">mysql.grant</a>
+        <a class="" href="../mysql.grant/">mysql.grant</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/mysql.user/">mysql.user</a>
+        <a class="" href="../mysql.user/">mysql.user</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/nginx.events/">nginx.events</a>
+        <a class="" href="../nginx.events/">nginx.events</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/nginx.global/">nginx.global</a>
+        <a class="" href="../nginx.global/">nginx.global</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/nginx.http/">nginx.http</a>
+        <a class="" href="../nginx.http/">nginx.http</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/nginx.if/">nginx.if</a>
+        <a class="" href="../nginx.if/">nginx.if</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/nginx.location/">nginx.location</a>
+        <a class="" href="../nginx.location/">nginx.location</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/nginx.map/">nginx.map</a>
+        <a class="" href="../nginx.map/">nginx.map</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/nginx.server/">nginx.server</a>
+        <a class="" href="../nginx.server/">nginx.server</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/nginx.upstream/">nginx.upstream</a>
+        <a class="" href="../nginx.upstream/">nginx.upstream</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/rabbitmq.auth_backend/">rabbitmq.auth_backend</a>
+        <a class="" href="../rabbitmq.auth_backend/">rabbitmq.auth_backend</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/rabbitmq.auth_mechanism/">rabbitmq.auth_mechanism</a>
+        <a class="" href="../rabbitmq.auth_mechanism/">rabbitmq.auth_mechanism</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/rabbitmq.backing_queue_module/">rabbitmq.backing_queue_module</a>
+        <a class="" href="../rabbitmq.backing_queue_module/">rabbitmq.backing_queue_module</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/rabbitmq.cluster_nodes/">rabbitmq.cluster_nodes</a>
+        <a class="" href="../rabbitmq.cluster_nodes/">rabbitmq.cluster_nodes</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/rabbitmq.collect_statistics_interval/">rabbitmq.collect_statistics_interval</a>
+        <a class="" href="../rabbitmq.collect_statistics_interval/">rabbitmq.collect_statistics_interval</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/rabbitmq.collect_statistics/">rabbitmq.collect_statistics</a>
+        <a class="" href="../rabbitmq.collect_statistics/">rabbitmq.collect_statistics</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/rabbitmq.default_permissions/">rabbitmq.default_permissions</a>
+        <a class="" href="../rabbitmq.default_permissions/">rabbitmq.default_permissions</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/rabbitmq.default_user/">rabbitmq.default_user</a>
+        <a class="" href="../rabbitmq.default_user/">rabbitmq.default_user</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/rabbitmq.default_user_tags/">rabbitmq.default_user_tags</a>
+        <a class="" href="../rabbitmq.default_user_tags/">rabbitmq.default_user_tags</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/rabbitmq.default_vhost/">rabbitmq.default_vhost</a>
+        <a class="" href="../rabbitmq.default_vhost/">rabbitmq.default_vhost</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/rabbitmq.delegate_count/">rabbitmq.delegate_count</a>
+        <a class="" href="../rabbitmq.delegate_count/">rabbitmq.delegate_count</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/rabbitmq.disk_free_limit/">rabbitmq.disk_free_limit</a>
+        <a class="" href="../rabbitmq.disk_free_limit/">rabbitmq.disk_free_limit</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/rabbitmq.frame_max/">rabbitmq.frame_max</a>
+        <a class="" href="../rabbitmq.frame_max/">rabbitmq.frame_max</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/rabbitmq.heartbeat/">rabbitmq.heartbeat</a>
+        <a class="" href="../rabbitmq.heartbeat/">rabbitmq.heartbeat</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/rabbitmq.hipe_compile/">rabbitmq.hipe_compile</a>
+        <a class="" href="../rabbitmq.hipe_compile/">rabbitmq.hipe_compile</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/rabbitmq.log_levels/">rabbitmq.log_levels</a>
+        <a class="" href="../rabbitmq.log_levels/">rabbitmq.log_levels</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/rabbitmq.msg_store_file_size_limit/">rabbitmq.msg_store_file_size_limit</a>
+        <a class="" href="../rabbitmq.msg_store_file_size_limit/">rabbitmq.msg_store_file_size_limit</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/rabbitmq.msg_store_index_module/">rabbitmq.msg_store_index_module</a>
+        <a class="" href="../rabbitmq.msg_store_index_module/">rabbitmq.msg_store_index_module</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/rabbitmq.policy/">rabbitmq.policy</a>
+        <a class="" href="../rabbitmq.policy/">rabbitmq.policy</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/rabbitmq.queue_index_max_journal_entries/">rabbitmq.queue_index_max_journal_entries</a>
+        <a class="" href="../rabbitmq.queue_index_max_journal_entries/">rabbitmq.queue_index_max_journal_entries</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/rabbitmq.ssl_listeners/">rabbitmq.ssl_listeners</a>
+        <a class="" href="../rabbitmq.ssl_listeners/">rabbitmq.ssl_listeners</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/rabbitmq.ssl_options/">rabbitmq.ssl_options</a>
+        <a class="" href="../rabbitmq.ssl_options/">rabbitmq.ssl_options</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/rabbitmq.tcp_listeners/">rabbitmq.tcp_listeners</a>
+        <a class="" href="../rabbitmq.tcp_listeners/">rabbitmq.tcp_listeners</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/rabbitmq.user_permissions/">rabbitmq.user_permissions</a>
+        <a class="" href="../rabbitmq.user_permissions/">rabbitmq.user_permissions</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/rabbitmq.user/">rabbitmq.user</a>
+        <a class="" href="../rabbitmq.user/">rabbitmq.user</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/rabbitmq.vhost/">rabbitmq.vhost</a>
+        <a class="" href="../rabbitmq.vhost/">rabbitmq.vhost</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../resources/rabbitmq.vm_memory_high_watermark/">rabbitmq.vm_memory_high_watermark</a>
+        <a class="" href="../rabbitmq.vm_memory_high_watermark/">rabbitmq.vm_memory_high_watermark</a>
         
     </li>
 
@@ -766,11 +766,11 @@
     
       
         
-          <li>Functions &raquo;</li>
+          <li>Resources &raquo;</li>
         
       
     
-    <li>options</li>
+    <li>keepalived.vrrp_script</li>
     <li class="wy-breadcrumbs-aside">
       
         
@@ -784,40 +784,24 @@
           <div role="main">
             <div class="section">
               
-                <p><code>lib/options.sh</code> contains functions related to parsing resource options.</p>
-<h2 id="stdliboptionscreate_option">stdlib.options.create_option</h2>
-<p>This function creates an option in a resource.</p>
-<pre><code class="shell">local -A options
-stdlib.options.create_option state   &quot;present&quot;
-stdlib.options.create_option package &quot;__required__&quot;
-stdlib.options.create_option version
-stdlib.options.parse_options &quot;$@&quot;
-</code></pre>
-
-<p>To successfully create a set of options:</p>
+                <h1 id="keepalivedvrrp_script">keepalived.vrrp_script</h1>
+<h2 id="description">Description</h2>
+<p>Manages vrrp_script section in keepalived.conf</p>
+<h2 id="parameters">Parameters</h2>
 <ul>
-<li>A local <code>options</code> variable must be created. If not, the options will be appended to the last resource declared.</li>
-<li><code>stdlib.options.create_option</code> is used with the first argument being the option name and the second argument being an optional default value.</li>
-<li>If the default value is <code>__required__</code>, Waffles will error and halt if the option was not set.</li>
+<li>state: The state of the resource. Required. Default: present.</li>
+<li>name: The name of the VRRP instance. Required. namevar.</li>
+<li>script: The script to define. Required.</li>
+<li>interval: The interval to run the script. Optional.</li>
+<li>weight: The points for priority. Optional.</li>
+<li>fall: Number of failures for KO. Optional.</li>
+<li>raise: Number of successes for OK. Optional.</li>
+<li>file: The file to store the settings in. Required. Defaults to /etc/keepalived/keepalived.conf.</li>
 </ul>
-<h2 id="stdliboptionscreate_mv_option">stdlib.options.create_mv_option</h2>
-<p>This function creates a multi-value option. These types of options can be specified multiple times. In order to use, you must declare
-an array of the same name as the option. For example, the <code>augeas.mail_alias</code> resource looks like this:</p>
-<pre><code class="shell">local -A options
-local -a destination
-stdlib.options.create_option    state       &quot;present&quot;
-stdlib.options.create_option    account     &quot;__required__&quot;
-stdlib.options.create_mv_option destination &quot;__required__&quot;
-stdlib.options.create_option    file        &quot;/etc/aliases&quot;
-stdlib.options.parse_options    &quot;$@&quot;
+<h2 id="example">Example</h2>
+<pre><code class="shell">keepalived.vrrp_script --name check_apache2 \
+                       --script &quot;killall -0 apache2&quot;
 </code></pre>
-
-<p>Now when declaring an alias, you can do:</p>
-<pre><code class="shell">augeas.mail_alias --root --destination jdoe --destination jsmith --destination foobar
-</code></pre>
-
-<h2 id="stdliboptionsparse_options">stdlib.options.parse_options</h2>
-<p>This function cycles through all options that were given in a declared resource. It will report if any required options were not set.</p>
               
             </div>
           </div>
@@ -825,10 +809,10 @@ stdlib.options.parse_options    &quot;$@&quot;
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../augeas/" class="btn btn-neutral float-right" title="augeas"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../keepalived.vrrp_sync_group/" class="btn btn-neutral float-right" title="keepalived.vrrp_sync_group"/>Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../catalog/" class="btn btn-neutral" title="catalog"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../keepalived.vrrp_instance/" class="btn btn-neutral" title="keepalived.vrrp_instance"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -856,10 +840,10 @@ stdlib.options.parse_options    &quot;$@&quot;
           <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../catalog/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../keepalived.vrrp_instance/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../augeas/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../keepalived.vrrp_sync_group/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
