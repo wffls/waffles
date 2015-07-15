@@ -36,7 +36,7 @@ function stdlib.apt {
   elif [[ "${options[version]}" == latest ]]; then
     _version=""
   else
-    _version="${options[version]}"
+    _version="=${options[version]}"
   fi
 
   stdlib.apt.read
@@ -95,7 +95,7 @@ function stdlib.apt.read {
   # if version == latest, install if there's a newer version available
   if [[ "${options[version]}" == "latest" && "$_installed" != "$_candidate" ]]; then
     stdlib_current_state="update"
-    _version="$_candidate"
+    _version="=$_candidate"
     return
   fi
 
@@ -117,7 +117,7 @@ function stdlib.apt.install {
   export DEBIAN_FRONTEND=noninteractive
   export APT_LISTBUGS_FRONTEND=none
   export APT_LISTCHANGES_FRONTEND=none
-  stdlib.capture_error "/usr/bin/apt-get install -y --force-yes -o DPkg::Options::=--force-confold ${options[package]}=${_version}"
+  stdlib.capture_error "/usr/bin/apt-get install -y --force-yes -o DPkg::Options::=--force-confold ${options[package]}${_version}"
   unset DEBIAN_FRONTEND
   unset APT_LISTBUGS_FRONTEND
   unset APT_LISTCHANGES_FRONTEND
