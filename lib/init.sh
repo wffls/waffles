@@ -94,3 +94,11 @@ function stdlib.enable_apache {
   source "$WAFFLES_LIB_DIR/apache/resources/apache_section.sh"
   source "$WAFFLES_LIB_DIR/apache/resources/apache_setting.sh"
 }
+
+# Keepalived-based Resources and Functions
+function stdlib.enable_keepalived {
+  source "$WAFFLES_LIB_DIR/keepalived/resources/keepalived_global_defs.sh"
+  source "$WAFFLES_LIB_DIR/keepalived/resources/keepalived_vrrp_instance.sh"
+  source "$WAFFLES_LIB_DIR/keepalived/resources/keepalived_vrrp_script.sh"
+  source "$WAFFLES_LIB_DIR/keepalived/resources/keepalived_vrrp_sync_group.sh"
+}
