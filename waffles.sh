@@ -91,11 +91,11 @@ function apply_role_remotely {
 # Main Script
 
 # Try to find waffles.conf in either /etc/waffles or ~/.waffles
-if [[ -f "/etc/waffles/waffles.conf" ]]; then
+if [[ -f /etc/waffles/waffles.conf ]]; then
   source /etc/waffles/waffles.conf
 fi
 
-if [[ -f "~/.waffles/waffles.conf" ]]; then
+if [[ -f ~/.waffles/waffles.conf ]]; then
   source ~/.waffles/waffles.conf
 fi
 
@@ -169,7 +169,7 @@ fi
 
 # Make sure the role is defined in a script.
 role_script="${WAFFLES_SITE_DIR}/roles/${role}.sh"
-if [[ ! -f "$role_script" ]]; then
+if [[ ! -f $role_script ]]; then
   stdlib.error "File $role_script does not exist for role $role."
   exit 1
 fi
