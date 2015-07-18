@@ -10,8 +10,9 @@
 #
 # * state: The state of the resource. Required. Default: present.
 # * path: The path to the setting in the json tree for non-k/v settings.
-# * key: The key portion of the dictionary.
-# * value: The value portion of the dictionary.
+# * key: The key portion of the dictionary. Required.
+# * value: The value portion of the dictionary. Required.
+# * type: The type of the value. Optional.
 # * file: The file to add the variable to. Required.
 #
 # === Example
@@ -36,9 +37,10 @@ function augeas.json_dict {
 
   local -A options
   stdlib.options.create_option state "present"
-  stdlib.options.create_option path  ""
-  stdlib.options.create_option key   ""
-  stdlib.options.create_option value ""
+  stdlib.options.create_option path
+  stdlib.options.create_option key   "__required__"
+  stdlib.options.create_option value "__required__"
+  stdlib.options.create_option type
   stdlib.options.create_option file  "__required__"
   stdlib.options.parse_options "$@"
 
@@ -46,6 +48,18 @@ function augeas.json_dict {
 
   local _name="${_path}${options[key]}"
   stdlib.catalog.add "augeas.json_dict/$_name"
+
+  # Determine the type of the value
+  local _type
+  if [[ -n "${options[type]}" ]]; then
+    _type="${options[type]}"
+  elif [[ "${options[value]}" =~ ^-?[0-9]+$ ]]; then
+    _type="number"
+  elif [[ "${options[value]}" == "true" || "${options[value]}" == "false" ]]; then
+    _type="const"
+  else
+    _type="string"
+  fi
 
   augeas.json_dict.read
   if [[ "${options[state]}" == "absent" ]]; then
@@ -100,7 +114,7 @@ function augeas.json_dict.read {
       _result=$(augeas.get --lens Json --file "${options[file]}" --path "${options[path]}/dict/entry[. = '${options[key]}']/array")
       ;;
     *)
-      _result=$(augeas.get --lens Json --file "${options[file]}" --path "${options[path]}/dict/entry[. = '${options[key]}']/string[. = '${options[value]}']")
+      _result=$(augeas.get --lens Json --file "${options[file]}" --path "${options[path]}/dict/entry[. = '${options[key]}']/${_type}[. = '${options[value]}']")
       ;;
   esac
 
@@ -130,13 +144,6 @@ function augeas.json_dict.create {
       _augeas_commands+=("touch /files${_path}dict/entry[. = '${options[key]}']/array")
       ;;
     *)
-      if [[ "${options[value]}" =~ ^-?[0-9]+$ ]]; then
-        _type="number"
-      elif [[ "${options[value]}" == "true" || "${options[value]}" == "false" ]]; then
-        _type="const"
-      else
-        _type="string"
-      fi
       _augeas_commands+=("set /files${_path}dict/entry[. = '${options[key]}']/${_type} '${options[value]}'")
       ;;
   esac
