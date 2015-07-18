@@ -11,7 +11,7 @@
 # * state: The state of the resource. Required. Default: present.
 # * path: The path to the setting in the json tree for non-k/v settings.
 # * key: The key of the dictionary that will hold the array.
-# * value: The array. Will be eval'd as a bash array.
+# * value: The value of the array. Multi-var.
 # * file: The file to add the variable to. Required.
 #
 # === Example
@@ -35,19 +35,18 @@ function augeas.json_array {
   fi
 
   local -A options
-  stdlib.options.create_option state "present"
-  stdlib.options.create_option path  ""
-  stdlib.options.create_option key   ""
-  stdlib.options.create_option value ""
-  stdlib.options.create_option file  "__required__"
+  local -a value
+  stdlib.options.create_option state    "present"
+  stdlib.options.create_option path
+  stdlib.options.create_option key
+  stdlib.options.create_mv_option value
+  stdlib.options.create_option file     "__required__"
   stdlib.options.parse_options "$@"
 
   local _path=$(echo "${options[file]}/${options[path]}/" | sed -e 's@/\+@/@g')
 
   local _name="${_path}${options[key]}"
   stdlib.catalog.add "augeas.json_array/$_name"
-
-  local _value=(${options[value]})
 
   augeas.json_array.read
   if [[ "${options[state]}" == "absent" ]]; then
@@ -96,7 +95,7 @@ function augeas.json_array.read {
   # Check if the values match and are in correct position
   local _idx=0
   local _i
-  for _i in "${_value[@]}"; do
+  for _i in "${value[@]}"; do
     (( _idx++ ))
     _result=$(augeas.get --lens Json --file "${options[file]}" --path "${options[path]}/dict/entry[. = '${options[key]}']/array/*[$_idx][. = '$_i']")
     if [[ "$_result" == "absent" ]]; then
@@ -122,7 +121,7 @@ function augeas.json_array.create {
   local _idx=0
   local _i
   local _type
-  for _i in "${_value[@]}"; do
+  for _i in "${value[@]}"; do
     (( _idx++ ))
     if [[ "$_i" =~ ^-?[0-9]+$ ]]; then
       _type="number"
