@@ -1,5 +1,16 @@
 `lib/system.sh` contains functions that are considered core to Waffles or do not warrant their own file.
 
+## stdlib.array_contains
+
+Reports true if element exists in an array.
+
+```shell
+x=(foo bar baz)
+if stdlib.array_contains "x" "foo" ; then
+  echo "Exists"
+fi
+```
+
 ## stdlib.array_join
 
 Joins an array into a string.

@@ -356,3 +356,23 @@ function stdlib.array_join {
     echo "$_string"
   fi
 }
+
+# stdlib.array_contains checks if an element exists in an array
+# $1 = array
+# $2 = delimiter
+function stdlib.array_contains {
+  if [[ $# -eq 2 ]]; then
+    local _arr="$1[@]"
+    local _needle="$2"
+    local _exists=1
+
+    for _element in "${!_arr}"; do
+      if [[ "$_element" == $_needle ]]; then
+        _exists=0
+        break
+      fi
+    done
+
+    return $_exists
+  fi
+}
