@@ -8,8 +8,9 @@ Manages a dictionary entry in a JSON file
 
 * state: The state of the resource. Required. Default: present.
 * path: The path to the setting in the json tree for non-k/v settings.
-* key: The key portion of the dictionary.
-* value: The value portion of the dictionary.
+* key: The key portion of the dictionary. Required.
+* value: The value portion of the dictionary. Required.
+* type: The type of the value. Optional.
 * file: The file to add the variable to. Required.
 
 ## Example

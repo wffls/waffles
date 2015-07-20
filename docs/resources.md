@@ -7,16 +7,22 @@ This document will cover how resources are used in Waffles.
 All resources are stored in the `$WAFFLES_DIR/lib` directory:
 
 * The Standard Library of resources is located in `$WAFFLES_DIR/lib/resources`.
+* Apache-based resources are located in `$WAFFLES_DIR/lib/apache`.
 * Augeas-based resources are located in `$WAFFLES_DIR/lib/augeas`.
+* Keepalived-based resources are located in `$WAFFLES_DIR/lib/keepalived`.
 * MySQL-based resources are located in `$WAFFLES_DIR/lib/mysql`.
+* Nginx-based resources are located in `$WAFFLES_DIR/lib/nginx`.
 * RabbitMQ-based resources are located in `$WAFFLES_DIR/lib/rabbitmq`.
 
 ## Enabling Non-Standard Resources
 
 By default, only the Standard Library is enabled in Waffles. To enable the other resources, use the following functions:
 
+* Apache: `stdlib.enable_apache`
 * Augeas: `stdlib.enable_augeas`
+* Keepalived: `stdlib.enable_keepalived`
 * MySQL: `stdlib.enable_mysql`
+* Nginx: `stdlib.enable_nginx`
 * RabbitMQ: `stdlib.enable_rabbitmq`
 
 ## Anatomy of a Resource

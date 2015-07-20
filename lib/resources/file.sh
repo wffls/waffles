@@ -19,7 +19,7 @@
 # === Example
 #
 # ```shell
-# stdlib.file --file /etc/foobar --content "Hello, World!"
+# stdlib.file --name /etc/foobar --content "Hello, World!"
 # ```
 #
 function stdlib.file {

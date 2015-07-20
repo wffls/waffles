@@ -17,7 +17,7 @@
 # === Example
 #
 # ```shell
-# augeas.json_array --file /root/web.json --path / --key foo --value "1 2 3 4"
+# augeas.json_array --file /root/web.json --path / --key foo --value 1 --value 2 --value 3
 #
 # {"foo":[1,2,3]}
 # ```

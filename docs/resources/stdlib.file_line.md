@@ -15,7 +15,8 @@ Manages single lines in a file.
 ## Example
 
 ```shell
-stdlib.file_line --file /etc/memcached.conf \
+stdlib.file_line --name "/etc/memcached.conf -l" \
+                 --file /etc/memcached.conf \
                  --line "-l 0.0.0.0" --match "^-l"
 ```
 
