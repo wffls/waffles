@@ -116,6 +116,9 @@
         
             <ul>
             
+                <li class="toctree-l3"><a href="#stdlibarray_contains">stdlib.array_contains</a></li>
+                
+            
                 <li class="toctree-l3"><a href="#stdlibarray_join">stdlib.array_join</a></li>
                 
             
@@ -850,7 +853,15 @@
           <div role="main">
             <div class="section">
               
-                <p><code>lib/system.sh</code> contains functions that are considered core to Waffles or do not warrant their own file.</p>
+                <p><code>lib/system.sh</code> contains functions that are considered core to Waffles.</p>
+<h2 id="stdlibarray_contains">stdlib.array_contains</h2>
+<p>Reports true if element exists in an array.</p>
+<pre><code class="shell">x=(foo bar baz)
+if stdlib.array_contains &quot;x&quot; &quot;foo&quot; ; then
+  echo &quot;Exists&quot;
+fi
+</code></pre>
+
 <h2 id="stdlibarray_join">stdlib.array_join</h2>
 <p>Joins an array into a string.</p>
 <pre><code class="shell">x=(foo bar baz)

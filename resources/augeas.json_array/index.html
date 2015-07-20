@@ -792,11 +792,11 @@
 <li>state: The state of the resource. Required. Default: present.</li>
 <li>path: The path to the setting in the json tree for non-k/v settings.</li>
 <li>key: The key of the dictionary that will hold the array.</li>
-<li>value: The array. Will be eval'd as a bash array.</li>
+<li>value: The value of the array. Multi-var.</li>
 <li>file: The file to add the variable to. Required.</li>
 </ul>
 <h2 id="example">Example</h2>
-<pre><code class="shell">augeas.json_array --file /root/web.json --path / --key foo --value &quot;1 2 3 4&quot;
+<pre><code class="shell">augeas.json_array --file /root/web.json --path / --key foo --value 1 --value 2 --value 3
 
 {&quot;foo&quot;:[1,2,3]}
 </code></pre>

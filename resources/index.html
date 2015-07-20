@@ -794,15 +794,21 @@
 <p>All resources are stored in the <code>$WAFFLES_DIR/lib</code> directory:</p>
 <ul>
 <li>The Standard Library of resources is located in <code>$WAFFLES_DIR/lib/resources</code>.</li>
+<li>Apache-based resources are located in <code>$WAFFLES_DIR/lib/apache</code>.</li>
 <li>Augeas-based resources are located in <code>$WAFFLES_DIR/lib/augeas</code>.</li>
+<li>Keepalived-based resources are located in <code>$WAFFLES_DIR/lib/keepalived</code>.</li>
 <li>MySQL-based resources are located in <code>$WAFFLES_DIR/lib/mysql</code>.</li>
+<li>Nginx-based resources are located in <code>$WAFFLES_DIR/lib/nginx</code>.</li>
 <li>RabbitMQ-based resources are located in <code>$WAFFLES_DIR/lib/rabbitmq</code>.</li>
 </ul>
 <h2 id="enabling-non-standard-resources">Enabling Non-Standard Resources</h2>
 <p>By default, only the Standard Library is enabled in Waffles. To enable the other resources, use the following functions:</p>
 <ul>
+<li>Apache: <code>stdlib.enable_apache</code></li>
 <li>Augeas: <code>stdlib.enable_augeas</code></li>
+<li>Keepalived: <code>stdlib.enable_keepalived</code></li>
 <li>MySQL: <code>stdlib.enable_mysql</code></li>
+<li>Nginx: <code>stdlib.enable_nginx</code></li>
 <li>RabbitMQ: <code>stdlib.enable_rabbitmq</code></li>
 </ul>
 <h2 id="anatomy-of-a-resource">Anatomy of a Resource</h2>

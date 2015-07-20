@@ -796,7 +796,8 @@
 <li>match: A regex to match to. Optional.</li>
 </ul>
 <h2 id="example">Example</h2>
-<pre><code class="shell">stdlib.file_line --file /etc/memcached.conf \
+<pre><code class="shell">stdlib.file_line --name &quot;/etc/memcached.conf -l&quot; \
+                 --file /etc/memcached.conf \
                  --line &quot;-l 0.0.0.0&quot; --match &quot;^-l&quot;
 </code></pre>
               
