@@ -1,6 +1,89 @@
 # Changelog
 
-## 0.2.0 - June 11, 2015
+## 0.15.0 - July 20, 2015
+
+* New function: `stdlib.array_contains`.
+* Updated resource: `augeas.json_array`.
+* Fixed `version` option in `stdlib.apt`.
+* New resources: keepalived.
+
+## 0.14.0 - July 12, 2015
+
+* New resource: More RabbitMQ resources.
+
+## 0.13.0 - July 3, 2015
+
+* Ensure consistent quoting in conditionals.
+* Added syntax check to tests.
+* Fixed typo in sourcing RabbitMQ resource.
+
+## 0.12.0 - July 2, 2015
+
+* New resource: apache.
+
+## 0.11.0 - July 2, 2015
+
+* Renamed `stdlib.join` to `stdlib.array_join`.
+
+## 0.10.0 - July 1, 2015
+
+* New resource: nginx.
+
+## 0.9.1 - June 28, 2015
+
+* Cleaning up catalog entries.
+
+## 0.9.0 - June 28, 2015
+
+* Added multi-value option support.
+
+## 0.8.0 - June 28, 2015
+
+* Added several array functions.
+
+## 0.7.0 - June 28, 2015
+
+* New function: `stdlib.join`.
+
+## 0.6.0 - June 28, 2015
+
+* `stdlib.split` now accepts multi-character delimiters.
+
+## 0.5.1 - June 27, 2015
+
+* Fixing tests.
+
+## 0.5.0 - June 27, 2015
+
+* Renamed `set_option` to `create_option`.
+
+## 0.4.0 - June 27, 2015
+
+* Added `system` flag to `stdlib.useradd`.
+* Fixing tests.
+
+## 0.3.0 - June 19, 2015
+
+* New resource: git.
+
+## 0.2.2 - June 19, 2015
+
+* mkdocs updates.
+
+## 0.2.1 - June 19, 2015
+
+* Documentation Updates.
+
+## 0.2.0 - June 16, 2015
+
+* Added `stdlib.debug_mute`.
+
+## 0.1.2 - June 11, 2015
+
+* Added two recipes: LXC and Terraform.
+* Fixed documentation index.
+
+## 0.1.1 - June 11, 2015
 
 Remote Deployment (push) Updates.
 
