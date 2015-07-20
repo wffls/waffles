@@ -26,7 +26,7 @@ apt-get install -y memcached
 This works, and doing `ps aux` shows that `memcached` is indeed running. But then we notice that `memcached` is only listening on `localhost`:
 
 ```shell
-$ netstat nap | grep 11211
+$ netstat -nap | grep 11211
 ```
 
 Since this `memcached` service will be used by other services on the network, we need to change `memcached`'s interface binding to `0.0.0.0`. The following should work:

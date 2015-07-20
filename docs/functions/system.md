@@ -1,4 +1,4 @@
-`lib/system.sh` contains functions that are considered core to Waffles or do not warrant their own file.
+`lib/system.sh` contains functions that are considered core to Waffles.
 
 ## stdlib.array_contains
 
