@@ -32,7 +32,7 @@ for file in $(find ../../lib/resources -name \*.sh | sort); do
   gendoc "$_name" "$file"
 done
 
-for category in apache augeas keepalived mysql nginx rabbitmq; do
+for category in apache augeas consul keepalived mysql nginx rabbitmq; do
   for file in $(find ../../lib/$category/resources -name \*.sh | sort); do
     _name="$(basename $file | sed -e 's/\.sh//g' -e "s/${category}_/${category}./")"
     gendoc "$_name" "$file"
