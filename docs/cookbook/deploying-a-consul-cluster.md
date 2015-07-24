@@ -121,7 +121,7 @@ Here are some notes on the above:
 * `stdlib.file` is able to copy a static file from `site/profiles/consul/files`. It is _highly_ recommended to bundle your static files into the profile that they are being called from. This ensures that they get copied to the remote node during remote deployment. Alternatively, while there are not yet resources for commands such as `scp` or `wget`, you could use them similarly to how the Consul zip file was downloaded.
 * `augeas.json_dict` is an Augeas-based resource that allows JSON files to be built on the command-line. In order to use Augeas, it must be installed. See the next section.
 * `stdlib.upstart` ensures that the Consul service is running.
-# Finally, the `for` loop will run if the node is the bootstrap node. It'll loop through all other existing nodes and join them. The existing nodes must be up and running first, which is why the bootstrap node was set to the last node in the cluster.
+* Finally, the `for` loop will run if the node is the bootstrap node. It'll loop through all other existing nodes and join them. The existing nodes must be up and running first, which is why the bootstrap node was set to the last node in the cluster.
 
 Finally, create `site/profiles/consul/files/consul.conf` with the following content:
 
