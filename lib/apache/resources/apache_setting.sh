@@ -160,6 +160,10 @@ function apache.setting.update {
     stdlib.error "Error adding apache.setting $_name with augeas: $_result"
     return
   fi
+
+  stdlib_state_change="true"
+  stdlib_resource_change="true"
+  let "stdlib_resource_changes++"
 }
 
 function apache.setting.delete {
@@ -172,4 +176,8 @@ function apache.setting.delete {
     stdlib.error "Error deleting apache.setting $_name with augeas: $_result"
     return
   fi
+
+  stdlib_state_change="true"
+  stdlib_resource_change="true"
+  let "stdlib_resource_changes++"
 }

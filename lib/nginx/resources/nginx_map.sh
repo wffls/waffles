@@ -123,6 +123,10 @@ function nginx.map.create {
     stdlib.error "Error adding nginx.map $_name with augeas: $_result"
     return
   fi
+
+  stdlib_state_change="true"
+  stdlib_resource_change="true"
+  let "stdlib_resource_changes++"
 }
 
 function nginx.map.update {
@@ -136,6 +140,10 @@ function nginx.map.update {
     stdlib.error "Error adding nginx.map $_name with augeas: $_result"
     return
   fi
+
+  stdlib_state_change="true"
+  stdlib_resource_change="true"
+  let "stdlib_resource_changes++"
 }
 
 function nginx.map.delete {
@@ -148,4 +156,8 @@ function nginx.map.delete {
     stdlib.error "Error deleting nginx.map $_name with augeas: $_result"
     return
   fi
+
+  stdlib_state_change="true"
+  stdlib_resource_change="true"
+  let "stdlib_resource_changes++"
 }

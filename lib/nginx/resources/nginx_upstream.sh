@@ -125,6 +125,10 @@ function nginx.upstream.create {
     stdlib.error "Error adding nginx.upstream $_name with augeas: $_result"
     return
   fi
+
+  stdlib_state_change="true"
+  stdlib_resource_change="true"
+  let "stdlib_resource_changes++"
 }
 
 function nginx.upstream.update {
@@ -137,6 +141,10 @@ function nginx.upstream.update {
     stdlib.error "Error adding nginx.upstream $_name with augeas: $_result"
     return
   fi
+
+  stdlib_state_change="true"
+  stdlib_resource_change="true"
+  let "stdlib_resource_changes++"
 }
 
 function nginx.upstream.delete {
@@ -149,4 +157,8 @@ function nginx.upstream.delete {
     stdlib.error "Error deleting nginx.upstream $_name with augeas: $_result"
     return
   fi
+
+  stdlib_state_change="true"
+  stdlib_resource_change="true"
+  let "stdlib_resource_changes++"
 }

@@ -125,6 +125,10 @@ function apache.section.create {
     stdlib.error "Error adding apache.section $_name with augeas: $_result"
     return
   fi
+
+  stdlib_state_change="true"
+  stdlib_resource_change="true"
+  let "stdlib_resource_changes++"
 }
 
 function apache.section.delete {
@@ -137,4 +141,8 @@ function apache.section.delete {
     stdlib.error "Error deleting apache.section $_name with augeas: $_result"
     return
   fi
+
+  stdlib_state_change="true"
+  stdlib_resource_change="true"
+  let "stdlib_resource_changes++"
 }

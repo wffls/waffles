@@ -152,6 +152,10 @@ function nginx.location.create {
     stdlib.error "Error adding nginx_location $_name with augeas: $_result"
     return
   fi
+
+  stdlib_state_change="true"
+  stdlib_resource_change="true"
+  let "stdlib_resource_changes++"
 }
 
 function nginx.location.update {
@@ -164,6 +168,10 @@ function nginx.location.update {
     stdlib.error "Error adding nginx_location $_name with augeas: $_result"
     return
   fi
+
+  stdlib_state_change="true"
+  stdlib_resource_change="true"
+  let "stdlib_resource_changes++"
 }
 
 function nginx.location.delete {
@@ -176,4 +184,8 @@ function nginx.location.delete {
     stdlib.error "Error deleting nginx_location $_name with augeas: $_result"
     return
   fi
+
+  stdlib_state_change="true"
+  stdlib_resource_change="true"
+  let "stdlib_resource_changes++"
 }

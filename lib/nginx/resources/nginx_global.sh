@@ -110,6 +110,10 @@ function nginx.global.create {
     stdlib.error "Error adding nginx.http $_name with augeas: $_result"
     return
   fi
+
+  stdlib_state_change="true"
+  stdlib_resource_change="true"
+  let "stdlib_resource_changes++"
 }
 
 function nginx.global.delete {
@@ -121,4 +125,8 @@ function nginx.global.delete {
     stdlib.error "Error deleting nginx.global $_name with augeas: $_result"
     return
   fi
+
+  stdlib_state_change="true"
+  stdlib_resource_change="true"
+  let "stdlib_resource_changes++"
 }

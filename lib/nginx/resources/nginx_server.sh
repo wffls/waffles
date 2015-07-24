@@ -119,6 +119,10 @@ function nginx.server.create {
     stdlib.error "Error adding nginx_server $_name with augeas: $_result"
     return
   fi
+
+  stdlib_state_change="true"
+  stdlib_resource_change="true"
+  let "stdlib_resource_changes++"
 }
 
 function nginx.server.update {
@@ -131,6 +135,10 @@ function nginx.server.update {
     stdlib.error "Error adding nginx_server $_name with augeas: $_result"
     return
   fi
+
+  stdlib_state_change="true"
+  stdlib_resource_change="true"
+  let "stdlib_resource_changes++"
 }
 
 function nginx.server.delete {
@@ -143,4 +151,8 @@ function nginx.server.delete {
     stdlib.error "Error deleting nginx_server $_name with augeas: $_result"
     return
   fi
+
+  stdlib_state_change="true"
+  stdlib_resource_change="true"
+  let "stdlib_resource_changes++"
 }

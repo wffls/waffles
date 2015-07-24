@@ -129,6 +129,10 @@ function nginx.if.create {
     stdlib.error "Error adding nginx_if $_name with augeas: $_result"
     return
   fi
+
+  stdlib_state_change="true"
+  stdlib_resource_change="true"
+  let "stdlib_resource_changes++"
 }
 
 function nginx.if.update {
@@ -141,6 +145,10 @@ function nginx.if.update {
     stdlib.error "Error adding nginx_if $_name with augeas: $_result"
     return
   fi
+
+  stdlib_state_change="true"
+  stdlib_resource_change="true"
+  let "stdlib_resource_changes++"
 }
 
 function nginx.if.delete {
@@ -153,4 +161,8 @@ function nginx.if.delete {
     stdlib.error "Error deleting nginx_if $_name with augeas: $_result"
     return
   fi
+
+  stdlib_state_change="true"
+  stdlib_resource_change="true"
+  let "stdlib_resource_changes++"
 }

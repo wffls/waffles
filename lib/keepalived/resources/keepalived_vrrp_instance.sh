@@ -263,6 +263,10 @@ function keepalived.vrrp_instance.create {
   if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error adding $_name with augeas: $_result"
   fi
+
+  stdlib_state_change="true"
+  stdlib_resource_change="true"
+  let "stdlib_resource_changes++"
 }
 
 function keepalived.vrrp_instance.delete {
@@ -309,4 +313,8 @@ function keepalived.vrrp_instance.delete {
   if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error adding $_name with augeas: $_result"
   fi
+
+  stdlib_state_change="true"
+  stdlib_resource_change="true"
+  let "stdlib_resource_changes++"
 }

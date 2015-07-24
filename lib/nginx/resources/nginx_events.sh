@@ -109,6 +109,10 @@ function nginx.events.create {
     stdlib.error "Error adding nginx.http $_name with augeas: $_result"
     return
   fi
+
+  stdlib_state_change="true"
+  stdlib_resource_change="true"
+  let "stdlib_resource_changes++"
 }
 
 function nginx.events.delete {
@@ -120,4 +124,8 @@ function nginx.events.delete {
     stdlib.error "Error deleting nginx.events $_name with augeas: $_result"
     return
   fi
+
+  stdlib_state_change="true"
+  stdlib_resource_change="true"
+  let "stdlib_resource_changes++"
 }

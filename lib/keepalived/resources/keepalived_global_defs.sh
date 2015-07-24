@@ -156,6 +156,10 @@ function keepalived.global_defs.create {
   if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error adding $_name with augeas: $_result"
   fi
+
+  stdlib_state_change="true"
+  stdlib_resource_change="true"
+  let "stdlib_resource_changes++"
 }
 
 function keepalived.global_defs.delete {
@@ -179,4 +183,8 @@ function keepalived.global_defs.delete {
   if [[ "$_result" =~ ^error ]]; then
     stdlib.error "Error adding $_name with augeas: $_result"
   fi
+
+  stdlib_state_change="true"
+  stdlib_resource_change="true"
+  let "stdlib_resource_changes++"
 }
