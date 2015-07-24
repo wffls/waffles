@@ -54,6 +54,7 @@ function stdlib.debug? {
 # stdlib.title is a section/subsection currently being run
 function stdlib.title {
   stdlib_title=""
+  stdlib_subtitle=""
   stdlib_title="$@"
   stdlib_state_change="false"
   stdlib_resource_change="false"
