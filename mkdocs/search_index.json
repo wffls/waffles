@@ -1381,6 +1381,56 @@
             "title": "Notes"
         }, 
         {
+            "location": "/resources/consul.check/", 
+            "text": "consul.check\n\n\nDescription\n\n\nManages a consul.check.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The name of the check Required. namevar.\n\n\nid: A unique ID for the check. Optional.\n\n\nservice_id: A service to tie the check to. Optional.\n\n\nnotes: Notes about the check. Optional.\n\n\ntoken: An ACL token. Optional.\n\n\ncheck: The script or http location for the check. Optional.\n\n\ntype: The type of check: script, http, or ttl. Required.\n\n\ninterval: The interval to run the script. Optional.\n\n\nttl: The TTL of the check. Optional.\n\n\nfile: The file to store the check in. Required. Defaults to /etc/consul.d/check-name.json\n\n\n\n\nExample\n\n\nconsul.check --name mysql \\\n             --check \n/usr/local/bin/check_mysql.sh\n \\\n             --type \nscript\n \\\n             --interval \n60s", 
+            "title": "consul.check"
+        }, 
+        {
+            "location": "/resources/consul.check/#consulcheck", 
+            "text": "", 
+            "title": "consul.check"
+        }, 
+        {
+            "location": "/resources/consul.check/#description", 
+            "text": "Manages a consul.check.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/consul.check/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  name: The name of the check Required. namevar.  id: A unique ID for the check. Optional.  service_id: A service to tie the check to. Optional.  notes: Notes about the check. Optional.  token: An ACL token. Optional.  check: The script or http location for the check. Optional.  type: The type of check: script, http, or ttl. Required.  interval: The interval to run the script. Optional.  ttl: The TTL of the check. Optional.  file: The file to store the check in. Required. Defaults to /etc/consul.d/check-name.json", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/consul.check/#example", 
+            "text": "consul.check --name mysql \\\n             --check  /usr/local/bin/check_mysql.sh  \\\n             --type  script  \\\n             --interval  60s", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/consul.service/", 
+            "text": "consul.service\n\n\nDescription\n\n\nManages a consul service.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The name of the service. Required. namevar.\n\n\nid: A unique ID for the service. Optional.\n\n\ntag: Tags to describe the service. Optional. Multi-var.\n\n\naddress: The address of the service. Optional.\n\n\nport: The port that the service runs on. Optional.\n\n\ntoken: An ACL token. Optional.\n\n\ncheck: The script or location for the check. Optional. Multi-var.\n\n\ncheck_type: The type of check. Optional. Multi-var.\n\n\ncheck_interval: The interval to run the script. Optional. Multi-var.\n\n\ncheck_ttl: The TTL of the check. Optional. Multi-var.\n\n\nfile: The file to store the service in. Required. Defaults to /etc/consul.d/service-name.json\n\n\n\n\nExample\n\n\nconsul.service --name mysql \\\n               --port 3306 \\\n               --check_type \nscript\n \\\n               --check \n/usr/local/bin/check_mysql.sh\n \\\n               --check_interval \n60s", 
+            "title": "consul.service"
+        }, 
+        {
+            "location": "/resources/consul.service/#consulservice", 
+            "text": "", 
+            "title": "consul.service"
+        }, 
+        {
+            "location": "/resources/consul.service/#description", 
+            "text": "Manages a consul service.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/consul.service/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  name: The name of the service. Required. namevar.  id: A unique ID for the service. Optional.  tag: Tags to describe the service. Optional. Multi-var.  address: The address of the service. Optional.  port: The port that the service runs on. Optional.  token: An ACL token. Optional.  check: The script or location for the check. Optional. Multi-var.  check_type: The type of check. Optional. Multi-var.  check_interval: The interval to run the script. Optional. Multi-var.  check_ttl: The TTL of the check. Optional. Multi-var.  file: The file to store the service in. Required. Defaults to /etc/consul.d/service-name.json", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/consul.service/#example", 
+            "text": "consul.service --name mysql \\\n               --port 3306 \\\n               --check_type  script  \\\n               --check  /usr/local/bin/check_mysql.sh  \\\n               --check_interval  60s", 
+            "title": "Example"
+        }, 
+        {
             "location": "/resources/keepalived.global_defs/", 
             "text": "keepalived.global_defs\n\n\nDescription\n\n\nManages global_defs section in keepalived.conf\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nnotification_email: Email address to send notifications. Optional. Multi-var.\n\n\nnotification_email_from: The From address on email notifications. Optional.\n\n\nsmtp_server: The smtp server to send notifications. Optional.\n\n\nsmtp_connect_timeout: Connect timeout for sending notifications. Optional.\n\n\nrouter_id: The router ID. Optional.\n\n\nvrrp_mcast_group4: VRRP multicast group for IPv4. Optional.\n\n\nvrrp_mcast_group6: VRRP multicast group for IPv6. Optional.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/keepalived/keepalived.conf.\n\n\n\n\nExample\n\n\nkeepalived.global_defs --notification_email root@localhost \\\n                       --notification_email jdoe@example.com \\\n                       --smtp_server smtp.example.com \\\n                       --router_id 42", 
             "title": "keepalived.global_defs"

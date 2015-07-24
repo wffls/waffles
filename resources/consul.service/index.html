@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>stdlib.file - Waffles</title>
+  <title>consul.service - Waffles</title>
   
 
   <link rel="shortcut icon" href="../../img/favicon.ico">
@@ -20,7 +20,7 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "stdlib.file";
+    var mkdocs_page_name = "consul.service";
   </script>
   
   <script src="../../js/jquery-2.1.1.min.js"></script>
@@ -288,21 +288,8 @@
 
         
             
-    <li class="toctree-l1 current">
-        <a class="current" href="./">stdlib.file</a>
-        
-            <ul>
-            
-                <li class="toctree-l3"><a href="#stdlibfile">stdlib.file</a></li>
-                
-                    <li><a class="toctree-l4" href="#description">Description</a></li>
-                
-                    <li><a class="toctree-l4" href="#parameters">Parameters</a></li>
-                
-                    <li><a class="toctree-l4" href="#example">Example</a></li>
-                
-            
-            </ul>
+    <li class="toctree-l1 ">
+        <a class="" href="../stdlib.file/">stdlib.file</a>
         
     </li>
 
@@ -455,8 +442,21 @@
 
         
             
-    <li class="toctree-l1 ">
-        <a class="" href="../consul.service/">consul.service</a>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">consul.service</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#consulservice">consul.service</a></li>
+                
+                    <li><a class="toctree-l4" href="#description">Description</a></li>
+                
+                    <li><a class="toctree-l4" href="#parameters">Parameters</a></li>
+                
+                    <li><a class="toctree-l4" href="#example">Example</a></li>
+                
+            
+            </ul>
         
     </li>
 
@@ -784,7 +784,7 @@
         
       
     
-    <li>stdlib.file</li>
+    <li>consul.service</li>
     <li class="wy-breadcrumbs-aside">
       
         
@@ -798,21 +798,30 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="stdlibfile">stdlib.file</h1>
+                <h1 id="consulservice">consul.service</h1>
 <h2 id="description">Description</h2>
-<p>Manages files</p>
+<p>Manages a consul service.</p>
 <h2 id="parameters">Parameters</h2>
 <ul>
 <li>state: The state of the resource. Required. Default: present.</li>
-<li>owner: The owner of the directory. Default: root.</li>
-<li>group: The group of the directory. Default: root.</li>
-<li>mode: The perms/mode of the directory. Default: 750.</li>
-<li>name: The destination file. Required. namevar.</li>
-<li>content: STDIN content for the file. Optional.</li>
-<li>source: Source directory to copy. Optional.</li>
+<li>name: The name of the service. Required. namevar.</li>
+<li>id: A unique ID for the service. Optional.</li>
+<li>tag: Tags to describe the service. Optional. Multi-var.</li>
+<li>address: The address of the service. Optional.</li>
+<li>port: The port that the service runs on. Optional.</li>
+<li>token: An ACL token. Optional.</li>
+<li>check: The script or location for the check. Optional. Multi-var.</li>
+<li>check_type: The type of check. Optional. Multi-var.</li>
+<li>check_interval: The interval to run the script. Optional. Multi-var.</li>
+<li>check_ttl: The TTL of the check. Optional. Multi-var.</li>
+<li>file: The file to store the service in. Required. Defaults to /etc/consul.d/service-name.json</li>
 </ul>
 <h2 id="example">Example</h2>
-<pre><code class="shell">stdlib.file --name /etc/foobar --content &quot;Hello, World!&quot;
+<pre><code class="shell">consul.service --name mysql \
+               --port 3306 \
+               --check_type &quot;script&quot; \
+               --check &quot;/usr/local/bin/check_mysql.sh&quot; \
+               --check_interval &quot;60s&quot;
 </code></pre>
               
             </div>
@@ -821,10 +830,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../stdlib.git/" class="btn btn-neutral float-right" title="stdlib.git"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../keepalived.global_defs/" class="btn btn-neutral float-right" title="keepalived.global_defs"/>Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../stdlib.file_line/" class="btn btn-neutral" title="stdlib.file_line"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../consul.check/" class="btn btn-neutral" title="consul.check"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -852,10 +861,10 @@
           <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../stdlib.file_line/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../consul.check/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../stdlib.git/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../keepalived.global_defs/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
