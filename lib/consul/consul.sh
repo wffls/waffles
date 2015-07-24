@@ -7,6 +7,7 @@ function consul.get_nodes {
   stdlib.options.parse_options "$@"
 
   declare -Ag consul_nodes
+  declare -g consul_error=""
 
   if [[ "${options[service]}" == "all" ]]; then
     if ! stdlib.command_exists curl ; then
@@ -18,14 +19,20 @@ function consul.get_nodes {
       fi
     fi
 
-    local _nodes=$(curl -s http://localhost:8500/v1/catalog/nodes | tr -d []\" | sed -e 's/Node://g' | sed -e 's/Address://g' | sed -e 's/},{/#/g' | tr -d {})
-    stdlib.split "$_nodes" "#"
+    local _nodes=$(curl -s http://localhost:8500/v1/catalog/nodes)
+    if [[ "$_nodes" == "No known Consul servers" ]]; then
+      consul_error="true"
+      return 1
+    else
+      _nodes=$(echo "$_nodes" | tr -d []\" | sed -e 's/Node://g' | sed -e 's/Address://g' | sed -e 's/},{/#/g' | tr -d {})
+      stdlib.split "$_nodes" "#"
 
-    local _node
-    for _node in "${__split[@]}"; do
-      stdlib.split "$_node" ','
-      consul_nodes[${__split[0]}]="${__split[1]}"
-    done
+      local _node
+      for _node in "${__split[@]}"; do
+        stdlib.split "$_node" ','
+        consul_nodes[${__split[0]}]="${__split[1]}"
+      done
+    fi
   else
     if ! stdlib.command_exists dig ; then
       stdlib.error "Cannot find dig."
