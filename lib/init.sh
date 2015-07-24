@@ -102,3 +102,10 @@ function stdlib.enable_keepalived {
   source "$WAFFLES_LIB_DIR/keepalived/resources/keepalived_vrrp_script.sh"
   source "$WAFFLES_LIB_DIR/keepalived/resources/keepalived_vrrp_sync_group.sh"
 }
+
+# Consul-based Resources and Functions
+function stdlib.enable_consul {
+  source "$WAFFLES_LIB_DIR/consul/consul.sh"
+  source "$WAFFLES_LIB_DIR/consul/resources/consul_service.sh"
+  source "$WAFFLES_LIB_DIR/consul/resources/consul_check.sh"
+}

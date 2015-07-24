@@ -61,6 +61,8 @@ pages:
     - augeas.mail_alias: 'resources/augeas.mail_alias.md'
     - augeas.shellvar: 'resources/augeas.shellvar.md'
     - augeas.ssh_authorized_key: 'resources/augeas.ssh_authorized_key.md'
+    - consul.check: 'resources/consul.check.md'
+    - consul.service: 'resources/consul.service.md'
     - keepalived.global_defs: 'resources/keepalived.global_defs.md'
     - keepalived.vrrp_instance: 'resources/keepalived.vrrp_instance.md'
     - keepalived.vrrp_script: 'resources/keepalived.vrrp_script.md'
