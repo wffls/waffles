@@ -31,6 +31,7 @@
 function stdlib.cron {
   stdlib.subtitle "stdlib.cron"
 
+  # Resource Options
   local -A options
   stdlib.options.create_option state  "present"
   stdlib.options.create_option name   "__required__"
@@ -43,44 +44,22 @@ function stdlib.cron {
   stdlib.options.create_option dow    "*"
   stdlib.options.parse_options "$@"
 
-  stdlib.catalog.add "stdlib.cron/${options[name]}"
-
-  local entry
+  # Local Variables
+  local entry="${options[minute]} ${options[hour]} ${options[dom]} ${options[month]} ${options[dow]} ${options[cmd]} # ${options[name]}"
   local _entry
 
-  entry="${options[minute]} ${options[hour]} ${options[dom]} ${options[month]} ${options[dow]} ${options[cmd]} # ${options[name]}"
-
-  stdlib.cron.read
-  if [[ "${options[state]}" == "absent" ]]; then
-    if [[ "$stdlib_current_state" != "absent" ]]; then
-      stdlib.info "${options[name]} state: $stdlib_current_state, should be absent."
-      stdlib.cron.delete
-    fi
-  else
-    case "$stdlib_current_state" in
-      absent)
-        stdlib.info "${options[name]} state: absent, should be present."
-        stdlib.cron.create
-        ;;
-      present)
-        stdlib.debug "${options[name]} state: present."
-        ;;
-      update)
-        stdlib.info "${options[name]} state: out of date."
-        stdlib.cron.create
-        ;;
-    esac
-  fi
+  # Process the resource
+  stdlib.resource.process "stdlib.cron" "$entry"
 }
 
 function stdlib.cron.read {
   _entry=$(crontab -u "${options[user]}" -l 2> /dev/null | grep "# ${options[name]}$")
-  if [[ -z "$_entry" ]]; then
+  if [[ -z $_entry ]]; then
     stdlib_current_state="absent"
     return
   fi
 
-  if [[ "$entry" != "$_entry" ]]; then
+  if [[ $entry != $_entry ]]; then
     stdlib_current_state="update"
     return
   fi
@@ -97,10 +76,10 @@ function stdlib.cron.create {
 ) | crontab -u "${options[user]}" -
 EOF
   stdlib.capture_error "$_script"
+}
 
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
+function stdlib.cron.update {
+  stdlib.cron.create
 }
 
 function stdlib.cron.delete {
@@ -111,8 +90,4 @@ function stdlib.cron.delete {
 ) | crontab -u "${options[user]}" -
 EOF
   stdlib.capture_error "$_script"
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }

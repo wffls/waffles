@@ -23,78 +23,63 @@ function rabbitmq.default_vhost {
 
   if ! stdlib.command_exists augtool ; then
     stdlib.error "Cannot find augtool."
-    if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
+    if [[ -n $WAFFLES_EXIT_ON_ERROR ]]; then
       exit 1
     else
       return 1
     fi
   fi
 
+  # Resource Options
   local -A options
   stdlib.options.create_option state "present"
   stdlib.options.create_option vhost "__required__"
   stdlib.options.create_option file  "/etc/rabbitmq/rabbitmq.config"
   stdlib.options.parse_options "$@"
 
+  # Local Variables
   local _name="${options[vhost]}"
-  stdlib.catalog.add "rabbitmq.default_vhost/$_name"
-
   local _dir=$(dirname "${options[file]}")
   local _file="${options[file]}"
 
-  rabbitmq.default_vhost.read
-  if [[ "${options[state]}" == "absent" ]]; then
-    if [[ "$stdlib_current_state" != "absent" ]]; then
-      stdlib.info "$_name state: $stdlib_current_state, should be absent."
-      rabbitmq.default_vhost.delete
-    fi
-  else
-    case "$stdlib_current_state" in
-      absent)
-        stdlib.info "$_name state: absent, should be present."
-        rabbitmq.default_vhost.create
-        ;;
-      present)
-        stdlib.debug "$_name state: present."
-        ;;
-      update)
-        stdlib.info "$_name state: present, needs updated."
-        rabbitmq.default_vhost.delete
-        rabbitmq.default_vhost.create
-        ;;
-    esac
-  fi
+  # Process the resource
+  stdlib.resource.process "rabbitmq.default_vhost" "$_name"
 }
 
 function rabbitmq.default_vhost.read {
-  if [[ ! -f "$_file" ]]; then
+  if [[ ! -f $_file ]]; then
     stdlib_current_state="absent"
     return
   fi
 
-  rabbitmq.generic_value_read "$_file" "default_vhost" "${options[vhost]}"
+  rabbitmq.generic_value_read $_file "default_vhost" "${options[vhost]}"
 }
 
 function rabbitmq.default_vhost.create {
   local _result
 
-  if [[ ! -d "$_dir" ]]; then
-    stdlib.capture_error mkdir -p "$_dir"
+  if [[ ! -d $_dir ]]; then
+    stdlib.capture_error mkdir -p $_dir
   fi
 
-  rabbitmq.generic_value_create "$_file" "default_vhost" "${options[vhost]}"
+  rabbitmq.generic_value_create $_file "default_vhost" "${options[vhost]}"
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error adding $_name with augeas: $_result"
   fi
+}
+
+function rabbitmq.default_vhost.update {
+  rabbitmq.default_vhost.delete
+  rabbitmq.default_vhost.create
 }
 
 function rabbitmq.default_vhost.delete {
   local _result
 
-  rabbitmq.generic_value_delete "$_file" "default_vhost" "${options[vhost]}"
+  rabbitmq.generic_value_delete $_file "default_vhost" "${options[vhost]}"
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error deleting rabbitmq.default_vhost $_name with augeas: $_result"
   fi
 }

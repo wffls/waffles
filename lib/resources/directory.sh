@@ -20,12 +20,13 @@
 # === Example
 #
 # ```shell
-# stdlib.directory --source modules/mymod/files/foo --name /var/lib/foo
+# stdlib.directory --source $WAFFLES_SITE_DIR/profiles/foo/files/mydir --name /var/lib/mydir
 # ```
 #
 function stdlib.directory {
   stdlib.subtitle "stdlib.directory"
 
+  # Resource Options
   local -A options
   stdlib.options.create_option state     "present"
   stdlib.options.create_option owner     "root"
@@ -37,46 +38,24 @@ function stdlib.directory {
   stdlib.options.create_option source
   stdlib.options.parse_options "$@"
 
-  stdlib.catalog.add "stdlib.directory/${options[name]}"
-
+  # Local Variables
   local _owner _group _mode _source _directory _recurse _rsync _parent
 
-  if [[ "${options[recurse]}" == "true" ]]; then
+  # Internal Resource Configuration
+  if [[ ${options[recurse]} == "true" ]]; then
     _recurse="-R"
   else
     _recurse=""
   fi
 
-  if [[ "${options[parent]}" == "true" ]]; then
+  if [[ ${options[parent]} == "true" ]]; then
     _parent="-p"
   else
     _parent=""
   fi
 
-  stdlib.directory.read
-  if [[ "${options[state]}" == "absent" ]]; then
-    if [[ "$stdlib_current_state" != "absent" ]]; then
-      stdlib.info "${options[name]} state: $stdlib_current_state, should be absent."
-      stdlib.directory.delete
-    fi
-  else
-    case "$stdlib_current_state" in
-      absent)
-        stdlib.info "${options[name]} state: absent, should be present."
-        stdlib.directory.create
-        ;;
-      present)
-        stdlib.debug "${options[name]} state: present."
-        ;;
-      update)
-        stdlib.info "${options[name]} state: out of date."
-        stdlib.directory.update
-        ;;
-      type_error)
-        stdlib.info "${options[name]} state: not a regular directory."
-        ;;
-    esac
-  fi
+  # Process the resource
+  stdlib.resource.process "stdlib.directory" "${options[name]}"
 }
 
 function stdlib.directory.read {
@@ -92,27 +71,28 @@ function stdlib.directory.read {
   _mode="${__split[2]}"
   _type="${__split[3]}"
 
-  if [[ "$_type" != "directory" ]]; then
-    stdlib_current_state="type_error"
+  if [[ $_type != "directory" ]]; then
+    stdlib.error "${options[name]} is not a regular directory"
+    stdlib_current_state="error"
     return
   fi
 
-  if [[ "${options[owner]}" != "$_owner" ]]; then
+  if [[ ${options[owner]} != $_owner ]]; then
     stdlib_current_state="update"
     return
   fi
 
-  if [[ "${options[group]}" != "$_group" ]]; then
+  if [[ ${options[group]} != $_group ]]; then
     stdlib_current_state="update"
     return
   fi
 
-  if [[ "${options[mode]}" != "$_mode" ]]; then
+  if [[ ${options[mode]} != $_mode ]]; then
     stdlib_current_state="update"
     return
   fi
 
-  if [[ -n "${options[source]}" ]]; then
+  if [[ -n ${options[source]} ]]; then
     _rsync=$(rsync -ani "${options[source]}/" "${options[name]}")
     if [[ -n $_rsync ]]; then
       stdlib_current_state="update"
@@ -124,7 +104,7 @@ function stdlib.directory.read {
 }
 
 function stdlib.directory.create {
-  if [[ -n "${options[source]}" ]]; then
+  if [[ -n ${options[source]} ]]; then
     stdlib.capture_error rsync -a "${options[source]}/" "${options[name]}"
     stdlib.capture_error chmod ${options[recurse]} ${options[mode]} "${options[name]}"
     stdlib.capture_error chown ${options[recurse]} ${options[owner]}:${options[group]} "${options[name]}"
@@ -133,10 +113,6 @@ function stdlib.directory.create {
     stdlib.capture_error chmod ${options[mode]} "${options[name]}"
     stdlib.capture_error chown ${options[owner]}:${options[group]} "${options[name]}"
   fi
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }
 
 function stdlib.directory.update {
@@ -155,16 +131,8 @@ function stdlib.directory.update {
   if [[ -n $_rsync ]]; then
     stdlib.capture_error rsync -a "${options[source]}/" "${options[name]}"
   fi
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }
 
 function stdlib.directory.delete {
   stdlib.capture_error rm -rf "${options[name]}"
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }

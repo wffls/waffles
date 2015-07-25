@@ -24,13 +24,14 @@ function rabbitmq.cluster_nodes {
 
   if ! stdlib.command_exists augtool ; then
     stdlib.error "Cannot find augtool."
-    if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
+    if [[ -n $WAFFLES_EXIT_ON_ERROR ]]; then
       exit 1
     else
       return 1
     fi
   fi
 
+  # Resource Options
   local -A options
   local -a node
   stdlib.options.create_option state        "present"
@@ -39,62 +40,41 @@ function rabbitmq.cluster_nodes {
   stdlib.options.create_option file         "/etc/rabbitmq/rabbitmq.config"
   stdlib.options.parse_options "$@"
 
+  # Local Variables
   local _name="rabbitmq.cluster_nodes"
-  stdlib.catalog.add "$_name"
-
   local _dir=$(dirname "${options[file]}")
   local _file="${options[file]}"
 
-  rabbitmq.cluster_nodes.read
-  if [[ "${options[state]}" == "absent" ]]; then
-    if [[ "$stdlib_current_state" != "absent" ]]; then
-      stdlib.info "$_name state: $stdlib_current_state, should be absent."
-      rabbitmq.cluster_nodes.delete
-    fi
-  else
-    case "$stdlib_current_state" in
-      absent)
-        stdlib.info "$_name state: absent, should be present."
-        rabbitmq.cluster_nodes.create
-        ;;
-      present)
-        stdlib.debug "$_name state: present."
-        ;;
-      update)
-        stdlib.info "$_name state: present, needs updated."
-        rabbitmq.cluster_nodes.delete
-        rabbitmq.cluster_nodes.create
-        ;;
-    esac
-  fi
+  # Process the resource
+  stdlib.resource.process "rabbitmq.cluster_nodes" "$_name"
 }
 
 function rabbitmq.cluster_nodes.read {
   local _result
 
-  if [[ ! -f "$_file" ]]; then
+  if [[ ! -f $_file ]]; then
     stdlib_current_state="absent"
     return
   fi
 
   # Check if the path exists in augeas
-  stdlib_current_state=$(augeas.get --lens Rabbitmq --file "$_file" --path "/rabbit/cluster_nodes/tuple")
-  if [[ "$stdlib_current_state" == "absent" ]]; then
+  stdlib_current_state=$(augeas.get --lens Rabbitmq --file $_file --path "/rabbit/cluster_nodes/tuple")
+  if [[ $stdlib_current_state == "absent" ]]; then
     return
   fi
 
   # Check if the nodes exist
   for n in "${node[@]}"; do
-    _result=$(augeas.get --lens Rabbitmq --file "$_file" --path "/rabbit/cluster_nodes/tuple/value[1]/value[. = '$n']")
-    if [[ "$_result" == "absent" ]]; then
+    _result=$(augeas.get --lens Rabbitmq --file $_file --path "/rabbit/cluster_nodes/tuple/value[1]/value[. = '$n']")
+    if [[ $_result == "absent" ]]; then
       stdlib_current_state="update"
       return
     fi
   done
 
   # Check if the cluster type matches
-  _result=$(augeas.get --lens Rabbitmq --file "$_file" --path "/rabbit/cluster_nodes/tuple/value[2][. = '${options[cluster_type]}']")
-  if [[ "$_result" == "absent" ]]; then
+  _result=$(augeas.get --lens Rabbitmq --file $_file --path "/rabbit/cluster_nodes/tuple/value[2][. = '${options[cluster_type]}']")
+  if [[ $_result == "absent" ]]; then
     stdlib_current_state="update"
     return
   fi
@@ -103,8 +83,8 @@ function rabbitmq.cluster_nodes.read {
 }
 
 function rabbitmq.cluster_nodes.create {
-  if [[ ! -d "$_dir" ]]; then
-    stdlib.capture_error mkdir -p "$_dir"
+  if [[ ! -d $_dir ]]; then
+    stdlib.capture_error mkdir -p $_dir
   fi
 
   local -a _augeas_commands=()
@@ -114,20 +94,25 @@ function rabbitmq.cluster_nodes.create {
   done
   _augeas_commands+=("set /files$_file/rabbit/cluster_nodes/tuple/value[2] '${options[cluster_type]}'")
 
-  local _result=$(augeas.run --lens Rabbitmq --file "$_file" "${_augeas_commands[@]}")
+  local _result=$(augeas.run --lens Rabbitmq --file $_file "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error adding $_name with augeas: $_result"
     return
   fi
 }
 
+function rabbitmq.cluster_nodes.update {
+  rabbitmq.cluster_nodes.delete
+  rabbitmq.cluster_nodes.create
+}
+
 function rabbitmq.cluster_nodes.delete {
   local -a _augeas_commands=()
   _augeas_commands+=("rm /files$_file/rabbit/cluster_nodes")
-  local _result=$(augeas.run --lens Rabbitmq --file "$_file" "${_augeas_commands[@]}")
+  local _result=$(augeas.run --lens Rabbitmq --file $_file "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error deleting rabbitmq.cluster_nodes $_name with augeas: $_result"
     return
   fi

@@ -23,6 +23,7 @@
 function rabbitmq.policy {
   stdlib.subtitle "rabbitmq.policy"
 
+  # Resource Options
   local -A options
   stdlib.options.create_option state  "present"
   stdlib.options.create_option name   "__required__"
@@ -31,44 +32,24 @@ function rabbitmq.policy {
   stdlib.options.create_option policy "__required__"
   stdlib.options.parse_options "$@"
 
-  stdlib.catalog.add "rabbitmq.policy/${options[name]}"
-
+  # Local Variables
   local queues
   local policy
 
-  rabbitmq.policy.read
-  if [[ "${options[state]}" == "absent" ]]; then
-    if [[ "$stdlib_current_state" != "absent" ]]; then
-      stdlib.info "${options[user]} state: $stdlib_current_state, should be absent."
-      rabbitmq.policy.delete
-    fi
-  else
-    case "$stdlib_current_state" in
-      absent)
-        stdlib.info "${options[user]} state: absent, should be present."
-        rabbitmq.policy.create
-        ;;
-      present)
-        stdlib.debug "${options[user]} state: present."
-        ;;
-      update)
-        stdlib.debug "${options[user]} state: out of date."
-        rabbitmq.policy.create
-        ;;
-    esac
-  fi
+  # Process the resource
+  stdlib.resource.process "rabbitmq.policy" "${options[name]}"
 }
 
 function rabbitmq.policy.read {
 
   local _policy=$(rabbitmqctl -q list_policies -p ${options[vhost]} 2>/dev/null | grep ${options[name]})
-  if [[ -z "$_policy" ]]; then
+  if [[ -z $_policy ]]; then
     stdlib_current_state="absent"
     return
   fi
 
   local _queue_set=$(echo "$_policy" | awk '{print $6}')
-  if [[ -n "$_queue_set" ]]; then
+  if [[ -n $_queue_set ]]; then
     queues=$(echo "$_policy" | awk '{print $4}' | sed -e 's/[\/&]/\\&/g')
     policy=$(echo "$_policy" | awk '{print $5}')
   else
@@ -76,12 +57,12 @@ function rabbitmq.policy.read {
     policy=$(echo "$_policy" | awk '{print $4}')
   fi
 
-  if [[ "$queues" != "${options[queues]}" ]]; then
+  if [[ $queues != ${options[queues]} ]]; then
     stdlib_current_state="update"
     return
   fi
 
-  if [[ "$policy" != "${options[policy]}" ]]; then
+  if [[ $policy != ${options[policy]} ]]; then
     stdlib_current_state="update"
     return
   fi
@@ -91,16 +72,12 @@ function rabbitmq.policy.read {
 
 function rabbitmq.policy.create {
   stdlib.capture_error "rabbitmqctl set_policy -p ${options[vhost]} ${options[name]} '${options[queues]}' '${options[policy]}'"
+}
 
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
+function rabbitmq.policy.update {
+  rabbitmq.policy.create
 }
 
 function rabbitmq.policy.delete {
   stdlib.capture_error "rabbitmqctl clear_policy -p ${options[vhost]} ${options[name]}"
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }

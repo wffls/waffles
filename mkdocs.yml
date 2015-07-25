@@ -19,9 +19,11 @@ pages:
     - 'system': 'functions/system.md'
     - 'catalog': 'functions/catalog.md'
     - 'options': 'functions/options.md'
+    - 'resource': 'functions/resource.md'
     - 'augeas': 'functions/augeas.md'
-    - 'augeas': 'functions/consul.md'
+    - 'consul': 'functions/consul.md'
     - 'mysql': 'functions/mysql.md'
+    - 'rabbitmq': 'functions/rabbitmq.md'
   - Guides:
     - 'Environment Variables': 'guides/environment-vars.md'
     - 'Deploying a MySQL Server': 'guides/deploying-a-mysql-server.md'

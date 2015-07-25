@@ -17,8 +17,8 @@
 # === Example
 #
 # ```shell
-# apache.section --type Directory --name /
-# apache.section --path "VirtualHost=*:80" --type Directory --name /
+# apache.section --path "VirtualHost=*:80" --type Directory --name / \
+#                --file /etc/apache2/sites-enabled/000-default.conf
 # ```
 #
 function apache.section {
@@ -33,6 +33,7 @@ function apache.section {
     fi
   fi
 
+  # Resource Options
   local -A options
   local -a path
   stdlib.options.create_option state   "present"
@@ -42,12 +43,14 @@ function apache.section {
   stdlib.options.create_mv_option path
   stdlib.options.parse_options "$@"
 
+  # Local Variables
   local _path
   local _parent_path
   local -a _parent_paths
   local _file="${options[file]}"
   local _name="$_file"
 
+  # Internal Resource Configuration
   if [[ $(stdlib.array_length path) -gt 0 ]]; then
     for p in "${path[@]}"; do
       stdlib.split "$p" "="
@@ -60,43 +63,23 @@ function apache.section {
 
   _name="${_name}.${options[type]}"
 
-  stdlib.catalog.add "apache.section/$_name"
-
-  apache.section.read
-  if [[ "${options[state]}" == "absent" ]]; then
-    if [[ "$stdlib_current_state" != "absent" ]]; then
-      stdlib.info "$_name state: $stdlib_current_state, should be absent."
-      apache.section.delete
-    fi
-  else
-    case "$stdlib_current_state" in
-      absent)
-        stdlib.info "$_name state: absent, should be present."
-        apache.section.create
-        ;;
-      present)
-        stdlib.debug "$_name state: present."
-        ;;
-      error)
-        stdlib.error "$_name state: parent does not exist yet. Please create it first."
-        return
-        ;;
-    esac
-  fi
+  # Process the resource
+  stdlib.resource.process "apache.section" "$_name"
 }
 
 function apache.section.read {
   local _result
 
-  if [[ ! -f "$_file" ]]; then
+  if [[ ! -f $_file ]]; then
     stdlib_current_state="absent"
     return
   fi
 
   # Check if the parent type/name exists
-  if [[ -n "$_path" ]]; then
+  if [[ -n $_path ]]; then
     _result=$(augeas.get --lens Httpd --file "$_file" --path "$_parent_path")
-    if [[ "$_result" == "absent" ]]; then
+    if [[ $_result == "absent" ]]; then
+      stdlib.error "$_name state: parent does not exist yet. Please create it first."
       stdlib_current_state="error"
       return
     fi
@@ -104,7 +87,7 @@ function apache.section.read {
 
   # Check if the type exists
   stdlib_current_state=$(augeas.get --lens Httpd --file "$_file" --path "$_path/${options[type]}/arg[. = '${options[name]}']")
-  if [[ "$stdlib_current_state" == "absent" ]]; then
+  if [[ $stdlib_current_state == "absent" ]]; then
     return
   fi
 
@@ -113,7 +96,7 @@ function apache.section.read {
 
 function apache.section.create {
   local _dir=$(dirname "$_file")
-  if [[ ! -d "$_dir" ]]; then
+  if [[ ! -d $_dir ]]; then
     stdlib.capture_error mkdir -p "$_dir"
   fi
 
@@ -121,14 +104,10 @@ function apache.section.create {
   _augeas_commands+=("set /files$_file/$_path/${options[type]}/arg '${options[name]}'")
   local _result=$(augeas.run --lens Httpd --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error adding apache.section $_name with augeas: $_result"
     return
   fi
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }
 
 function apache.section.delete {
@@ -137,12 +116,8 @@ function apache.section.delete {
 
   local _result=$(augeas.run --lens Httpd --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error deleting apache.section $_name with augeas: $_result"
     return
   fi
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }

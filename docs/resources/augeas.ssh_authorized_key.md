@@ -16,7 +16,7 @@ Manages ssh_authorized_keys
 ## Example
 
 ```shell
-augeas.ssh_authorized_key --name jdoe --key "AAAAB3NzaC1..." --type ssh-rsa --comment "jdoe@laptop"
+augeas.ssh_authorized_key --name jdoe --key "AAAAB3NzaC1..." --type ssh-rsa --comment "jdoe@laptop" --file "/root/.ssh/authorized_keys"
 ```
 
 ## Notes

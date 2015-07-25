@@ -15,7 +15,7 @@ Manages an apache section.
 ## Example
 
 ```shell
-apache.section --type Directory --name /
-apache.section --path "VirtualHost=*:80" --type Directory --name /
+apache.section --path "VirtualHost=*:80" --type Directory --name / \
+               --file /etc/apache2/sites-enabled/000-default.conf
 ```
 

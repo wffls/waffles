@@ -32,13 +32,14 @@ function nginx.upstream {
 
   if ! stdlib.command_exists augtool ; then
     stdlib.error "Cannot find augtool."
-    if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
+    if [[ -n $WAFFLES_EXIT_ON_ERROR ]]; then
       exit 1
     else
       return 1
     fi
   fi
 
+  # Resource Options
   local -A options
   stdlib.options.create_option state   "present"
   stdlib.options.create_option name    "__required__"
@@ -48,51 +49,32 @@ function nginx.upstream {
   stdlib.options.create_option file
   stdlib.options.parse_options "$@"
 
+  # Local Variables
   local _name="${options[name]}.${options[key]}.${options[value]}"
-  stdlib.catalog.add "nginx.upstream/$_name"
-
   local _dir="/etc/nginx/conf.d"
   local _value _file
 
-  if [[ -n "${options[file]}" ]]; then
+  # Internal Resource configuration
+  if [[ -n ${options[file]} ]]; then
     _file="${options[file]}"
   else
     _file="${_dir}/map_${options[name]}"
   fi
 
-  if [[ -n "${options[options]}" ]]; then
+  if [[ -n ${options[options]} ]]; then
     _value="${options[value]} ${options[options]}"
   else
     _value="${options[value]}"
   fi
 
-  nginx.upstream.read
-  if [[ "${options[state]}" == "absent" ]]; then
-    if [[ "$stdlib_current_state" != "absent" ]]; then
-      stdlib.info "$_name state: $stdlib_current_state, should be absent."
-      nginx.upstream.delete
-    fi
-  else
-    case "$stdlib_current_state" in
-      absent)
-        stdlib.info "$_name state: absent, should be present."
-        nginx.upstream.create
-        ;;
-      present)
-        stdlib.debug "$_name state: present."
-        ;;
-      update)
-        stdlib.info "$_name state: present, needs updated."
-        nginx.upstream.update
-        ;;
-    esac
-  fi
+  # Process the resource
+  stdlib.resource.process "nginx.upstream" "$_name"
 }
 
 function nginx.upstream.read {
   local _result
 
-  if [[ ! -f "$_file" ]]; then
+  if [[ ! -f $_file ]]; then
     stdlib_current_state="absent"
     return
   fi
@@ -105,7 +87,7 @@ function nginx.upstream.read {
 
   # Check if the key exists and the value matches
   _result=$(augeas.get --lens Nginx --file "$_file" --path "/upstream/#name[. = '${options[name]}']/../${options[key]}[. = '$_value']")
-  if [[ "$_result" == "absent" ]]; then
+  if [[ $_result == "absent" ]]; then
     stdlib_current_state="update"
   fi
 
@@ -121,14 +103,10 @@ function nginx.upstream.create {
 
   local _result=$(augeas.run --lens Nginx --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error adding nginx.upstream $_name with augeas: $_result"
     return
   fi
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }
 
 function nginx.upstream.update {
@@ -137,14 +115,10 @@ function nginx.upstream.update {
 
   local _result=$(augeas.run --lens Nginx --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error adding nginx.upstream $_name with augeas: $_result"
     return
   fi
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }
 
 function nginx.upstream.delete {
@@ -153,12 +127,8 @@ function nginx.upstream.delete {
 
   local _result=$(augeas.run --lens Nginx --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error deleting nginx.upstream $_name with augeas: $_result"
     return
   fi
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }

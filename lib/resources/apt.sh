@@ -21,48 +21,29 @@
 function stdlib.apt {
   stdlib.subtitle "stdlib.apt"
 
+  # Resource Options
   local -A options
   stdlib.options.create_option state   "present"
   stdlib.options.create_option package "__required__"
   stdlib.options.create_option version
   stdlib.options.parse_options "$@"
 
-  stdlib.catalog.add "stdlib.apt/${options[package]}"
+  # Local Variables
+  local _installed
+  local _candidate
+  local _version
 
-  local _installed _candidate _version
-
-  if [[ -z "${options[version]}" ]]; then
+  # Internal Resource Configuration
+  if [[ -z ${options[version]} ]]; then
     _version=""
-  elif [[ "${options[version]}" == latest ]]; then
+  elif [[ ${options[version]} == "latest" ]]; then
     _version=""
   else
     _version="=${options[version]}"
   fi
 
-  stdlib.apt.read
-  if [[ "${options[state]}" == "absent" ]]; then
-    if [[ "$stdlib_current_state" != "absent" ]]; then
-      stdlib.info "$package state: $stdlib_current_state, should be absent."
-      stdlib.apt.delete
-    fi
-  else
-    case "$stdlib_current_state" in
-      absent)
-        stdlib.info "${options[package]} state: absent, should be installed."
-        stdlib.apt.install
-        ;;
-      present)
-        stdlib.debug "${options[package]} state: present."
-        ;;
-      update)
-        stdlib.info "${options[package]} state: out of date."
-        stdlib.apt.install
-        ;;
-      updateable)
-        stdlib.info "${options[package]} state: present, new version available."
-        ;;
-    esac
-  fi
+  # Process the resource
+  stdlib.resource.process "stdlib.apt" "${options[package]}"
 }
 
 function stdlib.apt.read {
@@ -70,9 +51,9 @@ function stdlib.apt.read {
   # apt-cache is handling stderr weird
   # return 1 so installation attempt does not happen
   exist=$(apt-cache policy ${options[package]})
-  if [[ -z "$exist" ]]; then
-    stdlib.info "No such package: ${options[package]}"
-    stdlib_current_state="unknown"
+  if [[ -z $exist ]]; then
+    stdlib.error "No such package: ${options[package]}"
+    stdlib_current_state="error"
     return
   fi
 
@@ -87,33 +68,33 @@ function stdlib.apt.read {
   _candidate=$(/usr/bin/apt-cache policy ${options[package]} | grep Candidate | cut -d: -f2- | sed -e 's/^[[:space:]]//g')
 
   # If the package is installed, but version is set to "", then the requirement is satisfied
-  if [[ -n "$_installed" && -z "${options[version]}" ]]; then
+  if [[ -n $_installed && -z ${options[version]} ]]; then
     stdlib_current_state="present"
     return
   fi
 
   # if version == latest, install if there's a newer version available
-  if [[ "${options[version]}" == "latest" && "$_installed" != "$_candidate" ]]; then
+  if [[ ${options[version]} == "latest" && $_installed != $_candidate ]]; then
     stdlib_current_state="update"
     _version="=$_candidate"
     return
   fi
 
   # if installed != version, install the package
-  if [[ "${options[version]}" != "latest" && "$_installed" != "${options[version]}" ]]; then
+  if [[ ${options[version]} != "latest" && $_installed != ${options[version]} ]]; then
     stdlib_current_state="update"
     return
   fi
 
   # if installed and candidate differ, report a new version available.
-  if [[ "$_installed" != "$_candidate" ]]; then
+  if [[ $_installed != $_candidate ]]; then
     stdlib.debug "New version available: $_candidate"
   fi
 
   stdlib_current_state="present"
 }
 
-function stdlib.apt.install {
+function stdlib.apt.create {
   export DEBIAN_FRONTEND=noninteractive
   export APT_LISTBUGS_FRONTEND=none
   export APT_LISTCHANGES_FRONTEND=none
@@ -121,10 +102,10 @@ function stdlib.apt.install {
   unset DEBIAN_FRONTEND
   unset APT_LISTBUGS_FRONTEND
   unset APT_LISTCHANGES_FRONTEND
+}
 
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
+function stdlib.apt.update {
+  stdlib.apt.create
 }
 
 function stdlib.apt.delete {
@@ -135,8 +116,4 @@ function stdlib.apt.delete {
   unset DEBIAN_FRONTEND
   unset APT_LISTBUGS_FRONTEND
   unset APT_LISTCHANGES_FRONTEND
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }

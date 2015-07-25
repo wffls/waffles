@@ -1,6 +1,7 @@
 # Core Libraries and Functions
 source "$WAFFLES_LIB_DIR/catalog.sh"
 source "$WAFFLES_LIB_DIR/options.sh"
+source "$WAFFLES_LIB_DIR/resource.sh"
 source "$WAFFLES_LIB_DIR/system.sh"
 
 # Standard Library of Resources

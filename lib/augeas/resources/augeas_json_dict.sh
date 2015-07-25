@@ -35,6 +35,7 @@ function augeas.json_dict {
     fi
   fi
 
+  # Resource Options
   local -A options
   stdlib.options.create_option state "present"
   stdlib.options.create_option path
@@ -44,50 +45,31 @@ function augeas.json_dict {
   stdlib.options.create_option file  "__required__"
   stdlib.options.parse_options "$@"
 
+  # Local Variables
   local _path=$(echo "${options[file]}/${options[path]}/" | sed -e 's@/\+@/@g')
-
   local _name="${_path}${options[key]}"
-  stdlib.catalog.add "augeas.json_dict/$_name"
 
+  # Internal Resource Configuration
   # Determine the type of the value
   local _type
-  if [[ -n "${options[type]}" ]]; then
+  if [[ -n ${options[type]} ]]; then
     _type="${options[type]}"
-  elif [[ "${options[value]}" =~ ^-?[0-9]+$ ]]; then
+  elif [[ ${options[value]} =~ ^-?[0-9]+$ ]]; then
     _type="number"
-  elif [[ "${options[value]}" == "true" || "${options[value]}" == "false" ]]; then
+  elif [[ ${options[value]} == "true" || ${options[value]} == "false" ]]; then
     _type="const"
   else
     _type="string"
   fi
 
-  augeas.json_dict.read
-  if [[ "${options[state]}" == "absent" ]]; then
-    if [[ "$stdlib_current_state" != "absent" ]]; then
-      stdlib.info "$_name state: $stdlib_current_state, should be absent."
-      augeas.json_dict.delete
-    fi
-  else
-    case "$stdlib_current_state" in
-      absent)
-        stdlib.info "$_name state: absent, should be present."
-        augeas.json_dict.create
-        ;;
-      present)
-        stdlib.debug "$_name state: present."
-        ;;
-      update)
-        stdlib.info "$_name state: present, needs updated."
-        augeas.json_dict.create
-        ;;
-    esac
-  fi
+  # Process the resource
+  stdlib.resource.process "augeas.json_dict" "$_name"
 }
 
 function augeas.json_dict.read {
   local _result
 
-  if [[ ! -f "${options[file]}" ]]; then
+  if [[ ! -f ${options[file]} ]]; then
     stdlib_current_state="absent"
     return
   fi
@@ -100,7 +82,7 @@ function augeas.json_dict.read {
 
   # Check if the key matches
   _result=$(augeas.get --lens Json --file "${options[file]}" --path "${options[path]}/dict/entry[. = '${options[key]}']")
-  if [[ "$_result" == "absent" ]]; then
+  if [[ $_result == "absent" ]]; then
     stdlib_current_state="update"
     return
   fi
@@ -118,7 +100,7 @@ function augeas.json_dict.read {
       ;;
   esac
 
-  if [[ "$_result" == "absent" ]]; then
+  if [[ $_result == "absent" ]]; then
     stdlib_current_state="update"
     return
   fi
@@ -128,7 +110,7 @@ function augeas.json_dict.read {
 
 function augeas.json_dict.create {
   local -a _augeas_commands=()
-  if [[ ! -f "${options[file]}" ]]; then
+  if [[ ! -f ${options[file]} ]]; then
     stdlib.debug "Creating empty JSON file."
     stdlib.mute "echo '{}' > ${options[file]}"
     _augeas_commands+=("rm /files${options[file]}/dict")
@@ -150,18 +132,22 @@ function augeas.json_dict.create {
 
   local _result=$(augeas.run --lens Json --file "${options[file]}" "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error adding json ${options[name]} with augeas: $_result"
     return
   fi
 }
 
-function augeas.json.delete {
+function augeas.json_dict.update {
+  augeas.json_dict.create
+}
+
+function augeas.json_dict.delete {
   local -a _augeas_commands=()
   _augeas_commands+=("rm /files${_path}dict/entry[. = '${options[key]}'")
   local _result=$(augeas.run --lens Json --file ${options[file]} "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error deleting json ${options[name]} with augeas: $_result"
     return
   fi

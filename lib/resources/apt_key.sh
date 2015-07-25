@@ -17,39 +17,23 @@
 # === Example
 #
 # ```shell
-# stdlib.apt_key --key 1C4CBDCDCD2EFD2A
+# stdlib.apt_key --name "foobar" --key 1C4CBDCDCD2EFD2A
 # ```
 #
 function stdlib.apt_key {
   stdlib.subtitle "stdlib.apt_key"
 
+  # Resource Options
   local -A options
-  stdlib.options.create_option state          "present"
-  stdlib.options.create_option name           "__required__"
+  stdlib.options.create_option state "present"
+  stdlib.options.create_option name  "__required__"
   stdlib.options.create_option key
   stdlib.options.create_option keyserver
   stdlib.options.create_option remote_keyfile
   stdlib.options.parse_options "$@"
 
-  stdlib.catalog.add "stdlib.apt_key/${options[name]}"
-
-  stdlib.apt_key.read
-  if [[ "${options[state]}" == "absent" ]]; then
-    if [[ "$stdlib_current_state" != "absent" ]]; then
-      stdlib.info "${options[name]} state: $stdlib_current_state, should be absent."
-      stdlib.apt_key.delete
-    fi
-  else
-    case "$stdlib_current_state" in
-      absent)
-        stdlib.info "${options[name]} state: absent, should be present."
-        stdlib.apt_key.create
-        ;;
-      present)
-        stdlib.debug "${options[name]} state: present."
-        ;;
-    esac
-  fi
+  # Process the resource
+  stdlib.resource.process "stdlib.apt_key" "${options[name]}"
 }
 
 function stdlib.apt_key.read {
@@ -58,14 +42,18 @@ function stdlib.apt_key.read {
     stdlib_current_state="present"
     return
   fi
-
   stdlib_current_state="absent"
 }
 
 function stdlib.apt_key.create {
-  if [[ -n "${options[remote_keyfile]}" ]]; then
+  if [[ -n ${options[remote_keyfile]} ]]; then
     if ! stdlib.command_exists wget ; then
       stdlib.error "wget not installed. Unable to obtain remote keyfile."
+      if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
+        exit 1
+      else
+        return 1
+      fi
     else
       local _remote_file="${options[remote_keyfile]}"
       local _local_file=${_remote_file##*/}
@@ -78,16 +66,8 @@ function stdlib.apt_key.create {
   else
     stdlib.capture_error apt-key adv --keyserver ${options[keyserver]} --recv-keys ${options[key]}
   fi
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }
 
 function stdlib.apt_key.delete {
   stdlib.capture_error apt-key del ${options[key]}
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }

@@ -15,6 +15,6 @@ Manages apt keys
 ## Example
 
 ```shell
-stdlib.apt_key --key 1C4CBDCDCD2EFD2A
+stdlib.apt_key --name "foobar" --key 1C4CBDCDCD2EFD2A
 ```
 

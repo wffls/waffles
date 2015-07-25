@@ -26,13 +26,14 @@ function nginx.location {
 
   if ! stdlib.command_exists augtool ; then
     stdlib.error "Cannot find augtool."
-    if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
+    if [[ -n $WAFFLES_EXIT_ON_ERROR ]]; then
       exit 1
     else
       return 1
     fi
   fi
 
+  # Resource Options
   local -A options
   stdlib.options.create_option state       "present"
   stdlib.options.create_option name        "__required__"
@@ -42,21 +43,21 @@ function nginx.location {
   stdlib.options.create_option file
   stdlib.options.parse_options "$@"
 
+  # Local Variables
   local _name="${options[name]}.${options[key]}"
-  stdlib.catalog.add "nginx.location/$_name"
-
   local _dir="/etc/nginx/sites-enabled"
   local _server_name="${options[server_name]}"
   local _file
   local _comp _uri
 
-  if [[ -n "${options[file]}" ]]; then
+  # Internal Resource Configuration
+  if [[ -n ${options[file]} ]]; then
     _file="${options[file]}"
   else
     _file="${_dir}/${_server_name}"
   fi
 
-  if [[ "${options[name]}" =~ " " ]]; then
+  if [[ ${options[name]} =~ " " ]]; then
     stdlib.split "${options[name]}" " "
     _comp="${__split[0]}"
     _uri="${__split[1]}"
@@ -64,37 +65,14 @@ function nginx.location {
     _uri="${options[name]}"
   fi
 
-  nginx.location.read
-  if [[ "${options[state]}" == "absent" ]]; then
-    if [[ "$stdlib_current_state" != "absent" ]]; then
-      stdlib.info "$_name state: $stdlib_current_state, should be absent."
-      nginx.location.delete
-    fi
-  else
-    case "$stdlib_current_state" in
-      absent)
-        stdlib.info "$_name state: absent, should be present."
-        nginx.location.create
-        ;;
-      present)
-        stdlib.debug "$_name state: present."
-        ;;
-      update)
-        stdlib.info "$_name state: present, needs updated."
-        nginx.location.update
-        ;;
-      error)
-        stdlib.error "$_server_name does not exist. Run augeas.nginx_server first."
-        return
-        ;;
-    esac
-  fi
+  # Process the resource
+  stdlib.resource.process "nginx.location" "$_name"
 }
 
 function nginx.location.read {
   local _result
 
-  if [[ ! -f "$_file" ]]; then
+  if [[ ! -f $_file ]]; then
     stdlib_current_state="absent"
     return
   fi
@@ -102,6 +80,7 @@ function nginx.location.read {
   # Check if the server_name exists
   stdlib_current_state=$(augeas.get --lens Nginx --file "$_file" --path "/server/server_name[. = '$_server_name']")
   if [[ "$stdlib_current_state" == "absent" ]]; then
+    stdlib.error "$_server_name does not exist. Run augeas.nginx_server first."
     stdlib_current_state="error"
     return
   fi
@@ -110,15 +89,15 @@ function nginx.location.read {
   local _path
   _path="/server/server_name[. = '$_server_name']/../location/#uri[. = '$_uri']"
   stdlib_current_state=$(augeas.get --lens Nginx --file "$_file" --path "$_path")
-  if [[ "$stdlib_current_state" == "absent" ]]; then
+  if [[ $stdlib_current_state == "absent" ]]; then
     return
   fi
 
   # Check if comp exists
-  if [[ -n "$_comp" ]]; then
+  if [[ -n $_comp ]]; then
     _path="/server/server_name[. = '$_server_name']/../location/#uri[. = '$_uri']"
     _result=$(augeas.get --lens Nginx --file "$_file" --path "$_path")
-    if [[ "$_result" == "absent" ]]; then
+    if [[ $_result == "absent" ]]; then
       stdlib_current_state="update"
       return
     fi
@@ -127,7 +106,7 @@ function nginx.location.read {
   # Check if the key exists and the value matches
   _path="/server/server_name[. = '$_server_name']/../location/#uri[. = '$_uri']/../${options[key]}[. = '${options[value]}']"
   _result=$(augeas.get --lens Nginx --file "$_file" --path "$_path")
-  if [[ "$_result" == "absent" ]]; then
+  if [[ $_result == "absent" ]]; then
     stdlib_current_state="update"
     return
   fi
@@ -137,7 +116,7 @@ function nginx.location.read {
 
 function nginx.location.create {
   local -a _augeas_commands=()
-  if [[ -n "$_comp" ]]; then
+  if [[ -n $_comp ]]; then
     _augeas_commands+=("set /files$_file/server/server_name[. = '$_server_name']/../location[0]/#comp '$_comp'")
     _augeas_commands+=("set /files$_file/server/server_name[. = '$_server_name']/../location[last()]/#uri '$_uri'")
   else
@@ -148,14 +127,10 @@ function nginx.location.create {
 
   local _result=$(augeas.run --lens Nginx --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error adding nginx_location $_name with augeas: $_result"
     return
   fi
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }
 
 function nginx.location.update {
@@ -164,14 +139,10 @@ function nginx.location.update {
 
   local _result=$(augeas.run --lens Nginx --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error adding nginx_location $_name with augeas: $_result"
     return
   fi
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }
 
 function nginx.location.delete {
@@ -180,12 +151,8 @@ function nginx.location.delete {
 
   local _result=$(augeas.run --lens Nginx --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error deleting nginx_location $_name with augeas: $_result"
     return
   fi
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }

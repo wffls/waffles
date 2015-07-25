@@ -15,6 +15,6 @@ Manages ini file entries
 ## Example
 
 ```shell
-augeas.ini --key foo --value bar --file /root/vars
+augeas.ini --section DEFAULT --option foo --value bar --file /root/vars
 ```
 

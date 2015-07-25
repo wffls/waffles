@@ -23,60 +23,41 @@ function rabbitmq.ssl_listeners {
 
   if ! stdlib.command_exists augtool ; then
     stdlib.error "Cannot find augtool."
-    if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
+    if [[ -n $WAFFLES_EXIT_ON_ERROR ]]; then
       exit 1
     else
       return 1
     fi
   fi
 
+  # Resource Options
   local -A options
   stdlib.options.create_option state   "present"
   stdlib.options.create_option port    "__required__"
   stdlib.options.create_option file    "/etc/rabbitmq/rabbitmq.config"
   stdlib.options.parse_options "$@"
 
+  # Local Variables
   local _name="${options[port]}"
-  stdlib.catalog.add "rabbitmq.ssl_listeners/$_name"
-
   local _dir=$(dirname "${options[file]}")
   local _file="${options[file]}"
 
-  rabbitmq.ssl_listeners.read
-  if [[ "${options[state]}" == "absent" ]]; then
-    if [[ "$stdlib_current_state" != "absent" ]]; then
-      stdlib.info "$_name state: $stdlib_current_state, should be absent."
-      rabbitmq.ssl_listeners.delete
-    fi
-  else
-    case "$stdlib_current_state" in
-      absent)
-        stdlib.info "$_name state: absent, should be present."
-        rabbitmq.ssl_listeners.create
-        ;;
-      present)
-        stdlib.debug "$_name state: present."
-        ;;
-      update)
-        stdlib.info "$_name state: present, needs updated."
-        rabbitmq.ssl_listeners.delete
-        rabbitmq.ssl_listeners.create
-        ;;
-    esac
-  fi
+  # Process the resource
+  stdlib.resource.process
+  rabbitmq.ssl_listeners.read "rabbitmq.ssl_listeners" "$_name"
 }
 
 function rabbitmq.ssl_listeners.read {
   local _result
 
-  if [[ ! -f "$_file" ]]; then
+  if [[ ! -f $_file ]]; then
     stdlib_current_state="absent"
     return
   fi
 
   # Check if the port exists and matches
-  stdlib_current_state=$(augeas.get --lens Rabbitmq --file "$_file" --path "/rabbit/ssl_listeners/value[. = '${options[port]}']")
-  if [[ "$stdlib_current_state" == "absent" ]]; then
+  stdlib_current_state=$(augeas.get --lens Rabbitmq --file $_file --path "/rabbit/ssl_listeners/value[. = '${options[port]}']")
+  if [[ $stdlib_current_state == "absent" ]]; then
     return
   fi
 
@@ -84,27 +65,32 @@ function rabbitmq.ssl_listeners.read {
 }
 
 function rabbitmq.ssl_listeners.create {
-  if [[ ! -d "$_dir" ]]; then
-    stdlib.capture_error mkdir -p "$_dir"
+  if [[ ! -d $_dir ]]; then
+    stdlib.capture_error mkdir -p $_dir
   fi
 
   local -a _augeas_commands=()
   _augeas_commands+=("set /files$_file/rabbit/ssl_listeners/value[0] '${options[port]}'")
 
-  local _result=$(augeas.run --lens Rabbitmq --file "$_file" "${_augeas_commands[@]}")
+  local _result=$(augeas.run --lens Rabbitmq --file $_file "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error adding $_name with augeas: $_result"
     return
   fi
 }
 
+function rabbitmq.ssl_listeners.update {
+  rabbitmq.ssl_listeners.delete
+  rabbitmq.ssl_listeners.create
+}
+
 function rabbitmq.ssl_listeners.delete {
   local -a _augeas_commands=()
   _augeas_commands+=("rm /files$_file/rabbit/ssl_listeners/value[. = '${options[port]}']")
-  local _result=$(augeas.run --lens Rabbitmq --file "$_file" "${_augeas_commands[@]}")
+  local _result=$(augeas.run --lens Rabbitmq --file $_file "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error deleting rabbitmq.ssl_listeners $_name with augeas: $_result"
     return
   fi

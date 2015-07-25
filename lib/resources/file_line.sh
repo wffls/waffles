@@ -25,6 +25,7 @@
 function stdlib.file_line {
   stdlib.subtitle "stdlib.file_line"
 
+  # Resource Options
   local -A options
   stdlib.options.create_option state  "present"
   stdlib.options.create_option name   "__required__"
@@ -33,33 +34,12 @@ function stdlib.file_line {
   stdlib.options.create_option match
   stdlib.options.parse_options "$@"
 
-  stdlib.catalog.add "stdlib.file_line/${options[name]}"
-
-  stdlib.file_line.read
-  if [[ "${options[state]}" == "absent" ]]; then
-    if [[ "$stdlib_current_state" != "absent" ]]; then
-      stdlib.info "${options[line]} state: $stdlib_current_state, should be absent."
-      stdlib.file_line.delete
-    fi
-  else
-    case "$stdlib_current_state" in
-      absent)
-        stdlib.info "${options[name]} state: absent, should be present."
-        stdlib.file_line.create
-        ;;
-      present)
-        stdlib.debug "${options[name]} state: present."
-        ;;
-      update)
-        stdlib.info "${options[name]} state: out of date."
-        stdlib.file_line.create
-        ;;
-    esac
-  fi
+  # Process the resource
+  stdlib.resource.process "stdlib.file_line" "${options[name]}"
 }
 
 function stdlib.file_line.read {
-  if [[ ! -f "${options[file]}" ]]; then
+  if [[ ! -f ${options[file]} ]]; then
     stdlib_current_state="absent"
     return
   fi
@@ -70,11 +50,11 @@ function stdlib.file_line.read {
     return
   fi
 
-  if [[ -n "${options[match]}" ]]; then
+  if [[ -n ${options[match]} ]]; then
     stdlib.debug_mute "sed -n -e '/${options[match]}/p' '${options[file]}'"
     if [[ $? == 1 ]]; then
       stdlib.error "No match for ${options[match]} in ${options[file]}"
-      if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
+      if [[ -n $WAFFLES_EXIT_ON_ERROR ]]; then
         exit 1
       else
         return 1
@@ -86,13 +66,13 @@ function stdlib.file_line.read {
 }
 
 function stdlib.file_line.create {
-  if [[ ! -f "${options[file]}" ]]; then
-    if [[ -n "${options[match]}" ]]; then
+  if [[ ! -f ${options[file]} ]]; then
+    if [[ -n ${options[match]} ]]; then
       stdlib.warn "${options[file]} does not exist. Cannot match on an empty file. Proceeding without matching."
     fi
     stdlib.capture_error "echo '${options[line]}' > '${options[file]}'"
   else
-    if [[ -n "${options[match]}" ]]; then
+    if [[ -n ${options[match]} ]]; then
       local _replacement=$(echo ${options[line]} | sed -e 's/[\/&]/\\&/g')
       stdlib.capture_error "sed -i -e '/${options[match]}/c ${_replacement}' '${options[file]}'"
     else
@@ -100,17 +80,13 @@ function stdlib.file_line.create {
       stdlib.capture_error "sed -i -e '\$a${_replacement}' '${options[file]}'"
     fi
   fi
+}
 
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
+function stdlib.file_line.update {
+  stdlib.file_line.create
 }
 
 function stdlib.file_line.delete {
   local _replacement=$(echo ${options[line]} | sed -e 's/[\/&]/\\&/g')
   stdlib.capture_error "sed -i -e '/^${options[line]}$/d' '${options[file]}'"
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }

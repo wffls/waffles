@@ -30,31 +30,16 @@ function stdlib.apt_ppa {
     fi
   fi
 
+  # Resource Options
   local -A options
   stdlib.options.create_option state   "present"
   stdlib.options.create_option ppa     "__required__"
   stdlib.options.create_option refresh "true"
   stdlib.options.parse_options "$@"
 
-  stdlib.catalog.add "stdlib.apt_ppa/${options[ppa]}"
 
-  stdlib.apt_ppa.read
-  if [[ "${options[state]}" == "absent" ]]; then
-    if [[ "$stdlib_current_state" != "absent" ]]; then
-      stdlib.info "${options[ppa]} state: $stdlib_current_state, should be absent."
-      stdlib.apt_ppa.delete
-    fi
-  else
-    case "$stdlib_current_state" in
-      absent)
-        stdlib.info "${options[ppa]} state: absent, should be present."
-        stdlib.apt_ppa.create
-        ;;
-      present)
-        stdlib.debug "${options[ppa]} state: present."
-        ;;
-    esac
-  fi
+  # Process the resource
+  stdlib.resource.process "stdlib.apt_ppa" "${options[ppa]}"
 }
 
 function stdlib.apt_ppa.read {
@@ -68,25 +53,17 @@ function stdlib.apt_ppa.read {
 }
 
 function stdlib.apt_ppa.create {
-  stdlib.mute apt-add-repository -y ppa:${options[ppa]}
+  stdlib.capture_error apt-add-repository -y ppa:${options[ppa]}
 
-  if [[ "${options[refresh]}" == "true" ]]; then
+  if [[ ${options[refresh]} == "true" ]]; then
     stdlib.mute apt-get update
   fi
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }
 
 function stdlib.apt_ppa.delete {
-  stdlib.mute apt-add-repository -y -r ppa:${options[ppa]}
+  stdlib.capture_error apt-add-repository -y -r ppa:${options[ppa]}
 
-  if [[ "${options[refresh]}" == "true" ]]; then
+  if [[ ${options[refresh]} == "true" ]]; then
     stdlib.mute apt-get update
   fi
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }

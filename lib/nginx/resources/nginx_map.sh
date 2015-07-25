@@ -28,13 +28,14 @@ function nginx.map {
 
   if ! stdlib.command_exists augtool ; then
     stdlib.error "Cannot find augtool."
-    if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
+    if [[ -n $WAFFLES_EXIT_ON_ERROR ]]; then
       exit 1
     else
       return 1
     fi
   fi
 
+  # Resource Options
   local -A options
   stdlib.options.create_option state    "present"
   stdlib.options.create_option name     "__required__"
@@ -45,64 +46,45 @@ function nginx.map {
   stdlib.options.create_option file
   stdlib.options.parse_options "$@"
 
+  # Local Variables
   local _name="${options[name]}.${options[source]}.${options[key]}"
-  stdlib.catalog.add "nginx.map/$_name"
-
   local _dir="/etc/nginx/conf.d"
   local _value _file
 
-  if [[ -n "${options[file]}" ]]; then
+  # Internal Resource Configuration
+  if [[ -n ${options[file]} ]]; then
     _file="${options[file]}"
   else
     _file="${_dir}/map_${options[name]}"
   fi
 
-  nginx.map.read
-  if [[ "${options[state]}" == "absent" ]]; then
-    if [[ "$stdlib_current_state" != "absent" ]]; then
-      stdlib.info "$_name state: $stdlib_current_state, should be absent."
-      nginx.map.delete
-    fi
-  else
-    case "$stdlib_current_state" in
-      absent)
-        stdlib.info "$_name state: absent, should be present."
-        nginx.map.create
-        ;;
-      present)
-        stdlib.debug "$_name state: present."
-        ;;
-      update)
-        stdlib.info "$_name state: present, needs updated."
-        nginx.map.update
-        ;;
-    esac
-  fi
+  # Process the resource
+  stdlib.resource.process "nginx.map" "$_name"
 }
 
 function nginx.map.read {
   local _result
 
-  if [[ ! -f "$_file" ]]; then
+  if [[ ! -f $_file ]]; then
     stdlib_current_state="absent"
     return
   fi
 
   # Check if the server_name exists
   stdlib_current_state=$(augeas.get --lens Nginx --file "$_file" --path "/map/#source[. = '${options[source]}']")
-  if [[ "$stdlib_current_state" == "absent" ]]; then
+  if [[ $stdlib_current_state == "absent" ]]; then
     return
   fi
 
   # Check if the variable exists and matches
   _result=$(augeas.get --lens Nginx --file "$_file" --path "/map/#source[. = '${options[source]}']/../#variable[. = '${options[variable]}']")
-  if [[ "$_result" == "absent" ]]; then
+  if [[ $_result == "absent" ]]; then
     stdlib_current_state="update"
   fi
 
   # Check if the key exists and the value matches
   _result=$(augeas.get --lens Nginx --file "$_file" --path "/map/#source[. = '${options[source]}']/../${options[key]}[. = '${options[value]}']")
-  if [[ "$_result" == "absent" ]]; then
+  if [[ $_result == "absent" ]]; then
     stdlib_current_state="update"
   fi
 
@@ -119,14 +101,10 @@ function nginx.map.create {
 
   local _result=$(augeas.run --lens Nginx --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error adding nginx.map $_name with augeas: $_result"
     return
   fi
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }
 
 function nginx.map.update {
@@ -136,14 +114,10 @@ function nginx.map.update {
 
   local _result=$(augeas.run --lens Nginx --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error adding nginx.map $_name with augeas: $_result"
     return
   fi
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }
 
 function nginx.map.delete {
@@ -152,12 +126,8 @@ function nginx.map.delete {
 
   local _result=$(augeas.run --lens Nginx --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error deleting nginx.map $_name with augeas: $_result"
     return
   fi
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }

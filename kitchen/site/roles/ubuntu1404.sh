@@ -1,4 +1,4 @@
-stdlib.title ubuntu1204/tests
+stdlib.title ubuntu1404/tests
 
 source /etc/lsb-release
 
