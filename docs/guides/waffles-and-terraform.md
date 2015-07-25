@@ -1,6 +1,6 @@
 # Using Waffles with Terraform
 
-This recipe will show how to use Waffles with [Terraform](http://terraform.io). The Terraform OpenStack provider will be used, but these concepts should be applicable to any provider.
+This guide will show how to use Waffles with [Terraform](http://terraform.io). The Terraform OpenStack provider will be used, but these concepts should be applicable to any provider.
 
 ## Steps
 
@@ -62,6 +62,6 @@ The above configuration makes a few assumptions:
 
 ## Conclusion
 
-This recipe showed one way of using Waffles with Terraform. Both systems are extremely flexible and complement each other well, so there may be other ways of achieving the same result.
+This guide showed one way of using Waffles with Terraform. Both systems are extremely flexible and complement each other well, so there may be other ways of achieving the same result.
 
 For example, you could use Terraform's `file` provisioner to copy the entire `~/.waffles` directory to the remote virtual machine. The benefit of using Waffles's built-in push is that only the files which the role requires are copied over.

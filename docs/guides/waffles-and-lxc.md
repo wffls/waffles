@@ -1,6 +1,6 @@
 # Using Waffles with LXC
 
-This recipe will describe how to configure LXC containers with Waffles.
+This guide will describe how to configure LXC containers with Waffles.
 
 ## Steps
 
@@ -86,4 +86,4 @@ If you'd prefer not to have all containers prefixed with `waffles_`, just edit t
 
 ## Conclusion
 
-This recipe detailed one way of using Waffles with LXC by using a simple Bash script that automates the creation of a container and applies a role to it using Waffles.
+This guide detailed one way of using Waffles with LXC by using a simple Bash script that automates the creation of a container and applies a role to it using Waffles.

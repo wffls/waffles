@@ -2,7 +2,7 @@
 
 ## Description
 
-This recipe will show how you can reference previously declared data in subsequent data files.
+This guide will show how you can reference previously declared data in subsequent data files.
 
 ## Steps
 

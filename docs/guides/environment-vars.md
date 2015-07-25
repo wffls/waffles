@@ -2,7 +2,7 @@
 
 ## Description
 
-This recipe will show how to alter Waffles's behavior by setting different environment variables.
+This guide will show how to alter Waffles's behavior by setting different environment variables.
 
 ## WAFFLES_NOOP
 
