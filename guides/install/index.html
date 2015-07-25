@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Deploying a Consul Cluster - Waffles</title>
+  <title>Installation - Waffles</title>
   
 
   <link rel="shortcut icon" href="../../img/favicon.ico">
@@ -20,7 +20,7 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Deploying a Consul Cluster";
+    var mkdocs_page_name = "Installation";
   </script>
   
   <script src="../../js/jquery-2.1.1.min.js"></script>
@@ -71,8 +71,19 @@
 <li>
           
             <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../install/">Installation</a>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Installation</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#install-waffles">Install Waffles</a></li>
+                
+                    <li><a class="toctree-l4" href="#description">Description</a></li>
+                
+                    <li><a class="toctree-l4" href="#steps">Steps</a></li>
+                
+            
+            </ul>
         
     </li>
 <li>
@@ -140,6 +151,13 @@
         
             
     <li class="toctree-l1 ">
+        <a class="" href="../../functions/consul/">augeas</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
         <a class="" href="../../functions/mysql/">mysql</a>
         
     </li>
@@ -150,7 +168,7 @@
           
             <li>
     <ul class="subnav">
-    <li><span>Cookbook</span></li>
+    <li><span>Guides</span></li>
 
         
             
@@ -175,30 +193,8 @@
 
         
             
-    <li class="toctree-l1 current">
-        <a class="current" href="./">Deploying a Consul Cluster</a>
-        
-            <ul>
-            
-                <li class="toctree-l3"><a href="#deploying-a-consul-cluster">Deploying a Consul Cluster</a></li>
-                
-                    <li><a class="toctree-l4" href="#description">Description</a></li>
-                
-                    <li><a class="toctree-l4" href="#steps">Steps</a></li>
-                
-            
-                <li class="toctree-l3"><a href="#finally-the-for-loop-will-run-if-the-node-is-the-bootstrap-node-itll-loop-through-all-other-existing-nodes-and-join-them-the-existing-nodes-must-be-up-and-running-first-which-is-why-the-bootstrap-node-was-set-to-the-last-node-in-the-cluster">Finally, the for loop will run if the node is the bootstrap node. It'll loop through all other existing nodes and join them. The existing nodes must be up and running first, which is why the bootstrap node was set to the last node in the cluster.</a></li>
-                
-                    <li><a class="toctree-l4" href="#augeas">Augeas</a></li>
-                
-                    <li><a class="toctree-l4" href="#roles">Roles</a></li>
-                
-                    <li><a class="toctree-l4" href="#run">Run</a></li>
-                
-                    <li><a class="toctree-l4" href="#comments-and-conclusion">Comments and Conclusion</a></li>
-                
-            
-            </ul>
+    <li class="toctree-l1 ">
+        <a class="" href="../deploying-a-consul-cluster/">Deploying a Consul Cluster</a>
         
     </li>
 
@@ -788,12 +784,8 @@
     <li><a href="../..">Docs</a> &raquo;</li>
     
       
-        
-          <li>Cookbook &raquo;</li>
-        
-      
     
-    <li>Deploying a Consul Cluster</li>
+    <li>Installation</li>
     <li class="wy-breadcrumbs-aside">
       
         
@@ -807,162 +799,46 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="deploying-a-consul-cluster">Deploying a Consul Cluster</h1>
+                <h1 id="install-waffles">Install Waffles</h1>
 <h2 id="description">Description</h2>
-<p>This recipe will show one way of deploying a Consul cluster with Waffles.</p>
+<p>This guide will show how to install Waffles.</p>
 <h2 id="steps">Steps</h2>
-<h3 id="data">Data</h3>
-<p>The data file will have the version of Consul to install, a secret key for the cluster, the nodes that are in the cluster, and an associative array of Consul settings.</p>
-<pre><code class="shell">$ cat site/data/consul.sh
-# Consul Version
-data_consul_version=&quot;0.5.2&quot;
-
-# Secret key
-data_consul_key=&quot;jXwOaTXJFf4//4QGrpONBg==&quot;
-
-# Nodes in the cluster
-data_consul_nodes=(
-  consul-01
-  consul-02
-  consul-03
-)
-
-# Bootstrap node
-data_consul_bootstrap_node=&quot;consul-03&quot;
-
-# Consul config
-declare -Ag data_consul_config
-data_consul_config=(
-  [server]=&quot;true&quot;
-  [bootstrap_expect]=&quot;${#data_consul_nodes[@]}&quot;
-  [client_addr]=&quot;0.0.0.0&quot;
-  [datacenter]=&quot;honolulu&quot;
-  [data_dir]=&quot;/var/lib/consul&quot;
-  [encrypt]=&quot;${data_consul_key}&quot;
-  [enable_syslog]=&quot;true&quot;
-  [log_level]=&quot;INFO&quot;
-)
+<ol>
+<li>Clone the repository to a directory of your choice:</li>
+</ol>
+<pre><code class="shell">$ git clone https://github.com/jtopjian/waffles .waffles
+$ cd .waffles
 </code></pre>
 
-<h3 id="profiles">Profiles</h3>
-<h4 id="base-packages">Base Packages</h4>
-<p>In order to successfully execute the other profiles, we'll need to ensure the Consul server has a few base packages installed. Create <code>site/profiles/common/scripts/packages.sh</code> with the following contents:</p>
-<pre><code class="shell">stdlib.apt --package wget
-stdlib.apt --package software-properties-common
+<ol>
+<li>Create a data file:</li>
+</ol>
+<pre><code class="shell">$ cat &gt; site/data/memcached.sh &lt;&lt;EOF
+data_memcached_interface=&quot;0.0.0.0&quot;
+EOF
 </code></pre>
 
-<h4 id="consul">Consul</h4>
-<p>We'll use two profile scripts for the Consul cluster: the first will install Consul and the second will set up the Consul cluster.</p>
-<p>First, make the directory structure</p>
-<pre><code class="shell">$ mkdir -p site/profiles/consul/scripts
-</code></pre>
+<ol>
+<li>Create a profile:</li>
+</ol>
+<pre><code class="shell">$ cat &gt; site/profiles/memcached/scripts/server.sh &lt;&lt;EOF
+stdlib.title site/profiles/memcached/server
+stdlib.apt --package memcached --version latest
+stdlib.file_line --name memcached.conf/listen --file /etc/memcached.conf --line &quot;-l $data_memcached_server_listen&quot; --match &quot;^-l&quot;
+stdlib.sysvinit --name memcached
 
-<p>Next, make the repo profile script, located at <code>site/profiles/consul/scripts/install.sh</code>:</p>
-<pre><code class="shell">stdlib.title &quot;profiles/consul/install&quot;
-
-stdlib.apt --package unzip
-
-stdlib.useradd --user consul --homedir /var/lib/consul --createhome true
-stdlib.directory --name /etc/consul.d --owner consul --group consul
-
-if [[ ! -f /usr/local/bin/consul ]]; then
-  stdlib.mute pushd /tmp
-  stdlib.capture_error wget https://dl.bintray.com/mitchellh/consul/${data_consul_version}_linux_amd64.zip
-  stdlib.capture_error unzip ${data_consul_version}_linux_amd64.zip
-  stdlib.capture_error mv consul /usr/local/bin
-  stdlib.mute popd
+if [[ $stdlib_state_change == true ]]; then
+  stdlib.mute /etc/init.d/memcached restart
 fi
 </code></pre>
 
-<p>This install script is rather simple. It's doing the following:</p>
-<ul>
-<li>Installs the <code>unzip</code> package</li>
-<li>Creates a <code>consul</code> system user with a homedir of <code>/var/lib/consul</code></li>
-<li>Downloads the Consul binary of the version we specified in the data</li>
-<li>Unzips it and installs it to <code>/usr/local/bin</code>.</li>
-</ul>
-<p>Note: the way this script determines if Consul is installed is by the presence of the <code>/usr/local/bin/consul</code> file. If this method is too simplistic for you, feel free to package Consul into a <code>deb</code> or <code>rpm</code> package.</p>
-<p>Next, make the Consul server script, located at <code>sites/profiles/consul/scripts/server.sh</code>:</p>
-<pre><code class="shell">stdlib.title &quot;profiles/consul/server&quot;
-
-stdlib.file --name /etc/init/consul.conf --source &quot;$WAFFLES_SITE_DIR/profiles/consul/files/consul.conf&quot;
-
-for key in &quot;${!data_consul_config[@]}&quot;; do
-  augeas.json_dict --file /etc/consul.d/config.json --path / --key &quot;$key&quot; --value &quot;${data_consul_config[$key]}&quot;
-done
-
-stdlib.upstart --name consul --state running
-
-hostname=$(hostname)
-if [[ $hostname == $data_consul_bootstrap_node ]]; then
-  sleep 10
-  for i in &quot;${data_consul_nodes[@]}&quot;; do
-    if [[ $hostname != $i ]]; then
-      /usr/local/bin/consul join $i
-    fi
-  done
-fi
-
+<ol>
+<li>Create a role:</li>
+</ol>
+<pre><code class="shell">$ cat &gt; site/roles/memcached.sh &lt;&lt;EOF
+stdlib.data memcached
+stdlib.profile memcached/server
 </code></pre>
-
-<p>Here are some notes on the above:</p>
-<ul>
-<li><code>stdlib.file</code> is able to copy a static file from <code>site/profiles/consul/files</code>. It is <em>highly</em> recommended to bundle your static files into the profile that they are being called from. This ensures that they get copied to the remote node during remote deployment. Alternatively, while there are not yet resources for commands such as <code>scp</code> or <code>wget</code>, you could use them similarly to how the Consul zip file was downloaded.</li>
-<li><code>augeas.json_dict</code> is an Augeas-based resource that allows JSON files to be built on the command-line. In order to use Augeas, it must be installed. See the next section.</li>
-<li><code>stdlib.upstart</code> ensures that the Consul service is running.</li>
-</ul>
-<h1 id="finally-the-for-loop-will-run-if-the-node-is-the-bootstrap-node-itll-loop-through-all-other-existing-nodes-and-join-them-the-existing-nodes-must-be-up-and-running-first-which-is-why-the-bootstrap-node-was-set-to-the-last-node-in-the-cluster">Finally, the <code>for</code> loop will run if the node is the bootstrap node. It'll loop through all other existing nodes and join them. The existing nodes must be up and running first, which is why the bootstrap node was set to the last node in the cluster.</h1>
-<p>Finally, create <code>site/profiles/consul/files/consul.conf</code> with the following content:</p>
-<pre><code class="shell">description &quot;Consul agent&quot;
-
-start on runlevel [2345]
-stop on runlevel [!2345]
-
-respawn
-
-script
-  if [ -f &quot;/etc/default/consul&quot; ]; then
-    # Gives us the CONSUL_FLAGS variable
-    . /etc/default/consul
-  fi
-
-  # Make sure to use all our CPUs, because Consul can block a scheduler thread
-  export GOMAXPROCS=`nproc`
-
-  exec /usr/local/bin/consul agent \
-    -config-dir=&quot;/etc/consul.d&quot; \
-    ${CONSUL_FLAGS} \
-    &gt;&gt;/var/log/consul.log 2&gt;&amp;1
-end script
-</code></pre>
-
-<h4 id="augeas">Augeas</h4>
-<p>To install Augeas, create <code>site/profiles/augeas/scripts/install_apt.sh</code> with the following content:</p>
-<pre><code class="shell">stdlib.title &quot;profiles/augeas/install_apt&quot;
-
-stdlib.apt_ppa --ppa raphink/augeas
-stdlib.apt --package augeas-tools --version latest
-</code></pre>
-
-<h3 id="roles">Roles</h3>
-<p>Finally, combine the above Data and Profiles to build the role, located at <code>site/roles/consul.sh</code>:</p>
-<pre><code class="shell">stdlib.enable_augeas
-
-stdlib.data consul
-
-stdlib.profile common/packages
-stdlib.profile augeas/install_apt
-stdlib.profile consul/install
-stdlib.profile consul/server
-</code></pre>
-
-<p>The <code>stdlib.enable_augeas</code> function is a special function that will source all of the relevant Augeas functions and resources located under <code>lib</code>.</p>
-<p>The rest of the role should be self-explanatory.</p>
-<h2 id="run">Run</h2>
-<p>You should now run this against 3 servers, containers, or virtual machines of your choice.</p>
-<h2 id="comments-and-conclusion">Comments and Conclusion</h2>
-<p>The above example describes a simple way of deploying a Consul cluster using Waffles. It should be easy enough to modify and add other profiles to make a more well-rounded and robust service for you to use.</p>
-<p>Please be aware that <code>consul-01</code>, <code>consul-02</code>, and <code>consul-03</code> are all hostnames that can be resolved. If you are unable to add these to a DNS service, use IP addresses for testing.</p>
               
             </div>
           </div>
@@ -970,10 +846,10 @@ stdlib.profile consul/server
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../override-data/" class="btn btn-neutral float-right" title="Overriding Data"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../../concepts/" class="btn btn-neutral float-right" title="Concepts"/>Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../deploying-a-mysql-galera-cluster/" class="btn btn-neutral" title="Deploying a MySQL Galera Cluster"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../quickstart/" class="btn btn-neutral" title="Quickstart"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -1001,10 +877,10 @@ stdlib.profile consul/server
           <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../deploying-a-mysql-galera-cluster/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../../quickstart/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../override-data/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../../concepts/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

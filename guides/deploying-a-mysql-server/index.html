@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Waffles and LXC - Waffles</title>
+  <title>Deploying a MySQL Server - Waffles</title>
   
 
   <link rel="shortcut icon" href="../../img/favicon.ico">
@@ -20,7 +20,7 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Waffles and LXC";
+    var mkdocs_page_name = "Deploying a MySQL Server";
   </script>
   
   <script src="../../js/jquery-2.1.1.min.js"></script>
@@ -140,6 +140,13 @@
         
             
     <li class="toctree-l1 ">
+        <a class="" href="../../functions/consul/">augeas</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
         <a class="" href="../../functions/mysql/">mysql</a>
         
     </li>
@@ -150,7 +157,7 @@
           
             <li>
     <ul class="subnav">
-    <li><span>Cookbook</span></li>
+    <li><span>Guides</span></li>
 
         
             
@@ -161,8 +168,21 @@
 
         
             
-    <li class="toctree-l1 ">
-        <a class="" href="../deploying-a-mysql-server/">Deploying a MySQL Server</a>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Deploying a MySQL Server</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#deploying-a-mysql-server">Deploying a MySQL Server</a></li>
+                
+                    <li><a class="toctree-l4" href="#description">Description</a></li>
+                
+                    <li><a class="toctree-l4" href="#steps">Steps</a></li>
+                
+                    <li><a class="toctree-l4" href="#comments-and-conclusion">Comments and Conclusion</a></li>
+                
+            
+            </ul>
         
     </li>
 
@@ -203,19 +223,8 @@
 
         
             
-    <li class="toctree-l1 current">
-        <a class="current" href="./">Waffles and LXC</a>
-        
-            <ul>
-            
-                <li class="toctree-l3"><a href="#using-waffles-with-lxc">Using Waffles with LXC</a></li>
-                
-                    <li><a class="toctree-l4" href="#steps">Steps</a></li>
-                
-                    <li><a class="toctree-l4" href="#conclusion">Conclusion</a></li>
-                
-            
-            </ul>
+    <li class="toctree-l1 ">
+        <a class="" href="../waffles-and-lxc/">Waffles and LXC</a>
         
     </li>
 
@@ -778,11 +787,11 @@
     
       
         
-          <li>Cookbook &raquo;</li>
+          <li>Guides &raquo;</li>
         
       
     
-    <li>Waffles and LXC</li>
+    <li>Deploying a MySQL Server</li>
     <li class="wy-breadcrumbs-aside">
       
         
@@ -796,79 +805,79 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="using-waffles-with-lxc">Using Waffles with LXC</h1>
-<p>This recipe will describe how to configure LXC containers with Waffles.</p>
+                <h1 id="deploying-a-mysql-server">Deploying a MySQL Server</h1>
+<h2 id="description">Description</h2>
+<p>This guide will show one way of deploying a MySQL server with Waffles. In particular, Percona MySQL.</p>
 <h2 id="steps">Steps</h2>
-<h3 id="installing-lxc">Installing LXC</h3>
-<p>First, set up an LXC server. I've written a blog post <a href="http://terrarum.net/blog/building-an-lxc-server-1404.html">here</a> that may be used as a reference.</p>
-<h3 id="creating-a-base-container">Creating a Base Container</h3>
-<p>I find it very useful to have a standard container that's used as the basis for all other containers. If anything, it makes the creation of new containers almost instant since cloning a container is much quicker than creating an entirely new container.</p>
-<p>To create a base container, just create a standard container and turn it off with <code>lxc-stop</code>.</p>
-<h3 id="waffles-lxc-script">Waffles LXC Script</h3>
-<p>I've been using the following script for the past few months and find it works very well. Comments and improvements are definitely welcome, though.</p>
-<pre><code class="shell">#!/bin/bash
-
-if [ -z $1 ]; then
-  echo &quot;Role required.&quot;
-  exit 1
-fi
-
-lxc-ls | grep -q waffles_$1
-if [ $? == 0 ]; then
-  echo &quot;Shutting down and destroying waffles_$1&quot;
-  lxc-stop -n waffles_$1
-  lxc-destroy -n waffles_$1
-fi
-
-echo &quot;Cloning LXC container waffles_base to waffles_$1&quot;
-lxc-clone -o waffles_base -n waffles_$1 -s
-
-echo &quot;Copying root key to container&quot;
-mkdir /var/lib/lxc/waffles_$1/rootfs/root/.ssh
-cat /root/.ssh/id_rsa.pub &gt; /var/lib/lxc/waffles_$1/rootfs/root/.ssh/authorized_keys
-
-echo &quot;Starting waffles_$1 and waiting until it has an IP&quot;
-lxc-start -d -n waffles_$1
-
-running=false
-while [ &quot;$running&quot; == false ]; do
-  lxc-info -i -n waffles_$1 | grep -q 10
-  if [ $? == 0 ]; then
-    ip=$(lxc-info -i -n waffles_$1 | awk '{print $2}')
-    running=true
-  else
-    echo &quot;waffles_$1 not up yet. Sleeping...&quot;
-    sleep 2
-  fi
-done
-
-grep -q waffles_$1 /etc/hosts
-if [ $? == 0 ]; then
-  sed -i -e &quot;/waffles_$1/d&quot; /etc/hosts
-fi
-echo &quot;$ip waffles_$1&quot; &gt;&gt; /etc/hosts
-
-pkill -HUP dnsmasq
-
-echo &quot;Running waffles&quot;
-lxc-attach -n waffles_$1 -- apt-get update
-lxc-attach -n waffles_$1 -- apt-get install -y rsync
-cd /root/.waffles &amp;&amp; bash waffles.sh -s waffles_$1 -r $1
+<h3 id="data">Data</h3>
+<p>There will only be one data item: the MySQL root password. This example will store the password in plain text -- note that a best practice would be to install it either in an encrypted repository, an encrypted string, or something along those lines.</p>
+<pre><code class="shell">$ cat site/data/mysql.sh
+data_mysql_root_password=&quot;password&quot;
 </code></pre>
 
-<p>This script assumes the following:</p>
+<h3 id="profiles">Profiles</h3>
+<p>We'll use two profile scripts for the MySQL server: the first will configure the Percona repo and the second will install and configure MySQL itself.</p>
+<p>First, make the directory structure</p>
+<pre><code class="shell">$ mkdir -p site/profiles/mysql/scripts
+</code></pre>
+
+<p>Next, make the repo profile script, located at <code>site/profiles/mysql/scripts/percona_repo.sh</code>:</p>
+<pre><code class="shell">stdlib.title &quot;mysql/percona/repo&quot;
+
+source /etc/lsb-release
+
+stdlib.apt_key --name percona --keyserver keys.gnupg.net --key 1C4CBDCDCD2EFD2A
+stdlib.apt_source --name percona --uri http://repo.percona.com/apt --distribution $DISTRIB_CODENAME --component main --include_src true
+</code></pre>
+
+<p>Next, make the MySQL profile script, located at <code>sites/profilfes/mysql/scripts/percona_server.sh</code>:</p>
+<pre><code class="shell">stdlib.title &quot;mysql/percona/server&quot;
+
+hostname=$(hostname | sed -e 's/_/\\\_/g')
+
+stdlib.apt --package percona-server-server-5.6
+
+mysql.user --user root --host localhost --password password
+mysql.mycnf --filename &quot;/root/.my.cnf&quot; --user root --password password
+
+mysql.user --state absent --user root --host 127.0.0.1 --password &quot;&quot;
+mysql.user --state absent --user root --host ::1 --password &quot;&quot;
+mysql.user --state absent --user &quot;&quot; --host localhost --password &quot;&quot;
+mysql.user --state absent --user root --host $hostname --password &quot;&quot;
+mysql.user --state absent --user &quot;&quot; --host $hostname --password &quot;&quot;
+
+mysql.database --state absent --name test
+
+stdlib.ini --file /etc/mysql/my.cnf --section mysqld --option bind-address --value 0.0.0.0
+
+if [[ $stdlib_state_change == true ]]; then
+  /etc/init.d/mysql restart
+fi
+</code></pre>
+
+<p>This script is rather simple in concept. Some notes about it:</p>
 <ul>
-<li>You have a base container called <code>waffles_base</code>.</li>
-<li>You have Waffles installed under <code>/root/.waffles</code>.</li>
+<li>The <code>hostname</code> variable is doing some shell escaping for MySQL commands.</li>
+<li>A <code>root@localhost</code> user is being configured with the password set in the data file.</li>
+<li>MySQL installs several other default <code>root</code> and "blank" users. We want to ensure these users are removed.</li>
+<li>We also want to ensure that the <code>test</code> database is removed.</li>
+<li>MySQL listens on localhost by default. We want it to listen on all interfaces, so we change the <code>bind-address</code> setting to <code>0.0.0.0</code>.</li>
+<li>The special variable <code>$stdlib_state_change</code> will be <code>true</code> if any changes were made at all in the file. If they were, we want to restart the MySQL service. This will not happen if no changes were made.</li>
 </ul>
-<p>To use this script, run it like so:</p>
-<pre><code class="shell">$ waffles_lxc.sh memcached
+<h3 id="roles">Roles</h3>
+<p>Finally, combine the above Data and Profiles to build the role, located at <code>site/roles/mysql.sh</code>:</p>
+<pre><code class="shell">stdlib.enable_mysql
+
+stdlib.data mysql
+
+stdlib.profile mysql/percona_repo
+stdlib.profile mysql/percona_server
 </code></pre>
 
-<p>The script will then clone <code>waffles_base</code> as <code>waffles_memcached</code> and create an <code>/etc/hosts</code> entry for it so all other containers can reference it by name.</p>
-<p>If you'd prefer not to have all containers prefixed with <code>waffles_</code>, just edit the script.</p>
-<h2 id="conclusion">Conclusion</h2>
-<p>This recipe detailed one way of using Waffles with LXC by using a simple Bash script that automates the creation of a container and applies a role to it using Waffles.</p>
+<p>The <code>stdlib.enable_mysql</code> function is a special function that will source all of the relevant MySQL functions and resources located under <code>lib</code>.</p>
+<p>The rest of the role should be self-explanatory.</p>
+<h2 id="comments-and-conclusion">Comments and Conclusion</h2>
+<p>The above example describes a simple way of deploying a Percona MySQL server using Waffles. It should be easy enough to modify and add other profiles to make a more well-rounded and robust service for you to use.</p>
               
             </div>
           </div>
@@ -876,10 +885,10 @@ cd /root/.waffles &amp;&amp; bash waffles.sh -s waffles_$1 -r $1
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../waffles-and-terraform/" class="btn btn-neutral float-right" title="Waffles and Terraform"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../deploying-a-mysql-galera-cluster/" class="btn btn-neutral float-right" title="Deploying a MySQL Galera Cluster"/>Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../testing-with-test-kitchen/" class="btn btn-neutral" title="Testing Waffles with Test Kitchen"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../environment-vars/" class="btn btn-neutral" title="Environment Variables"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -907,10 +916,10 @@ cd /root/.waffles &amp;&amp; bash waffles.sh -s waffles_$1 -r $1
           <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../testing-with-test-kitchen/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../environment-vars/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../waffles-and-terraform/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../deploying-a-mysql-galera-cluster/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

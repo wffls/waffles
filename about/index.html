@@ -64,8 +64,6 @@
             
                 <li class="toctree-l3"><a href="#about-waffles">About Waffles</a></li>
                 
-                    <li><a class="toctree-l4" href="#why-another-configuration-management-system">Why Another Configuration Management System?</a></li>
-                
                     <li><a class="toctree-l4" href="#why-bash">Why Bash?</a></li>
                 
                     <li><a class="toctree-l4" href="#why-waffles">Why "Waffles"?</a></li>
@@ -90,7 +88,7 @@
           
             <li>
     <li class="toctree-l1 ">
-        <a class="" href="../cookbook/install/">Installation</a>
+        <a class="" href="../guides/install/">Installation</a>
         
     </li>
 <li>
@@ -158,6 +156,13 @@
         
             
     <li class="toctree-l1 ">
+        <a class="" href="../functions/consul/">augeas</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
         <a class="" href="../functions/mysql/">mysql</a>
         
     </li>
@@ -168,68 +173,68 @@
           
             <li>
     <ul class="subnav">
-    <li><span>Cookbook</span></li>
+    <li><span>Guides</span></li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../cookbook/environment-vars/">Environment Variables</a>
+        <a class="" href="../guides/environment-vars/">Environment Variables</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../cookbook/deploying-a-mysql-server/">Deploying a MySQL Server</a>
+        <a class="" href="../guides/deploying-a-mysql-server/">Deploying a MySQL Server</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../cookbook/deploying-a-mysql-galera-cluster/">Deploying a MySQL Galera Cluster</a>
+        <a class="" href="../guides/deploying-a-mysql-galera-cluster/">Deploying a MySQL Galera Cluster</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../cookbook/deploying-a-consul-cluster/">Deploying a Consul Cluster</a>
+        <a class="" href="../guides/deploying-a-consul-cluster/">Deploying a Consul Cluster</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../cookbook/override-data/">Overriding Data</a>
+        <a class="" href="../guides/override-data/">Overriding Data</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../cookbook/referencing-data-from-data/">Referencing Data from Data</a>
+        <a class="" href="../guides/referencing-data-from-data/">Referencing Data from Data</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../cookbook/testing-with-test-kitchen/">Testing Waffles with Test Kitchen</a>
+        <a class="" href="../guides/testing-with-test-kitchen/">Testing Waffles with Test Kitchen</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../cookbook/waffles-and-lxc/">Waffles and LXC</a>
+        <a class="" href="../guides/waffles-and-lxc/">Waffles and LXC</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../cookbook/waffles-and-terraform/">Waffles and Terraform</a>
+        <a class="" href="../guides/waffles-and-terraform/">Waffles and Terraform</a>
         
     </li>
 
@@ -800,11 +805,10 @@
             <div class="section">
               
                 <h1 id="about-waffles">About Waffles</h1>
-<h2 id="why-another-configuration-management-system">Why Another Configuration Management System?</h2>
-<p>Over the years I've seen configuration management systems grow to become very large and complex projects. It's not uncommon for configuration management systems to have complex dependencies and require large all-in-one installations because manual installation would be just too difficult. I find this extremely ironic.</p>
 <p>Waffles is my attempt to create a simple, lightweight configuration management system. It doesn't have all of the features that Puppet, Chef, Ansible, or others have, but it can still do a lot.</p>
 <p>Waffles is very small and its core only uses Bash 4.3. rsync is required for push-based deployments.</p>
 <p>I also chose to make heavy use of <a href="http://augeas.net/">Augeas</a>. Augeas, in my opinion, is a very underutilized tool. You can easily run Waffles without Augeas, but Augeas makes handling certain situations much easier.</p>
+<p><em>note</em>: Some parts of the standard library use tools such as <code>grep</code>, <code>sed</code>, <code>awk</code>, <code>coreutils</code>, etc. I consider these standard to any Linux distribution. If I ever get around to getting Waffles to work on FreeBSD, Windows, etc, changes may need made to the standard library. Also, using Waffles on very stripped down Linux containers may require modifications, too. Despite this caveat, I still consider Waffles to be a Bash-based configuration management system. Perhaps a more precise description is that Waffles is a Bash script to facilitate the configuration of Linux-based systems using a collection of other shell scripts and tools.</p>
 <h2 id="why-bash">Why Bash?</h2>
 <p>The main reasons why I chose Bash over another language such as Python, Ruby, Golang, etc are:</p>
 <ul>

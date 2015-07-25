@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Referencing Data from Data - Waffles</title>
+  <title>Overriding Data - Waffles</title>
   
 
   <link rel="shortcut icon" href="../../img/favicon.ico">
@@ -20,7 +20,7 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Referencing Data from Data";
+    var mkdocs_page_name = "Overriding Data";
   </script>
   
   <script src="../../js/jquery-2.1.1.min.js"></script>
@@ -140,6 +140,13 @@
         
             
     <li class="toctree-l1 ">
+        <a class="" href="../../functions/consul/">augeas</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
         <a class="" href="../../functions/mysql/">mysql</a>
         
     </li>
@@ -150,7 +157,7 @@
           
             <li>
     <ul class="subnav">
-    <li><span>Cookbook</span></li>
+    <li><span>Guides</span></li>
 
         
             
@@ -182,19 +189,12 @@
 
         
             
-    <li class="toctree-l1 ">
-        <a class="" href="../override-data/">Overriding Data</a>
-        
-    </li>
-
-        
-            
     <li class="toctree-l1 current">
-        <a class="current" href="./">Referencing Data from Data</a>
+        <a class="current" href="./">Overriding Data</a>
         
             <ul>
             
-                <li class="toctree-l3"><a href="#referencing-data-from-data-files">Referencing Data from Data Files</a></li>
+                <li class="toctree-l3"><a href="#override-data">Override Data</a></li>
                 
                     <li><a class="toctree-l4" href="#description">Description</a></li>
                 
@@ -204,6 +204,13 @@
                 
             
             </ul>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../referencing-data-from-data/">Referencing Data from Data</a>
         
     </li>
 
@@ -780,11 +787,11 @@
     
       
         
-          <li>Cookbook &raquo;</li>
+          <li>Guides &raquo;</li>
         
       
     
-    <li>Referencing Data from Data</li>
+    <li>Overriding Data</li>
     <li class="wy-breadcrumbs-aside">
       
         
@@ -798,41 +805,35 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="referencing-data-from-data-files">Referencing Data from Data Files</h1>
+                <h1 id="override-data">Override Data</h1>
 <h2 id="description">Description</h2>
-<p>This recipe will show how you can reference previously declared data in subsequent data files.</p>
+<p>This guide will show how to easily override data in two different data files</p>
 <h2 id="steps">Steps</h2>
 <ol>
-<li>Create an initial data file:</li>
+<li>Create the initial data file:</li>
 </ol>
-<pre><code class="shell">$ cat &gt; site/data/common.sh &lt;&lt;EOF
-data_common_packages=(
-  &quot;vim&quot;
-  &quot;tmux&quot;
-)
+<pre><code class="shell">$ cat site/data/common.sh &lt;&lt;EOF
+data_memcached_uid=&quot;999&quot;
 EOF
 </code></pre>
 
 <ol>
-<li>Create a second data file that references data from the first:</li>
+<li>Create the second data file:</li>
 </ol>
-<pre><code class="shell">$ cat &gt; site/data/memcached.sh &lt;&lt;EOF
-data_common_packages=(
-  &quot;htop&quot;
-  &quot;${data_common_packages[@]}&quot;
-)
+<pre><code class="shell">$ cat site/data/memcached.sh &lt;&lt;EOF
+data_memcached_uid=&quot;700&quot;
 EOF
 </code></pre>
 
 <ol>
-<li>Declare the data files in order in your role:</li>
+<li>Add both data files to your role. The file called last will take precedence:</li>
 </ol>
-<pre><code class="shell">stdlib.data common
-stdlib.data memcached
+<pre><code class="shell">site.data common
+site.data memcached
 </code></pre>
 
 <h2 id="comments">Comments</h2>
-<p>This is possible because data files are just regular Bash scripts. The variables that have been sourced earlier in the chain are naturally available to files later in the chain. By using regular Bash syntax, you can manipulate the available data in any legal way.</p>
+<p>This is useful for when you want to keep data that can be used across multiple roles in a single file, but some roles need individual pieces of data overridden. A common case for this is when you are introducing a configuration management system into an existing environment and something like user UIDs have not been made standard.</p>
               
             </div>
           </div>
@@ -840,10 +841,10 @@ stdlib.data memcached
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../testing-with-test-kitchen/" class="btn btn-neutral float-right" title="Testing Waffles with Test Kitchen"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../referencing-data-from-data/" class="btn btn-neutral float-right" title="Referencing Data from Data"/>Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../override-data/" class="btn btn-neutral" title="Overriding Data"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../deploying-a-consul-cluster/" class="btn btn-neutral" title="Deploying a Consul Cluster"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -871,10 +872,10 @@ stdlib.data memcached
           <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../override-data/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../deploying-a-consul-cluster/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../testing-with-test-kitchen/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../referencing-data-from-data/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

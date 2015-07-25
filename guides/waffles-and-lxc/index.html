@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Deploying a MySQL Galera Cluster - Waffles</title>
+  <title>Waffles and LXC - Waffles</title>
   
 
   <link rel="shortcut icon" href="../../img/favicon.ico">
@@ -20,7 +20,7 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Deploying a MySQL Galera Cluster";
+    var mkdocs_page_name = "Waffles and LXC";
   </script>
   
   <script src="../../js/jquery-2.1.1.min.js"></script>
@@ -140,6 +140,13 @@
         
             
     <li class="toctree-l1 ">
+        <a class="" href="../../functions/consul/">augeas</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
         <a class="" href="../../functions/mysql/">mysql</a>
         
     </li>
@@ -150,7 +157,7 @@
           
             <li>
     <ul class="subnav">
-    <li><span>Cookbook</span></li>
+    <li><span>Guides</span></li>
 
         
             
@@ -168,23 +175,8 @@
 
         
             
-    <li class="toctree-l1 current">
-        <a class="current" href="./">Deploying a MySQL Galera Cluster</a>
-        
-            <ul>
-            
-                <li class="toctree-l3"><a href="#deploying-a-mysql-galera-cluster">Deploying a MySQL Galera Cluster</a></li>
-                
-                    <li><a class="toctree-l4" href="#description">Description</a></li>
-                
-                    <li><a class="toctree-l4" href="#steps">Steps</a></li>
-                
-                    <li><a class="toctree-l4" href="#run">Run</a></li>
-                
-                    <li><a class="toctree-l4" href="#comments-and-conclusion">Comments and Conclusion</a></li>
-                
-            
-            </ul>
+    <li class="toctree-l1 ">
+        <a class="" href="../deploying-a-mysql-galera-cluster/">Deploying a MySQL Galera Cluster</a>
         
     </li>
 
@@ -218,8 +210,19 @@
 
         
             
-    <li class="toctree-l1 ">
-        <a class="" href="../waffles-and-lxc/">Waffles and LXC</a>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Waffles and LXC</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#using-waffles-with-lxc">Using Waffles with LXC</a></li>
+                
+                    <li><a class="toctree-l4" href="#steps">Steps</a></li>
+                
+                    <li><a class="toctree-l4" href="#conclusion">Conclusion</a></li>
+                
+            
+            </ul>
         
     </li>
 
@@ -782,11 +785,11 @@
     
       
         
-          <li>Cookbook &raquo;</li>
+          <li>Guides &raquo;</li>
         
       
     
-    <li>Deploying a MySQL Galera Cluster</li>
+    <li>Waffles and LXC</li>
     <li class="wy-breadcrumbs-aside">
       
         
@@ -800,119 +803,79 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="deploying-a-mysql-galera-cluster">Deploying a MySQL Galera Cluster</h1>
-<h2 id="description">Description</h2>
-<p>This recipe will show one way of deploying a MySQL Galera cluster with Waffles. In particular, Percona XtraDB Cluster.</p>
+                <h1 id="using-waffles-with-lxc">Using Waffles with LXC</h1>
+<p>This guide will describe how to configure LXC containers with Waffles.</p>
 <h2 id="steps">Steps</h2>
-<h3 id="data">Data</h3>
-<p>The data file will contain a few items:</p>
-<ul>
-<li>The MySQL root password</li>
-<li>The SST password</li>
-<li>The name of the node which will act as the "bootstrap" node.</li>
-</ul>
-<p>This example will store the password in plain text -- note that a best practice would be to install it either in an encrypted repository, an encrypted string, or something along those lines.</p>
-<pre><code class="shell">$ cat site/data/mysql.sh
-data_mysql_root_password=&quot;password&quot;
-data_mysql_sst_password=&quot;password&quot;
-data_galera_bootstrap_node=&quot;mysql-01&quot;
-</code></pre>
+<h3 id="installing-lxc">Installing LXC</h3>
+<p>First, set up an LXC server. I've written a blog post <a href="http://terrarum.net/blog/building-an-lxc-server-1404.html">here</a> that may be used as a reference.</p>
+<h3 id="creating-a-base-container">Creating a Base Container</h3>
+<p>I find it very useful to have a standard container that's used as the basis for all other containers. If anything, it makes the creation of new containers almost instant since cloning a container is much quicker than creating an entirely new container.</p>
+<p>To create a base container, just create a standard container and turn it off with <code>lxc-stop</code>.</p>
+<h3 id="waffles-lxc-script">Waffles LXC Script</h3>
+<p>I've been using the following script for the past few months and find it works very well. Comments and improvements are definitely welcome, though.</p>
+<pre><code class="shell">#!/bin/bash
 
-<h3 id="profiles">Profiles</h3>
-<p>We'll use two profile scripts for the Galera cluster: the first will configure the Percona repo and the second will install and configure MySQL and Galera.</p>
-<p>First, make the directory structure</p>
-<pre><code class="shell">$ mkdir -p site/profiles/mysql/scripts
-</code></pre>
-
-<p>Next, make the repo profile script, located at <code>site/profiles/mysql/scripts/percona_repo.sh</code>:</p>
-<pre><code class="shell">stdlib.title &quot;mysql/percona/repo&quot;
-
-source /etc/lsb-release
-
-stdlib.apt_key --name percona --keyserver keys.gnupg.net --key 1C4CBDCDCD2EFD2A
-stdlib.apt_source --name percona --uri http://repo.percona.com/apt --distribution $DISTRIB_CODENAME --component main --include_src true
-</code></pre>
-
-<p>Next, make the MySQL profile script, located at <code>sites/profiles/mysql/scripts/percona_xtradb_cluster.sh</code>:</p>
-<pre><code class="shell">stdlib.title &quot;mysql/percona/xtradb-cluster&quot;
-
-# Get some information useful for the configuration
-hostname=$(hostname)
-mysql_hostname=$(hostname | sed -e 's/_/\\\_/g')
-my_ip=$(/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
-
-# Install the percona cluster package
-stdlib.apt --package percona-xtradb-cluster-56
-
-# Record of the MySQL sysv service
-stdlib.sysvinit --name mysql
-
-# Configure the MySQL root user
-mysql.user --user root --host localhost --password &quot;$data_mysql_root_password&quot;
-mysql.mycnf --filename &quot;/root/.my.cnf&quot; --user root --password &quot;$data_mysql_root_password&quot;
-
-# Remove some of the default accounts
-mysql.user --state absent --user root --host 127.0.0.1 --password &quot;&quot;
-mysql.user --state absent --user root --host ::1 --password &quot;&quot;
-mysql.user --state absent --user &quot;&quot; --host localhost --password &quot;&quot;
-mysql.user --state absent --user root --host $mysql_hostname --password &quot;&quot;
-mysql.user --state absent --user &quot;&quot; --host $mysql_hostname --password &quot;&quot;
-
-# Create the sst user
-mysql.user --user sst --host localhost --password &quot;$data_mysql_sst_password&quot;
-mysql.grant --user sst --host localhost --database &quot;*&quot; --privileges &quot;RELOAD, LOCK TABLES, REPLICATION CLIENT&quot;
-
-# Configure `/etc/mysql/my.cnf`
-stdlib.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_provider --value /usr/lib/libgalera_smm.so
-stdlib.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_sst_method --value xtrabackup-v2
-stdlib.ini --file /etc/mysql/my.cnf --section mysqld --option binlog_format --value ROW
-stdlib.ini --file /etc/mysql/my.cnf --section mysqld --option default_storage_engine --value InnoDB
-stdlib.ini --file /etc/mysql/my.cnf --section mysqld --option innodb_autoinc_lock_mode --value 2
-stdlib.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_node_address --value $my_ip
-stdlib.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_cluster_name --value my_cluster
-stdlib.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_sst_auth --value &quot;sst:${data_mysql_sst_password}&quot;
-
-# If the hostname is config_galera1, do not set gcomm
-if [[ $hostname == $data_galera_bootstrap_node ]]; then
-  stdlib.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_cluster_address --value &quot;gcomm://&quot;
-else
-  stdlib.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_cluster_address --value &quot;gcomm://mysql-01,mysql-02,mysql-03&quot;
+if [ -z $1 ]; then
+  echo &quot;Role required.&quot;
+  exit 1
 fi
 
-# If any of the above settings changed, restart MySQL
-if [[ $stdlib_state_change == true ]]; then
-  /etc/init.d/mysql restart
+lxc-ls | grep -q waffles_$1
+if [ $? == 0 ]; then
+  echo &quot;Shutting down and destroying waffles_$1&quot;
+  lxc-stop -n waffles_$1
+  lxc-destroy -n waffles_$1
 fi
+
+echo &quot;Cloning LXC container waffles_base to waffles_$1&quot;
+lxc-clone -o waffles_base -n waffles_$1 -s
+
+echo &quot;Copying root key to container&quot;
+mkdir /var/lib/lxc/waffles_$1/rootfs/root/.ssh
+cat /root/.ssh/id_rsa.pub &gt; /var/lib/lxc/waffles_$1/rootfs/root/.ssh/authorized_keys
+
+echo &quot;Starting waffles_$1 and waiting until it has an IP&quot;
+lxc-start -d -n waffles_$1
+
+running=false
+while [ &quot;$running&quot; == false ]; do
+  lxc-info -i -n waffles_$1 | grep -q 10
+  if [ $? == 0 ]; then
+    ip=$(lxc-info -i -n waffles_$1 | awk '{print $2}')
+    running=true
+  else
+    echo &quot;waffles_$1 not up yet. Sleeping...&quot;
+    sleep 2
+  fi
+done
+
+grep -q waffles_$1 /etc/hosts
+if [ $? == 0 ]; then
+  sed -i -e &quot;/waffles_$1/d&quot; /etc/hosts
+fi
+echo &quot;$ip waffles_$1&quot; &gt;&gt; /etc/hosts
+
+pkill -HUP dnsmasq
+
+echo &quot;Running waffles&quot;
+lxc-attach -n waffles_$1 -- apt-get update
+lxc-attach -n waffles_$1 -- apt-get install -y rsync
+cd /root/.waffles &amp;&amp; bash waffles.sh -s waffles_$1 -r $1
 </code></pre>
 
-<p>This script may be a little long, but it shouldn't be difficult to understand. Some notes about it:</p>
+<p>This script assumes the following:</p>
 <ul>
-<li>The <code>hostname</code> is captured to determine if the node should be the bootstrap node. It's also used for some MySQL configuration.</li>
-<li>A <code>root@localhost</code> user is being configured with the password set in the data file.</li>
-<li>MySQL installs several other default <code>root</code> and "blank" users. We want to ensure these users are removed.</li>
-<li>We also want to ensure that the <code>test</code> database is removed.</li>
-<li>MySQL listens on localhost by default. We want it to listen on all interfaces, so we change the <code>bind-address</code> setting to <code>0.0.0.0</code>.</li>
-<li>The <code>stdlib.ini</code> resources are configuring MySQL, wsrep, and SST.</li>
-<li>If the node is the bootstrap node, the <code>wsrep_cluster_address</code> is set to the special <code>gcomm://</code>. If not, it is set to all other nodes in the cluster. Once the cluster has been bootstrapped, you should remove the <code>if</code> conditional and only leave the <code>else</code> portion.</li>
-<li>The special variable <code>$stdlib_state_change</code> will be <code>true</code> if any changes were made at all in the file. If they were, we want to restart the MySQL service. This will not happen if no changes were made.</li>
+<li>You have a base container called <code>waffles_base</code>.</li>
+<li>You have Waffles installed under <code>/root/.waffles</code>.</li>
 </ul>
-<h3 id="roles">Roles</h3>
-<p>Finally, combine the above Data and Profiles to build the role, located at <code>site/roles/mysql.sh</code>:</p>
-<pre><code class="shell">stdlib.enable_mysql
-
-stdlib.data mysql
-
-stdlib.profile mysql/percona_repo
-stdlib.profile mysql/percona_xtradb_cluster
+<p>To use this script, run it like so:</p>
+<pre><code class="shell">$ waffles_lxc.sh memcached
 </code></pre>
 
-<p>The <code>stdlib.enable_mysql</code> function is a special function that will source all of the relevant MySQL functions and resources located under <code>lib</code>.</p>
-<p>The rest of the role should be self-explanatory.</p>
-<h2 id="run">Run</h2>
-<p>You should now run this against 3 servers, containers, or virtual machines of your choice. The bootstrap node must be run and completed before all others.</p>
-<h2 id="comments-and-conclusion">Comments and Conclusion</h2>
-<p>The above example describes a simple way of deploying a Percona MySQL Galera cluster using Waffles. It should be easy enough to modify and add other profiles to make a more well-rounded and robust service for you to use.</p>
-<p>Please be aware that <code>mysql-01</code>, <code>mysql-02</code>, and <code>mysql-03</code> are all hostnames that can be resolved. If you are unable to add these to a DNS service, use IP addresses for testing.</p>
+<p>The script will then clone <code>waffles_base</code> as <code>waffles_memcached</code> and create an <code>/etc/hosts</code> entry for it so all other containers can reference it by name.</p>
+<p>If you'd prefer not to have all containers prefixed with <code>waffles_</code>, just edit the script.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>This guide detailed one way of using Waffles with LXC by using a simple Bash script that automates the creation of a container and applies a role to it using Waffles.</p>
               
             </div>
           </div>
@@ -920,10 +883,10 @@ stdlib.profile mysql/percona_xtradb_cluster
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../deploying-a-consul-cluster/" class="btn btn-neutral float-right" title="Deploying a Consul Cluster"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../waffles-and-terraform/" class="btn btn-neutral float-right" title="Waffles and Terraform"/>Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../deploying-a-mysql-server/" class="btn btn-neutral" title="Deploying a MySQL Server"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../testing-with-test-kitchen/" class="btn btn-neutral" title="Testing Waffles with Test Kitchen"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -951,10 +914,10 @@ stdlib.profile mysql/percona_xtradb_cluster
           <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../deploying-a-mysql-server/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../testing-with-test-kitchen/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../deploying-a-consul-cluster/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../waffles-and-terraform/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

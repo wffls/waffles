@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Waffles and Terraform - Waffles</title>
+  <title>Environment Variables - Waffles</title>
   
 
   <link rel="shortcut icon" href="../../img/favicon.ico">
@@ -20,7 +20,7 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Waffles and Terraform";
+    var mkdocs_page_name = "Environment Variables";
   </script>
   
   <script src="../../js/jquery-2.1.1.min.js"></script>
@@ -140,6 +140,13 @@
         
             
     <li class="toctree-l1 ">
+        <a class="" href="../../functions/consul/">augeas</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
         <a class="" href="../../functions/mysql/">mysql</a>
         
     </li>
@@ -150,12 +157,27 @@
           
             <li>
     <ul class="subnav">
-    <li><span>Cookbook</span></li>
+    <li><span>Guides</span></li>
 
         
             
-    <li class="toctree-l1 ">
-        <a class="" href="../environment-vars/">Environment Variables</a>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Environment Variables</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#environment-variable-support">Environment Variable Support</a></li>
+                
+                    <li><a class="toctree-l4" href="#description">Description</a></li>
+                
+                    <li><a class="toctree-l4" href="#waffles_noop">WAFFLES_NOOP</a></li>
+                
+                    <li><a class="toctree-l4" href="#waffles_debug">WAFFLES_DEBUG</a></li>
+                
+                    <li><a class="toctree-l4" href="#test">TEST</a></li>
+                
+            
+            </ul>
         
     </li>
 
@@ -210,21 +232,8 @@
 
         
             
-    <li class="toctree-l1 current">
-        <a class="current" href="./">Waffles and Terraform</a>
-        
-            <ul>
-            
-                <li class="toctree-l3"><a href="#using-waffles-with-terraform">Using Waffles with Terraform</a></li>
-                
-                    <li><a class="toctree-l4" href="#steps">Steps</a></li>
-                
-                    <li><a class="toctree-l4" href="#comments">Comments</a></li>
-                
-                    <li><a class="toctree-l4" href="#conclusion">Conclusion</a></li>
-                
-            
-            </ul>
+    <li class="toctree-l1 ">
+        <a class="" href="../waffles-and-terraform/">Waffles and Terraform</a>
         
     </li>
 
@@ -780,11 +789,11 @@
     
       
         
-          <li>Cookbook &raquo;</li>
+          <li>Guides &raquo;</li>
         
       
     
-    <li>Waffles and Terraform</li>
+    <li>Environment Variables</li>
     <li class="wy-breadcrumbs-aside">
       
         
@@ -798,57 +807,43 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="using-waffles-with-terraform">Using Waffles with Terraform</h1>
-<p>This recipe will show how to use Waffles with <a href="http://terraform.io">Terraform</a>. The Terraform OpenStack provider will be used, but these concepts should be applicable to any provider.</p>
-<h2 id="steps">Steps</h2>
-<h3 id="installing-terraform">Installing Terraform</h3>
-<p>First, set up and install Terraform. Instructions can be found on Terraform's <a href="http://terraform.io">homepage</a>.</p>
-<h3 id="creating-a-terraform-configuration">Creating a Terraform Configuration</h3>
-<p>The following Terraform Configuration is all that is required to use Waffles with Terraform:</p>
-<pre><code class="ruby">resource &quot;openstack_compute_keypair_v2&quot; &quot;waffles&quot; {
-  name = &quot;waffles&quot;
-  public_key = &quot;${file(&quot;/root/.ssh/id_rsa.pub&quot;)}&quot;
-}
-
-resource &quot;openstack_compute_instance_v2&quot; &quot;waffles&quot; {
-  name = &quot;waffles&quot;
-  image_name = &quot;Ubuntu 14.04&quot;
-  flavor_name = &quot;m1.tiny&quot;
-
-  key_pair = &quot;${openstack_compute_keypair_v2.waffles.name}&quot;
-  security_groups = [&quot;default&quot;]
-
-  connection {
-    user = &quot;ubuntu&quot;
-    key_file = &quot;/root/.ssh/id_rsa&quot;
-    host = &quot;${openstack_compute_instance_v2.waffles.access_ip_v6}&quot;
-  }
-
-  provisioner &quot;local-exec&quot; {
-    command = &quot;sleep 10 &amp;&amp; cd /root/.waffles &amp;&amp; bash waffles.sh -r memcached -s ${openstack_compute_instance_v2.waffles.access_ip_v6} -u ubuntu -y&quot;
-  }
-
-}
+                <h1 id="environment-variable-support">Environment Variable Support</h1>
+<h2 id="description">Description</h2>
+<p>This guide will show how to alter Waffles's behavior by setting different environment variables.</p>
+<h2 id="waffles_noop">WAFFLES_NOOP</h2>
+<p>no-op stands for "no operation". Rather than actually executing commands, it will print what <em>would have</em> happened if Waffles was run in normal mode.</p>
+<h3 id="steps">Steps</h3>
+<ol>
+<li>Run Waffles with <code>WAFFLES_NOOP</code> set:</li>
+</ol>
+<pre><code class="shell">$ WAFFLES_NOOP=1 waffles.sh memcached
 </code></pre>
 
-<p>Save the above as something like <code>~/waffles-tform/main.tf</code></p>
-<h3 id="apply-the-terraform-configuration">Apply the Terraform Configuration</h3>
-<p>Now just apply the configuration with:</p>
-<pre><code class="shell">$ cd waffles-tform
-$ terraform apply
+<h3 id="comments">Comments</h3>
+<p>You can also use the <code>-n</code> flag when running Waffles.</p>
+<h2 id="waffles_debug">WAFFLES_DEBUG</h2>
+<p>This will print extra information about each action. If Waffles is not working correctly, try running in "debug" mode and see if you can spot the error.</p>
+<p>The output from "debug" mode is also the best way to report bugs.</p>
+<h3 id="steps_1">Steps</h3>
+<ol>
+<li>Run Waffles with <code>WAFFLES_DEBUG</code> set:</li>
+</ol>
+<pre><code class="shell">$ WAFFLES_DEBUG=1 waffles.sh memcached
 </code></pre>
 
-<h2 id="comments">Comments</h2>
-<p>The above configuration makes a few assumptions:</p>
-<ul>
-<li><code>rsync</code> is already installed on the image you'll be using. If yours doesn't, use <code>cloud-init</code> or a similar system to pre-install it.</li>
-<li>The virtual machine that Terraform creates is accessible via IPv6. If yours isn't, either attach a Floating or Elastic IP or use the fixed IP somehow.</li>
-<li>The SSH key being used is <code>/root/.ssh/id_rsa</code>. This is because Waffles does not support non-default SSH keys yet.</li>
-<li>SSH access is allowed through the security group.</li>
-</ul>
-<h2 id="conclusion">Conclusion</h2>
-<p>This recipe showed one way of using Waffles with Terraform. Both systems are extremely flexible and complement each other well, so there may be other ways of achieving the same result.</p>
-<p>For example, you could use Terraform's <code>file</code> provisioner to copy the entire <code>~/.waffles</code> directory to the remote virtual machine. The benefit of using Waffles's built-in push is that only the files which the role requires are copied over.</p>
+<h3 id="comments_1">Comments</h3>
+<p>You can also use the <code>-d</code> flag when running Waffles.</p>
+<h2 id="test">TEST</h2>
+<p>When TEST is set, Waffles will exit 1 if any changes were made. This is useful to verify the previous run was successful because no changes should need to be made upon the second execution.</p>
+<h3 id="steps_2">Steps</h3>
+<ol>
+<li>Run Waffles with <code>WAFFLES_TEST</code> set:</li>
+</ol>
+<pre><code class="shell">$ WAFFLES_TEST=1 waffles.sh memcached
+</code></pre>
+
+<h3 id="comments_2">Comments</h3>
+<p>You can also use the <code>-t</code> flag when running Waffles.</p>
               
             </div>
           </div>
@@ -856,10 +851,10 @@ $ terraform apply
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../../resources/" class="btn btn-neutral float-right" title="Internals"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../deploying-a-mysql-server/" class="btn btn-neutral float-right" title="Deploying a MySQL Server"/>Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../waffles-and-lxc/" class="btn btn-neutral" title="Waffles and LXC"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../functions/mysql/" class="btn btn-neutral" title="mysql"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -887,10 +882,10 @@ $ terraform apply
           <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../waffles-and-lxc/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../../functions/mysql/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../../resources/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../deploying-a-mysql-server/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

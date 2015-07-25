@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Deploying a MySQL Server - Waffles</title>
+  <title>Referencing Data from Data - Waffles</title>
   
 
   <link rel="shortcut icon" href="../../img/favicon.ico">
@@ -20,7 +20,7 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Deploying a MySQL Server";
+    var mkdocs_page_name = "Referencing Data from Data";
   </script>
   
   <script src="../../js/jquery-2.1.1.min.js"></script>
@@ -140,6 +140,13 @@
         
             
     <li class="toctree-l1 ">
+        <a class="" href="../../functions/consul/">augeas</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
         <a class="" href="../../functions/mysql/">mysql</a>
         
     </li>
@@ -150,7 +157,7 @@
           
             <li>
     <ul class="subnav">
-    <li><span>Cookbook</span></li>
+    <li><span>Guides</span></li>
 
         
             
@@ -161,21 +168,8 @@
 
         
             
-    <li class="toctree-l1 current">
-        <a class="current" href="./">Deploying a MySQL Server</a>
-        
-            <ul>
-            
-                <li class="toctree-l3"><a href="#deploying-a-mysql-server">Deploying a MySQL Server</a></li>
-                
-                    <li><a class="toctree-l4" href="#description">Description</a></li>
-                
-                    <li><a class="toctree-l4" href="#steps">Steps</a></li>
-                
-                    <li><a class="toctree-l4" href="#comments-and-conclusion">Comments and Conclusion</a></li>
-                
-            
-            </ul>
+    <li class="toctree-l1 ">
+        <a class="" href="../deploying-a-mysql-server/">Deploying a MySQL Server</a>
         
     </li>
 
@@ -202,8 +196,21 @@
 
         
             
-    <li class="toctree-l1 ">
-        <a class="" href="../referencing-data-from-data/">Referencing Data from Data</a>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Referencing Data from Data</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#referencing-data-from-data-files">Referencing Data from Data Files</a></li>
+                
+                    <li><a class="toctree-l4" href="#description">Description</a></li>
+                
+                    <li><a class="toctree-l4" href="#steps">Steps</a></li>
+                
+                    <li><a class="toctree-l4" href="#comments">Comments</a></li>
+                
+            
+            </ul>
         
     </li>
 
@@ -780,11 +787,11 @@
     
       
         
-          <li>Cookbook &raquo;</li>
+          <li>Guides &raquo;</li>
         
       
     
-    <li>Deploying a MySQL Server</li>
+    <li>Referencing Data from Data</li>
     <li class="wy-breadcrumbs-aside">
       
         
@@ -798,79 +805,41 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="deploying-a-mysql-server">Deploying a MySQL Server</h1>
+                <h1 id="referencing-data-from-data-files">Referencing Data from Data Files</h1>
 <h2 id="description">Description</h2>
-<p>This recipe will show one way of deploying a MySQL server with Waffles. In particular, Percona MySQL.</p>
+<p>This guide will show how you can reference previously declared data in subsequent data files.</p>
 <h2 id="steps">Steps</h2>
-<h3 id="data">Data</h3>
-<p>There will only be one data item: the MySQL root password. This example will store the password in plain text -- note that a best practice would be to install it either in an encrypted repository, an encrypted string, or something along those lines.</p>
-<pre><code class="shell">$ cat site/data/mysql.sh
-data_mysql_root_password=&quot;password&quot;
+<ol>
+<li>Create an initial data file:</li>
+</ol>
+<pre><code class="shell">$ cat &gt; site/data/common.sh &lt;&lt;EOF
+data_common_packages=(
+  &quot;vim&quot;
+  &quot;tmux&quot;
+)
+EOF
 </code></pre>
 
-<h3 id="profiles">Profiles</h3>
-<p>We'll use two profile scripts for the MySQL server: the first will configure the Percona repo and the second will install and configure MySQL itself.</p>
-<p>First, make the directory structure</p>
-<pre><code class="shell">$ mkdir -p site/profiles/mysql/scripts
+<ol>
+<li>Create a second data file that references data from the first:</li>
+</ol>
+<pre><code class="shell">$ cat &gt; site/data/memcached.sh &lt;&lt;EOF
+data_common_packages=(
+  &quot;htop&quot;
+  &quot;${data_common_packages[@]}&quot;
+)
+EOF
 </code></pre>
 
-<p>Next, make the repo profile script, located at <code>site/profiles/mysql/scripts/percona_repo.sh</code>:</p>
-<pre><code class="shell">stdlib.title &quot;mysql/percona/repo&quot;
-
-source /etc/lsb-release
-
-stdlib.apt_key --name percona --keyserver keys.gnupg.net --key 1C4CBDCDCD2EFD2A
-stdlib.apt_source --name percona --uri http://repo.percona.com/apt --distribution $DISTRIB_CODENAME --component main --include_src true
+<ol>
+<li>Declare the data files in order in your role:</li>
+</ol>
+<pre><code class="shell">stdlib.data common
+stdlib.data memcached
 </code></pre>
 
-<p>Next, make the MySQL profile script, located at <code>sites/profilfes/mysql/scripts/percona_server.sh</code>:</p>
-<pre><code class="shell">stdlib.title &quot;mysql/percona/server&quot;
-
-hostname=$(hostname | sed -e 's/_/\\\_/g')
-
-stdlib.apt --package percona-server-server-5.6
-
-mysql.user --user root --host localhost --password password
-mysql.mycnf --filename &quot;/root/.my.cnf&quot; --user root --password password
-
-mysql.user --state absent --user root --host 127.0.0.1 --password &quot;&quot;
-mysql.user --state absent --user root --host ::1 --password &quot;&quot;
-mysql.user --state absent --user &quot;&quot; --host localhost --password &quot;&quot;
-mysql.user --state absent --user root --host $hostname --password &quot;&quot;
-mysql.user --state absent --user &quot;&quot; --host $hostname --password &quot;&quot;
-
-mysql.database --state absent --name test
-
-stdlib.ini --file /etc/mysql/my.cnf --section mysqld --option bind-address --value 0.0.0.0
-
-if [[ $stdlib_state_change == true ]]; then
-  /etc/init.d/mysql restart
-fi
-</code></pre>
-
-<p>This script is rather simple in concept. Some notes about it:</p>
-<ul>
-<li>The <code>hostname</code> variable is doing some shell escaping for MySQL commands.</li>
-<li>A <code>root@localhost</code> user is being configured with the password set in the data file.</li>
-<li>MySQL installs several other default <code>root</code> and "blank" users. We want to ensure these users are removed.</li>
-<li>We also want to ensure that the <code>test</code> database is removed.</li>
-<li>MySQL listens on localhost by default. We want it to listen on all interfaces, so we change the <code>bind-address</code> setting to <code>0.0.0.0</code>.</li>
-<li>The special variable <code>$stdlib_state_change</code> will be <code>true</code> if any changes were made at all in the file. If they were, we want to restart the MySQL service. This will not happen if no changes were made.</li>
-</ul>
-<h3 id="roles">Roles</h3>
-<p>Finally, combine the above Data and Profiles to build the role, located at <code>site/roles/mysql.sh</code>:</p>
-<pre><code class="shell">stdlib.enable_mysql
-
-stdlib.data mysql
-
-stdlib.profile mysql/percona_repo
-stdlib.profile mysql/percona_server
-</code></pre>
-
-<p>The <code>stdlib.enable_mysql</code> function is a special function that will source all of the relevant MySQL functions and resources located under <code>lib</code>.</p>
-<p>The rest of the role should be self-explanatory.</p>
-<h2 id="comments-and-conclusion">Comments and Conclusion</h2>
-<p>The above example describes a simple way of deploying a Percona MySQL server using Waffles. It should be easy enough to modify and add other profiles to make a more well-rounded and robust service for you to use.</p>
+<h2 id="comments">Comments</h2>
+<p>This is possible because data files are just regular Bash scripts. The variables that have been sourced earlier in the chain are naturally available to files later in the chain. By using regular Bash syntax, you can manipulate the available data in any legal way.</p>
               
             </div>
           </div>
@@ -878,10 +847,10 @@ stdlib.profile mysql/percona_server
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../deploying-a-mysql-galera-cluster/" class="btn btn-neutral float-right" title="Deploying a MySQL Galera Cluster"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../testing-with-test-kitchen/" class="btn btn-neutral float-right" title="Testing Waffles with Test Kitchen"/>Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../environment-vars/" class="btn btn-neutral" title="Environment Variables"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../override-data/" class="btn btn-neutral" title="Overriding Data"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -909,10 +878,10 @@ stdlib.profile mysql/percona_server
           <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../environment-vars/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../override-data/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../deploying-a-mysql-galera-cluster/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../testing-with-test-kitchen/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
