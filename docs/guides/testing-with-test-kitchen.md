@@ -2,7 +2,7 @@
 
 ## Description
 
-This recipe will show how to set up Test Kitchen so you can run various acceptance and integration tests on Waffles.
+This guide will show how to set up Test Kitchen so you can run various acceptance and integration tests on Waffles.
 
 ## Steps
 

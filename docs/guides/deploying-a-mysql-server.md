@@ -2,7 +2,7 @@
 
 ## Description
 
-This recipe will show one way of deploying a MySQL server with Waffles. In particular, Percona MySQL.
+This guide will show one way of deploying a MySQL server with Waffles. In particular, Percona MySQL.
 
 ## Steps
 

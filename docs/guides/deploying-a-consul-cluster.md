@@ -2,7 +2,7 @@
 
 ## Description
 
-This recipe will show one way of deploying a Consul cluster with Waffles.
+This guide will show one way of deploying a Consul cluster with Waffles.
 
 ## Steps
 

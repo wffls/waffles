@@ -2,7 +2,7 @@
 
 ## Description
 
-This recipe will show how to easily override data in two different data files
+This guide will show how to easily override data in two different data files
 
 ## Steps
 

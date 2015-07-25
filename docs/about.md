@@ -1,14 +1,12 @@
 # About Waffles
 
-## Why Another Configuration Management System?
-
-Over the years I've seen configuration management systems grow to become very large and complex projects. It's not uncommon for configuration management systems to have complex dependencies and require large all-in-one installations because manual installation would be just too difficult. I find this extremely ironic.
-
 Waffles is my attempt to create a simple, lightweight configuration management system. It doesn't have all of the features that Puppet, Chef, Ansible, or others have, but it can still do a lot.
 
 Waffles is very small and its core only uses Bash 4.3. rsync is required for push-based deployments.
 
 I also chose to make heavy use of [Augeas](http://augeas.net/). Augeas, in my opinion, is a very underutilized tool. You can easily run Waffles without Augeas, but Augeas makes handling certain situations much easier.
+
+_note_: Some parts of the standard library use tools such as `grep`, `sed`, `awk`, `coreutils`, etc. I consider these standard to any Linux distribution. If I ever get around to getting Waffles to work on FreeBSD, Windows, etc, changes may need made to the standard library. Also, using Waffles on very stripped down Linux containers may require modifications, too. Despite this caveat, I still consider Waffles to be a Bash-based configuration management system. Perhaps a more precise description is that Waffles is a Bash script to facilitate the configuration of Linux-based systems using a collection of other shell scripts and tools.
 
 ## Why Bash?
 

@@ -2,7 +2,7 @@
 
 ## Description
 
-This recipe will show how to install Waffles.
+This guide will show how to install Waffles.
 
 ## Steps
 

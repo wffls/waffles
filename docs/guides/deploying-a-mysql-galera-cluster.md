@@ -2,7 +2,7 @@
 
 ## Description
 
-This recipe will show one way of deploying a MySQL Galera cluster with Waffles. In particular, Percona XtraDB Cluster.
+This guide will show one way of deploying a MySQL Galera cluster with Waffles. In particular, Percona XtraDB Cluster.
 
 ## Steps
 
