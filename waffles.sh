@@ -34,7 +34,7 @@ function apply_role_locally {
   stdlib.include $role_script
 
   # If WAFFLES_TEST is set, exit 1 if any changes where made
-  if [[ -n "$WAFFLES_TEST" ]]; then
+  if [[ -n $WAFFLES_TEST ]]; then
     [[ $stdlib_resource_changes -eq 0 ]] || exit 1
   fi
 }
@@ -45,7 +45,7 @@ function apply_role_remotely {
 
   local _include
   for i in "${!stdlib_remote_copy[@]}"; do
-    if [[ "$i" =~ sh$ ]]; then
+    if [[ $i =~ sh$ ]]; then
       _include="$_include --include=site/$i"
     else
       _include="$_include --include=site/$i/**"
@@ -53,18 +53,18 @@ function apply_role_remotely {
   done
 
   local _args
-  if [[ -n "$WAFFLES_NOOP" ]]; then
+  if [[ -n $WAFFLES_NOOP ]]; then
     _args="$_args -n"
   fi
 
-  if [[ -n "$WAFFLES_DEBUG" ]]; then
+  if [[ -n $WAFFLES_DEBUG ]]; then
     _args="$_args -d"
   fi
 
   # To deploy to explicit IPv6 addresses, use the bracket form ([fd00:abcd::1]) and let the following code take care of the rest.
   local _rsync_server
   local _ssh_server
-  if [[ "$server" =~ [][] ]]; then
+  if [[ $server =~ [][] ]]; then
     server="${server/[/}"
     server="${server/]/}"
     _rsync_server="[$WAFFLES_SSH_USER@$server]"
@@ -75,8 +75,9 @@ function apply_role_remotely {
   fi
 
   # Determine if "sudo" is required
-  local _remote_waffles_command
-  if [[ -n "$WAFFLES_REMOTE_SUDO" ]]; then
+  local _remote_rsync_path
+  local _remote_ssh_command
+  if [[ -n $WAFFLES_REMOTE_SUDO ]]; then
     _remote_rsync_path="sudo rsync"
     _remote_ssh_command="sudo bash waffles.sh"
   else
@@ -91,7 +92,7 @@ function apply_role_remotely {
 # Main Script
 
 # Try to find waffles.conf in either /etc/waffles or ~/.waffles
-if [[ -f /etc/waffles/waffles.conf ]]; then
+if [[ -f "/etc/waffles/waffles.conf" ]]; then
   source /etc/waffles/waffles.conf
 fi
 
@@ -100,16 +101,16 @@ if [[ -f ~/.waffles/waffles.conf ]]; then
 fi
 
 # If CONFIG_FILE or WAFFLES_CONFIG_FILE is set, prefer it
-if [[ -n "$CONFIG_FILE" ]]; then
+if [[ -n $CONFIG_FILE ]]; then
   source "$CONFIG_FILE"
 fi
 
-if [[ -n "$WAFFLES_CONFIG_FILE" ]]; then
+if [[ -n $WAFFLES_CONFIG_FILE ]]; then
   source "$WAFFLES_CONFIG_FILE"
 fi
 
 # Make sure WAFFLES_SITE_DIR has a value
-if [[ -z "$WAFFLES_SITE_DIR" ]]; then
+if [[ -z $WAFFLES_SITE_DIR ]]; then
   echo "WAFFLES_SITE_DIR is not set."
   exit 1
 fi
@@ -175,7 +176,7 @@ if [[ ! -f $role_script ]]; then
 fi
 
 # Call either the local or remote apply_role function
-if [[ -n "$server" ]]; then
+if [[ -n $server ]]; then
   (apply_role_remotely)
 else
   (apply_role_locally)
