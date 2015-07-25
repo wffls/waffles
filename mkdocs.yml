@@ -9,7 +9,7 @@ pages:
   - Home: 'index.md'
   - About: 'about.md'
   - Quickstart: 'quickstart.md'
-  - Installation: 'cookbook/install.md'
+  - Installation: 'guides/install.md'
   - Concepts: 'concepts.md'
   - Usage: 'usage.md'
   - Modules: 'modules.md'
