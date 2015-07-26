@@ -143,6 +143,13 @@
         
             
     <li class="toctree-l1 ">
+        <a class="" href="../functions/resource/">resource</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
         <a class="" href="../functions/augeas/">augeas</a>
         
     </li>
@@ -150,7 +157,7 @@
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../functions/consul/">augeas</a>
+        <a class="" href="../functions/consul/">consul</a>
         
     </li>
 
@@ -158,6 +165,13 @@
             
     <li class="toctree-l1 ">
         <a class="" href="../functions/mysql/">mysql</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../functions/rabbitmq/">rabbitmq</a>
         
     </li>
 
@@ -827,6 +841,7 @@
 <li>The Standard Library of resources is located in <code>$WAFFLES_DIR/lib/resources</code>.</li>
 <li>Apache-based resources are located in <code>$WAFFLES_DIR/lib/apache</code>.</li>
 <li>Augeas-based resources are located in <code>$WAFFLES_DIR/lib/augeas</code>.</li>
+<li>Consul-based resources are located in <code>$WAFFLES_DIR/lib/consul</code>.</li>
 <li>Keepalived-based resources are located in <code>$WAFFLES_DIR/lib/keepalived</code>.</li>
 <li>MySQL-based resources are located in <code>$WAFFLES_DIR/lib/mysql</code>.</li>
 <li>Nginx-based resources are located in <code>$WAFFLES_DIR/lib/nginx</code>.</li>
@@ -837,15 +852,15 @@
 <ul>
 <li>Apache: <code>stdlib.enable_apache</code></li>
 <li>Augeas: <code>stdlib.enable_augeas</code></li>
+<li>Consul: <code>stdlib.enable_consul</code></li>
 <li>Keepalived: <code>stdlib.enable_keepalived</code></li>
 <li>MySQL: <code>stdlib.enable_mysql</code></li>
 <li>Nginx: <code>stdlib.enable_nginx</code></li>
 <li>RabbitMQ: <code>stdlib.enable_rabbitmq</code></li>
 </ul>
 <h2 id="anatomy-of-a-resource">Anatomy of a Resource</h2>
-<p>All resources share much of the same code. In the future, resources may be refactored to account for a lot of this shared code.</p>
 <h3 id="header">Header</h3>
-<p>Each resource has a detailed comment header. This header describes what the resource does, what parameters it takes, how to use it, and any comments.</p>
+<p>Each resource has a detailed comment header. This header describes what the resource does, what parameters it takes, how to use it, and any comments. The comment header is very important as this is where the resource documentation is generated from.</p>
 <h3 id="function-resourcename">function resource.name</h3>
 <p>The next part of a resource is the first "function". This first function is named after the resource name. So any time you use a resource, you're actually just calling a Bash function.</p>
 <p>The first thing done inside this function is to call a "subtitle" with <code>stdlib.subtitle</code>. Subtitles serve two purposes:</p>
@@ -854,9 +869,19 @@
 <li>They reset an internal flag for changes made in the resource. This flag is called <code>stdlib_resource_change</code>. See the "State Changes" section for more details.</li>
 </ol>
 <p>Next, an <code>options</code> variable is declared. It is important that this variable is declared in each resource. If not, then the resource will share variables with the last called resource. After the <code>options</code> variable is declared, any parameters for the resource are declared. Finally, variables are checked via <code>stdlib.options.parse_options</code>. All logic related to <code>options</code> can be found in <code>$WAFFLES_DIR/lib/options.sh</code>.</p>
-<p>After options, a catalog entry is made.</p>
+<p>After options, any local variables are defined.</p>
 <p>Next, any optional custom logic is defined. This usually includes local variables just for the resource or ensuring that correctly formatted parameters were given.</p>
-<p>The last section of this function determines the state of the resource by calling <code>function.name.read</code> and comparing it against the declared state of the resource. For example, if the state of the resource is "absent" but it should be "present", or if the resource is "present" but it should be "absent".</p>
+<p>Next, <code>stdlib.resource.process</code> is called.</p>
+<h3 id="function-stdlibresourceprocess">function stdlib.resource.process</h3>
+<p>This is a centralized function that was introduced to help reduce repeated code in all resources. It does the following:</p>
+<ul>
+<li>A catalog entry is made.</li>
+<li><code>stdlib.resource.read</code> is called, which in turn calls <code>calling_resource.read</code>.</li>
+<li>A comparison is made of the resource state versus the state that the resource should be in.</li>
+<li>Depending on the results of the above, <code>stdlib.resource.x</code> is called, which in turn calls <code>calling_resource.x</code>.</li>
+</ul>
+<p>Each of the <code>stdlib.resource.x</code> functions do a few other things like determine if a resource change was made and how many changes were made throughout the entire run. In the future, these functions may also generate summary reports of the run.</p>
+<h3 id="function-resourcenamex">function resource.name.x</h3>
 <p>The rest of the resource is made up of four standard functions:</p>
 <ul>
 <li>function.name.read</li>
@@ -864,16 +889,8 @@
 <li>function.name.update</li>
 <li>function.name.delete</li>
 </ul>
-<p>Some resources contain extra functions, but they always tie back into those standard four. Sometimes <code>function.name.update</code> doesn't exist, and the call in the <code>stdlib_current_state</code> case statement just points to <code>fuction.name.create</code>. Or it's possible to combine a <code>function.name.delete</code> with <code>function.name.create</code> for an update.</p>
-<p>So in summary, the skeleton of a function is really just:</p>
-<ul>
-<li>function.name</li>
-<li>function.name.read</li>
-<li>function.name.create</li>
-<li>function.name.update (optional)</li>
-<li>function.name.delete</li>
-</ul>
-<p>If you create a resource that conforms to those five functions, it'll work just fine in Waffles.</p>
+<p>Some resources contain extra functions, but they always tie back into those standard four. Sometimes <code>function.name.update</code> just calls <code>delete</code> and <code>create</code>.</p>
+<p>If you create a resource that conforms to those four functions, it'll work just fine in Waffles.</p>
 <h3 id="function-resourcenameread">function resource.name.read</h3>
 <p>The <code>read</code> function determines the current state of the resource. For example, <code>stdlib.apt.read</code> determines if the package is installed, and if so, what version is installed.</p>
 <h3 id="function-resourcenamecreate">function resource.name.create</h3>
@@ -894,7 +911,7 @@ fi
 
 <p>Similar to <code>stdlib_resource_change</code> is <code>stdlib_state_change</code>. <code>stdlib_state_change</code> works in the exact same way, but it is reset when a call to <code>stdlib.title</code> is made. You usually use <code>stdlib.title</code> at the beginning of Profiles.</p>
 <h2 id="examples">Examples</h2>
-<p>Use the Standard Library, Augeas, MySQL, and RabbitMQ resources as examples of how resources are built.</p>
+<p>Use the Standard Library and Augeas resources as examples of how resources are built.</p>
               
             </div>
           </div>

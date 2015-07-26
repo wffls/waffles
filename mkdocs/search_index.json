@@ -326,6 +326,36 @@
             "title": "stdlib.options.parse_options"
         }, 
         {
+            "location": "/functions/resource/", 
+            "text": "lib/resource.sh\n contains functions that coordinate resource execution.\n\n\nstdlib.resource.process\n\n\nThis function does several things:\n\n\n\n\nCreates a catalog entry of the resource.\n\n\nCalls \nstdlib.resource.read\n, which in turn calls \ncalling_resource.read\n.\n\n\nCompares the resource state versus the state that the resource has been requested to be in.\n\n\nDepending on the results of the above, calls \nstdlib.resource.x\n, which in turn calls \ncalling_resource.x\n.\n\n\n\n\nThis function requires two arguments:\n\n\n\n\n$1\n: The resource type (\nstdlib.apt\n)\n\n\n$2\n: The resource name (\napache2\n)\n\n\n\n\nstdlib.resource.read\n\n\nCalls \nresource_type.read\n. May also perform pre and post actions.\n\n\nstdlib.resource.create\n\n\nCalls \nresource_type.create\n.\n\n\nAlso flags that a resource has changed and increments the amount of total changes made throughout the Waffles run.\n\n\nstdlib.resource.update\n\n\nCalls \nresource_type.update\n.\n\n\nAlso flags that a resource has changed and increments the amount of total changes made throughout the Waffles run.\n\n\nstdlib.resource.delete\n\n\nCalls \nresource_type.delete\n.\n\n\nAlso flags that a resource has changed and increments the amount of total changes made throughout the Waffles run.", 
+            "title": "resource"
+        }, 
+        {
+            "location": "/functions/resource/#stdlibresourceprocess", 
+            "text": "This function does several things:   Creates a catalog entry of the resource.  Calls  stdlib.resource.read , which in turn calls  calling_resource.read .  Compares the resource state versus the state that the resource has been requested to be in.  Depending on the results of the above, calls  stdlib.resource.x , which in turn calls  calling_resource.x .   This function requires two arguments:   $1 : The resource type ( stdlib.apt )  $2 : The resource name ( apache2 )", 
+            "title": "stdlib.resource.process"
+        }, 
+        {
+            "location": "/functions/resource/#stdlibresourceread", 
+            "text": "Calls  resource_type.read . May also perform pre and post actions.", 
+            "title": "stdlib.resource.read"
+        }, 
+        {
+            "location": "/functions/resource/#stdlibresourcecreate", 
+            "text": "Calls  resource_type.create .  Also flags that a resource has changed and increments the amount of total changes made throughout the Waffles run.", 
+            "title": "stdlib.resource.create"
+        }, 
+        {
+            "location": "/functions/resource/#stdlibresourceupdate", 
+            "text": "Calls  resource_type.update .  Also flags that a resource has changed and increments the amount of total changes made throughout the Waffles run.", 
+            "title": "stdlib.resource.update"
+        }, 
+        {
+            "location": "/functions/resource/#stdlibresourcedelete", 
+            "text": "Calls  resource_type.delete .  Also flags that a resource has changed and increments the amount of total changes made throughout the Waffles run.", 
+            "title": "stdlib.resource.delete"
+        }, 
+        {
             "location": "/functions/augeas/", 
             "text": "lib/augeas/augeas.sh\n contains helper functions for the Augeas resources. These are all used internally in the Augeas resources and you shouldn't need to use them anywhere else.\n\n\naugeas.run\n\n\nRuns a series of Augeas commands on a file.\n\n\naugeas.get\n\n\nChecks the state of an Augeas-based resource.", 
             "title": "augeas"
@@ -343,7 +373,7 @@
         {
             "location": "/functions/consul/", 
             "text": "lib/consul/consul.sh\n contains helper functions for the Consul resources\n\n\nconsul.get_nodes\n\n\nReturns a list of nodes. Results are stored in \n$consul_nodes\n hash.\n\n\nOption \n--service\n: Optional. Limits results to a set of services.\n\n\nconsul.get_nodes --service consul\n\nconsul_nodes[consul-01]=\n192.168.1.1\n\nconsul_nodes[consul-02]=\n192.168.1.2\n\nconsul_nodes[consul-03]=\n192.168.1.3\n\nconsul_nodes[consul-01|port]=\n8300\n\nconsul_nodes[consul-02|port]=\n8300\n\nconsul_nodes[consul-03|port]=\n8300\n\n\n\n\n\nconsul.get_services\n\n\nReturns a list of services in the Consul catalog. Results are stored in \n$consul_services array\n.\n\n\nconsul.get_services\n\nconsul_services=(consul mysql)\n\n\n\n\nconsul.get_kv\n\n\nRetrieves the value of a key.\n\n\nconsul.get_kv --key foobar\n=\n barfoo\n\n\n\n\nconsul.set_kv\n\n\nSets a value for a key.\n\n\nconsul.set_kv --key foobar --value barfoo\n\n\n\n\nconsul.delete_kv\n\n\nDeletes a key.\n\n\nconsul.delete_kv --key foobar", 
-            "title": "augeas"
+            "title": "consul"
         }, 
         {
             "location": "/functions/consul/#consulget_nodes", 
@@ -384,6 +414,41 @@
             "location": "/functions/mysql/#mysqlmycnf", 
             "text": "A function that generates a  .my.cnf  file.  mysql.mycnf --filename  /root/.my.cnf  --user root --password password  This isn't a first-class resource because it simply builds on other resources.", 
             "title": "mysql.mycnf"
+        }, 
+        {
+            "location": "/functions/rabbitmq/", 
+            "text": "lib/rabbitmq/rabbitmq.sh\n contains helper functions for the RabbitMQ resources. You should not need to use these functions directly.\n\n\nrabbitmq.generic_value_create\n\n\nCreates a \"generic\" RabbitMQ config file setting.\n\n\nrabbitmq.generic_value_read\n\n\nReads a \"generic\" RabbitMQ config file setting.\n\n\nrabbitmq.generic_value_delete\n\n\nDeletes a \"generic\" RabbitMQ config file setting.\n\n\nrabbitmq.list_value_create\n\n\nCreates a RabbitMQ config file setting of type \"list\".\n\n\nrabbitmq.list_value_read\n\n\nReads a RabbitMQ config file setting of type \"list\".\n\n\nrabbitmq.list_value_delete\n\n\nDeletes a RabbitMQ config file setting of type \"list\".", 
+            "title": "rabbitmq"
+        }, 
+        {
+            "location": "/functions/rabbitmq/#rabbitmqgeneric_value_create", 
+            "text": "Creates a \"generic\" RabbitMQ config file setting.", 
+            "title": "rabbitmq.generic_value_create"
+        }, 
+        {
+            "location": "/functions/rabbitmq/#rabbitmqgeneric_value_read", 
+            "text": "Reads a \"generic\" RabbitMQ config file setting.", 
+            "title": "rabbitmq.generic_value_read"
+        }, 
+        {
+            "location": "/functions/rabbitmq/#rabbitmqgeneric_value_delete", 
+            "text": "Deletes a \"generic\" RabbitMQ config file setting.", 
+            "title": "rabbitmq.generic_value_delete"
+        }, 
+        {
+            "location": "/functions/rabbitmq/#rabbitmqlist_value_create", 
+            "text": "Creates a RabbitMQ config file setting of type \"list\".", 
+            "title": "rabbitmq.list_value_create"
+        }, 
+        {
+            "location": "/functions/rabbitmq/#rabbitmqlist_value_read", 
+            "text": "Reads a RabbitMQ config file setting of type \"list\".", 
+            "title": "rabbitmq.list_value_read"
+        }, 
+        {
+            "location": "/functions/rabbitmq/#rabbitmqlist_value_delete", 
+            "text": "Deletes a RabbitMQ config file setting of type \"list\".", 
+            "title": "rabbitmq.list_value_delete"
         }, 
         {
             "location": "/guides/environment-vars/", 
@@ -622,7 +687,7 @@
         }, 
         {
             "location": "/resources/", 
-            "text": "Waffles Resources\n\n\nThis document will cover how resources are used in Waffles.\n\n\nLocation\n\n\nAll resources are stored in the \n$WAFFLES_DIR/lib\n directory:\n\n\n\n\nThe Standard Library of resources is located in \n$WAFFLES_DIR/lib/resources\n.\n\n\nApache-based resources are located in \n$WAFFLES_DIR/lib/apache\n.\n\n\nAugeas-based resources are located in \n$WAFFLES_DIR/lib/augeas\n.\n\n\nKeepalived-based resources are located in \n$WAFFLES_DIR/lib/keepalived\n.\n\n\nMySQL-based resources are located in \n$WAFFLES_DIR/lib/mysql\n.\n\n\nNginx-based resources are located in \n$WAFFLES_DIR/lib/nginx\n.\n\n\nRabbitMQ-based resources are located in \n$WAFFLES_DIR/lib/rabbitmq\n.\n\n\n\n\nEnabling Non-Standard Resources\n\n\nBy default, only the Standard Library is enabled in Waffles. To enable the other resources, use the following functions:\n\n\n\n\nApache: \nstdlib.enable_apache\n\n\nAugeas: \nstdlib.enable_augeas\n\n\nKeepalived: \nstdlib.enable_keepalived\n\n\nMySQL: \nstdlib.enable_mysql\n\n\nNginx: \nstdlib.enable_nginx\n\n\nRabbitMQ: \nstdlib.enable_rabbitmq\n\n\n\n\nAnatomy of a Resource\n\n\nAll resources share much of the same code. In the future, resources may be refactored to account for a lot of this shared code.\n\n\nHeader\n\n\nEach resource has a detailed comment header. This header describes what the resource does, what parameters it takes, how to use it, and any comments.\n\n\nfunction resource.name\n\n\nThe next part of a resource is the first \"function\". This first function is named after the resource name. So any time you use a resource, you're actually just calling a Bash function.\n\n\nThe first thing done inside this function is to call a \"subtitle\" with \nstdlib.subtitle\n. Subtitles serve two purposes:\n\n\n\n\nThey set the name to be printed when running Waffles.\n\n\nThey reset an internal flag for changes made in the resource. This flag is called \nstdlib_resource_change\n. See the \"State Changes\" section for more details.\n\n\n\n\nNext, an \noptions\n variable is declared. It is important that this variable is declared in each resource. If not, then the resource will share variables with the last called resource. After the \noptions\n variable is declared, any parameters for the resource are declared. Finally, variables are checked via \nstdlib.options.parse_options\n. All logic related to \noptions\n can be found in \n$WAFFLES_DIR/lib/options.sh\n.\n\n\nAfter options, a catalog entry is made.\n\n\nNext, any optional custom logic is defined. This usually includes local variables just for the resource or ensuring that correctly formatted parameters were given.\n\n\nThe last section of this function determines the state of the resource by calling \nfunction.name.read\n and comparing it against the declared state of the resource. For example, if the state of the resource is \"absent\" but it should be \"present\", or if the resource is \"present\" but it should be \"absent\".\n\n\nThe rest of the resource is made up of four standard functions:\n\n\n\n\nfunction.name.read\n\n\nfunction.name.create\n\n\nfunction.name.update\n\n\nfunction.name.delete\n\n\n\n\nSome resources contain extra functions, but they always tie back into those standard four. Sometimes \nfunction.name.update\n doesn't exist, and the call in the \nstdlib_current_state\n case statement just points to \nfuction.name.create\n. Or it's possible to combine a \nfunction.name.delete\n with \nfunction.name.create\n for an update.\n\n\nSo in summary, the skeleton of a function is really just:\n\n\n\n\nfunction.name\n\n\nfunction.name.read\n\n\nfunction.name.create\n\n\nfunction.name.update (optional)\n\n\nfunction.name.delete\n\n\n\n\nIf you create a resource that conforms to those five functions, it'll work just fine in Waffles.\n\n\nfunction resource.name.read\n\n\nThe \nread\n function determines the current state of the resource. For example, \nstdlib.apt.read\n determines if the package is installed, and if so, what version is installed.\n\n\nfunction resource.name.create\n\n\nThe \ncreate\n function does whatever is required to create the the resource. For example, \nstdlib.apt.create\n installs a package via \napt\n and \nstdlib.file_line.create\n adds a line to a given file either by \necho\n or \nsed\n.\n\n\nIt's important to try to stick with a core philosophy of Waffles: use standard nix utilities for the creation of resources.\n\n\nfunction resource.name.update\n\n\nIf the work required to update a resource is different than creating a resource, use the \nupdate\n function. However, if it's easier to simply delete the resource and recreate it, then do that instead of an update function. Just don't use that method as an excuse.\n\n\nfunction resource.name.delete\n\n\nThis function deletes the resource. For example, \nstdlib.apt.delete\n will actually remove the package.\n\n\nState Changes\n\n\nAfter you call a resource, you can check the status of the \nstdlib_resource_change\n flag. If it is true, then a change happened when you called the resource. For example:\n\n\nstdlib.apt --package sl --version latest\n\nif [[ $stdlib_resource_change == \ntrue\n ]]; then\n  stdlib.info \nPackage sl was installed or upgraded.\n\nfi\n\n\n\n\nSimilar to \nstdlib_resource_change\n is \nstdlib_state_change\n. \nstdlib_state_change\n works in the exact same way, but it is reset when a call to \nstdlib.title\n is made. You usually use \nstdlib.title\n at the beginning of Profiles.\n\n\nExamples\n\n\nUse the Standard Library, Augeas, MySQL, and RabbitMQ resources as examples of how resources are built.", 
+            "text": "Waffles Resources\n\n\nThis document will cover how resources are used in Waffles.\n\n\nLocation\n\n\nAll resources are stored in the \n$WAFFLES_DIR/lib\n directory:\n\n\n\n\nThe Standard Library of resources is located in \n$WAFFLES_DIR/lib/resources\n.\n\n\nApache-based resources are located in \n$WAFFLES_DIR/lib/apache\n.\n\n\nAugeas-based resources are located in \n$WAFFLES_DIR/lib/augeas\n.\n\n\nConsul-based resources are located in \n$WAFFLES_DIR/lib/consul\n.\n\n\nKeepalived-based resources are located in \n$WAFFLES_DIR/lib/keepalived\n.\n\n\nMySQL-based resources are located in \n$WAFFLES_DIR/lib/mysql\n.\n\n\nNginx-based resources are located in \n$WAFFLES_DIR/lib/nginx\n.\n\n\nRabbitMQ-based resources are located in \n$WAFFLES_DIR/lib/rabbitmq\n.\n\n\n\n\nEnabling Non-Standard Resources\n\n\nBy default, only the Standard Library is enabled in Waffles. To enable the other resources, use the following functions:\n\n\n\n\nApache: \nstdlib.enable_apache\n\n\nAugeas: \nstdlib.enable_augeas\n\n\nConsul: \nstdlib.enable_consul\n\n\nKeepalived: \nstdlib.enable_keepalived\n\n\nMySQL: \nstdlib.enable_mysql\n\n\nNginx: \nstdlib.enable_nginx\n\n\nRabbitMQ: \nstdlib.enable_rabbitmq\n\n\n\n\nAnatomy of a Resource\n\n\nHeader\n\n\nEach resource has a detailed comment header. This header describes what the resource does, what parameters it takes, how to use it, and any comments. The comment header is very important as this is where the resource documentation is generated from.\n\n\nfunction resource.name\n\n\nThe next part of a resource is the first \"function\". This first function is named after the resource name. So any time you use a resource, you're actually just calling a Bash function.\n\n\nThe first thing done inside this function is to call a \"subtitle\" with \nstdlib.subtitle\n. Subtitles serve two purposes:\n\n\n\n\nThey set the name to be printed when running Waffles.\n\n\nThey reset an internal flag for changes made in the resource. This flag is called \nstdlib_resource_change\n. See the \"State Changes\" section for more details.\n\n\n\n\nNext, an \noptions\n variable is declared. It is important that this variable is declared in each resource. If not, then the resource will share variables with the last called resource. After the \noptions\n variable is declared, any parameters for the resource are declared. Finally, variables are checked via \nstdlib.options.parse_options\n. All logic related to \noptions\n can be found in \n$WAFFLES_DIR/lib/options.sh\n.\n\n\nAfter options, any local variables are defined.\n\n\nNext, any optional custom logic is defined. This usually includes local variables just for the resource or ensuring that correctly formatted parameters were given.\n\n\nNext, \nstdlib.resource.process\n is called.\n\n\nfunction stdlib.resource.process\n\n\nThis is a centralized function that was introduced to help reduce repeated code in all resources. It does the following:\n\n\n\n\nA catalog entry is made.\n\n\nstdlib.resource.read\n is called, which in turn calls \ncalling_resource.read\n.\n\n\nA comparison is made of the resource state versus the state that the resource should be in.\n\n\nDepending on the results of the above, \nstdlib.resource.x\n is called, which in turn calls \ncalling_resource.x\n.\n\n\n\n\nEach of the \nstdlib.resource.x\n functions do a few other things like determine if a resource change was made and how many changes were made throughout the entire run. In the future, these functions may also generate summary reports of the run.\n\n\nfunction resource.name.x\n\n\nThe rest of the resource is made up of four standard functions:\n\n\n\n\nfunction.name.read\n\n\nfunction.name.create\n\n\nfunction.name.update\n\n\nfunction.name.delete\n\n\n\n\nSome resources contain extra functions, but they always tie back into those standard four. Sometimes \nfunction.name.update\n just calls \ndelete\n and \ncreate\n.\n\n\nIf you create a resource that conforms to those four functions, it'll work just fine in Waffles.\n\n\nfunction resource.name.read\n\n\nThe \nread\n function determines the current state of the resource. For example, \nstdlib.apt.read\n determines if the package is installed, and if so, what version is installed.\n\n\nfunction resource.name.create\n\n\nThe \ncreate\n function does whatever is required to create the the resource. For example, \nstdlib.apt.create\n installs a package via \napt\n and \nstdlib.file_line.create\n adds a line to a given file either by \necho\n or \nsed\n.\n\n\nIt's important to try to stick with a core philosophy of Waffles: use standard nix utilities for the creation of resources.\n\n\nfunction resource.name.update\n\n\nIf the work required to update a resource is different than creating a resource, use the \nupdate\n function. However, if it's easier to simply delete the resource and recreate it, then do that instead of an update function. Just don't use that method as an excuse.\n\n\nfunction resource.name.delete\n\n\nThis function deletes the resource. For example, \nstdlib.apt.delete\n will actually remove the package.\n\n\nState Changes\n\n\nAfter you call a resource, you can check the status of the \nstdlib_resource_change\n flag. If it is true, then a change happened when you called the resource. For example:\n\n\nstdlib.apt --package sl --version latest\n\nif [[ $stdlib_resource_change == \ntrue\n ]]; then\n  stdlib.info \nPackage sl was installed or upgraded.\n\nfi\n\n\n\n\nSimilar to \nstdlib_resource_change\n is \nstdlib_state_change\n. \nstdlib_state_change\n works in the exact same way, but it is reset when a call to \nstdlib.title\n is made. You usually use \nstdlib.title\n at the beginning of Profiles.\n\n\nExamples\n\n\nUse the Standard Library and Augeas resources as examples of how resources are built.", 
             "title": "Internals"
         }, 
         {
@@ -632,17 +697,17 @@
         }, 
         {
             "location": "/resources/#location", 
-            "text": "All resources are stored in the  $WAFFLES_DIR/lib  directory:   The Standard Library of resources is located in  $WAFFLES_DIR/lib/resources .  Apache-based resources are located in  $WAFFLES_DIR/lib/apache .  Augeas-based resources are located in  $WAFFLES_DIR/lib/augeas .  Keepalived-based resources are located in  $WAFFLES_DIR/lib/keepalived .  MySQL-based resources are located in  $WAFFLES_DIR/lib/mysql .  Nginx-based resources are located in  $WAFFLES_DIR/lib/nginx .  RabbitMQ-based resources are located in  $WAFFLES_DIR/lib/rabbitmq .", 
+            "text": "All resources are stored in the  $WAFFLES_DIR/lib  directory:   The Standard Library of resources is located in  $WAFFLES_DIR/lib/resources .  Apache-based resources are located in  $WAFFLES_DIR/lib/apache .  Augeas-based resources are located in  $WAFFLES_DIR/lib/augeas .  Consul-based resources are located in  $WAFFLES_DIR/lib/consul .  Keepalived-based resources are located in  $WAFFLES_DIR/lib/keepalived .  MySQL-based resources are located in  $WAFFLES_DIR/lib/mysql .  Nginx-based resources are located in  $WAFFLES_DIR/lib/nginx .  RabbitMQ-based resources are located in  $WAFFLES_DIR/lib/rabbitmq .", 
             "title": "Location"
         }, 
         {
             "location": "/resources/#enabling-non-standard-resources", 
-            "text": "By default, only the Standard Library is enabled in Waffles. To enable the other resources, use the following functions:   Apache:  stdlib.enable_apache  Augeas:  stdlib.enable_augeas  Keepalived:  stdlib.enable_keepalived  MySQL:  stdlib.enable_mysql  Nginx:  stdlib.enable_nginx  RabbitMQ:  stdlib.enable_rabbitmq", 
+            "text": "By default, only the Standard Library is enabled in Waffles. To enable the other resources, use the following functions:   Apache:  stdlib.enable_apache  Augeas:  stdlib.enable_augeas  Consul:  stdlib.enable_consul  Keepalived:  stdlib.enable_keepalived  MySQL:  stdlib.enable_mysql  Nginx:  stdlib.enable_nginx  RabbitMQ:  stdlib.enable_rabbitmq", 
             "title": "Enabling Non-Standard Resources"
         }, 
         {
             "location": "/resources/#anatomy-of-a-resource", 
-            "text": "All resources share much of the same code. In the future, resources may be refactored to account for a lot of this shared code.  Header  Each resource has a detailed comment header. This header describes what the resource does, what parameters it takes, how to use it, and any comments.  function resource.name  The next part of a resource is the first \"function\". This first function is named after the resource name. So any time you use a resource, you're actually just calling a Bash function.  The first thing done inside this function is to call a \"subtitle\" with  stdlib.subtitle . Subtitles serve two purposes:   They set the name to be printed when running Waffles.  They reset an internal flag for changes made in the resource. This flag is called  stdlib_resource_change . See the \"State Changes\" section for more details.   Next, an  options  variable is declared. It is important that this variable is declared in each resource. If not, then the resource will share variables with the last called resource. After the  options  variable is declared, any parameters for the resource are declared. Finally, variables are checked via  stdlib.options.parse_options . All logic related to  options  can be found in  $WAFFLES_DIR/lib/options.sh .  After options, a catalog entry is made.  Next, any optional custom logic is defined. This usually includes local variables just for the resource or ensuring that correctly formatted parameters were given.  The last section of this function determines the state of the resource by calling  function.name.read  and comparing it against the declared state of the resource. For example, if the state of the resource is \"absent\" but it should be \"present\", or if the resource is \"present\" but it should be \"absent\".  The rest of the resource is made up of four standard functions:   function.name.read  function.name.create  function.name.update  function.name.delete   Some resources contain extra functions, but they always tie back into those standard four. Sometimes  function.name.update  doesn't exist, and the call in the  stdlib_current_state  case statement just points to  fuction.name.create . Or it's possible to combine a  function.name.delete  with  function.name.create  for an update.  So in summary, the skeleton of a function is really just:   function.name  function.name.read  function.name.create  function.name.update (optional)  function.name.delete   If you create a resource that conforms to those five functions, it'll work just fine in Waffles.  function resource.name.read  The  read  function determines the current state of the resource. For example,  stdlib.apt.read  determines if the package is installed, and if so, what version is installed.  function resource.name.create  The  create  function does whatever is required to create the the resource. For example,  stdlib.apt.create  installs a package via  apt  and  stdlib.file_line.create  adds a line to a given file either by  echo  or  sed .  It's important to try to stick with a core philosophy of Waffles: use standard nix utilities for the creation of resources.  function resource.name.update  If the work required to update a resource is different than creating a resource, use the  update  function. However, if it's easier to simply delete the resource and recreate it, then do that instead of an update function. Just don't use that method as an excuse.  function resource.name.delete  This function deletes the resource. For example,  stdlib.apt.delete  will actually remove the package.", 
+            "text": "Header  Each resource has a detailed comment header. This header describes what the resource does, what parameters it takes, how to use it, and any comments. The comment header is very important as this is where the resource documentation is generated from.  function resource.name  The next part of a resource is the first \"function\". This first function is named after the resource name. So any time you use a resource, you're actually just calling a Bash function.  The first thing done inside this function is to call a \"subtitle\" with  stdlib.subtitle . Subtitles serve two purposes:   They set the name to be printed when running Waffles.  They reset an internal flag for changes made in the resource. This flag is called  stdlib_resource_change . See the \"State Changes\" section for more details.   Next, an  options  variable is declared. It is important that this variable is declared in each resource. If not, then the resource will share variables with the last called resource. After the  options  variable is declared, any parameters for the resource are declared. Finally, variables are checked via  stdlib.options.parse_options . All logic related to  options  can be found in  $WAFFLES_DIR/lib/options.sh .  After options, any local variables are defined.  Next, any optional custom logic is defined. This usually includes local variables just for the resource or ensuring that correctly formatted parameters were given.  Next,  stdlib.resource.process  is called.  function stdlib.resource.process  This is a centralized function that was introduced to help reduce repeated code in all resources. It does the following:   A catalog entry is made.  stdlib.resource.read  is called, which in turn calls  calling_resource.read .  A comparison is made of the resource state versus the state that the resource should be in.  Depending on the results of the above,  stdlib.resource.x  is called, which in turn calls  calling_resource.x .   Each of the  stdlib.resource.x  functions do a few other things like determine if a resource change was made and how many changes were made throughout the entire run. In the future, these functions may also generate summary reports of the run.  function resource.name.x  The rest of the resource is made up of four standard functions:   function.name.read  function.name.create  function.name.update  function.name.delete   Some resources contain extra functions, but they always tie back into those standard four. Sometimes  function.name.update  just calls  delete  and  create .  If you create a resource that conforms to those four functions, it'll work just fine in Waffles.  function resource.name.read  The  read  function determines the current state of the resource. For example,  stdlib.apt.read  determines if the package is installed, and if so, what version is installed.  function resource.name.create  The  create  function does whatever is required to create the the resource. For example,  stdlib.apt.create  installs a package via  apt  and  stdlib.file_line.create  adds a line to a given file either by  echo  or  sed .  It's important to try to stick with a core philosophy of Waffles: use standard nix utilities for the creation of resources.  function resource.name.update  If the work required to update a resource is different than creating a resource, use the  update  function. However, if it's easier to simply delete the resource and recreate it, then do that instead of an update function. Just don't use that method as an excuse.  function resource.name.delete  This function deletes the resource. For example,  stdlib.apt.delete  will actually remove the package.", 
             "title": "Anatomy of a Resource"
         }, 
         {
@@ -652,12 +717,12 @@
         }, 
         {
             "location": "/resources/#examples", 
-            "text": "Use the Standard Library, Augeas, MySQL, and RabbitMQ resources as examples of how resources are built.", 
+            "text": "Use the Standard Library and Augeas resources as examples of how resources are built.", 
             "title": "Examples"
         }, 
         {
             "location": "/resources/stdlib.apt_key/", 
-            "text": "stdlib.apt_key\n\n\nDescription\n\n\nManages apt keys\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: An arbitrary name. Required. namevar.\n\n\nkey: The key to import. Required if no remote_keyfile.\n\n\nkeyserver: The key server. Required if no remote_keyfile.\n\n\nremote_keyfile: A remote key to import. Required if no key or keyserver.\n\n\n\n\nExample\n\n\nstdlib.apt_key --key 1C4CBDCDCD2EFD2A", 
+            "text": "stdlib.apt_key\n\n\nDescription\n\n\nManages apt keys\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: An arbitrary name. Required. namevar.\n\n\nkey: The key to import. Required if no remote_keyfile.\n\n\nkeyserver: The key server. Required if no remote_keyfile.\n\n\nremote_keyfile: A remote key to import. Required if no key or keyserver.\n\n\n\n\nExample\n\n\nstdlib.apt_key --name \nfoobar\n --key 1C4CBDCDCD2EFD2A", 
             "title": "stdlib.apt_key"
         }, 
         {
@@ -677,7 +742,7 @@
         }, 
         {
             "location": "/resources/stdlib.apt_key/#example", 
-            "text": "stdlib.apt_key --key 1C4CBDCDCD2EFD2A", 
+            "text": "stdlib.apt_key --name  foobar  --key 1C4CBDCDCD2EFD2A", 
             "title": "Example"
         }, 
         {
@@ -812,7 +877,7 @@
         }, 
         {
             "location": "/resources/stdlib.directory/", 
-            "text": "stdlib.directory\n\n\nDescription\n\n\nManages directories\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nowner: The owner of the directory. Default: root.\n\n\ngroup: The group of the directory. Default: root.\n\n\nmode: The perms/mode of the directory. Default: 750.\n\n\nname: The destination directory. Required. namevar.\n\n\nsource: Optional source directory to copy.\n\n\nrecurse: Whether to apply all settings recursively. Optional.\n\n\nparent: Whether to make the parent directories. Optional.\n\n\n\n\nExample\n\n\nstdlib.directory --source modules/mymod/files/foo --name /var/lib/foo", 
+            "text": "stdlib.directory\n\n\nDescription\n\n\nManages directories\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nowner: The owner of the directory. Default: root.\n\n\ngroup: The group of the directory. Default: root.\n\n\nmode: The perms/mode of the directory. Default: 750.\n\n\nname: The destination directory. Required. namevar.\n\n\nsource: Optional source directory to copy.\n\n\nrecurse: Whether to apply all settings recursively. Optional.\n\n\nparent: Whether to make the parent directories. Optional.\n\n\n\n\nExample\n\n\nstdlib.directory --source $WAFFLES_SITE_DIR/profiles/foo/files/mydir --name /var/lib/mydir", 
             "title": "stdlib.directory"
         }, 
         {
@@ -832,7 +897,7 @@
         }, 
         {
             "location": "/resources/stdlib.directory/#example", 
-            "text": "stdlib.directory --source modules/mymod/files/foo --name /var/lib/foo", 
+            "text": "stdlib.directory --source $WAFFLES_SITE_DIR/profiles/foo/files/mydir --name /var/lib/mydir", 
             "title": "Example"
         }, 
         {
@@ -887,7 +952,7 @@
         }, 
         {
             "location": "/resources/stdlib.git/", 
-            "text": "stdlib.git\n\n\nDescription\n\n\nManage a git repository\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The name (path) of the git repo destination. Required.\n\n\nsource: The URI of the source git repo. Required.\n\n\nbranch: The branch to checkout. Optional. Default: master.\n\n\ntag: The tag to checkout. Optional.\n\n\ncommit: the commit to checkout. Optional.\n\n\nowner: The owner of the repo. Default: root.\n\n\ngroup: The group owner of the repo. Default: root.\n\n\n\n\nExample\n\n\ngit --state latest --name /root/.dotfiles --source https://github.com/jtopjian/dotfiles\n\n\n\n\nNotes\n\n\nIf state is set to \"latest\", Waffles will do a \ngit pull\n if it's able to.\n\n\nThe order of checkout preferences is:\n\n\n\n\ncommit\n\n\ntag\n\n\nbranch", 
+            "text": "stdlib.git\n\n\nDescription\n\n\nManage a git repository\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The name (path) of the git repo destination. Required.\n\n\nsource: The URI of the source git repo. Required.\n\n\nbranch: The branch to checkout. Optional. Default: master.\n\n\ntag: The tag to checkout. Optional.\n\n\ncommit: the commit to checkout. Optional.\n\n\nowner: The owner of the repo. Default: root.\n\n\ngroup: The group owner of the repo. Default: root.\n\n\n\n\nExample\n\n\ngit --state latest --name /root/.dotfiles --source https://github.com/jtopjian/dotfiles\n\n\n\n\nNotes\n\n\nIf state is set to \"latest\", Waffles will do a \ngit pull\n, if it's able to.\n\n\nThe order of checkout preferences is:\n\n\n\n\ncommit\n\n\ntag\n\n\nbranch", 
             "title": "stdlib.git"
         }, 
         {
@@ -912,7 +977,7 @@
         }, 
         {
             "location": "/resources/stdlib.git/#notes", 
-            "text": "If state is set to \"latest\", Waffles will do a  git pull  if it's able to.  The order of checkout preferences is:   commit  tag  branch", 
+            "text": "If state is set to \"latest\", Waffles will do a  git pull , if it's able to.  The order of checkout preferences is:   commit  tag  branch", 
             "title": "Notes"
         }, 
         {
@@ -1097,7 +1162,7 @@
         }, 
         {
             "location": "/resources/apache.section/", 
-            "text": "apache.section\n\n\nDescription\n\n\nManages an apache section.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\ntype: The type of the section Required. namevar.\n\n\nname: The name of the section Required. namevar.\n\n\npath: The path leading up to the type. Optional. Multi. namevar.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/apache2/apache2.conf. namevar.\n\n\n\n\nExample\n\n\napache.section --type Directory --name /\napache.section --path \nVirtualHost=*:80\n --type Directory --name /", 
+            "text": "apache.section\n\n\nDescription\n\n\nManages an apache section.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\ntype: The type of the section Required. namevar.\n\n\nname: The name of the section Required. namevar.\n\n\npath: The path leading up to the type. Optional. Multi. namevar.\n\n\nfile: The file to store the settings in. Optional. Defaults to /etc/apache2/apache2.conf. namevar.\n\n\n\n\nExample\n\n\napache.section --path \nVirtualHost=*:80\n --type Directory --name / \\\n               --file /etc/apache2/sites-enabled/000-default.conf", 
             "title": "apache.section"
         }, 
         {
@@ -1117,7 +1182,7 @@
         }, 
         {
             "location": "/resources/apache.section/#example", 
-            "text": "apache.section --type Directory --name /\napache.section --path  VirtualHost=*:80  --type Directory --name /", 
+            "text": "apache.section --path  VirtualHost=*:80  --type Directory --name / \\\n               --file /etc/apache2/sites-enabled/000-default.conf", 
             "title": "Example"
         }, 
         {
@@ -1147,7 +1212,7 @@
         }, 
         {
             "location": "/resources/augeas.aptconf/", 
-            "text": "augeas.aptconf\n\n\nDescription\n\n\nManages apt.conf settings\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nsetting: The setting Required. namevar.\n\n\nvalue: A value for the setting Required.\n\n\nfile: The file to add the variable to. Required. namevar.\n\n\n\n\nExample\n\n\naugeas.aptconf --setting APT::Periodic::Update-Package-Lists --value 1 --file /etc/apt/apt.conf/20auto-upgrades\naugeas.aptconf --setting APT::Periodic::Unattended-Upgrade --value 1 --file /etc/apt/apt.conf/20auto-upgrades", 
+            "text": "augeas.aptconf\n\n\nDescription\n\n\nManages apt.conf settings\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nsetting: The setting Required. namevar.\n\n\nvalue: A value for the setting Required.\n\n\nfile: The file to add the variable to. Required. namevar.\n\n\n\n\nExample\n\n\naugeas.aptconf --setting APT::Periodic::Update-Package-Lists --value 1 --file /etc/apt/apt.conf.d/20auto-upgrades\naugeas.aptconf --setting APT::Periodic::Unattended-Upgrade --value 1 --file /etc/apt/apt.conf.d/20auto-upgrades", 
             "title": "augeas.aptconf"
         }, 
         {
@@ -1167,7 +1232,7 @@
         }, 
         {
             "location": "/resources/augeas.aptconf/#example", 
-            "text": "augeas.aptconf --setting APT::Periodic::Update-Package-Lists --value 1 --file /etc/apt/apt.conf/20auto-upgrades\naugeas.aptconf --setting APT::Periodic::Unattended-Upgrade --value 1 --file /etc/apt/apt.conf/20auto-upgrades", 
+            "text": "augeas.aptconf --setting APT::Periodic::Update-Package-Lists --value 1 --file /etc/apt/apt.conf.d/20auto-upgrades\naugeas.aptconf --setting APT::Periodic::Unattended-Upgrade --value 1 --file /etc/apt/apt.conf.d/20auto-upgrades", 
             "title": "Example"
         }, 
         {
@@ -1197,7 +1262,7 @@
         }, 
         {
             "location": "/resources/augeas.file_line/", 
-            "text": "augeas.file_line\n\n\nDescription\n\n\nManages single lines in a file\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: An arbitrary name for the line. Required. namevar.\n\n\nline: The line to manage in the file. Required.\n\n\nfile: The file to add the line. Required. namevar.\n\n\n\n\nExample\n\n\naugeas.file_line --file /root/foo.txt --line \nHello, World!", 
+            "text": "augeas.file_line\n\n\nDescription\n\n\nManages single lines in a file\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: An arbitrary name for the line. Required. namevar.\n\n\nline: The line to manage in the file. Required.\n\n\nfile: The file to add the line. Required. namevar.\n\n\n\n\nExample\n\n\naugeas.file_line --name foo --file /root/foo.txt --line \nHello, World!", 
             "title": "augeas.file_line"
         }, 
         {
@@ -1217,7 +1282,7 @@
         }, 
         {
             "location": "/resources/augeas.file_line/#example", 
-            "text": "augeas.file_line --file /root/foo.txt --line  Hello, World!", 
+            "text": "augeas.file_line --name foo --file /root/foo.txt --line  Hello, World!", 
             "title": "Example"
         }, 
         {
@@ -1247,7 +1312,7 @@
         }, 
         {
             "location": "/resources/augeas.ini/", 
-            "text": "augeas.ini\n\n\nDescription\n\n\nManages ini file entries\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nsection: The section in the ini file. Required. namevar.\n\n\noption: The option in the ini file. Required. namevar.\n\n\nvalue: The value of the option. Required.\n\n\nfile: The file to add the variable to. Required. namevar.\n\n\n\n\nExample\n\n\naugeas.ini --key foo --value bar --file /root/vars", 
+            "text": "augeas.ini\n\n\nDescription\n\n\nManages ini file entries\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nsection: The section in the ini file. Required. namevar.\n\n\noption: The option in the ini file. Required. namevar.\n\n\nvalue: The value of the option. Required.\n\n\nfile: The file to add the variable to. Required. namevar.\n\n\n\n\nExample\n\n\naugeas.ini --section DEFAULT --option foo --value bar --file /root/vars", 
             "title": "augeas.ini"
         }, 
         {
@@ -1267,7 +1332,7 @@
         }, 
         {
             "location": "/resources/augeas.ini/#example", 
-            "text": "augeas.ini --key foo --value bar --file /root/vars", 
+            "text": "augeas.ini --section DEFAULT --option foo --value bar --file /root/vars", 
             "title": "Example"
         }, 
         {
@@ -1372,7 +1437,7 @@
         }, 
         {
             "location": "/resources/augeas.ssh_authorized_key/", 
-            "text": "augeas.ssh_authorized_key\n\n\nDescription\n\n\nManages ssh_authorized_keys\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The ssh_authorized_key. Required. namevar.\n\n\nkey: The ssh key. Required.\n\n\ntype: The key type. Required.\n\n\noptions: A CSV list of ssh_authorized_key options. Optional\n\n\nfile: The ssh_authorized_keys file. Required.\n\n\n\n\nExample\n\n\naugeas.ssh_authorized_key --name jdoe --key \nAAAAB3NzaC1...\n --type ssh-rsa --comment \njdoe@laptop\n\n\n\n\n\nNotes\n\n\nTODO: \noptions\n have not been tested.", 
+            "text": "augeas.ssh_authorized_key\n\n\nDescription\n\n\nManages ssh_authorized_keys\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The ssh_authorized_key. Required. namevar.\n\n\nkey: The ssh key. Required.\n\n\ntype: The key type. Required.\n\n\noptions: A CSV list of ssh_authorized_key options. Optional\n\n\nfile: The ssh_authorized_keys file. Required.\n\n\n\n\nExample\n\n\naugeas.ssh_authorized_key --name jdoe --key \nAAAAB3NzaC1...\n --type ssh-rsa --comment \njdoe@laptop\n --file \n/root/.ssh/authorized_keys\n\n\n\n\n\nNotes\n\n\nTODO: \noptions\n have not been tested.", 
             "title": "augeas.ssh_authorized_key"
         }, 
         {
@@ -1392,7 +1457,7 @@
         }, 
         {
             "location": "/resources/augeas.ssh_authorized_key/#example", 
-            "text": "augeas.ssh_authorized_key --name jdoe --key  AAAAB3NzaC1...  --type ssh-rsa --comment  jdoe@laptop", 
+            "text": "augeas.ssh_authorized_key --name jdoe --key  AAAAB3NzaC1...  --type ssh-rsa --comment  jdoe@laptop  --file  /root/.ssh/authorized_keys", 
             "title": "Example"
         }, 
         {

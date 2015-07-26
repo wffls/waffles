@@ -143,6 +143,13 @@
         
             
     <li class="toctree-l1 ">
+        <a class="" href="../../functions/resource/">resource</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
         <a class="" href="../../functions/augeas/">augeas</a>
         
     </li>
@@ -150,7 +157,7 @@
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../functions/consul/">augeas</a>
+        <a class="" href="../../functions/consul/">consul</a>
         
     </li>
 
@@ -158,6 +165,13 @@
             
     <li class="toctree-l1 ">
         <a class="" href="../../functions/mysql/">mysql</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../functions/rabbitmq/">rabbitmq</a>
         
     </li>
 
@@ -830,7 +844,7 @@
 <li>file: The ssh_authorized_keys file. Required.</li>
 </ul>
 <h2 id="example">Example</h2>
-<pre><code class="shell">augeas.ssh_authorized_key --name jdoe --key &quot;AAAAB3NzaC1...&quot; --type ssh-rsa --comment &quot;jdoe@laptop&quot;
+<pre><code class="shell">augeas.ssh_authorized_key --name jdoe --key &quot;AAAAB3NzaC1...&quot; --type ssh-rsa --comment &quot;jdoe@laptop&quot; --file &quot;/root/.ssh/authorized_keys&quot;
 </code></pre>
 
 <h2 id="notes">Notes</h2>

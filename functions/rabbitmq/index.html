@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>rabbitmq.heartbeat - Waffles</title>
+  <title>rabbitmq - Waffles</title>
   
 
   <link rel="shortcut icon" href="../../img/favicon.ico">
@@ -20,7 +20,7 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "rabbitmq.heartbeat";
+    var mkdocs_page_name = "rabbitmq";
   </script>
   
   <script src="../../js/jquery-2.1.1.min.js"></script>
@@ -115,63 +115,85 @@
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../functions/types/">Types</a>
+        <a class="" href="../types/">Types</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../functions/system/">system</a>
+        <a class="" href="../system/">system</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../functions/catalog/">catalog</a>
+        <a class="" href="../catalog/">catalog</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../functions/options/">options</a>
+        <a class="" href="../options/">options</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../functions/resource/">resource</a>
+        <a class="" href="../resource/">resource</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../functions/augeas/">augeas</a>
+        <a class="" href="../augeas/">augeas</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../functions/consul/">consul</a>
+        <a class="" href="../consul/">consul</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../functions/mysql/">mysql</a>
+        <a class="" href="../mysql/">mysql</a>
         
     </li>
 
         
             
-    <li class="toctree-l1 ">
-        <a class="" href="../../functions/rabbitmq/">rabbitmq</a>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">rabbitmq</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#rabbitmqgeneric_value_create">rabbitmq.generic_value_create</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#rabbitmqgeneric_value_read">rabbitmq.generic_value_read</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#rabbitmqgeneric_value_delete">rabbitmq.generic_value_delete</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#rabbitmqlist_value_create">rabbitmq.list_value_create</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#rabbitmqlist_value_read">rabbitmq.list_value_read</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#rabbitmqlist_value_delete">rabbitmq.list_value_delete</a></li>
+                
+            
+            </ul>
         
     </li>
 
@@ -257,531 +279,518 @@
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../">Internals</a>
+        <a class="" href="../../resources/">Internals</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.apt_key/">stdlib.apt_key</a>
+        <a class="" href="../../resources/stdlib.apt_key/">stdlib.apt_key</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.apt_ppa/">stdlib.apt_ppa</a>
+        <a class="" href="../../resources/stdlib.apt_ppa/">stdlib.apt_ppa</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.apt/">stdlib.apt</a>
+        <a class="" href="../../resources/stdlib.apt/">stdlib.apt</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.apt_source/">stdlib.apt_source</a>
+        <a class="" href="../../resources/stdlib.apt_source/">stdlib.apt_source</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.cron/">stdlib.cron</a>
+        <a class="" href="../../resources/stdlib.cron/">stdlib.cron</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.debconf/">stdlib.debconf</a>
+        <a class="" href="../../resources/stdlib.debconf/">stdlib.debconf</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.directory/">stdlib.directory</a>
+        <a class="" href="../../resources/stdlib.directory/">stdlib.directory</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.file_line/">stdlib.file_line</a>
+        <a class="" href="../../resources/stdlib.file_line/">stdlib.file_line</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.file/">stdlib.file</a>
+        <a class="" href="../../resources/stdlib.file/">stdlib.file</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.git/">stdlib.git</a>
+        <a class="" href="../../resources/stdlib.git/">stdlib.git</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.groupadd/">stdlib.groupadd</a>
+        <a class="" href="../../resources/stdlib.groupadd/">stdlib.groupadd</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.ini/">stdlib.ini</a>
+        <a class="" href="../../resources/stdlib.ini/">stdlib.ini</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.ip6tables_rule/">stdlib.ip6tables_rule</a>
+        <a class="" href="../../resources/stdlib.ip6tables_rule/">stdlib.ip6tables_rule</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.iptables_rule/">stdlib.iptables_rule</a>
+        <a class="" href="../../resources/stdlib.iptables_rule/">stdlib.iptables_rule</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.sysvinit/">stdlib.sysvinit</a>
+        <a class="" href="../../resources/stdlib.sysvinit/">stdlib.sysvinit</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.upstart/">stdlib.upstart</a>
+        <a class="" href="../../resources/stdlib.upstart/">stdlib.upstart</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.useradd/">stdlib.useradd</a>
+        <a class="" href="../../resources/stdlib.useradd/">stdlib.useradd</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../apache.section/">apache.section</a>
+        <a class="" href="../../resources/apache.section/">apache.section</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../apache.setting/">apache.setting</a>
+        <a class="" href="../../resources/apache.setting/">apache.setting</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../augeas.aptconf/">augeas.aptconf</a>
+        <a class="" href="../../resources/augeas.aptconf/">augeas.aptconf</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../augeas.cron/">augeas.cron</a>
+        <a class="" href="../../resources/augeas.cron/">augeas.cron</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../augeas.file_line/">augeas.file_line</a>
+        <a class="" href="../../resources/augeas.file_line/">augeas.file_line</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../augeas.host/">augeas.host</a>
+        <a class="" href="../../resources/augeas.host/">augeas.host</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../augeas.ini/">augeas.ini</a>
+        <a class="" href="../../resources/augeas.ini/">augeas.ini</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../augeas.json_array/">augeas.json_array</a>
+        <a class="" href="../../resources/augeas.json_array/">augeas.json_array</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../augeas.json_dict/">augeas.json_dict</a>
+        <a class="" href="../../resources/augeas.json_dict/">augeas.json_dict</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../augeas.mail_alias/">augeas.mail_alias</a>
+        <a class="" href="../../resources/augeas.mail_alias/">augeas.mail_alias</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../augeas.shellvar/">augeas.shellvar</a>
+        <a class="" href="../../resources/augeas.shellvar/">augeas.shellvar</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../augeas.ssh_authorized_key/">augeas.ssh_authorized_key</a>
+        <a class="" href="../../resources/augeas.ssh_authorized_key/">augeas.ssh_authorized_key</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../consul.check/">consul.check</a>
+        <a class="" href="../../resources/consul.check/">consul.check</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../consul.service/">consul.service</a>
+        <a class="" href="../../resources/consul.service/">consul.service</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../keepalived.global_defs/">keepalived.global_defs</a>
+        <a class="" href="../../resources/keepalived.global_defs/">keepalived.global_defs</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../keepalived.vrrp_instance/">keepalived.vrrp_instance</a>
+        <a class="" href="../../resources/keepalived.vrrp_instance/">keepalived.vrrp_instance</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../keepalived.vrrp_script/">keepalived.vrrp_script</a>
+        <a class="" href="../../resources/keepalived.vrrp_script/">keepalived.vrrp_script</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../keepalived.vrrp_sync_group/">keepalived.vrrp_sync_group</a>
+        <a class="" href="../../resources/keepalived.vrrp_sync_group/">keepalived.vrrp_sync_group</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../mysql.database/">mysql.database</a>
+        <a class="" href="../../resources/mysql.database/">mysql.database</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../mysql.grant/">mysql.grant</a>
+        <a class="" href="../../resources/mysql.grant/">mysql.grant</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../mysql.user/">mysql.user</a>
+        <a class="" href="../../resources/mysql.user/">mysql.user</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../nginx.events/">nginx.events</a>
+        <a class="" href="../../resources/nginx.events/">nginx.events</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../nginx.global/">nginx.global</a>
+        <a class="" href="../../resources/nginx.global/">nginx.global</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../nginx.http/">nginx.http</a>
+        <a class="" href="../../resources/nginx.http/">nginx.http</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../nginx.if/">nginx.if</a>
+        <a class="" href="../../resources/nginx.if/">nginx.if</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../nginx.location/">nginx.location</a>
+        <a class="" href="../../resources/nginx.location/">nginx.location</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../nginx.map/">nginx.map</a>
+        <a class="" href="../../resources/nginx.map/">nginx.map</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../nginx.server/">nginx.server</a>
+        <a class="" href="../../resources/nginx.server/">nginx.server</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../nginx.upstream/">nginx.upstream</a>
+        <a class="" href="../../resources/nginx.upstream/">nginx.upstream</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.auth_backend/">rabbitmq.auth_backend</a>
+        <a class="" href="../../resources/rabbitmq.auth_backend/">rabbitmq.auth_backend</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.auth_mechanism/">rabbitmq.auth_mechanism</a>
+        <a class="" href="../../resources/rabbitmq.auth_mechanism/">rabbitmq.auth_mechanism</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.backing_queue_module/">rabbitmq.backing_queue_module</a>
+        <a class="" href="../../resources/rabbitmq.backing_queue_module/">rabbitmq.backing_queue_module</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.cluster_nodes/">rabbitmq.cluster_nodes</a>
+        <a class="" href="../../resources/rabbitmq.cluster_nodes/">rabbitmq.cluster_nodes</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.collect_statistics_interval/">rabbitmq.collect_statistics_interval</a>
+        <a class="" href="../../resources/rabbitmq.collect_statistics_interval/">rabbitmq.collect_statistics_interval</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.collect_statistics/">rabbitmq.collect_statistics</a>
+        <a class="" href="../../resources/rabbitmq.collect_statistics/">rabbitmq.collect_statistics</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.default_permissions/">rabbitmq.default_permissions</a>
+        <a class="" href="../../resources/rabbitmq.default_permissions/">rabbitmq.default_permissions</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.default_user/">rabbitmq.default_user</a>
+        <a class="" href="../../resources/rabbitmq.default_user/">rabbitmq.default_user</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.default_user_tags/">rabbitmq.default_user_tags</a>
+        <a class="" href="../../resources/rabbitmq.default_user_tags/">rabbitmq.default_user_tags</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.default_vhost/">rabbitmq.default_vhost</a>
+        <a class="" href="../../resources/rabbitmq.default_vhost/">rabbitmq.default_vhost</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.delegate_count/">rabbitmq.delegate_count</a>
+        <a class="" href="../../resources/rabbitmq.delegate_count/">rabbitmq.delegate_count</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.disk_free_limit/">rabbitmq.disk_free_limit</a>
+        <a class="" href="../../resources/rabbitmq.disk_free_limit/">rabbitmq.disk_free_limit</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.frame_max/">rabbitmq.frame_max</a>
+        <a class="" href="../../resources/rabbitmq.frame_max/">rabbitmq.frame_max</a>
         
     </li>
 
         
             
-    <li class="toctree-l1 current">
-        <a class="current" href="./">rabbitmq.heartbeat</a>
-        
-            <ul>
-            
-                <li class="toctree-l3"><a href="#rabbitmqheartbeat">rabbitmq.heartbeat</a></li>
-                
-                    <li><a class="toctree-l4" href="#description">Description</a></li>
-                
-                    <li><a class="toctree-l4" href="#parameters">Parameters</a></li>
-                
-                    <li><a class="toctree-l4" href="#example">Example</a></li>
-                
-            
-            </ul>
+    <li class="toctree-l1 ">
+        <a class="" href="../../resources/rabbitmq.heartbeat/">rabbitmq.heartbeat</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.hipe_compile/">rabbitmq.hipe_compile</a>
+        <a class="" href="../../resources/rabbitmq.hipe_compile/">rabbitmq.hipe_compile</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.log_levels/">rabbitmq.log_levels</a>
+        <a class="" href="../../resources/rabbitmq.log_levels/">rabbitmq.log_levels</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.msg_store_file_size_limit/">rabbitmq.msg_store_file_size_limit</a>
+        <a class="" href="../../resources/rabbitmq.msg_store_file_size_limit/">rabbitmq.msg_store_file_size_limit</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.msg_store_index_module/">rabbitmq.msg_store_index_module</a>
+        <a class="" href="../../resources/rabbitmq.msg_store_index_module/">rabbitmq.msg_store_index_module</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.policy/">rabbitmq.policy</a>
+        <a class="" href="../../resources/rabbitmq.policy/">rabbitmq.policy</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.queue_index_max_journal_entries/">rabbitmq.queue_index_max_journal_entries</a>
+        <a class="" href="../../resources/rabbitmq.queue_index_max_journal_entries/">rabbitmq.queue_index_max_journal_entries</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.ssl_listeners/">rabbitmq.ssl_listeners</a>
+        <a class="" href="../../resources/rabbitmq.ssl_listeners/">rabbitmq.ssl_listeners</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.ssl_options/">rabbitmq.ssl_options</a>
+        <a class="" href="../../resources/rabbitmq.ssl_options/">rabbitmq.ssl_options</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.tcp_listeners/">rabbitmq.tcp_listeners</a>
+        <a class="" href="../../resources/rabbitmq.tcp_listeners/">rabbitmq.tcp_listeners</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.user_permissions/">rabbitmq.user_permissions</a>
+        <a class="" href="../../resources/rabbitmq.user_permissions/">rabbitmq.user_permissions</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.user/">rabbitmq.user</a>
+        <a class="" href="../../resources/rabbitmq.user/">rabbitmq.user</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.vhost/">rabbitmq.vhost</a>
+        <a class="" href="../../resources/rabbitmq.vhost/">rabbitmq.vhost</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.vm_memory_high_watermark/">rabbitmq.vm_memory_high_watermark</a>
+        <a class="" href="../../resources/rabbitmq.vm_memory_high_watermark/">rabbitmq.vm_memory_high_watermark</a>
         
     </li>
 
@@ -811,11 +820,11 @@
     
       
         
-          <li>Resources &raquo;</li>
+          <li>Functions &raquo;</li>
         
       
     
-    <li>rabbitmq.heartbeat</li>
+    <li>rabbitmq</li>
     <li class="wy-breadcrumbs-aside">
       
         
@@ -829,18 +838,19 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="rabbitmqheartbeat">rabbitmq.heartbeat</h1>
-<h2 id="description">Description</h2>
-<p>Manages heartbeat settings in a rabbitmq.config file.</p>
-<h2 id="parameters">Parameters</h2>
-<ul>
-<li>state: The state of the resource. Required. Default: present.</li>
-<li>value: The default value. Required. namevar.</li>
-<li>file: The file to store the settings in. Optional. Defaults to /etc/rabbitmq/rabbitmq.config.</li>
-</ul>
-<h2 id="example">Example</h2>
-<pre><code class="shell">rabbitmq.heartbeat --value /
-</code></pre>
+                <p><code>lib/rabbitmq/rabbitmq.sh</code> contains helper functions for the RabbitMQ resources. You should not need to use these functions directly.</p>
+<h2 id="rabbitmqgeneric_value_create">rabbitmq.generic_value_create</h2>
+<p>Creates a "generic" RabbitMQ config file setting.</p>
+<h2 id="rabbitmqgeneric_value_read">rabbitmq.generic_value_read</h2>
+<p>Reads a "generic" RabbitMQ config file setting.</p>
+<h2 id="rabbitmqgeneric_value_delete">rabbitmq.generic_value_delete</h2>
+<p>Deletes a "generic" RabbitMQ config file setting.</p>
+<h2 id="rabbitmqlist_value_create">rabbitmq.list_value_create</h2>
+<p>Creates a RabbitMQ config file setting of type "list".</p>
+<h2 id="rabbitmqlist_value_read">rabbitmq.list_value_read</h2>
+<p>Reads a RabbitMQ config file setting of type "list".</p>
+<h2 id="rabbitmqlist_value_delete">rabbitmq.list_value_delete</h2>
+<p>Deletes a RabbitMQ config file setting of type "list".</p>
               
             </div>
           </div>
@@ -848,10 +858,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../rabbitmq.hipe_compile/" class="btn btn-neutral float-right" title="rabbitmq.hipe_compile"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../../guides/environment-vars/" class="btn btn-neutral float-right" title="Environment Variables"/>Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../rabbitmq.frame_max/" class="btn btn-neutral" title="rabbitmq.frame_max"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../mysql/" class="btn btn-neutral" title="mysql"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -879,10 +889,10 @@
           <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../rabbitmq.frame_max/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../mysql/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../rabbitmq.hipe_compile/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../../guides/environment-vars/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
