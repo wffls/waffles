@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.16.0 - July 25, 2015
+
+* New resource: Initial Consul resources.
+* Major resource refactor.
+* Conditional quoting style changes.
+* Test Kitchen additions and fixes.
+* Reset subtitle on title change.
+
 ## 0.15.0 - July 20, 2015
 
 * New function: `stdlib.array_contains`.
