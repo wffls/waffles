@@ -23,7 +23,7 @@ git --state latest --name /root/.dotfiles --source https://github.com/jtopjian/d
 
 ## Notes
 
-If state is set to "latest", Waffles will do a `git pull` if it's able to.
+If state is set to "latest", Waffles will do a `git pull`, if it's able to.
 
 The order of checkout preferences is:
 

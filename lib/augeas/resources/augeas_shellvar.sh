@@ -31,6 +31,7 @@ function augeas.shellvar {
     fi
   fi
 
+  # Resource Options
   local -A options
   stdlib.options.create_option state "present"
   stdlib.options.create_option key   "__required__"
@@ -38,31 +39,11 @@ function augeas.shellvar {
   stdlib.options.create_option file  "__required__"
   stdlib.options.parse_options "$@"
 
+  # Local Variables
   local _name="${options[file]}.${options[key]}"
-  stdlib.catalog.add "augeas.shellvar/$_name"
 
-  augeas.shellvar.read
-  if [[ "${options[state]}" == "absent" ]]; then
-    if [[ "$stdlib_current_state" != "absent" ]]; then
-      stdlib.info "$_name state: $stdlib_current_state, should be absent."
-      augeas.shellvar.delete
-    fi
-  else
-    case "$stdlib_current_state" in
-      absent)
-        stdlib.info "$_name state: absent, should be present."
-        augeas.shellvar.create
-        ;;
-      present)
-        stdlib.debug "$_name state: present."
-        ;;
-      update)
-        stdlib.info "$_name state: present, needs updated."
-        augeas.shellvar.delete
-        augeas.shellvar.create
-        ;;
-    esac
-  fi
+  # Process the resource
+  stdlib.resource.process "augeas.shellvar" "$_name"
 }
 
 function augeas.shellvar.read {
@@ -70,13 +51,13 @@ function augeas.shellvar.read {
 
   # Check if the key exists
   stdlib_current_state=$(augeas.get --lens Shellvars --file "${options[file]}" --path "/${options[key]}")
-  if [[ "$stdlib_current_state" == "absent" ]]; then
+  if [[ $stdlib_current_state == "absent" ]]; then
     return
   fi
 
   # Check if the value matches
   _result=$(augeas.get --lens Shellvars --file "${options[file]}" --path "/${options[key]}[. = '${options[value]}']")
-  if [[ "$_result" == "absent" ]]; then
+  if [[ $_result == "absent" ]]; then
     stdlib_current_state="update"
   fi
 }
@@ -87,10 +68,15 @@ function augeas.shellvar.create {
 
   local _result=$(augeas.run --lens Shellvars --file "${options[file]}" "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error adding shellvar $_name with augeas: $_result"
     return
   fi
+}
+
+function augeas.shellvar.update {
+  augeas.shellvar.delete
+  augeas.shellvar.create
 }
 
 function augeas.shellvar.delete {
@@ -98,7 +84,7 @@ function augeas.shellvar.delete {
   _augeas_commands+=("rm /files${options[file]}/${options[key]}")
   local _result=$(augeas.run --lens Shellvars --file ${options[file]} "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error deleting shellvar $_name with augeas: $_result"
     return
   fi

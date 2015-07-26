@@ -10,13 +10,13 @@ function rabbitmq.generic_value_read {
   local _state
 
   _state=$(augeas.get --lens Rabbitmq --file "$_file" --path "/rabbit/${_key}")
-  if [[ "$_state" == "absent" ]]; then
+  if [[ $_state == "absent" ]]; then
     stdlib_current_state="absent"
     return
   fi
 
   _state=$(augeas.get --lens Rabbitmq --file "$_file" --path "/rabbit/${_key}[. = '${_value}']")
-  if [[ "$_state" == "absent" ]]; then
+  if [[ $_state == "absent" ]]; then
     stdlib_current_state="update"
     return
   fi
@@ -36,7 +36,7 @@ function rabbitmq.list_value_read {
   local _state
 
   _state=$(augeas.get --lens Rabbitmq --file "$_file" --path "/rabbit/${_key}")
-  if [[ "$_state" == "absent" ]]; then
+  if [[ $_state == "absent" ]]; then
     stdlib_current_state="absent"
     return
   fi

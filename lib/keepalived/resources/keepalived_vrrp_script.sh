@@ -36,6 +36,7 @@ function keepalived.vrrp_script {
     fi
   fi
 
+  # Resource Options
   local -A options
   local -a group
   stdlib.options.create_option state    "present"
@@ -48,57 +49,34 @@ function keepalived.vrrp_script {
   stdlib.options.create_option raise
   stdlib.options.parse_options "$@"
 
+  # Local Variables
   local _name="${options[name]}"
-  stdlib.catalog.add "keepalived.vrrp_script/${options[name]}"
-
   local _dir=$(dirname "${options[file]}")
   local _file="${options[file]}"
+  local -a simple_options=("script" "interval" "weight" "raise" "fall")
   local -A options_to_update
 
-  # a list of "simple" key/value options
-  local -a simple_options=("script" "interval" "weight" "raise" "fall")
-
-  keepalived.vrrp_script.read
-  if [[ "${options[state]}" == "absent" ]]; then
-    if [[ "$stdlib_current_state" != "absent" ]]; then
-      stdlib.info "$_name state: $stdlib_current_state, should be absent."
-      keepalived.vrrp_script.delete
-    fi
-  else
-    case "$stdlib_current_state" in
-      absent)
-        stdlib.info "$_name state: absent, should be present."
-        keepalived.vrrp_script.create
-        ;;
-      present)
-        stdlib.debug "$_name state: present."
-        ;;
-      update)
-        stdlib.info "$_name state: present, needs updated."
-        keepalived.vrrp_script.delete
-        keepalived.vrrp_script.create
-        ;;
-    esac
-  fi
+  # Process the resource
+  stdlib.resource.process "keepalived.vrrp_script" "$_name"
 }
 
 function keepalived.vrrp_script.read {
-  if [[ ! -f "$_file" ]]; then
+  if [[ ! -f $_file ]]; then
     stdlib_current_state="absent"
     return
   fi
 
   # Check if the vrrp_script exists
   stdlib_current_state=$(augeas.get --lens Keepalived --file "$_file" --path "/vrrp_script[. = '${options[name]}']")
-  if [[ "$stdlib_current_state" == "absent" ]]; then
+  if [[ $stdlib_current_state == "absent" ]]; then
     return
   fi
 
   # simple keys
   for o in "${simple_options[@]}"; do
-    if [[ -n "${options[$o]}" ]]; then
+    if [[ -n ${options[$o]} ]]; then
       _result=$(augeas.get --lens Keepalived --file "$_file" --path "/vrrp_script[. = '${options[name]}']/$o[. = '${options[$o]}']")
-      if [[ "$_result" == "absent" ]]; then
+      if [[ $_result == "absent" ]]; then
         options_to_update[$o]=1
         stdlib_current_state="update"
       fi
@@ -107,14 +85,14 @@ function keepalived.vrrp_script.read {
 
   # Set simple options
   for o in "${simple_options[@]}"; do
-    if [[ "${options_to_update[$o]+isset}" || "$stdlib_current_state" == "absent" ]]; then
-      if [[ -n "${options[$o]}" ]]; then
+    if [[ ${options_to_update[$o]+isset} || $stdlib_current_state == "absent" ]]; then
+      if [[ -n ${options[$o]} ]]; then
         _augeas_commands+=("set /files/${_file}/vrrp_script[. = '${options[name]}']/$o '${options[$o]}'")
       fi
     fi
   done
 
-  if [[ "$stdlib_current_state" == "update" ]]; then
+  if [[ $stdlib_current_state == "update" ]]; then
     return
   else
     stdlib_current_state="present"
@@ -125,32 +103,33 @@ function keepalived.vrrp_script.create {
   local _result
   local -a _augeas_commands=()
 
-  if [[ ! -d "$_dir" ]]; then
+  if [[ ! -d $_dir ]]; then
     stdlib.capture_error mkdir -p "$_dir"
   fi
 
   # Create the vrrp_script
-  if [[ "$stdlib_current_state" == "absent" ]]; then
+  if [[ $stdlib_current_state == "absent" ]]; then
     _augeas_commands+=("set /files/${_file}/vrrp_script[0] '${options[name]}'")
   fi
 
   # Create simple options
   for o in "${simple_options[@]}"; do
-    if [[ "${options_to_update[$o]+isset}" || "$stdlib_current_state" == "absent" ]]; then
-      if [[ -n "${options[$o]}" ]]; then
+    if [[ ${options_to_update[$o]+isset} || $stdlib_current_state == "absent" ]]; then
+      if [[ -n ${options[$o]} ]]; then
         _augeas_commands+=("set /files/${_file}/vrrp_script[. = '${options[name]}']/$o '${options[$o]}'")
       fi
     fi
   done
 
   _result=$(augeas.run --lens Keepalived --file "$_file" "${_augeas_commands[@]}")
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error adding $_name with augeas: $_result"
   fi
+}
 
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
+function keepalived.vrrp_script.update {
+  keepalived.vrrp_script.delete
+  keepalived.vrrp_script.create
 }
 
 function keepalived.vrrp_script.delete {
@@ -158,11 +137,7 @@ function keepalived.vrrp_script.delete {
   local -a _augeas_commands=()
 
   _result=$(augeas.run --lens Keepalived --file "$_file" "${_augeas_commands[@]}")
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error adding $_name with augeas: $_result"
   fi
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }

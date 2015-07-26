@@ -23,77 +23,62 @@ function rabbitmq.auth_backend {
 
   if ! stdlib.command_exists augtool ; then
     stdlib.error "Cannot find augtool."
-    if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
+    if [[ -n $WAFFLES_EXIT_ON_ERROR ]]; then
       exit 1
     else
       return 1
     fi
   fi
 
+  # Resource Options
   local -A options
   stdlib.options.create_option state   "present"
   stdlib.options.create_option backend "__required__"
   stdlib.options.create_option file    "/etc/rabbitmq/rabbitmq.config"
   stdlib.options.parse_options "$@"
 
+  # Local Variables
   local _name="${options[backend]}"
-  stdlib.catalog.add "rabbitmq.auth_backend/$_name"
-
   local _dir=$(dirname "${options[file]}")
   local _file="${options[file]}"
 
-  rabbitmq.auth_backend.read
-  if [[ "${options[state]}" == "absent" ]]; then
-    if [[ "$stdlib_current_state" != "absent" ]]; then
-      stdlib.info "$_name state: $stdlib_current_state, should be absent."
-      rabbitmq.auth_backend.delete
-    fi
-  else
-    case "$stdlib_current_state" in
-      absent)
-        stdlib.info "$_name state: absent, should be present."
-        rabbitmq.auth_backend.create
-        ;;
-      present)
-        stdlib.debug "$_name state: present."
-        ;;
-      update)
-        stdlib.info "$_name state: present, needs updated."
-        rabbitmq.auth_backend.delete
-        rabbitmq.auth_backend.create
-        ;;
-    esac
-  fi
+  # Process the resource
+  stdlib.resource.process "rabbitmq.auth_backend" "$_name"
 }
 
 function rabbitmq.auth_backend.read {
   local _result
 
-  if [[ ! -f "$_file" ]]; then
+  if [[ ! -f $_file ]]; then
     stdlib_current_state="absent"
     return
   fi
 
-  rabbitmq.list_value_read "$_file" "auth_backends" "${options[backend]}"
+  rabbitmq.list_value_read $_file "auth_backends" "${options[backend]}"
 }
 
 function rabbitmq.auth_backend.create {
-  if [[ ! -d "$_dir" ]]; then
-    stdlib.capture_error mkdir -p "$_dir"
+  if [[ ! -d $_dir ]]; then
+    stdlib.capture_error mkdir -p $_dir
   fi
 
-  rabbitmq.list_value_create "$_file" "auth_backends" "${options[backend]}"
+  rabbitmq.list_value_create $_file "auth_backends" "${options[backend]}"
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error adding $_name with augeas: $_result"
     return
   fi
 }
 
-function rabbitmq.auth_backend.delete {
-  rabbitmq.list_value_create "$_file" "auth_backends" "${options[backend]}"
+function rabbitmq.auth_backend.update {
+  rabbitmq.auth_backend.delete
+  rabbitmq.auth_backend.create
+}
 
-  if [[ "$_result" =~ ^error ]]; then
+function rabbitmq.auth_backend.delete {
+  rabbitmq.list_value_create $_file "auth_backends" "${options[backend]}"
+
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error deleting rabbitmq.auth_backend $_name with augeas: $_result"
     return
   fi

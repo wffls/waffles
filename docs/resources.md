@@ -9,6 +9,7 @@ All resources are stored in the `$WAFFLES_DIR/lib` directory:
 * The Standard Library of resources is located in `$WAFFLES_DIR/lib/resources`.
 * Apache-based resources are located in `$WAFFLES_DIR/lib/apache`.
 * Augeas-based resources are located in `$WAFFLES_DIR/lib/augeas`.
+* Consul-based resources are located in `$WAFFLES_DIR/lib/consul`.
 * Keepalived-based resources are located in `$WAFFLES_DIR/lib/keepalived`.
 * MySQL-based resources are located in `$WAFFLES_DIR/lib/mysql`.
 * Nginx-based resources are located in `$WAFFLES_DIR/lib/nginx`.
@@ -20,6 +21,7 @@ By default, only the Standard Library is enabled in Waffles. To enable the other
 
 * Apache: `stdlib.enable_apache`
 * Augeas: `stdlib.enable_augeas`
+* Consul: `stdlib.enable_consul`
 * Keepalived: `stdlib.enable_keepalived`
 * MySQL: `stdlib.enable_mysql`
 * Nginx: `stdlib.enable_nginx`
@@ -27,11 +29,9 @@ By default, only the Standard Library is enabled in Waffles. To enable the other
 
 ## Anatomy of a Resource
 
-All resources share much of the same code. In the future, resources may be refactored to account for a lot of this shared code.
-
 ### Header
 
-Each resource has a detailed comment header. This header describes what the resource does, what parameters it takes, how to use it, and any comments.
+Each resource has a detailed comment header. This header describes what the resource does, what parameters it takes, how to use it, and any comments. The comment header is very important as this is where the resource documentation is generated from.
 
 ### function resource.name
 
@@ -44,11 +44,24 @@ The first thing done inside this function is to call a "subtitle" with `stdlib.s
 
 Next, an `options` variable is declared. It is important that this variable is declared in each resource. If not, then the resource will share variables with the last called resource. After the `options` variable is declared, any parameters for the resource are declared. Finally, variables are checked via `stdlib.options.parse_options`. All logic related to `options` can be found in `$WAFFLES_DIR/lib/options.sh`.
 
-After options, a catalog entry is made.
+After options, any local variables are defined.
 
 Next, any optional custom logic is defined. This usually includes local variables just for the resource or ensuring that correctly formatted parameters were given.
 
-The last section of this function determines the state of the resource by calling `function.name.read` and comparing it against the declared state of the resource. For example, if the state of the resource is "absent" but it should be "present", or if the resource is "present" but it should be "absent".
+Next, `stdlib.resource.process` is called.
+
+### function stdlib.resource.process
+
+This is a centralized function that was introduced to help reduce repeated code in all resources. It does the following:
+
+* A catalog entry is made.
+* `stdlib.resource.read` is called, which in turn calls `calling_resource.read`.
+* A comparison is made of the resource state versus the state that the resource should be in.
+* Depending on the results of the above, `stdlib.resource.x` is called, which in turn calls `calling_resource.x`.
+
+Each of the `stdlib.resource.x` functions do a few other things like determine if a resource change was made and how many changes were made throughout the entire run. In the future, these functions may also generate summary reports of the run.
+
+### function resource.name.x
 
 The rest of the resource is made up of four standard functions:
 
@@ -57,17 +70,9 @@ The rest of the resource is made up of four standard functions:
 * function.name.update
 * function.name.delete
 
-Some resources contain extra functions, but they always tie back into those standard four. Sometimes `function.name.update` doesn't exist, and the call in the `stdlib_current_state` case statement just points to `fuction.name.create`. Or it's possible to combine a `function.name.delete` with `function.name.create` for an update.
+Some resources contain extra functions, but they always tie back into those standard four. Sometimes `function.name.update` just calls `delete` and `create`.
 
-So in summary, the skeleton of a function is really just:
-
-* function.name
-* function.name.read
-* function.name.create
-* function.name.update (optional)
-* function.name.delete
-
-If you create a resource that conforms to those five functions, it'll work just fine in Waffles.
+If you create a resource that conforms to those four functions, it'll work just fine in Waffles.
 
 ### function resource.name.read
 
@@ -103,4 +108,4 @@ Similar to `stdlib_resource_change` is `stdlib_state_change`. `stdlib_state_chan
 
 ## Examples
 
-Use the Standard Library, Augeas, MySQL, and RabbitMQ resources as examples of how resources are built.
+Use the Standard Library and Augeas resources as examples of how resources are built.

@@ -31,6 +31,7 @@ function augeas.mail_alias {
     fi
   fi
 
+  # Resource Options
   local -A options
   local -a destination
   stdlib.options.create_option    state       "present"
@@ -39,44 +40,21 @@ function augeas.mail_alias {
   stdlib.options.create_option    file        "/etc/aliases"
   stdlib.options.parse_options    "$@"
 
-  for d in "${destination[@]}"; do
-    stdlib.catalog.add "augeas.mail_alias/${options[account]}/${d}"
-  done
-
-  augeas.mail_alias.read
-  if [[ "${options[state]}" == "absent" ]]; then
-    if [[ "$stdlib_current_state" != "absent" ]]; then
-      stdlib.info "${options[account]} state: $stdlib_current_state, should be absent."
-      augeas.mail_alias.delete
-    fi
-  else
-    case "$stdlib_current_state" in
-      absent)
-        stdlib.info "${options[account]} state: absent, should be present."
-        augeas.mail_alias.create
-        ;;
-      present)
-        stdlib.debug "${options[account]} state: present."
-        ;;
-      update)
-        stdlib.info "${options[account]} state: present, needs updated."
-        augeas.mail_alias.update
-        ;;
-    esac
-  fi
+  # Process the resource
+  stdlib.resource.process "augeas.mail_alias" "${options[account]}"
 }
 
 function augeas.mail_alias.read {
   local _result
 
   stdlib_current_state=$(augeas.get --lens Aliases --file "${options[file]}" --path "*/name[. = '${options[account]}']")
-  if [[ "$stdlib_current_state" == "absent" ]]; then
+  if [[ $stdlib_current_state == "absent" ]]; then
     return
   fi
 
   for d in "${destination[@]}"; do
     _result=$(augeas.get --lens Aliases --file "${options[file]}" --path "*/name[. = '${options[account]}']/../value[. = '$d']")
-    if [[ "$_result" == "absent" ]]; then
+    if [[ $_result == "absent" ]]; then
       stdlib_current_state="update"
     fi
   done
@@ -92,7 +70,7 @@ function augeas.mail_alias.create {
 
   local _result=$(augeas.run --lens Aliases --file "${options[file]}" "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error creating mail alias with augeas: $_result"
     return
   fi
@@ -107,7 +85,7 @@ function augeas.mail_alias.update {
 
   local _result=$(augeas.run --lens Aliases --file "${options[file]}" "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error creating mail alias with augeas: $_result"
     return
   fi
@@ -121,7 +99,7 @@ function augeas.mail_alias.delete {
 
   local _result=$(augeas.run --lens Aliases --file ${options[file]} "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error deleting resource with augeas: $_result"
     return
   fi

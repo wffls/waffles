@@ -9,7 +9,7 @@ function consul.get_nodes {
   declare -Ag consul_nodes
   declare -g consul_error=""
 
-  if [[ "${options[service]}" == "all" ]]; then
+  if [[ ${options[service]} == "all" ]]; then
     if ! stdlib.command_exists curl ; then
       stdlib.error "Cannot find curl."
       if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
@@ -20,7 +20,7 @@ function consul.get_nodes {
     fi
 
     local _nodes=$(curl -s http://localhost:8500/v1/catalog/nodes)
-    if [[ "$_nodes" == "No known Consul servers" ]]; then
+    if [[ $_nodes == "No known Consul servers" ]]; then
       consul_error="true"
       return 1
     else
@@ -63,7 +63,7 @@ function consul.get_nodes {
 function consul.get_services {
   if ! stdlib.command_exists curl ; then
     stdlib.error "Cannot find curl."
-    if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
+    if [[ -n $WAFFLES_EXIT_ON_ERROR ]]; then
       exit 1
     else
       return 1
@@ -76,7 +76,7 @@ function consul.get_services {
 function consul.get_kv {
   if ! stdlib.command_exists curl ; then
     stdlib.error "Cannot find curl."
-    if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
+    if [[ -n $WAFFLES_EXIT_ON_ERROR ]]; then
       exit 1
     else
       return 1
@@ -108,7 +108,7 @@ function consul.get_kv {
 function consul.set_kv {
   if ! stdlib.command_exists curl ; then
     stdlib.error "Cannot find curl."
-    if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
+    if [[ -n $WAFFLES_EXIT_ON_ERROR ]]; then
       exit 1
     else
       return 1
@@ -124,14 +124,14 @@ function consul.set_kv {
   stdlib.options.parse_options "$@"
 
   local _flags
-  if [[ -n "${options[flags]}" ]]; then
+  if [[ -n ${options[flags]} ]]; then
     _flags="?flags=${options[flags]}"
   else
     _flags=""
   fi
 
   _result=$(curl -s -X PUT -d "${options[value]}" ${options[server]}${options[path]}/${options[key]}${_flags})
-  if [[ "$_result" != "true" ]]; then
+  if [[ $_result != "true" ]]; then
     stdlib.error "Error adding key: ${_result}"
     return 1
   fi
@@ -140,7 +140,7 @@ function consul.set_kv {
 function consul.delete_kv {
   if ! stdlib.command_exists curl ; then
     stdlib.error "Cannot find curl."
-    if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
+    if [[ -n $WAFFLES_EXIT_ON_ERROR ]]; then
       exit 1
     else
       return 1

@@ -14,6 +14,6 @@ Manages single lines in a file
 ## Example
 
 ```shell
-augeas.file_line --file /root/foo.txt --line "Hello, World!"
+augeas.file_line --name foo --file /root/foo.txt --line "Hello, World!"
 ```
 

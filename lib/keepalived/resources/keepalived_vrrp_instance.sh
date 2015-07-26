@@ -52,6 +52,7 @@ function keepalived.vrrp_instance {
     fi
   fi
 
+  # Resource Options
   local -A options
   local -a virtual_ipaddress
   local -a unicast_peer
@@ -77,68 +78,42 @@ function keepalived.vrrp_instance {
   stdlib.options.create_mv_option unicast_peer
   stdlib.options.parse_options    "$@"
 
+  # Local Variables
+  local _name="${options[name]}"
+  local _dir=$(dirname "${options[file]}")
+  local _file="${options[file]}"
+  local -A options_to_update
+  local -a simple_options=("interface" "virtual_router_id" "priority" "advert_int" "unicast_src_ip" "notify_master" "notify_backup" "notify_fault" "notify")
+  local -a auth_keys=("auth_type" "auth_pass")
+  local -a boolean_options=("smtp_alert" "native_ipv6" "debug")
+
+  # Internal Resource Configuration
   # If auth_type is set, make sure auth_pass is set
-  if [[ -n "${options[auth_type]}" && -z "${options[auth_pass]}" ]]; then
+  if [[ -n ${options[auth_type]} && -z ${options[auth_pass]} ]]; then
     stdlib.error "Both auth_type and auth_pass must be set."
     return
   fi
 
-  local _name="${options[name]}"
-  stdlib.catalog.add "keepalived.vrrp_instance/${options[name]}"
-
-  local _dir=$(dirname "${options[file]}")
-  local _file="${options[file]}"
-  local -A options_to_update
-
-  # a list of "simple" key/value options
-  local -a simple_options=("interface" "virtual_router_id" "priority" "advert_int" "unicast_src_ip" "notify_master" "notify_backup" "notify_fault" "notify")
-
-  # auth-related keys
-  local -a auth_keys=("auth_type" "auth_pass")
-
-  # boolean options
-  local -a boolean_options=("smtp_alert" "native_ipv6" "debug")
-
-  keepalived.vrrp_instance.read
-  if [[ "${options[state]}" == "absent" ]]; then
-    if [[ "$stdlib_current_state" != "absent" ]]; then
-      stdlib.info "$_name state: $stdlib_current_state, should be absent."
-      keepalived.vrrp_instance.delete
-    fi
-  else
-    case "$stdlib_current_state" in
-      absent)
-        stdlib.info "$_name state: absent, should be present."
-        keepalived.vrrp_instance.create
-        ;;
-      present)
-        stdlib.debug "$_name state: present."
-        ;;
-      update)
-        stdlib.info "$_name state: present, needs updated."
-        keepalived.vrrp_instance.delete
-        keepalived.vrrp_instance.create
-        ;;
-    esac
-  fi
+  # Process the resource
+  stdlib.resource.process "keepalived.vrrp_instance" "$_name"
 }
 
 function keepalived.vrrp_instance.read {
-  if [[ ! -f "$_file" ]]; then
+  if [[ ! -f $_file ]]; then
     stdlib_current_state="absent"
     return
   fi
 
   # Check if the vrrp_instance exists
   stdlib_current_state=$(augeas.get --lens Keepalived --file "$_file" --path "/vrrp_instance[. = '${options[name]}']")
-  if [[ "$stdlib_current_state" == "absent" ]]; then
+  if [[ $stdlib_current_state == "absent" ]]; then
     return
   fi
 
   # Check if the virtual_ipaddresses exist
   for v in "${virtual_ipaddress[@]}"; do
     _result=$(augeas.get --lens Keepalived --file "$_file" --path "/vrrp_instance[. = '${options[name]}']/virtual_ipaddress/ipaddr[. = '$v']")
-    if [[ "$_result" == "absent" ]]; then
+    if [[ $_result == "absent" ]]; then
       options_to_update["virtual_ipaddress"]=1
       stdlib_current_state="update"
     fi
@@ -147,7 +122,7 @@ function keepalived.vrrp_instance.read {
   # Check if the unicast peer IPs exist
   for u in "${unicast_peer[@]}"; do
     _result=$(augeas.get --lens Keepalived --file "$_file" --path "/vrrp_instance[. = '${options[name]}']/unicast_peer/ipaddr[. = '$u']")
-    if [[ "$_result" == "absent" ]]; then
+    if [[ $_result == "absent" ]]; then
       options_to_update["unicast_peer"]=1
       stdlib_current_state="update"
     fi
@@ -155,9 +130,9 @@ function keepalived.vrrp_instance.read {
 
   # Check authentication
   for a in "${auth_keys[@]}"; do
-    if [[ -n "${options[$a]}" ]]; then
+    if [[ -n ${options[$a]} ]]; then
       _result=$(augeas.get --lens Keepalived --file "$_file" --path "/vrrp_instance[. = '${options[name]}']/authentication/$a[. = '${options[$a]}']")
-      if [[ "$_result" == "absent" ]]; then
+      if [[ $_result == "absent" ]]; then
         options_to_update[$a]=1
         stdlib_current_state="update"
       fi
@@ -168,16 +143,16 @@ function keepalived.vrrp_instance.read {
 
   # Handle state in a special way since it conflicts with the "state" option
   _result=$(augeas.get --lens Keepalived --file "$_file" --path "/vrrp_instance[. = '${options[name]}']/state[. = '${options[vrrp_state]}']")
-  if [[ "$_result" == "absent" ]]; then
+  if [[ $_result == "absent" ]]; then
     options_to_update["vrrp_state"]=1
     stdlib_current_state="update"
   fi
 
   # Other simple keys
   for o in "${simple_options[@]}"; do
-    if [[ -n "${options[$o]}" ]]; then
+    if [[ -n ${options[$o]} ]]; then
       _result=$(augeas.get --lens Keepalived --file "$_file" --path "/vrrp_instance[. = '${options[name]}']/$o[. = '${options[$o]}']")
-      if [[ "$_result" == "absent" ]]; then
+      if [[ $_result == "absent" ]]; then
         options_to_update[$o]=1
         stdlib_current_state="update"
       fi
@@ -186,16 +161,16 @@ function keepalived.vrrp_instance.read {
 
   # Boolean keys
   for b in "${boolean_keys[@]}"; do
-    if [[ -n "${options[$b]}" ]]; then
+    if [[ -n ${options[$b]} ]]; then
       _result=$(augeas.get --lens Keepalived --file "$_file" --path "/vrrp_instance[. = '${options[name]}']/$b")
-      if [[ "$_result" == "absent" ]]; then
+      if [[ $_result == "absent" ]]; then
         options_to_update[$b]=1
         stdlib_current_state="update"
       fi
     fi
   done
 
-  if [[ "$stdlib_current_state" == "update" ]]; then
+  if [[ $stdlib_current_state == "update" ]]; then
     return
   else
     stdlib_current_state="present"
@@ -207,32 +182,32 @@ function keepalived.vrrp_instance.create {
   local _result
   local -a _augeas_commands=()
 
-  if [[ ! -d "$_dir" ]]; then
+  if [[ ! -d $_dir ]]; then
     stdlib.capture_error mkdir -p "$_dir"
   fi
 
   # Create the vrrp_instance
-  if [[ "$stdlib_current_state" == "absent" ]]; then
+  if [[ $stdlib_current_state == "absent" ]]; then
     _augeas_commands+=("set /files/${_file}/vrrp_instance[0] '${options[name]}'")
   fi
 
   # Set virtual_ipaddress
-  if [[ "${options_to_update[virtual_ipaddress]+isset}" || "$stdlib_current_state" == "absent" ]]; then
+  if [[ ${options_to_update[virtual_ipaddress]+isset} || $stdlib_current_state == "absent" ]]; then
     for n in "${virtual_ipaddress[@]}"; do
       _augeas_commands+=("set /files/${_file}/vrrp_instance[. = '${options[name]}']/virtual_ipaddress/ipaddr[0] '$n'")
     done
   fi
 
   # Set unicast_peers
-  if [[ "${options_to_update[unicast_peer]+isset}" || "$stdlib_current_state" == "absent" ]]; then
+  if [[ ${options_to_update[unicast_peer]+isset} || $stdlib_current_state == "absent" ]]; then
     for n in "${unicast_peer[@]}"; do
       _augeas_commands+=("set /files/${_file}/vrrp_instance[. = '${options[name]}']/unicast_peer/ipaddr[0] '$n'")
     done
   fi
 
   # Set authentication options
-  if [[ "${options_to_update[auth_type]+isset}" || "$stdlib_current_state" == "absent" ]]; then
-    if [[ -n "${options[auth_type]}" ]]; then
+  if [[ ${options_to_update[auth_type]+isset} || $stdlib_current_state == "absent" ]]; then
+    if [[ -n ${options[auth_type]} ]]; then
       _augeas_commands+=("set /files/${_file}/vrrp_instance[. = '${options[name]}']/authentication/auth_type '${options[auth_type]}'")
       _augeas_commands+=("set /files/${_file}/vrrp_instance[. = '${options[name]}']/authentication/auth_pass '${options[auth_pass]}'")
     fi
@@ -243,8 +218,8 @@ function keepalived.vrrp_instance.create {
 
   # Set simple options
   for o in "${simple_options[@]}"; do
-    if [[ "${options_to_update[$o]+isset}" || "$stdlib_current_state" == "absent" ]]; then
-      if [[ -n "${options[$o]}" ]]; then
+    if [[ ${options_to_update[$o]+isset} || $stdlib_current_state == "absent" ]]; then
+      if [[ -n ${options[$o]} ]]; then
         _augeas_commands+=("set /files/${_file}/vrrp_instance[. = '${options[name]}']/$o '${options[$o]}'")
       fi
     fi
@@ -252,21 +227,22 @@ function keepalived.vrrp_instance.create {
 
   # Set boolean options
   for b in "${boolean_options[@]}"; do
-    if [[ "${options_to_update[$b]+isset}" || "$stdlib_current_state" == "absent" ]]; then
-      if [[ "${options[$b]}" != "false" ]]; then
+    if [[ ${options_to_update[$b]+isset} || $stdlib_current_state == "absent" ]]; then
+      if [[ ${options[$b]} != "false" ]]; then
         _augeas_commands+=("touch /files/${_file}/vrrp_instance[. = '${options[name]}']/$b")
       fi
     fi
   done
 
   _result=$(augeas.run --lens Keepalived --file "$_file" "${_augeas_commands[@]}")
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error adding $_name with augeas: $_result"
   fi
+}
 
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
+function keepalived.vrrp_instance.update {
+  keepalived.vrrp_instance.delete
+  keepalived.vrrp_instance.create
 }
 
 function keepalived.vrrp_instance.delete {
@@ -274,21 +250,21 @@ function keepalived.vrrp_instance.delete {
   local -a _augeas_commands=()
 
   # Delete virtual_ipaddress
-  if [[ "${options_to_update[virtual_ipaddress]+isset}" ]]; then
+  if [[ ${options_to_update[virtual_ipaddress]+isset} ]]; then
     for n in "${virtual_ipaddress[@]}"; do
       _augeas_commands+=("rm /files/${_file}/vrrp_instance[. = '${options[name]}']/virtual_ipaddress")
     done
   fi
 
   # Delete unicast_peers
-  if [[ "${options_to_update[unicast_peer]+isset}" ]]; then
+  if [[ ${options_to_update[unicast_peer]+isset} ]]; then
     for n in "${unicast_peer[@]}"; do
       _augeas_commands+=("rm /files/${_file}/vrrp_instance[. = '${options[name]}']/unicast_peer")
     done
   fi
 
   # Delete authentication options
-  if [[ "${options_to_update[auth_type]+isset}" ]]; then
+  if [[ ${options_to_update[auth_type]+isset} ]]; then
     _augeas_commands+=("set /files/${_file}/vrrp_instance[. = '${options[name]}']/authentication")
   fi
 
@@ -297,24 +273,20 @@ function keepalived.vrrp_instance.delete {
 
   # Delete simple options
   for o in "${simple_options[@]}"; do
-    if [[ "${options_to_update[$o]+isset}" ]]; then
+    if [[ ${options_to_update[$o]+isset} ]]; then
       _augeas_commands+=("rm /files/${_file}/vrrp_instance[. = '${options[name]}']/$o")
     fi
   done
 
   # Delete boolean options
   for b in "${boolean_options[@]}"; do
-    if [[ "${options_to_update[$b]+isset}" ]]; then
+    if [[ ${options_to_update[$b]+isset} ]]; then
       _augeas_commands+=("rm /files/${_file}/vrrp_instance[. = '${options[name]}']/$o")
     fi
   done
 
   _result=$(augeas.run --lens Keepalived --file "$_file" "${_augeas_commands[@]}")
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error adding $_name with augeas: $_result"
   fi
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }

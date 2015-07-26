@@ -39,6 +39,7 @@ function keepalived.global_defs {
     fi
   fi
 
+  # Resource Options
   local -A options
   local -a notification_email
   local -a simple_options=("notification_email_from" "smtp_server"
@@ -56,53 +57,32 @@ function keepalived.global_defs {
 
   stdlib.options.parse_options    "$@"
 
+  # Local Variables
+  local -A options_to_update
   local _name="keepalived.global_defs"
-  stdlib.catalog.add "keepalived.global_defs"
-
   local _dir=$(dirname "${options[file]}")
   local _file="${options[file]}"
 
-  local -A options_to_update
-  keepalived.global_defs.read
-  if [[ "${options[state]}" == "absent" ]]; then
-    if [[ "$stdlib_current_state" != "absent" ]]; then
-      stdlib.info "$_name state: $stdlib_current_state, should be absent."
-      keepalived.global_defs.delete
-    fi
-  else
-    case "$stdlib_current_state" in
-      absent)
-        stdlib.info "$_name state: absent, should be present."
-        keepalived.global_defs.create
-        ;;
-      present)
-        stdlib.debug "$_name state: present."
-        ;;
-      update)
-        stdlib.info "$_name state: present, needs updated."
-        keepalived.global_defs.delete
-        keepalived.global_defs.create
-        ;;
-    esac
-  fi
+  # Process the resource
+  stdlib.resource.process "keepalived.global_defs" "$_name"
 }
 
 function keepalived.global_defs.read {
-  if [[ ! -f "$_file" ]]; then
+  if [[ ! -f $_file ]]; then
     stdlib_current_state="absent"
     return
   fi
 
   # Check if the global_defs key exists
   stdlib_current_state=$(augeas.get --lens Keepalived --file "$_file" --path "/global_defs")
-  if [[ "$stdlib_current_state" == "absent" ]]; then
+  if [[ $stdlib_current_state == "absent" ]]; then
     return
   fi
 
   # Check if the notification emails exist
   for n in "${notification_email[@]}"; do
     _result=$(augeas.get --lens Keepalived --file "$_file" --path "/global_defs/notification_email/email[. = '$n']")
-    if [[ "$_result" == "absent" ]]; then
+    if [[ $_result == "absent" ]]; then
       stdlib_current_state="update"
       options_to_update["notification_email"]=1
     fi
@@ -110,9 +90,9 @@ function keepalived.global_defs.read {
 
   # Check if the other keys are set
   for o in "${simple_options[@]}"; do
-    if [[ -n "${options[$o]}" ]]; then
+    if [[ -n ${options[$o]} ]]; then
       _result=$(augeas.get --lens Keepalived --file "$_file" --path "/global_defs/${o}[. = '${options[$o]}']")
-      if [[ "$_result" == "absent" ]]; then
+      if [[ $_result == "absent" ]]; then
         stdlib_current_state="update"
         options_to_update[$o]=1
       fi
@@ -131,12 +111,12 @@ function keepalived.global_defs.create {
   local _result
   local -a _augeas_commands=()
 
-  if [[ ! -d "$_dir" ]]; then
+  if [[ ! -d $_dir ]]; then
     stdlib.capture_error mkdir -p "$_dir"
   fi
 
   # Set notification emails
-  if [[ "${options_to_update[notification_email]+isset}" ]]; then
+  if [[ ${options_to_update[notification_email]+isset} ]]; then
     for n in "${notification_email[@]}"; do
       _augeas_commands+=("set /files/${_file}/global_defs/notification_email/email[0] '$n'")
     done
@@ -144,22 +124,23 @@ function keepalived.global_defs.create {
 
   # Set all other options
   for o in "${!options_to_update[@]}"; do
-    if [[ "$o" == "notification_email" ]]; then
+    if [[ $o == "notification_email" ]]; then
       continue
     fi
-    if [[ -n "${options[$o]}" ]]; then
+    if [[ -n ${options[$o]} ]]; then
       _augeas_commands+=("set /files/${_file}/global_defs/$o '${options[$o]}'")
     fi
   done
 
   _result=$(augeas.run --lens Keepalived --file "$_file" "${_augeas_commands[@]}")
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error adding $_name with augeas: $_result"
   fi
+}
 
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
+function keepalived.global_defs.update {
+  keepalived.global_defs.delete
+  keepalived.global_defs.create
 }
 
 function keepalived.global_defs.delete {
@@ -167,24 +148,20 @@ function keepalived.global_defs.delete {
   local -a _augeas_commands=()
 
   # Delete notification emails
-  if [[ "${options_to_update[notification_email]+isset}" ]]; then
+  if [[ ${options_to_update[notification_email]+isset} ]]; then
     _augeas_commands+=("rm /files/${_file}/global_defs/notification_email")
   fi
 
   # Set all other options
   for o in "${!options_to_update[@]}"; do
-    if [[ "$o" == "notification_emails" ]]; then
+    if [[ $o == "notification_emails" ]]; then
       continue
     fi
     _augeas_commands+=("rm /files/${_file}/global_defs/$o")
   done
 
   _result=$(augeas.run --lens Keepalived --file "$_file" "${_augeas_commands[@]}")
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error adding $_name with augeas: $_result"
   fi
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }

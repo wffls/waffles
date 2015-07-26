@@ -24,6 +24,7 @@
 function mysql.user {
   stdlib.subtitle "mysql.user"
 
+  # Resource Options
   local -A options
   stdlib.options.create_option state    "present"
   stdlib.options.create_option user     ""
@@ -31,36 +32,19 @@ function mysql.user {
   stdlib.options.create_option password ""
   stdlib.options.parse_options "$@"
 
-  stdlib.catalog.add "mysql.user/${options[user]}@${options[host]}"
-
+  # Local Variables
+  local _name="${options[user]}@${options[host]}"
   local password
-  if [[ -z "${options[password]}" ]]; then
+
+  # Internal Resource configuration
+  if [[ -z ${options[password]} ]]; then
     password=""
   else
     password=$(mysql -NBe "select password('${options[password]}')")
   fi
 
-  mysql.user.read
-  if [[ "${options[state]}" == "absent" ]]; then
-    if [[ "$stdlib_current_state" != "absent" ]]; then
-      stdlib.info "${options[user]} state: $stdlib_current_state, should be absent."
-      mysql.user.delete
-    fi
-  else
-    case "$stdlib_current_state" in
-      absent)
-        stdlib.info "${options[user]} state: absent, should be present."
-        mysql.user.create
-        ;;
-      present)
-        stdlib.debug "${options[user]} state: present."
-        ;;
-      update)
-        stdlib.debug "${options[user]} state: out of date."
-        mysql.user.update
-        ;;
-    esac
-  fi
+  # Process the resource
+  stdlib.resource.process "mysql.user" "$_name"
 }
 
 function mysql.user.read {
@@ -70,14 +54,14 @@ function mysql.user.read {
 
   local _user_query="SELECT count(*) FROM mysql.user WHERE CONCAT(user, '@', host) = '${options[user]}@${options[host]}'"
   local _user_count=$(mysql -NBe "${_user_query}")
-  if [[ "$_user_count" == 0 ]]; then
+  if [[ $_user_count == 0 ]]; then
     stdlib_current_state="absent"
     return
   fi
 
   local _password_query="SELECT PASSWORD FROM mysql.user WHERE CONCAT(user, '@', host) = '${options[user]}@${options[host]}'"
   local _password=$(mysql -NBe "${_password_query}")
-  if [[ "$_password" != "$password" ]]; then
+  if [[ $_password != $password ]]; then
     stdlib_current_state="update"
     return
   fi
@@ -87,24 +71,12 @@ function mysql.user.read {
 
 function mysql.user.create {
   stdlib.capture_error "mysql -NBe \"CREATE USER '${options[user]}'@'${options[host]}' IDENTIFIED BY PASSWORD '${password}'\""
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }
 
 function mysql.user.update {
   stdlib.capture_error "mysql -NBe \"SET PASSWORD FOR '${options[user]}'@'${options[host]}' = '${password}'\""
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }
 
 function mysql.user.delete {
   stdlib.capture_error "mysql -NBe \"DROP USER '${options[user]}'@'${options[host]}'\""
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }

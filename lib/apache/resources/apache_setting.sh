@@ -35,6 +35,7 @@ function apache.setting {
     fi
   fi
 
+  # Resource Options
   local -A options
   local -a path
   stdlib.options.create_option state   "present"
@@ -44,12 +45,14 @@ function apache.setting {
   stdlib.options.create_mv_option path
   stdlib.options.parse_options "$@"
 
+  # Local Variables
   local _path
   local _parent_path
   local -a _parent_paths
   local _file="${options[file]}"
   local _name="$_file"
 
+  # Internal Resource Configuration
   if [[ $(stdlib.array_length path) -gt 0 ]]; then
     for p in "${path[@]}"; do
       stdlib.split "$p" "="
@@ -63,47 +66,23 @@ function apache.setting {
   _name="${_name}.${options[key]}"
   _values=(${options[value]})
 
-  stdlib.catalog.add "apache.setting/$_name"
-
-  apache.setting.read
-  if [[ "${options[state]}" == "absent" ]]; then
-    if [[ "$stdlib_current_state" != "absent" ]]; then
-      stdlib.info "$_name state: $stdlib_current_state, should be absent."
-      apache.setting.delete
-    fi
-  else
-    case "$stdlib_current_state" in
-      absent)
-        stdlib.info "$_name state: absent, should be present."
-        apache.setting.create
-        ;;
-      present)
-        stdlib.debug "$_name state: present."
-        ;;
-      update)
-        stdlib.info "$_name state: present, needs updated."
-        apache.setting.update
-        ;;
-      error)
-        stdlib.error "$_name state: parent does not exist yet. Please create it first."
-        return
-        ;;
-    esac
-  fi
+  # Process the resource
+  stdlib.resource.process "apache.setting" "$_name"
 }
 
 function apache.setting.read {
   local _result
 
-  if [[ ! -f "$_file" ]]; then
+  if [[ ! -f $_file ]]; then
     stdlib_current_state="absent"
     return
   fi
 
   # Check if the parent key/value exists
-  if [[ -n "$_path" ]]; then
+  if [[ -n $_path ]]; then
     _result=$(augeas.get --lens Httpd --file "$_file" --path "$_parent_path")
-    if [[ "$_result" == "absent" ]]; then
+    if [[ $_result == "absent" ]]; then
+      stdlib.error "$_name state: parent does not exist yet. Please create it first."
       stdlib_current_state="error"
       return
     fi
@@ -111,14 +90,14 @@ function apache.setting.read {
 
   # Check if the key exists
   stdlib_current_state=$(augeas.get --lens Httpd --file "$_file" --path "$_path/directive[. = '${options[key]}']")
-  if [[ "$stdlib_current_state" == "absent" ]]; then
+  if [[ $stdlib_current_state == "absent" ]]; then
     return
   fi
 
   # Check if the value exists
   for v in "${_values[@]}"; do
     _result=$(augeas.get --lens Httpd --file "$_file" --path "$_path/directive[. = '${options[key]}']/arg[. = '$v']")
-    if [[ "$_result" == "absent" ]]; then
+    if [[ $_result == "absent" ]]; then
       stdlib_current_state="update"
       return
     fi
@@ -129,7 +108,7 @@ function apache.setting.read {
 
 function apache.setting.create {
   local _dir=$(dirname "$_file")
-  if [[ ! -d "$_dir" ]]; then
+  if [[ ! -d $_dir ]]; then
     stdlib.capture_error mkdir -p "$_dir"
   fi
 
@@ -141,7 +120,7 @@ function apache.setting.create {
 
   local _result=$(augeas.run --lens Httpd --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error adding apache.setting $_name with augeas: $_result"
     return
   fi
@@ -156,14 +135,10 @@ function apache.setting.update {
 
   local _result=$(augeas.run --lens Httpd --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error adding apache.setting $_name with augeas: $_result"
     return
   fi
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }
 
 function apache.setting.delete {
@@ -172,12 +147,8 @@ function apache.setting.delete {
 
   local _result=$(augeas.run --lens Httpd --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error deleting apache.setting $_name with augeas: $_result"
     return
   fi
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }

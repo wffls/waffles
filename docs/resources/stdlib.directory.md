@@ -18,6 +18,6 @@ Manages directories
 ## Example
 
 ```shell
-stdlib.directory --source modules/mymod/files/foo --name /var/lib/foo
+stdlib.directory --source $WAFFLES_SITE_DIR/profiles/foo/files/mydir --name /var/lib/mydir
 ```
 

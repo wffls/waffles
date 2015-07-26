@@ -17,7 +17,7 @@
 # === Example
 #
 # ```shell
-# augeas.ini --key foo --value bar --file /root/vars
+# augeas.ini --section DEFAULT --option foo --value bar --file /root/vars
 # ```
 #
 function augeas.ini {
@@ -32,6 +32,7 @@ function augeas.ini {
     fi
   fi
 
+  # Resource Options
   local -A options
   stdlib.options.create_option state   "present"
   stdlib.options.create_option section "__required__"
@@ -40,31 +41,11 @@ function augeas.ini {
   stdlib.options.create_option file    "__required__"
   stdlib.options.parse_options "$@"
 
+  # Local Variables
   local _name="${options[file]}.${options[section]}.${options[option]}"
-  stdlib.catalog.add "augeas.ini/$_name"
 
-  augeas.ini.read
-  if [[ "${options[state]}" == "absent" ]]; then
-    if [[ "$stdlib_current_state" != "absent" ]]; then
-      stdlib.info "$_name state: $stdlib_current_state, should be absent."
-      augeas.ini.delete
-    fi
-  else
-    case "$stdlib_current_state" in
-      absent)
-        stdlib.info "$_name state: absent, should be present."
-        augeas.ini.create
-        ;;
-      present)
-        stdlib.debug "$_name state: present."
-        ;;
-      update)
-        stdlib.info "$_name state: present, needs updated."
-        augeas.ini.delete
-        augeas.ini.create
-        ;;
-    esac
-  fi
+  # Process the resource
+  stdlib.resource.process "augeas.ini" "$_name"
 }
 
 function augeas.ini.read {
@@ -78,7 +59,7 @@ function augeas.ini.read {
 
   # Check if the value matches
   _result=$(augeas.get --lens Puppet --file "${options[file]}" --path "/${options[section]}/${options[option]}[. = '${options[value]}']")
-  if [[ "$_result" == "absent" ]]; then
+  if [[ $_result == "absent" ]]; then
     stdlib_current_state="update"
   fi
 }
@@ -89,10 +70,15 @@ function augeas.ini.create {
 
   local _result=$(augeas.run --lens Puppet --file "${options[file]}" "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error adding ini $_name with augeas: $_result"
     return
   fi
+}
+
+function augeas.ini.update {
+  augeas.ini.delete
+  augeas.ini.create
 }
 
 function augeas.ini.delete {
@@ -100,7 +86,7 @@ function augeas.ini.delete {
   _augeas_commands+=("rm /files${options[file]}/${options[section]}/${options[option]}")
   local _result=$(augeas.run --lens Puppet --file ${options[file]} "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error deleting ini $_name with augeas: $_result"
     return
   fi

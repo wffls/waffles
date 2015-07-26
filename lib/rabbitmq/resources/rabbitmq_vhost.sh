@@ -20,30 +20,14 @@
 function rabbitmq.vhost {
   stdlib.subtitle "rabbitmq.vhost"
 
+  # Resource Options
   local -A options
   stdlib.options.create_option state  "present"
   stdlib.options.create_option vhost  "__required__"
   stdlib.options.parse_options "$@"
 
-  stdlib.catalog.add "rabbitmq.vhost/${options[vhost]}"
-
-  rabbitmq.vhost.read
-  if [[ "${options[state]}" == "absent" ]]; then
-    if [[ "$stdlib_current_state" != "absent" ]]; then
-      stdlib.info "${options[vhost]} state: $stdlib_current_state, should be absent."
-      rabbitmq.vhost.delete
-    fi
-  else
-    case "$stdlib_current_state" in
-      absent)
-        stdlib.info "${options[vhost]} state: absent, should be present."
-        rabbitmq.vhost.create
-        ;;
-      present)
-        stdlib.debug "${options[vhost]} state: present."
-        ;;
-    esac
-  fi
+  # Process the resource
+  stdlib.resource.process "rabbitmq.vhost" "${options[vhost]}"
 }
 
 function rabbitmq.vhost.read {
@@ -59,16 +43,8 @@ function rabbitmq.vhost.read {
 
 function rabbitmq.vhost.create {
   stdlib.capture_error "rabbitmqctl add_vhost ${options[vhost]}"
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }
 
 function rabbitmq.vhost.delete {
   stdlib.capture_error "rabbitmqctl delete_vhost ${options[vhost]}"
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }

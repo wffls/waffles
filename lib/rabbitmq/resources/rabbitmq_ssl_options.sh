@@ -27,13 +27,14 @@ function rabbitmq.ssl_options {
 
   if ! stdlib.command_exists augtool ; then
     stdlib.error "Cannot find augtool."
-    if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
+    if [[ -n $WAFFLES_EXIT_ON_ERROR ]]; then
       exit 1
     else
       return 1
     fi
   fi
 
+  # Resource Options
   local -A options
   stdlib.options.create_option state                "present"
   stdlib.options.create_option keyfile              "__required__"
@@ -44,49 +45,28 @@ function rabbitmq.ssl_options {
   stdlib.options.create_option fail_if_no_peer_cert
   stdlib.options.parse_options "$@"
 
+  # Local Variables
   local _name="rabbitmq.ssl_options"
-  stdlib.catalog.add "$_name"
-
   local _dir=$(dirname "${options[file]}")
   local _file="${options[file]}"
 
-  rabbitmq.ssl_options.read
-  if [[ "${options[state]}" == "absent" ]]; then
-    if [[ "$stdlib_current_state" != "absent" ]]; then
-      stdlib.info "$_name state: $stdlib_current_state, should be absent."
-      rabbitmq.ssl_options.delete
-    fi
-  else
-    case "$stdlib_current_state" in
-      absent)
-        stdlib.info "$_name state: absent, should be present."
-        rabbitmq.ssl_options.create
-        ;;
-      present)
-        stdlib.debug "$_name state: present."
-        ;;
-      update)
-        stdlib.info "$_name state: present, needs updated."
-        rabbitmq.ssl_options.delete
-        rabbitmq.ssl_options.create
-        ;;
-    esac
-  fi
+  # Process the resource
+  stdlib.resource.process "rabbitmq.ssl_options" "$_name"
 }
 
 function rabbitmq.ssl_options.read {
   local _result
 
-  if [[ ! -f "$_file" ]]; then
+  if [[ ! -f $_file ]]; then
     stdlib_current_state="absent"
     return
   fi
 
   # Check if the ssl options exist
   for i in cacertfile certfile keyfile verify fail_if_no_peer_cert; do
-    if [[ -n "${options[$i]}" ]]; then
-      stdlib_current_state=$(augeas.get --lens Rabbitmq --file "$_file" --path "/rabbit/ssl_options/$i")
-      if [[ "$stdlib_current_state" == "absent" ]]; then
+    if [[ -n ${options[$i]} ]]; then
+      stdlib_current_state=$(augeas.get --lens Rabbitmq --file $_file --path "/rabbit/ssl_options/$i")
+      if [[ $stdlib_current_state == "absent" ]]; then
         return
       fi
     fi
@@ -94,9 +74,9 @@ function rabbitmq.ssl_options.read {
 
   # Check if the ssl options match
   for i in cacertfile certfile keyfile verify fail_if_no_peer_cert; do
-    if [[ -n "${options[$i]}" ]]; then
-      _result=$(augeas.get --lens Rabbitmq --file "$_file" --path "/rabbit/ssl_options/$i[. = '${options[$i]}']")
-      if [[ "$stdlib_current_state" == "absent" ]]; then
+    if [[ -n ${options[$i]} ]]; then
+      _result=$(augeas.get --lens Rabbitmq --file $_file --path "/rabbit/ssl_options/$i[. = '${options[$i]}']")
+      if [[ $stdlib_current_state == "absent" ]]; then
         stdlib_current_state="update"
         return
       fi
@@ -107,33 +87,38 @@ function rabbitmq.ssl_options.read {
 }
 
 function rabbitmq.ssl_options.create {
-  if [[ ! -d "$_dir" ]]; then
-    stdlib.capture_error mkdir -p "$_dir"
+  if [[ ! -d $_dir ]]; then
+    stdlib.capture_error mkdir -p $_dir
   fi
 
   local -a _augeas_commands=()
 
   # Set each of the ssl options
   for i in cacertfile certfile keyfile verify fail_if_no_peer_cert; do
-    if [[ -n "${options[$i]}" ]]; then
+    if [[ -n ${options[$i]} ]]; then
       _augeas_commands+=("set /files$_file/rabbit/ssl_options/$i '${options[$i]}'")
     fi
   done
 
-  local _result=$(augeas.run --lens Rabbitmq --file "$_file" "${_augeas_commands[@]}")
+  local _result=$(augeas.run --lens Rabbitmq --file $_file "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error adding $_name with augeas: $_result"
     return
   fi
 }
 
+function rabbitmq.ssl_options.update {
+  rabbitmq.ssl_options.delete
+  rabbitmq.ssl_options.create
+}
+
 function rabbitmq.ssl_options.delete {
   local -a _augeas_commands=()
   _augeas_commands+=("rm /files$_file/rabbit/ssl_options")
-  local _result=$(augeas.run --lens Rabbitmq --file "$_file" "${_augeas_commands[@]}")
+  local _result=$(augeas.run --lens Rabbitmq --file $_file "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error deleting rabbitmq.ssl_options $_name with augeas: $_result"
     return
   fi

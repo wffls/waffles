@@ -26,13 +26,14 @@ function nginx.if {
 
   if ! stdlib.command_exists augtool ; then
     stdlib.error "Cannot find augtool."
-    if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
+    if [[ -n $WAFFLES_EXIT_ON_ERROR ]]; then
       exit 1
     else
       return 1
     fi
   fi
 
+  # Resource Options
   local -A options
   stdlib.options.create_option state       "present"
   stdlib.options.create_option name        "__required__"
@@ -56,6 +57,8 @@ function nginx.if {
     _file="${_dir}/${_server_name}"
   fi
 
+  # Process the resource 
+  stdlib.resource.process
   nginx.if.read
   if [[ "${options[state]}" == "absent" ]]; then
     if [[ "$stdlib_current_state" != "absent" ]]; then
@@ -109,7 +112,7 @@ function nginx.if.read {
   # Check if the key exists and the value matches
   _path="/server/server_name[. = '$_server_name']/../if/#cond[. = '$_cond']/../${options[key]}[. = '${options[value]}']"
   _result=$(augeas.get --lens Nginx --file "$_file" --path "$_path")
-  if [[ "$_result" == "absent" ]]; then
+  if [[ $_result == "absent" ]]; then
     stdlib_current_state="update"
     return
   fi
@@ -125,7 +128,7 @@ function nginx.if.create {
 
   local _result=$(augeas.run --lens Nginx --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error adding nginx_if $_name with augeas: $_result"
     return
   fi
@@ -141,7 +144,7 @@ function nginx.if.update {
 
   local _result=$(augeas.run --lens Nginx --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error adding nginx_if $_name with augeas: $_result"
     return
   fi
@@ -157,7 +160,7 @@ function nginx.if.delete {
 
   local _result=$(augeas.run --lens Nginx --file "$_file" "${_augeas_commands[@]}")
 
-  if [[ "$_result" =~ ^error ]]; then
+  if [[ $_result =~ ^error ]]; then
     stdlib.error "Error deleting nginx_if $_name with augeas: $_result"
     return
   fi

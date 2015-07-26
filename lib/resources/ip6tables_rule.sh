@@ -25,6 +25,7 @@
 function stdlib.ip6tables_rule {
   stdlib.subtitle "stdlib.ip6tables_rule"
 
+  # Resource Options
   local -A options
   stdlib.options.create_option state    "present"
   stdlib.options.create_option name     "__required__"
@@ -35,31 +36,11 @@ function stdlib.ip6tables_rule {
   stdlib.options.create_option action   "ACCEPT"
   stdlib.options.parse_options "$@"
 
-  stdlib.catalog.add "stdlib.ip6tables_rule/${options[name]}"
-
+  # Local Variables
   local rule="${options[chain]} ${options[rule]} -m comment --comment \"${options[priority]} ${options[name]}\" -j ${options[action]}"
 
-  stdlib.ip6tables_rule.read
-  if [[ "${options[state]}" == "absent" ]]; then
-    if [[ "$stdlib_current_state" != "absent" ]]; then
-      stdlib.info "${options[name]} state: $stdlib_current_state, should be absent."
-      stdlib.ip6tables_rule.delete
-    fi
-  else
-    case "$stdlib_current_state" in
-      absent)
-        stdlib.info "${options[name]} state: absent, should be present."
-        stdlib.ip6tables_rule.create
-        ;;
-      present)
-        stdlib.debug "${options[name]} state: present."
-        ;;
-      update)
-        stdlib.debug "${options[name]} state: out of date."
-        stdlib.ip6tables_rule.update
-        ;;
-    esac
-  fi
+  # Process the resource
+  stdlib.resource.process "stdlib.ip6tables_rule" "$rule"
 }
 
 function stdlib.ip6tables_rule.read {
@@ -91,7 +72,7 @@ function stdlib.ip6tables_rule.create {
     for oldrule in "${oldrules[@]}"; do
       rulenum=$((rulenum+1))
       local oldcomment=$(echo $oldrule | sed -e 's/.*--comment "\(.*\)".*/\1/')
-      if [[ ! "$oldcomment" =~ ^- ]]; then
+      if [[ ! $oldcomment =~ ^- ]]; then
         local priority=$(echo $oldcomment | cut -d' ' -f1)
         if [[ $priority > ${options[priority]} ]]; then
           stdlib.capture_error "ip6tables -t ${options[table]} -I $rulenum $oldrule"
@@ -102,30 +83,18 @@ function stdlib.ip6tables_rule.create {
     done
   fi
 
-  if [[ "$added" == "false" ]]; then
+  if [[ $added == "false" ]]; then
     stdlib.capture_error "ip6tables -t ${options[table]} -A $rule"
   fi
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }
 
 function stdlib.ip6tables_rule.update {
   local _rule=$(ip6tables -S -t ${options[table]} "${options[chain]}" | grep "comment \"${options[priority]} ${options[name]}\"" | sed -e 's/^-A/-D/')
   stdlib.capture_error "ip6tables -t ${options[table]} $_rule"
   stdlib.capture_error "ip6tables -t ${options[table]} $rule"
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }
 
 function stdlib.ip6tables_rule.delete {
   local _rule=$(ip6tables -S -t ${options[table]} "${options[chain]}" | grep "comment \"${options[priority]} ${options[name]}\"" | sed -e 's/^-A/-D/')
   stdlib.capture_error "ip6tables -t ${options[table]} $_rule"
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }

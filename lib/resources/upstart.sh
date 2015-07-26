@@ -20,30 +20,14 @@
 function stdlib.upstart {
   stdlib.subtitle $FUNCNAME
 
+  # Resource Options
   local -A options
   stdlib.options.create_option state "running"
   stdlib.options.create_option name  "__required__"
   stdlib.options.parse_options "$@"
 
-  stdlib.catalog.add "stdlib.upstart/${options[name]}"
-
-  stdlib.upstart.read
-  if [[ "${options[state]}" == "stopped" ]]; then
-    if [[ $stdlib_current_state != stopped ]]; then
-      stdlib.info "${options[name]} state: $stdlib_current_state, should be stopped."
-      stdlib.upstart.delete
-    fi
-  else
-    case "$stdlib_current_state" in
-      stopped)
-        stdlib.info "${options[name]} state: stopped, should be running."
-        stdlib.upstart.create
-        ;;
-      running)
-        stdlib.debug "${options[name]} state: running."
-        ;;
-    esac
-  fi
+  # Process the resource
+  stdlib.resource.process "stdlib.upstart" "${options[name]}"
 }
 
 function stdlib.upstart.read {
@@ -56,35 +40,23 @@ function stdlib.upstart.read {
     fi
   else
     local _status=$(status ${options[name]})
-    if [[ "$_status" =~ "stop" ]]; then
-      stdlib_current_state="stopped"
+    if [[ $_status =~ "stop" ]]; then
+      stdlib_current_state="absent"
       return
     fi
   fi
 
-  stdlib_current_state="running"
+  stdlib_current_state="present"
 }
 
 function stdlib.upstart.create {
   stdlib.capture_error start ${options[name]}
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }
 
 function stdlib.upstart.update {
   stdlib.capture_error restart ${options[name]}
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }
 
 function stdlib.upstart.delete {
   stdlib.capture_error stop {$options[name]}
-
-  stdlib_state_change="true"
-  stdlib_resource_change="true"
-  let "stdlib_resource_changes++"
 }
