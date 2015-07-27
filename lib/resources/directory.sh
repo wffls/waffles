@@ -106,8 +106,8 @@ function stdlib.directory.read {
 function stdlib.directory.create {
   if [[ -n ${options[source]} ]]; then
     stdlib.capture_error rsync -a "${options[source]}/" "${options[name]}"
-    stdlib.capture_error chmod ${options[recurse]} ${options[mode]} "${options[name]}"
-    stdlib.capture_error chown ${options[recurse]} ${options[owner]}:${options[group]} "${options[name]}"
+    stdlib.capture_error chmod $_recurse ${options[mode]} "${options[name]}"
+    stdlib.capture_error chown $_recurse ${options[owner]}:${options[group]} "${options[name]}"
   else
     stdlib.capture_error mkdir $_parent "${options[name]}"
     stdlib.capture_error chmod ${options[mode]} "${options[name]}"
@@ -117,15 +117,15 @@ function stdlib.directory.create {
 
 function stdlib.directory.update {
   if [[ ${options[owner]} != $_owner ]]; then
-    stdlib.capture_error chown $recurse ${options[owner]} "${options[name]}"
+    stdlib.capture_error chown $_recurse ${options[owner]} "${options[name]}"
   fi
 
   if [[ ${options[group]} != $_group ]]; then
-    stdlib.capture_error chgrp $recurse ${options[group]} "$directory"
+    stdlib.capture_error chgrp $_recurse ${options[group]} "${options[name]}"
   fi
 
   if [[ ${options[mode]} != $_mode ]]; then
-    stdlib.capture_error chmod $recurse ${options[mode]} "${options[name]}"
+    stdlib.capture_error chmod $_recurse ${options[mode]} "${options[name]}"
   fi
 
   if [[ -n $_rsync ]]; then
