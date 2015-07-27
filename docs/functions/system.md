@@ -145,6 +145,25 @@ A simple function that takes a command as input, prints the command, and then ex
 stdlib.exec apt-get update
 ```
 
+## stdlib.hash_keys
+
+Returns the keys of a hash / associative array.
+
+```shell
+declare -A foo=(
+  [a]=1
+  [b]=2
+  [c]=3
+)
+
+stdlib.hash_keys "foo"
+=> a b c
+
+x=($(stdlib.hash_keys "foo"))
+echo "${x[1]}"
+=> b
+```
+
 ## stdlib.include
 
 A more intelligent `source`. It checks if the file being sourced / included exists, and if not, prints a warning and moves on.
