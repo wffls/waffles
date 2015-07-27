@@ -377,3 +377,12 @@ function stdlib.array_contains {
     return $_exists
   fi
 }
+
+# stdlib.hash_keys returns the keys of a hash / assoc array
+# $1 = hash/associative array
+function stdlib.hash_keys {
+  if [[ $# -eq 1 ]]; then
+    local _arr="$1"
+    eval "echo \${!$_arr[@]}"
+  fi
+}
