@@ -865,7 +865,7 @@ stdlib.profile memcached
 </code></pre>
 
 <h2 id="data">Data</h2>
-<p>Scripts stored in <code>site/data</code> are, again, just regular Bash scripts. It's only by convension that you store data, and not programming logic, in these files.</p>
+<p>Scripts stored in <code>site/data</code> are, again, just regular Bash scripts. It's only by convention that you store data, and not programming logic, in these files.</p>
 <p>So what is "data"? It's all of the settings that make your site or environment unique:</p>
 <ul>
 <li>IP Addresses</li>
@@ -873,7 +873,7 @@ stdlib.profile memcached
 <li>Package versions</li>
 <li>Firewall rules</li>
 </ul>
-<p>Data files looks like this:</p>
+<p>Data files look like this:</p>
 <pre><code class="shell">data_memcached_listen=&quot;0.0.0.0&quot;
 
 declare -Ag data_user_info
@@ -887,7 +887,7 @@ data_user_info=(
 )
 </code></pre>
 
-<p>You can name the variables anything you like, though the Waffles naming convension is to start each variable with <code>data_</code>.</p>
+<p>You can name the variables anything you like, though the Waffles naming convention is to start each variable with <code>data_</code>.</p>
 <p>Note: Bash associative arrays <em>must</em> be declared as global variables. This is because all files are sourced inside a Bash function and, for whatever reason, associative arrays are not visible outside of a function (unlike all other Bash variable types).</p>
 <h3 id="hierarchial-data">Hierarchial Data</h3>
 <p>By declaring multiple data files in your role, you can create a hierarchy of data. For example:</p>
@@ -896,8 +896,8 @@ stdlib.data memcached
 </code></pre>
 
 <p>In the above, common settings that are applicable to <em>any</em> role are stored in <code>site/data/common.sh</code>. Only data relevant to the <code>memcached</code> service is stored in <code>site/data/memcached.sh</code>.</p>
-<p>You can even declare the same variable in both data files. The data file declared last will overwrite all previous declarations and win.</p>
-<p>Finally, you can reference data from a previously declared data file. You can't, however, reference variables in data files <em>before</em> they were declared. To clarify: <code>site/data/memcached.sh</code> can reference data from <code>site/data/common.sh</code>, but not vice versa.</p>
+<p>You can even declare the same variable in both data files. The data file declaring it last will overwrite all previous declarations and win.</p>
+<p>Finally, you can reference data from a previously declared data file. You can't, however, reference variables in data files <em>before</em> they are declared. To clarify: <code>site/data/memcached.sh</code> can reference data from <code>site/data/common.sh</code>, but not vice versa.</p>
 <h3 id="data-structure">Data Structure</h3>
 <p>The placement of data files is flexible. You can do any of the following:</p>
 <pre><code class="shell">stdlib.data common =&gt; data/common.sh
