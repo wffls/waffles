@@ -46,7 +46,7 @@ stdlib.profile memcached
 
 ## Data
 
-Scripts stored in `site/data` are, again, just regular Bash scripts. It's only by convension that you store data, and not programming logic, in these files.
+Scripts stored in `site/data` are, again, just regular Bash scripts. It's only by convention that you store data, and not programming logic, in these files.
 
 So what is "data"? It's all of the settings that make your site or environment unique:
 
@@ -55,7 +55,7 @@ So what is "data"? It's all of the settings that make your site or environment u
 * Package versions
 * Firewall rules
 
-Data files looks like this:
+Data files look like this:
 
 ```shell
 data_memcached_listen="0.0.0.0"
@@ -71,7 +71,7 @@ data_user_info=(
 )
 ```
 
-You can name the variables anything you like, though the Waffles naming convension is to start each variable with `data_`.
+You can name the variables anything you like, though the Waffles naming convention is to start each variable with `data_`.
 
 Note: Bash associative arrays _must_ be declared as global variables. This is because all files are sourced inside a Bash function and, for whatever reason, associative arrays are not visible outside of a function (unlike all other Bash variable types).
 
@@ -86,9 +86,9 @@ stdlib.data memcached
 
 In the above, common settings that are applicable to _any_ role are stored in `site/data/common.sh`. Only data relevant to the `memcached` service is stored in `site/data/memcached.sh`.
 
-You can even declare the same variable in both data files. The data file declared last will overwrite all previous declarations and win.
+You can even declare the same variable in both data files. The data file declaring it last will overwrite all previous declarations and win.
 
-Finally, you can reference data from a previously declared data file. You can't, however, reference variables in data files _before_ they were declared. To clarify: `site/data/memcached.sh` can reference data from `site/data/common.sh`, but not vice versa.
+Finally, you can reference data from a previously declared data file. You can't, however, reference variables in data files _before_ they are declared. To clarify: `site/data/memcached.sh` can reference data from `site/data/common.sh`, but not vice versa.
 
 ### Data Structure
 
