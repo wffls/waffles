@@ -14,7 +14,6 @@
 # * question: The debconf question. Required.
 # * vtype: The vtype of the debconf setting. Required.
 # * value: The answer/setting. Required.
-# * unseen: Whether to set the setting to unseen.
 #
 # === Example
 #
@@ -43,11 +42,10 @@ function stdlib.debconf {
   stdlib.options.create_option question "__required__"
   stdlib.options.create_option vtype    "__required__"
   stdlib.options.create_option value    "__required__"
-  stdlib.options.create_option unseen
   stdlib.options.parse_options "$@"
 
   # Local Variables
-  local _value _unseen
+  local _value
 
   # Internal Resource Configuration
   if [[ -n ${options[unseen]} ]]; then
@@ -61,23 +59,29 @@ function stdlib.debconf {
 }
 
 function stdlib.debconf.read {
-  local _dc=$(debconf-show "${options[package]}" | grep "${options[question]}:")
-  if [[ -z $_dc ]]; then
+  local _dc=$(echo get ${options[question]} | debconf-communicate ${options[package]})
+  if [[ $_dc =~ ^10 ]]; then
     stdlib_current_state="absent"
-    return
-  fi
-
-  _value=$(echo $_dc | cut -d: -f2 | tr -d ' ')
-  if [[ ${options[value]} != $_value ]]; then
+  elif [[ $_dc == "0" ]]; then
+    stdlib_current_state="absent"
+  elif [[ $_dc == "0 ${options[value]}" ]]; then
+    stdlib_current_state="present"
+  else
     stdlib_current_state="update"
-    return
   fi
-
-  stdlib_current_state="present"
 }
 
 function stdlib.debconf.create {
-  stdlib.capture_error debconf-set-selections $unseen ${options[package]} ${options[question]} ${options[vtype]} ${options[value]}
+  local _script
+  read -r -d '' _script<<EOF
+echo ${options[package]} ${options[question]} ${options[vtype]} "${options[value]}" | debconf-set-selections
+EOF
+  stdlib.capture_error "$_script"
+}
+
+function stdlib.debconf.update {
+  stdlib.debconf.delete
+  stdlib.debconf.create
 }
 
 function stdlib.debconf.delete {
