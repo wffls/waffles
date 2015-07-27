@@ -34,7 +34,14 @@ function mysql.grant {
 
   # Local Variables
   local _name="'${options[user]}'@'${options[host]}'"
-  local grant="GRANT ${options[privileges]} ON \`${options[database]}\`.* TO $_name"
+  local _grant
+
+  # Internal Resource Configuration
+  if [[ ${options[database]} == "*" ]]; then
+    _grant="GRANT ${options[privileges]} ON *.* TO $_name"
+  else
+    _grant="GRANT ${options[privileges]} ON \`${options[database]}\`.* TO $_name"
+  fi
 
   # Process the resource
   stdlib.resource.process "mysql.grant" "$_name"
@@ -51,7 +58,7 @@ function mysql.grant.read {
     return
   fi
 
-  if [[ $_grant_result != $grant ]]; then
+  if [[ ! $_grant_result =~ ^$_grant ]]; then
     stdlib_current_state="update"
     return
   fi
