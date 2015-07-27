@@ -107,7 +107,7 @@ function stdlib.file.read {
     return
   fi
 
-  if [[ -n $_md5 ]]; then
+  if [[ -n $md5 ]]; then
     if [[ $md5 != $_md5 ]]; then
       stdlib_current_state="update"
       return
