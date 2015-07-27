@@ -12,7 +12,6 @@ Manages debconf entries
 * question: The debconf question. Required.
 * vtype: The vtype of the debconf setting. Required.
 * value: The answer/setting. Required.
-* unseen: Whether to set the setting to unseen.
 
 ## Example
 
