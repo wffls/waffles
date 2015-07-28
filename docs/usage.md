@@ -170,7 +170,7 @@ You can run `waffles.sh` directly on a node and Waffles will apply the role to t
 
 ### Remote Execution (push)
 
-It's possible to run Waffles on a remote node by pushing the configuration via rsync and SSH. To do this, set the environment variable `STREAM=1`. For example:
+It's possible to run Waffles on a remote node by pushing the configuration via rsync and SSH. To do this, use the `-s <server>` flag. For example:
 
 ```shell
 $ waffles.sh -s www.example.com -r web
