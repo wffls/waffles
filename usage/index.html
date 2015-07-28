@@ -954,7 +954,7 @@ stdlib.profiles memcached/utils =&gt; profiles/memcached/scripts/utils.sh
 <h3 id="local-execution">Local Execution</h3>
 <p>You can run <code>waffles.sh</code> directly on a node and Waffles will apply the role to that node. This is most useful when you copy the entire contents of the <code>waffles</code> directory to a node.</p>
 <h3 id="remote-execution-push">Remote Execution (push)</h3>
-<p>It's possible to run Waffles on a remote node by pushing the configuration via rsync and SSH. To do this, set the environment variable <code>STREAM=1</code>. For example:</p>
+<p>It's possible to run Waffles on a remote node by pushing the configuration via rsync and SSH. To do this, use the <code>-s &lt;server&gt;</code> flag. For example:</p>
 <pre><code class="shell">$ waffles.sh -s www.example.com -r web
 </code></pre>
 
