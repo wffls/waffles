@@ -1012,7 +1012,7 @@
         }, 
         {
             "location": "/resources/stdlib.ini/", 
-            "text": "stdlib.ini\n\n\nDescription\n\n\nManages ini files/entries\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nfile: The ini file. Required.\n\n\nsection: The ini file section. Required.\n\n\noption: The ini file setting/option. Required.\n\n\nvalue: The value of the option. Required.\n\n\n\n\nExample\n\n\nstdlib.ini --file /etc/nova/nova.conf --section DEFAULT --option debug --value True", 
+            "text": "stdlib.ini\n\n\nDescription\n\n\nManages ini files/entries\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nfile: The ini file. Required.\n\n\nsection: The ini file section. Required.\n\n\noption: The ini file setting/option. Required.\n\n\nvalue: The value of the option. Use \"\nnone\n\" to not set a value. Required.\n\n\n\n\nExample\n\n\nstdlib.ini --file /etc/nova/nova.conf --section DEFAULT --option debug --value True", 
             "title": "stdlib.ini"
         }, 
         {
@@ -1027,7 +1027,7 @@
         }, 
         {
             "location": "/resources/stdlib.ini/#parameters", 
-            "text": "state: The state of the resource. Required. Default: present.  file: The ini file. Required.  section: The ini file section. Required.  option: The ini file setting/option. Required.  value: The value of the option. Required.", 
+            "text": "state: The state of the resource. Required. Default: present.  file: The ini file. Required.  section: The ini file section. Required.  option: The ini file setting/option. Required.  value: The value of the option. Use \" none \" to not set a value. Required.", 
             "title": "Parameters"
         }, 
         {
