@@ -10,7 +10,7 @@ Manages ini files/entries
 * file: The ini file. Required.
 * section: The ini file section. Required.
 * option: The ini file setting/option. Required.
-* value: The value of the option. Required.
+* value: The value of the option. Use "__none__" to not set a value. Required.
 
 ## Example
 

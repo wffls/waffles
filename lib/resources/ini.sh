@@ -12,7 +12,7 @@
 # * file: The ini file. Required.
 # * section: The ini file section. Required.
 # * option: The ini file setting/option. Required.
-# * value: The value of the option. Required.
+# * value: The value of the option. Use "__none__" to not set a value. Required.
 #
 # === Example
 #
@@ -45,12 +45,12 @@ function stdlib.ini.read {
     return
   fi
 
-  if ! stdlib.ini.ini_get ; then
+  if ! stdlib.ini.ini_get_option ; then
     stdlib_current_state="absent"
     return
   fi
 
-  if ! stdlib.ini.ini_has_option ; then
+  if ! stdlib.ini.ini_option_has_value ; then
     stdlib_current_state="update"
     return
   fi
@@ -82,27 +82,35 @@ function stdlib.ini.delete {
   fi
 }
 
-# The following were taken from
+# The following were modified from
 # https://raw.githubusercontent.com/openstack-dev/devstack/master/inc/ini-config
-function stdlib.ini.ini_get {
+function stdlib.ini.ini_get_option {
   local _line
   if [[ -n ${options[section]} ]]; then
-    _line=$(sed -ne "/^\[${options[section]}\]/,/^\[.*\]/ { /^${options[option]}[ \t]*=/ p; }" "${options[file]}")
+    _line=$(sed -ne "/^\[${options[section]}\]/,/^\[.*\]/ { /^${options[option]}\([ \t]*=\|$\)/ p; }" "${options[file]}")
   else
-    _line=$(sed -ne "/^${options[option]}[ \t]*=/ p;"  "${options[file]}")
+    _line=$(sed -ne "/^${options[option]}[ \t]*/ p;"  "${options[file]}")
   fi
 
   [[ -n $_line ]]
 
 }
 
-function stdlib.ini.ini_has_option {
+function stdlib.ini.ini_option_has_value {
   local _line
   local _value=$(echo ${options[value]} | sed -e 's/[\/&]/\\&/g')
   if [[ -n ${options[section]} ]]; then
-    _line=$(sed -ne "/^\[${options[section]}\]/,/^\[.*\]/ { /^${options[option]}[ \t]*=[ \t]*${_value}$/ p; }" "${options[file]}")
+    if [[ ${options[value]} == "__none__" ]]; then
+      _line=$(sed -ne "/^\[${options[section]}\]/,/^\[.*\]/ { /^${options[option]}$/ p; }" "${options[file]}")
+    else
+      _line=$(sed -ne "/^\[${options[section]}\]/,/^\[.*\]/ { /^${options[option]}[ \t]*=[ \t]*${_value}$/ p; }" "${options[file]}")
+    fi
   else
-    _line=$(sed -ne "/^${options[option]}[ \t]*=[ \t]*${_value}$/ p;" "${options[file]}")
+    if [[ ${options[value]} == "__none__" ]]; then
+      _line=$(sed -ne "/^${options[option]}$/ p;" "${options[file]}")
+    else
+      _line=$(sed -ne "/^${options[option]}[ \t]*=[ \t]*${_value}$/ p;" "${options[file]}")
+    fi
   fi
 
   [[ -n $_line ]]
@@ -120,31 +128,31 @@ function stdlib.ini.inidelete {
 function stdlib.ini.iniset {
   [[ -z ${options[option]} ]] && return
   if [[ -n ${options[section]} ]]; then
-    [[ -z ${options[option]} ]] && return
-
     # Add the section if it doesn't exist
     if ! grep -q "^\[${options[section]}\]" "${options[file]}" 2>/dev/null; then
       echo -e "\n[${options[section]}]" >>"${options[file]}"
     fi
 
-    if [[ $stdlib_current_state == "absent" ]]; then
+    if [[ $stdlib_current_state != "absent" ]]; then
+      stdlib.ini.inidelete
+    fi
+
+    if [[ ${options[value]} == "__none__" ]]; then
+      # Add it
+      sed -i -e "/^\[${options[section]}\]/ a\\
+${options[option]}
+" "${options[file]}"
+    else
       # Add it
       sed -i -e "/^\[${options[section]}\]/ a\\
 ${options[option]} = ${options[value]}
 " "${options[file]}"
-    else
-      # Replace it
-      local sep=$(echo -ne "\x01")
-      sed -i -e '/^\['${options[section]}'\]/,/^\[.*\]/ s'${sep}'^\('${options[option]}'[ \t]*=[ \t]*\).*$'${sep}'\1'"${options[value]}"${sep} "${options[file]}"
     fi
   else
-    if [[ $stdlib_current_state == "absent" ]]; then
-      # Add it
-      echo -e "${options[option]} = ${options[value]}" >> "${options[file]}"
-    else
-      # Replace it
-      local sep=$(echo -ne "\x01")
-      sed -i -e 's'${sep}'^\('${options[option]}'[ \t]*=[ \t]*\).*$'${sep}'\1'"${options[value]}"${sep} "${options[file]}"
+    if [[ $stdlib_current_state != "absent" ]]; then
+      stdlib.ini.inidelete
     fi
+
+    echo -e "${options[option]} = ${options[value]}" >> "${options[file]}"
   fi
 }

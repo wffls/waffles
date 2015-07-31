@@ -41,6 +41,10 @@ stdlib.file --name /opt/puppetlabs/agent/facts.d/role.txt --content "role=memcac
 stdlib.info "file_line"
 stdlib.file_line --name memcached.conf/memory --file /etc/memcached.conf --line "-m 128" --match "^-m"
 
+stdlib.info "ini"
+stdlib.ini --file /root/test.ini --section foobar --option foo --value bar
+stdlib.ini --file /root/test.ini --section foobar --option baz --value __none__
+
 stdlib.info "sysvinit"
 stdlib.sysvinit --name memcached
 
