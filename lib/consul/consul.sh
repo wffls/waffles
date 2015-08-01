@@ -1,12 +1,13 @@
 # consul.get_nodes retrieves a list of nodes.
-# Option: service. Required. Defaults to "all".
+# Options:
+#   service. Required. Defaults to "all".
 # Results are stored in consul_nodes hash.
 function consul.get_nodes {
+  declare -Ag consul_nodes
   local -A options
   stdlib.options.create_option service "all"
   stdlib.options.parse_options "$@"
 
-  declare -Ag consul_nodes
   declare -g consul_error=""
 
   if [[ ${options[service]} == "all" ]]; then
@@ -73,6 +74,12 @@ function consul.get_services {
   declare -ag consul_services=($(curl -s http://localhost:8500/v1/catalog/services | sed -e 's/\[.*\]//g' | tr -d {}\" | tr : " "))
 }
 
+# get_kv returns the value for a given key in the key/value store
+# Options:
+#   server: The consul server to query. Defaults to localhost:8500
+#   path: The path to query. Defaults to /v1/kv.
+#   key: The key to query. Required.
+#   raw: Whether to return a raw result. Defaults to "true".
 function consul.get_kv {
   if ! stdlib.command_exists curl ; then
     stdlib.error "Cannot find curl."
@@ -105,6 +112,13 @@ function consul.get_kv {
   fi
 }
 
+# set_kv sets a value for a given key in the key/value store
+# Options:
+#   server: The consul server to use. Defaults to localhost:8500
+#   path: The path to the key. Defaults to /v1/kv.
+#   key: The key to set. Required.
+#   value: The value to set. Required.
+#   flags: Additional flags.
 function consul.set_kv {
   if ! stdlib.command_exists curl ; then
     stdlib.error "Cannot find curl."
@@ -137,6 +151,11 @@ function consul.set_kv {
   fi
 }
 
+# delete_kv deletes a key in the key/value store.
+# Options:
+#   server: The consul server to use. Defaults to localhost:8500
+#   path: The path to the key. Defaults to /v1/kv.
+#   key: The key to delete. Required.
 function consul.delete_kv {
   if ! stdlib.command_exists curl ; then
     stdlib.error "Cannot find curl."
@@ -156,5 +175,25 @@ function consul.delete_kv {
   _result=$(curl -s -X DELETE ${options[server]}${options[path]}/${options[key]})
   if [[ $? != 0 ]]; then
     stdlib.error "Error deleting key: ${_result}"
+  fi
+}
+
+# build_hosts_file will add known nodes in the Consul cluster to /etc/hosts and purge nodes that no longer exist.
+function consul.build_hosts_file {
+  _pid="$$"
+  consul.get_nodes
+  stdlib.capture_error grep -v \'# consul\' /etc/hosts \> /tmp/hosts.$_pid
+  for _node in "${!consul_nodes[@]}"; do
+    stdlib.file_line --name "/etc/hosts $_node" --file /tmp/hosts.$_pid --line "${consul_nodes[$_node]} $_node # consul"
+  done
+
+  _orig_md5=$(sort /etc/hosts | md5sum | cut -d" " -f1)
+  _new_md5=$(sort /tmp/hosts.$_pid | md5sum | cut -d" " -f1)
+
+  if [[ "$_orig_md5" != "$_new_md5" ]]; then
+    stdlib.capture_error mv /etc/hosts /etc/hosts.orig
+    stdlib.capture_error mv /tmp/hosts.$_pid /etc/hosts
+  else
+    stdlib.capture_error rm /tmp/hosts.$_pid
   fi
 }
