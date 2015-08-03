@@ -45,15 +45,15 @@ function augeas.json_array {
   stdlib.options.parse_options "$@"
 
   # Local Variables
-  local _path=$(echo "${options[file]}/${options[path]}/" | sed -e 's@/\+@/@g')
-  local _name="${_path}${options[key]}"
+  local _path="${options[path]}"
+  local _name=$(echo "${options[file]}/${_path}/${options[key]}" | sed -e 's@/\+@/@g')
 
   # Process the resource
   stdlib.resource.process "augeas.json_array" "$_name"
 }
 
 function augeas.json_array.read {
-  local _result
+  local _result _p _key _key_path _last_path
 
   if [[ ! -f ${options[file]} ]]; then
     stdlib_current_state="absent"
@@ -66,8 +66,27 @@ function augeas.json_array.read {
     return
   fi
 
+  stdlib.split "$_path" "/"
+  for _key in "${__split[@]}"; do
+    if [[ -n $_key ]]; then
+      _key_path="/dict/entry[. = '$_key']"
+      if [[ -z $_last_path ]]; then
+        _last_path="$_key_path"
+      else
+        _last_path="$_last_path/$_key_path"
+      fi
+
+      # Check if the path exists
+      stdlib_current_state=$(augeas.get --lens Json --file "${options[file]}" --path "$_last_path")
+      if [[ $stdlib_current_state == "absent" ]]; then
+        return
+      fi
+    fi
+  done
+
   # Check if the key matches
-  _result=$(augeas.get --lens Json --file "${options[file]}" --path "${options[path]}/dict/entry[. = '${options[key]}']")
+  _p=$(echo "$_last_path/dict/entry[. = '${options[key]}']" | sed -e 's@/\+@/@g')
+  _result=$(augeas.get --lens Json --file "${options[file]}" --path "$_p")
   if [[ $_result == "absent" ]]; then
     stdlib_current_state="update"
     return
@@ -78,7 +97,7 @@ function augeas.json_array.read {
   local _i
   for _i in "${value[@]}"; do
     (( _idx++ ))
-    _result=$(augeas.get --lens Json --file "${options[file]}" --path "${options[path]}/dict/entry[. = '${options[key]}']/array/*[$_idx][. = '$_i']")
+    _result=$(augeas.get --lens Json --file "${options[file]}" --path "$_p/array/*[$_idx][. = '$_i']")
     if [[ $_result == "absent" ]]; then
       stdlib_current_state="update"
       return
@@ -90,14 +109,38 @@ function augeas.json_array.read {
 
 function augeas.json_array.create {
   local -a _augeas_commands=()
+  local _p _key _key_path _last_path
+
   if [[ ! -f "${options[file]}" ]]; then
     stdlib.debug "Creating empty JSON file."
     stdlib.mute "echo '{}' > ${options[file]}"
     _augeas_commands+=("rm /files${options[file]}/dict")
   fi
 
-  _augeas_commands+=("set /files${_path}dict/entry[. = '${options[key]}'] '${options[key]}'")
-  _augeas_commands+=("touch /files${_path}dict/entry[. = '${options[key]}']/array")
+  # Ensure the path leading up exists
+  stdlib.split "$_path" "/"
+  for _key in "${__split[@]}"; do
+    if [[ -n $_key ]]; then
+      _key_path="/dict/entry[. = '$_key']"
+      if [[ -z $_last_path ]]; then
+        _last_path="$_key_path"
+      else
+        _last_path="$_last_path/$_key_path"
+      fi
+
+      _p=$(echo "/files/${options[file]}/$_last_path" | sed -e 's@/\+@/@g')
+      _augeas_commands+=("set $_p '$_key'")
+
+      _p=$(echo "/files/${options[file]}/$_last_path/dict" | sed -e 's@/\+@/@g')
+      _augeas_commands+=("touch $_p")
+    fi
+  done
+
+  _p=$(echo "/files/${options[file]}/$_last_path/dict/entry[. = '${options[key]}']" | sed -e 's@/\+@/@g')
+  _augeas_commands+=("set $_p '${options[key]}'")
+
+  _p=$(echo "/files/${options[file]}/$_last_path/dict/entry[. = '${options[key]}']/array" | sed -e 's@/\+@/@g')
+  _augeas_commands+=("touch $_p")
 
   local _idx=0
   local _i
@@ -111,7 +154,8 @@ function augeas.json_array.create {
     else
       _type="string"
     fi
-    _augeas_commands+=("set /files${_path}dict/entry[. = '${options[key]}']/array/${_type}[$_idx] '$_i'")
+    _p=$(echo "/files/${options[file]}/$_last_path/dict/entry[. = '${options[key]}']/array/${_type}[$_idx]" | sed -e 's@/\+@/@g')
+    _augeas_commands+=("set $_p '$_i'")
   done
 
   local _result=$(augeas.run --lens Json --file "${options[file]}" "${_augeas_commands[@]}")
@@ -128,7 +172,23 @@ function augeas.json_array.update {
 
 function augeas.json_array.delete {
   local -a _augeas_commands=()
-  _augeas_commands+=("rm /files${_path}dict/entry[. = '${options[key]}'")
+  local _p _key _key_path _last_path
+
+  # Lazily build the last path
+  stdlib.split "$_path" "/"
+  for _key in "${__split[@]}"; do
+    if [[ -n $_key ]]; then
+      _key_path="/dict/entry[. = '$_key']"
+      if [[ -z $_last_path ]]; then
+        _last_path="$_key_path"
+      else
+        _last_path="$_last_path/$_key_path"
+      fi
+    fi
+  done
+
+  _p=$(echo "/files/${options[file]}/$_last_path/dict/entry[. = '${options[key]}']" | sed -e 's@/\+@/@g')
+  _augeas_commands+=("rm $_p")
   local _result=$(augeas.run --lens Json --file ${options[file]} "${_augeas_commands[@]}")
 
   if [[ $_result =~ ^error ]]; then

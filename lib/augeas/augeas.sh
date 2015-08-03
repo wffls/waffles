@@ -33,7 +33,7 @@ function augeas.get {
   stdlib.options.create_option path "__required__"
   stdlib.options.parse_options "$@"
 
-  local _path=$(echo "${options[file]}/${options[path]}" | sed -e 's@/\+@/@g')
+  local _path=$(echo "${options[file]}/${options[path]}")
 
   local _result=$(cat <<EOF | augtool -A
 set /augeas/load/${options[lens]}/lens ${options[lens]}.lns
