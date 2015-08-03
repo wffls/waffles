@@ -86,7 +86,7 @@ function stdlib.file.read {
     md5=$(echo "${options[content]}" | md5sum | cut -d' ' -f1)
   fi
 
-  if [[ $_type != "regular file" ]]; then
+  if [[ $_type != "regular file" ]] && [[ $_type != "regular empty file" ]]; then
     stdlib.error "${options[name]} is not a regular file."
     stdlib_current_state="error"
     return
