@@ -7,7 +7,7 @@ Manages a consul.watch.
 ## Parameters
 
 * state: The state of the resource. Required. Default: present.
-* name: The name of the check Required. namevar.
+* name: The name of the watch. Required. namevar.
 * type: The type of watch: key, keyprefix, services, nodes, service, checks, event. Required.
 * key: A key to monitor when using type "key". Optional.
 * prefix: A prefix to monitor when using type "keyprefix". Optional.
@@ -19,7 +19,7 @@ Manages a consul.watch.
 * datacenter: Can be provided to override the agent's default datacenter. Optional.
 * token: Can be provided to override the agent's default ACL token. Optional.
 * handler: The handler to invoke when the data view updates. Required.
-* file: The file to store the check in. Required. Defaults to /etc/consul.d/check-name.json
+* file: The file to store the watch in. Required. Defaults to /etc/consul/agent/conf.d/watch-name.json
 
 ## Example
 

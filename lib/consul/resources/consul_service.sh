@@ -19,7 +19,7 @@
 # * check_type: The type of check. Optional. Multi-var.
 # * check_interval: The interval to run the script. Optional. Multi-var.
 # * check_ttl: The TTL of the check. Optional. Multi-var.
-# * file: The file to store the service in. Required. Defaults to /etc/consul.d/service-name.json
+# * file: The file to store the service in. Required. Defaults to /etc/consul/agent/conf.d/service-name.json
 #
 # === Example
 #
@@ -73,7 +73,7 @@ function consul.service {
 
   # Internal Resource Configuration
   if [[ -z ${options[file]} ]]; then
-    _file="/etc/consul.d/service-${options[name]}.json"
+    _file="/etc/consul/agent/conf.d/service-${options[name]}.json"
   else
     _file="${options[file]}"
   fi

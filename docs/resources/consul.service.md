@@ -17,7 +17,7 @@ Manages a consul service.
 * check_type: The type of check. Optional. Multi-var.
 * check_interval: The interval to run the script. Optional. Multi-var.
 * check_ttl: The TTL of the check. Optional. Multi-var.
-* file: The file to store the service in. Required. Defaults to /etc/consul.d/service-name.json
+* file: The file to store the service in. Required. Defaults to /etc/consul/agent/conf.d/service-name.json
 
 ## Example
 
