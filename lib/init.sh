@@ -110,5 +110,6 @@ function stdlib.enable_consul {
   source "$WAFFLES_LIB_DIR/consul/consul.sh"
   source "$WAFFLES_LIB_DIR/consul/resources/consul_check.sh"
   source "$WAFFLES_LIB_DIR/consul/resources/consul_service.sh"
+  source "$WAFFLES_LIB_DIR/consul/resources/consul_template.sh"
   source "$WAFFLES_LIB_DIR/consul/resources/consul_watch.sh"
 }

@@ -16,7 +16,7 @@ Manages a consul.check.
 * type: The type of check: script, http, or ttl. Required.
 * interval: The interval to run the script. Optional.
 * ttl: The TTL of the check. Optional.
-* file: The file to store the check in. Required. Defaults to /etc/consul.d/check-name.json
+* file: The file to store the check in. Required. Defaults to /etc/consul/agent/conf.d/check-name.json
 
 ## Example
 
