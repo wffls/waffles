@@ -98,7 +98,7 @@ function stdlib.ini.ini_get_option {
 
 function stdlib.ini.ini_option_has_value {
   local _line
-  local _value=$(echo ${options[value]} | sed -e 's/[\/&]/\\&/g')
+  local _value=$(echo ${options[value]} | sed -e 's/[\/&]/\\&/g' | sed -e 's/[][]/\\&/g')
   if [[ -n ${options[section]} ]]; then
     if [[ ${options[value]} == "__none__" ]]; then
       _line=$(sed -ne "/^\[${options[section]}\]/,/^\[.*\]/ { /^${options[option]}$/ p; }" "${options[file]}")
