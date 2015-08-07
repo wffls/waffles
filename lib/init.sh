@@ -30,6 +30,7 @@ function stdlib.enable_augeas {
   source "$WAFFLES_LIB_DIR/augeas/resources/augeas_aptconf.sh"
   source "$WAFFLES_LIB_DIR/augeas/resources/augeas_cron.sh"
   source "$WAFFLES_LIB_DIR/augeas/resources/augeas_file_line.sh"
+  source "$WAFFLES_LIB_DIR/augeas/resources/augeas_generic.sh"
   source "$WAFFLES_LIB_DIR/augeas/resources/augeas_host.sh"
   source "$WAFFLES_LIB_DIR/augeas/resources/augeas_ini.sh"
   source "$WAFFLES_LIB_DIR/augeas/resources/augeas_json_array.sh"
