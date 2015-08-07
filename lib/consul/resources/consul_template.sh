@@ -60,7 +60,7 @@ function consul.template {
 
   # Internal Resource configuration
   if [[ -z ${options[file]} ]]; then
-    _file="/etc/consul/template/conf.d/template-${options[name]}.json"
+    _file="/etc/consul/template/conf.d/${options[name]}.json"
   else
     _file="${options[file]}"
   fi
@@ -90,22 +90,17 @@ function consul.template.read {
     fi
   done
 
-  if [[ $stdlib_current_state == "update" ]]; then
-    return
-  else
-    stdlib_current_state="present"
-  fi
+  stdlib_current_state="present"
 }
 
 function consul.template.create {
   local _result
   local -a _augeas_commands=()
 
-  if [[ ! -f $_file ]]; then
-    stdlib.debug "Creating empty JSON file."
-    stdlib.mute "echo '{}' > $_file"
-    _augeas_commands+=("rm /files/$_file/dict")
-  fi
+  # Create an empty file
+  stdlib.debug "Creating empty JSON file."
+  stdlib.mute "echo '{}' > $_file"
+  _augeas_commands+=("rm /files/$_file/dict")
 
   # Create the check entry
   _augeas_commands+=("set /files/$_file/dict/entry 'template'")
