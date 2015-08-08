@@ -1086,6 +1086,31 @@
             "title": "Example"
         }, 
         {
+            "location": "/resources/stdlib.sudo_cmd/", 
+            "text": "stdlib.sudo_cmd\n\n\nDescription\n\n\nProvides an easy way to give a user sudo access to a single command.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nuser: The user of the sudo privilege. Required. namevar.\n\n\ncommand: The command of the sudo privilege. Required. namevar.\n\n\npassword: Whether to prompt for a password. Required. Default: false.\n\n\n\n\nExample\n\n\nsudo_cmd --user consul --command /usr/local/bin/consul_build_hosts_file.sh", 
+            "title": "stdlib.sudo_cmd"
+        }, 
+        {
+            "location": "/resources/stdlib.sudo_cmd/#stdlibsudo_cmd", 
+            "text": "", 
+            "title": "stdlib.sudo_cmd"
+        }, 
+        {
+            "location": "/resources/stdlib.sudo_cmd/#description", 
+            "text": "Provides an easy way to give a user sudo access to a single command.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/stdlib.sudo_cmd/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  user: The user of the sudo privilege. Required. namevar.  command: The command of the sudo privilege. Required. namevar.  password: Whether to prompt for a password. Required. Default: false.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/stdlib.sudo_cmd/#example", 
+            "text": "sudo_cmd --user consul --command /usr/local/bin/consul_build_hosts_file.sh", 
+            "title": "Example"
+        }, 
+        {
             "location": "/resources/stdlib.sysvinit/", 
             "text": "stdlib.sysvinit\n\n\nDescription\n\n\nManages sysv-init services\n\n\nParameters\n\n\n\n\nstate: The state of the service. Required. Default: running.\n\n\nname: The name of the service. Required. namevar.\n\n\n\n\nExample\n\n\nstdlib.sysvinit --name memcached", 
             "title": "stdlib.sysvinit"
@@ -1291,6 +1316,56 @@
             "title": "Example"
         }, 
         {
+            "location": "/resources/augeas.generic/", 
+            "text": "augeas.generic\n\n\nDescription\n\n\nChange a file using Augeas\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: An arbitrary name for the resource. Required. namevar.\n\n\nlens: The Augeas lens to use without the .lns extension. Required.\n\n\nlens_path: A custom directory that contain lenses. Optional. Multi-var.\n\n\ncommand: A single Augeas command to run. Optional. Multi-var.\n\n\nonlyif: A match conditional to check prior to running commands. If \ntrue\n, the command(s) are run. Optional.\n\n\nfile: The file to modify. Required. namevar.\n\n\n\n\nonlyif Conditional Tests\n\n\nonlyif\n tests have the following format:\n\n\n--onlyif \npath\n \nfunction\n \noperator\n \ncomparison\n\n\n\n\n\n= Size\n\n\nSize compares the amount of matches.\n\n\n\n\nsize -lt 1\n\n\nsize -gt 1\n\n\nAny numerical comparisons\n\n\n\n\n= Path\n\n\n\n\n\n\nWill compare the returned path(s) with a string:\n\n\n\n\n\n\npath not_include \nstring\n\n\n\n\npath include \nstring\n\n\n\n\n= Result\n\n\nResult will compare the returned result(s) with a string:\n\n\n\n\nresult not_include \nstring\n\n\nresult include \nstring\n\n\n\n\n= Conditional Test Examples\n\n\nAssume \n/files/etc/hosts\n:\n\n\n\n\n*/ipaddr[. =~ regexp(\"127.*\")]\n\n\n*/ipaddr[. =~ regexp(\"127.*\")] size -lt 1\n\n\n*/ipaddr[. =~ regexp(\"127.*\")] size -gt 1\n\n\n*/ipaddr[. =~ regexp(\"127.*\")] path not_include 127.0.0.1\n\n\n*/ipaddr[. = \"127.0.0.1\"]/../canonical result include localhost\n\n\n\n\nExample\n\n\naugeas.generic --name test --lens Hosts --file /root/hosts \\\n  --command \nset *[canonical = 'localhost'][1]/ipaddr '10.3.3.27'\n \\\n  --onlyif \n*/ipaddr[. = '127.0.0.1']/../canonical result include 'localhost'\n\n\naugeas.generic --name test2 --lens Hosts --file /root/hosts \\\n  --command \nset 0/ipaddr '8.8.8.8'\n \\\n  --command \nset 0/canonical 'google.com'\n \\\n  --onlyif \n*/ipaddr[. = '8.8.8.8'] result not_include '8.8.8.8'\n\n\naugeas.generic --name test3 --lens Hosts --file /root/hosts \\\n  --command \nset 0/ipaddr '1.1.1.1'\n \\\n  --command \nset 0/canonical 'foobar.com'\n \\\n  --onlyif \n*/ipaddr[. = '1.1.1.1'] path not_include 'ipaddr'\n\n\naugeas.generic --name test4 --lens Hosts --file /root/hosts \\\n  --command \nset 0/ipaddr '2.2.2.2'\n \\\n  --command \nset 0/canonical 'barfoo.com'\n \\\n  --onlyif \n*/ipaddr[. = '2.2.2.2'] size ## 0\n\n\naugeas.generic --name test5 --lens Hosts --file /root/hosts \\\n  --command \nset 0/ipaddr '3.3.3.3'\n \\\n  --command \nset 0/canonical 'bazbar.com'\n \\\n  --onlyif \n*/ipaddr[. = '3.3.3.3'] size -lt 1", 
+            "title": "augeas.generic"
+        }, 
+        {
+            "location": "/resources/augeas.generic/#augeasgeneric", 
+            "text": "", 
+            "title": "augeas.generic"
+        }, 
+        {
+            "location": "/resources/augeas.generic/#description", 
+            "text": "Change a file using Augeas", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/augeas.generic/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  name: An arbitrary name for the resource. Required. namevar.  lens: The Augeas lens to use without the .lns extension. Required.  lens_path: A custom directory that contain lenses. Optional. Multi-var.  command: A single Augeas command to run. Optional. Multi-var.  onlyif: A match conditional to check prior to running commands. If  true , the command(s) are run. Optional.  file: The file to modify. Required. namevar.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/augeas.generic/#onlyif-conditional-tests", 
+            "text": "onlyif  tests have the following format:  --onlyif  path   function   operator   comparison", 
+            "title": "onlyif Conditional Tests"
+        }, 
+        {
+            "location": "/resources/augeas.generic/#size", 
+            "text": "Size compares the amount of matches.   size -lt 1  size -gt 1  Any numerical comparisons", 
+            "title": "= Size"
+        }, 
+        {
+            "location": "/resources/augeas.generic/#path", 
+            "text": "Will compare the returned path(s) with a string:    path not_include  string   path include  string", 
+            "title": "= Path"
+        }, 
+        {
+            "location": "/resources/augeas.generic/#result", 
+            "text": "Result will compare the returned result(s) with a string:   result not_include  string  result include  string", 
+            "title": "= Result"
+        }, 
+        {
+            "location": "/resources/augeas.generic/#conditional-test-examples", 
+            "text": "Assume  /files/etc/hosts :   */ipaddr[. =~ regexp(\"127.*\")]  */ipaddr[. =~ regexp(\"127.*\")] size -lt 1  */ipaddr[. =~ regexp(\"127.*\")] size -gt 1  */ipaddr[. =~ regexp(\"127.*\")] path not_include 127.0.0.1  */ipaddr[. = \"127.0.0.1\"]/../canonical result include localhost", 
+            "title": "= Conditional Test Examples"
+        }, 
+        {
+            "location": "/resources/augeas.generic/#example", 
+            "text": "augeas.generic --name test --lens Hosts --file /root/hosts \\\n  --command  set *[canonical = 'localhost'][1]/ipaddr '10.3.3.27'  \\\n  --onlyif  */ipaddr[. = '127.0.0.1']/../canonical result include 'localhost' \n\naugeas.generic --name test2 --lens Hosts --file /root/hosts \\\n  --command  set 0/ipaddr '8.8.8.8'  \\\n  --command  set 0/canonical 'google.com'  \\\n  --onlyif  */ipaddr[. = '8.8.8.8'] result not_include '8.8.8.8' \n\naugeas.generic --name test3 --lens Hosts --file /root/hosts \\\n  --command  set 0/ipaddr '1.1.1.1'  \\\n  --command  set 0/canonical 'foobar.com'  \\\n  --onlyif  */ipaddr[. = '1.1.1.1'] path not_include 'ipaddr' \n\naugeas.generic --name test4 --lens Hosts --file /root/hosts \\\n  --command  set 0/ipaddr '2.2.2.2'  \\\n  --command  set 0/canonical 'barfoo.com'  \\\n  --onlyif  */ipaddr[. = '2.2.2.2'] size ## 0 \n\naugeas.generic --name test5 --lens Hosts --file /root/hosts \\\n  --command  set 0/ipaddr '3.3.3.3'  \\\n  --command  set 0/canonical 'bazbar.com'  \\\n  --onlyif  */ipaddr[. = '3.3.3.3'] size -lt 1", 
+            "title": "Example"
+        }, 
+        {
             "location": "/resources/augeas.host/", 
             "text": "augeas.host\n\n\nDescription\n\n\nManages hosts in /etc/hosts\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The host. Required. namevar.\n\n\nip: The IP address of the host. Required.\n\n\naliases: A CSV list of host aliases. Optional\n\n\nfile: The hosts file. Default: /etc/hosts.\n\n\n\n\nExample\n\n\naugeas.host --name example.com --ip 192.168.1.1 --aliases www,db", 
             "title": "augeas.host"
@@ -1472,7 +1547,7 @@
         }, 
         {
             "location": "/resources/consul.check/", 
-            "text": "consul.check\n\n\nDescription\n\n\nManages a consul.check.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The name of the check Required. namevar.\n\n\nid: A unique ID for the check. Optional.\n\n\nservice_id: A service to tie the check to. Optional.\n\n\nnotes: Notes about the check. Optional.\n\n\ntoken: An ACL token. Optional.\n\n\ncheck: The script or http location for the check. Optional.\n\n\ntype: The type of check: script, http, or ttl. Required.\n\n\ninterval: The interval to run the script. Optional.\n\n\nttl: The TTL of the check. Optional.\n\n\nfile: The file to store the check in. Required. Defaults to /etc/consul.d/check-name.json\n\n\n\n\nExample\n\n\nconsul.check --name mysql \\\n             --check \n/usr/local/bin/check_mysql.sh\n \\\n             --type \nscript\n \\\n             --interval \n60s", 
+            "text": "consul.check\n\n\nDescription\n\n\nManages a consul.check.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The name of the check Required. namevar.\n\n\nid: A unique ID for the check. Optional.\n\n\nservice_id: A service to tie the check to. Optional.\n\n\nnotes: Notes about the check. Optional.\n\n\ntoken: An ACL token. Optional.\n\n\ncheck: The script or http location for the check. Optional.\n\n\ntype: The type of check: script, http, or ttl. Required.\n\n\ninterval: The interval to run the script. Optional.\n\n\nttl: The TTL of the check. Optional.\n\n\nfile: The file to store the check in. Required. Defaults to /etc/consul/agent/conf.d/check-name.json\n\n\n\n\nExample\n\n\nconsul.check --name mysql \\\n             --check \n/usr/local/bin/check_mysql.sh\n \\\n             --type \nscript\n \\\n             --interval \n60s", 
             "title": "consul.check"
         }, 
         {
@@ -1487,7 +1562,7 @@
         }, 
         {
             "location": "/resources/consul.check/#parameters", 
-            "text": "state: The state of the resource. Required. Default: present.  name: The name of the check Required. namevar.  id: A unique ID for the check. Optional.  service_id: A service to tie the check to. Optional.  notes: Notes about the check. Optional.  token: An ACL token. Optional.  check: The script or http location for the check. Optional.  type: The type of check: script, http, or ttl. Required.  interval: The interval to run the script. Optional.  ttl: The TTL of the check. Optional.  file: The file to store the check in. Required. Defaults to /etc/consul.d/check-name.json", 
+            "text": "state: The state of the resource. Required. Default: present.  name: The name of the check Required. namevar.  id: A unique ID for the check. Optional.  service_id: A service to tie the check to. Optional.  notes: Notes about the check. Optional.  token: An ACL token. Optional.  check: The script or http location for the check. Optional.  type: The type of check: script, http, or ttl. Required.  interval: The interval to run the script. Optional.  ttl: The TTL of the check. Optional.  file: The file to store the check in. Required. Defaults to /etc/consul/agent/conf.d/check-name.json", 
             "title": "Parameters"
         }, 
         {
@@ -1497,7 +1572,7 @@
         }, 
         {
             "location": "/resources/consul.service/", 
-            "text": "consul.service\n\n\nDescription\n\n\nManages a consul service.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The name of the service. Required. namevar.\n\n\nid: A unique ID for the service. Optional.\n\n\ntag: Tags to describe the service. Optional. Multi-var.\n\n\naddress: The address of the service. Optional.\n\n\nport: The port that the service runs on. Optional.\n\n\ntoken: An ACL token. Optional.\n\n\ncheck: The script or location for the check. Optional. Multi-var.\n\n\ncheck_type: The type of check. Optional. Multi-var.\n\n\ncheck_interval: The interval to run the script. Optional. Multi-var.\n\n\ncheck_ttl: The TTL of the check. Optional. Multi-var.\n\n\nfile: The file to store the service in. Required. Defaults to /etc/consul.d/service-name.json\n\n\n\n\nExample\n\n\nconsul.service --name mysql \\\n               --port 3306 \\\n               --check_type \nscript\n \\\n               --check \n/usr/local/bin/check_mysql.sh\n \\\n               --check_interval \n60s", 
+            "text": "consul.service\n\n\nDescription\n\n\nManages a consul service.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The name of the service. Required. namevar.\n\n\nid: A unique ID for the service. Optional.\n\n\ntag: Tags to describe the service. Optional. Multi-var.\n\n\naddress: The address of the service. Optional.\n\n\nport: The port that the service runs on. Optional.\n\n\ntoken: An ACL token. Optional.\n\n\ncheck: The script or location for the check. Optional. Multi-var.\n\n\ncheck_type: The type of check. Optional. Multi-var.\n\n\ncheck_interval: The interval to run the script. Optional. Multi-var.\n\n\ncheck_ttl: The TTL of the check. Optional. Multi-var.\n\n\nfile: The file to store the service in. Required. Defaults to /etc/consul/agent/conf.d/service-name.json\n\n\n\n\nExample\n\n\nconsul.service --name mysql \\\n               --port 3306 \\\n               --check_type \nscript\n \\\n               --check \n/usr/local/bin/check_mysql.sh\n \\\n               --check_interval \n60s", 
             "title": "consul.service"
         }, 
         {
@@ -1512,12 +1587,62 @@
         }, 
         {
             "location": "/resources/consul.service/#parameters", 
-            "text": "state: The state of the resource. Required. Default: present.  name: The name of the service. Required. namevar.  id: A unique ID for the service. Optional.  tag: Tags to describe the service. Optional. Multi-var.  address: The address of the service. Optional.  port: The port that the service runs on. Optional.  token: An ACL token. Optional.  check: The script or location for the check. Optional. Multi-var.  check_type: The type of check. Optional. Multi-var.  check_interval: The interval to run the script. Optional. Multi-var.  check_ttl: The TTL of the check. Optional. Multi-var.  file: The file to store the service in. Required. Defaults to /etc/consul.d/service-name.json", 
+            "text": "state: The state of the resource. Required. Default: present.  name: The name of the service. Required. namevar.  id: A unique ID for the service. Optional.  tag: Tags to describe the service. Optional. Multi-var.  address: The address of the service. Optional.  port: The port that the service runs on. Optional.  token: An ACL token. Optional.  check: The script or location for the check. Optional. Multi-var.  check_type: The type of check. Optional. Multi-var.  check_interval: The interval to run the script. Optional. Multi-var.  check_ttl: The TTL of the check. Optional. Multi-var.  file: The file to store the service in. Required. Defaults to /etc/consul/agent/conf.d/service-name.json", 
             "title": "Parameters"
         }, 
         {
             "location": "/resources/consul.service/#example", 
             "text": "consul.service --name mysql \\\n               --port 3306 \\\n               --check_type  script  \\\n               --check  /usr/local/bin/check_mysql.sh  \\\n               --check_interval  60s", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/consul.template/", 
+            "text": "consul.template\n\n\nDescription\n\n\nManages a consul.template.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The name of the template. Required. namevar.\n\n\nsource: The source of the template. Optional. Defaults to /etc/consul/template/tpl/name.tpl\n\n\ndestination: The destination of the rendered template. Required.\n\n\ncommand: An optional command to run after the template is rendered. Optional.\n\n\nfile: The file to store the template in. Required. Defaults to /etc/consul/template/conf.d/name.json\n\n\n\n\nExample\n\n\nconsul.template --name hosts \\\n                --destination /etc/hosts", 
+            "title": "consul.template"
+        }, 
+        {
+            "location": "/resources/consul.template/#consultemplate", 
+            "text": "", 
+            "title": "consul.template"
+        }, 
+        {
+            "location": "/resources/consul.template/#description", 
+            "text": "Manages a consul.template.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/consul.template/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  name: The name of the template. Required. namevar.  source: The source of the template. Optional. Defaults to /etc/consul/template/tpl/name.tpl  destination: The destination of the rendered template. Required.  command: An optional command to run after the template is rendered. Optional.  file: The file to store the template in. Required. Defaults to /etc/consul/template/conf.d/name.json", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/consul.template/#example", 
+            "text": "consul.template --name hosts \\\n                --destination /etc/hosts", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/consul.watch/", 
+            "text": "consul.watch\n\n\nDescription\n\n\nManages a consul.watch.\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The name of the watch. Required. namevar.\n\n\ntype: The type of watch: key, keyprefix, services, nodes, service, checks, event. Required.\n\n\nkey: A key to monitor when using type \"key\". Optional.\n\n\nprefix: A prefix to monitor when using type \"keyprefix\". Optional.\n\n\nservice: A service to monitor when using type \"service\" or \"checks\". Optional.\n\n\ntag: A service tag to monitor when using type \"service\". Optional.\n\n\npassingonly: Only return instances passing all health checks when using type \"service\". Optional.\n\n\ncheck_state: A state to filter on when using type \"checks\". Optional.\n\n\nevent_name: An event to filter on when using type \"event. Optional.\n\n\ndatacenter: Can be provided to override the agent's default datacenter. Optional.\n\n\ntoken: Can be provided to override the agent's default ACL token. Optional.\n\n\nhandler: The handler to invoke when the data view updates. Required.\n\n\nfile: The file to store the watch in. Required. Defaults to /etc/consul/agent/conf.d/watch-name.json\n\n\n\n\nExample\n\n\nconsul.watch --name nodes \\\n             --type nodes \\\n             --handler \n/usr/local/bin/build_hosts_file.sh", 
+            "title": "consul.watch"
+        }, 
+        {
+            "location": "/resources/consul.watch/#consulwatch", 
+            "text": "", 
+            "title": "consul.watch"
+        }, 
+        {
+            "location": "/resources/consul.watch/#description", 
+            "text": "Manages a consul.watch.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/consul.watch/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  name: The name of the watch. Required. namevar.  type: The type of watch: key, keyprefix, services, nodes, service, checks, event. Required.  key: A key to monitor when using type \"key\". Optional.  prefix: A prefix to monitor when using type \"keyprefix\". Optional.  service: A service to monitor when using type \"service\" or \"checks\". Optional.  tag: A service tag to monitor when using type \"service\". Optional.  passingonly: Only return instances passing all health checks when using type \"service\". Optional.  check_state: A state to filter on when using type \"checks\". Optional.  event_name: An event to filter on when using type \"event. Optional.  datacenter: Can be provided to override the agent's default datacenter. Optional.  token: Can be provided to override the agent's default ACL token. Optional.  handler: The handler to invoke when the data view updates. Required.  file: The file to store the watch in. Required. Defaults to /etc/consul/agent/conf.d/watch-name.json", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/consul.watch/#example", 
+            "text": "consul.watch --name nodes \\\n             --type nodes \\\n             --handler  /usr/local/bin/build_hosts_file.sh", 
             "title": "Example"
         }, 
         {

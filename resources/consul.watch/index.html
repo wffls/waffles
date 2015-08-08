@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>mysql.user - Waffles</title>
+  <title>consul.watch - Waffles</title>
   
 
   <link rel="shortcut icon" href="../../img/favicon.ico">
@@ -20,7 +20,7 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "mysql.user";
+    var mkdocs_page_name = "consul.watch";
   </script>
   
   <script src="../../js/jquery-2.1.1.min.js"></script>
@@ -501,8 +501,21 @@
 
         
             
-    <li class="toctree-l1 ">
-        <a class="" href="../consul.watch/">consul.watch</a>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">consul.watch</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#consulwatch">consul.watch</a></li>
+                
+                    <li><a class="toctree-l4" href="#description">Description</a></li>
+                
+                    <li><a class="toctree-l4" href="#parameters">Parameters</a></li>
+                
+                    <li><a class="toctree-l4" href="#example">Example</a></li>
+                
+            
+            </ul>
         
     </li>
 
@@ -550,21 +563,8 @@
 
         
             
-    <li class="toctree-l1 current">
-        <a class="current" href="./">mysql.user</a>
-        
-            <ul>
-            
-                <li class="toctree-l3"><a href="#mysqluser">mysql.user</a></li>
-                
-                    <li><a class="toctree-l4" href="#description">Description</a></li>
-                
-                    <li><a class="toctree-l4" href="#parameters">Parameters</a></li>
-                
-                    <li><a class="toctree-l4" href="#example">Example</a></li>
-                
-            
-            </ul>
+    <li class="toctree-l1 ">
+        <a class="" href="../mysql.user/">mysql.user</a>
         
     </li>
 
@@ -843,7 +843,7 @@
         
       
     
-    <li>mysql.user</li>
+    <li>consul.watch</li>
     <li class="wy-breadcrumbs-aside">
       
         
@@ -857,19 +857,30 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="mysqluser">mysql.user</h1>
+                <h1 id="consulwatch">consul.watch</h1>
 <h2 id="description">Description</h2>
-<p>Manages MySQL users</p>
+<p>Manages a consul.watch.</p>
 <h2 id="parameters">Parameters</h2>
 <ul>
 <li>state: The state of the resource. Required. Default: present.</li>
-<li>user: The username of the mysql user. unique.</li>
-<li>host: The host of the mysql user. Required. unique.</li>
-<li>password: The password of the mysql user.</li>
+<li>name: The name of the watch. Required. namevar.</li>
+<li>type: The type of watch: key, keyprefix, services, nodes, service, checks, event. Required.</li>
+<li>key: A key to monitor when using type "key". Optional.</li>
+<li>prefix: A prefix to monitor when using type "keyprefix". Optional.</li>
+<li>service: A service to monitor when using type "service" or "checks". Optional.</li>
+<li>tag: A service tag to monitor when using type "service". Optional.</li>
+<li>passingonly: Only return instances passing all health checks when using type "service". Optional.</li>
+<li>check_state: A state to filter on when using type "checks". Optional.</li>
+<li>event_name: An event to filter on when using type "event. Optional.</li>
+<li>datacenter: Can be provided to override the agent's default datacenter. Optional.</li>
+<li>token: Can be provided to override the agent's default ACL token. Optional.</li>
+<li>handler: The handler to invoke when the data view updates. Required.</li>
+<li>file: The file to store the watch in. Required. Defaults to /etc/consul/agent/conf.d/watch-name.json</li>
 </ul>
-<p>Unintuitively, user and password are optional because MySQL allows blank usernames and blank passwords.</p>
 <h2 id="example">Example</h2>
-<pre><code class="shell">mysql.user --user root --password password
+<pre><code class="shell">consul.watch --name nodes \
+             --type nodes \
+             --handler &quot;/usr/local/bin/build_hosts_file.sh&quot;
 </code></pre>
               
             </div>
@@ -878,10 +889,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../nginx.events/" class="btn btn-neutral float-right" title="nginx.events"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../keepalived.global_defs/" class="btn btn-neutral float-right" title="keepalived.global_defs"/>Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../mysql.grant/" class="btn btn-neutral" title="mysql.grant"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../consul.template/" class="btn btn-neutral" title="consul.template"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -909,10 +920,10 @@
           <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../mysql.grant/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../consul.template/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../nginx.events/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../keepalived.global_defs/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

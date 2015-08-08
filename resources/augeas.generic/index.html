@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>mysql.user - Waffles</title>
+  <title>augeas.generic - Waffles</title>
   
 
   <link rel="shortcut icon" href="../../img/favicon.ico">
@@ -20,7 +20,7 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "mysql.user";
+    var mkdocs_page_name = "augeas.generic";
   </script>
   
   <script src="../../js/jquery-2.1.1.min.js"></script>
@@ -424,8 +424,31 @@
 
         
             
-    <li class="toctree-l1 ">
-        <a class="" href="../augeas.generic/">augeas.generic</a>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">augeas.generic</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#augeasgeneric">augeas.generic</a></li>
+                
+                    <li><a class="toctree-l4" href="#description">Description</a></li>
+                
+                    <li><a class="toctree-l4" href="#parameters">Parameters</a></li>
+                
+                    <li><a class="toctree-l4" href="#onlyif-conditional-tests">onlyif Conditional Tests</a></li>
+                
+                    <li><a class="toctree-l4" href="#size">= Size</a></li>
+                
+                    <li><a class="toctree-l4" href="#path">= Path</a></li>
+                
+                    <li><a class="toctree-l4" href="#result">= Result</a></li>
+                
+                    <li><a class="toctree-l4" href="#conditional-test-examples">= Conditional Test Examples</a></li>
+                
+                    <li><a class="toctree-l4" href="#example">Example</a></li>
+                
+            
+            </ul>
         
     </li>
 
@@ -550,21 +573,8 @@
 
         
             
-    <li class="toctree-l1 current">
-        <a class="current" href="./">mysql.user</a>
-        
-            <ul>
-            
-                <li class="toctree-l3"><a href="#mysqluser">mysql.user</a></li>
-                
-                    <li><a class="toctree-l4" href="#description">Description</a></li>
-                
-                    <li><a class="toctree-l4" href="#parameters">Parameters</a></li>
-                
-                    <li><a class="toctree-l4" href="#example">Example</a></li>
-                
-            
-            </ul>
+    <li class="toctree-l1 ">
+        <a class="" href="../mysql.user/">mysql.user</a>
         
     </li>
 
@@ -843,7 +853,7 @@
         
       
     
-    <li>mysql.user</li>
+    <li>augeas.generic</li>
     <li class="wy-breadcrumbs-aside">
       
         
@@ -857,19 +867,80 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="mysqluser">mysql.user</h1>
+                <h1 id="augeasgeneric">augeas.generic</h1>
 <h2 id="description">Description</h2>
-<p>Manages MySQL users</p>
+<p>Change a file using Augeas</p>
 <h2 id="parameters">Parameters</h2>
 <ul>
 <li>state: The state of the resource. Required. Default: present.</li>
-<li>user: The username of the mysql user. unique.</li>
-<li>host: The host of the mysql user. Required. unique.</li>
-<li>password: The password of the mysql user.</li>
+<li>name: An arbitrary name for the resource. Required. namevar.</li>
+<li>lens: The Augeas lens to use without the .lns extension. Required.</li>
+<li>lens_path: A custom directory that contain lenses. Optional. Multi-var.</li>
+<li>command: A single Augeas command to run. Optional. Multi-var.</li>
+<li>onlyif: A match conditional to check prior to running commands. If <code>true</code>, the command(s) are run. Optional.</li>
+<li>file: The file to modify. Required. namevar.</li>
 </ul>
-<p>Unintuitively, user and password are optional because MySQL allows blank usernames and blank passwords.</p>
+<h2 id="onlyif-conditional-tests">onlyif Conditional Tests</h2>
+<p><code>onlyif</code> tests have the following format:</p>
+<pre><code class="shell">--onlyif &quot;&lt;path&gt; &lt;function&gt; &lt;operator&gt; &lt;comparison&gt;&quot;
+</code></pre>
+
+<h2 id="size">= Size</h2>
+<p>Size compares the amount of matches.</p>
+<ul>
+<li><code>size -lt 1</code></li>
+<li><code>size -gt 1</code></li>
+<li>Any numerical comparisons</li>
+</ul>
+<h2 id="path">= Path</h2>
+<ul>
+<li>
+<p>Will compare the returned path(s) with a string:</p>
+</li>
+<li>
+<p><code>path not_include &lt;string&gt;</code></p>
+</li>
+<li><code>path include &lt;string&gt;</code></li>
+</ul>
+<h2 id="result">= Result</h2>
+<p>Result will compare the returned result(s) with a string:</p>
+<ul>
+<li><code>result not_include &lt;string&gt;</code></li>
+<li><code>result include &lt;string&gt;</code></li>
+</ul>
+<h2 id="conditional-test-examples">= Conditional Test Examples</h2>
+<p>Assume <code>/files/etc/hosts</code>:</p>
+<ul>
+<li><code>*/ipaddr[. =~ regexp("127.*")]</code></li>
+<li><code>*/ipaddr[. =~ regexp("127.*")] size -lt 1</code></li>
+<li><code>*/ipaddr[. =~ regexp("127.*")] size -gt 1</code></li>
+<li><code>*/ipaddr[. =~ regexp("127.*")] path not_include 127.0.0.1</code></li>
+<li><code>*/ipaddr[. = "127.0.0.1"]/../canonical result include localhost</code></li>
+</ul>
 <h2 id="example">Example</h2>
-<pre><code class="shell">mysql.user --user root --password password
+<pre><code class="shell">augeas.generic --name test --lens Hosts --file /root/hosts \
+  --command &quot;set *[canonical = 'localhost'][1]/ipaddr '10.3.3.27'&quot; \
+  --onlyif &quot;*/ipaddr[. = '127.0.0.1']/../canonical result include 'localhost'&quot;
+
+augeas.generic --name test2 --lens Hosts --file /root/hosts \
+  --command &quot;set 0/ipaddr '8.8.8.8'&quot; \
+  --command &quot;set 0/canonical 'google.com'&quot; \
+  --onlyif &quot;*/ipaddr[. = '8.8.8.8'] result not_include '8.8.8.8'&quot;
+
+augeas.generic --name test3 --lens Hosts --file /root/hosts \
+  --command &quot;set 0/ipaddr '1.1.1.1'&quot; \
+  --command &quot;set 0/canonical 'foobar.com'&quot; \
+  --onlyif &quot;*/ipaddr[. = '1.1.1.1'] path not_include 'ipaddr'&quot;
+
+augeas.generic --name test4 --lens Hosts --file /root/hosts \
+  --command &quot;set 0/ipaddr '2.2.2.2'&quot; \
+  --command &quot;set 0/canonical 'barfoo.com'&quot; \
+  --onlyif &quot;*/ipaddr[. = '2.2.2.2'] size ## 0&quot;
+
+augeas.generic --name test5 --lens Hosts --file /root/hosts \
+  --command &quot;set 0/ipaddr '3.3.3.3'&quot; \
+  --command &quot;set 0/canonical 'bazbar.com'&quot; \
+  --onlyif &quot;*/ipaddr[. = '3.3.3.3'] size -lt 1&quot;
 </code></pre>
               
             </div>
@@ -878,10 +949,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../nginx.events/" class="btn btn-neutral float-right" title="nginx.events"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../augeas.host/" class="btn btn-neutral float-right" title="augeas.host"/>Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../mysql.grant/" class="btn btn-neutral" title="mysql.grant"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../augeas.file_line/" class="btn btn-neutral" title="augeas.file_line"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -909,10 +980,10 @@
           <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../mysql.grant/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../augeas.file_line/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../nginx.events/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../augeas.host/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

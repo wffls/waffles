@@ -362,6 +362,13 @@
         
             
     <li class="toctree-l1 ">
+        <a class="" href="../stdlib.sudo_cmd/">stdlib.sudo_cmd</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
         <a class="" href="../stdlib.sysvinit/">stdlib.sysvinit</a>
         
     </li>
@@ -412,6 +419,13 @@
             
     <li class="toctree-l1 ">
         <a class="" href="../augeas.file_line/">augeas.file_line</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../augeas.generic/">augeas.generic</a>
         
     </li>
 
@@ -488,6 +502,20 @@
             
     <li class="toctree-l1 ">
         <a class="" href="../consul.service/">consul.service</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../consul.template/">consul.template</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../consul.watch/">consul.watch</a>
         
     </li>
 
@@ -844,7 +872,7 @@
 <li>type: The type of check: script, http, or ttl. Required.</li>
 <li>interval: The interval to run the script. Optional.</li>
 <li>ttl: The TTL of the check. Optional.</li>
-<li>file: The file to store the check in. Required. Defaults to /etc/consul.d/check-name.json</li>
+<li>file: The file to store the check in. Required. Defaults to /etc/consul/agent/conf.d/check-name.json</li>
 </ul>
 <h2 id="example">Example</h2>
 <pre><code class="shell">consul.check --name mysql \

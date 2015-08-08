@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>mysql.user - Waffles</title>
+  <title>consul.template - Waffles</title>
   
 
   <link rel="shortcut icon" href="../../img/favicon.ico">
@@ -20,7 +20,7 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "mysql.user";
+    var mkdocs_page_name = "consul.template";
   </script>
   
   <script src="../../js/jquery-2.1.1.min.js"></script>
@@ -494,8 +494,21 @@
 
         
             
-    <li class="toctree-l1 ">
-        <a class="" href="../consul.template/">consul.template</a>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">consul.template</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#consultemplate">consul.template</a></li>
+                
+                    <li><a class="toctree-l4" href="#description">Description</a></li>
+                
+                    <li><a class="toctree-l4" href="#parameters">Parameters</a></li>
+                
+                    <li><a class="toctree-l4" href="#example">Example</a></li>
+                
+            
+            </ul>
         
     </li>
 
@@ -550,21 +563,8 @@
 
         
             
-    <li class="toctree-l1 current">
-        <a class="current" href="./">mysql.user</a>
-        
-            <ul>
-            
-                <li class="toctree-l3"><a href="#mysqluser">mysql.user</a></li>
-                
-                    <li><a class="toctree-l4" href="#description">Description</a></li>
-                
-                    <li><a class="toctree-l4" href="#parameters">Parameters</a></li>
-                
-                    <li><a class="toctree-l4" href="#example">Example</a></li>
-                
-            
-            </ul>
+    <li class="toctree-l1 ">
+        <a class="" href="../mysql.user/">mysql.user</a>
         
     </li>
 
@@ -843,7 +843,7 @@
         
       
     
-    <li>mysql.user</li>
+    <li>consul.template</li>
     <li class="wy-breadcrumbs-aside">
       
         
@@ -857,19 +857,21 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="mysqluser">mysql.user</h1>
+                <h1 id="consultemplate">consul.template</h1>
 <h2 id="description">Description</h2>
-<p>Manages MySQL users</p>
+<p>Manages a consul.template.</p>
 <h2 id="parameters">Parameters</h2>
 <ul>
 <li>state: The state of the resource. Required. Default: present.</li>
-<li>user: The username of the mysql user. unique.</li>
-<li>host: The host of the mysql user. Required. unique.</li>
-<li>password: The password of the mysql user.</li>
+<li>name: The name of the template. Required. namevar.</li>
+<li>source: The source of the template. Optional. Defaults to /etc/consul/template/tpl/name.tpl</li>
+<li>destination: The destination of the rendered template. Required.</li>
+<li>command: An optional command to run after the template is rendered. Optional.</li>
+<li>file: The file to store the template in. Required. Defaults to /etc/consul/template/conf.d/name.json</li>
 </ul>
-<p>Unintuitively, user and password are optional because MySQL allows blank usernames and blank passwords.</p>
 <h2 id="example">Example</h2>
-<pre><code class="shell">mysql.user --user root --password password
+<pre><code class="shell">consul.template --name hosts \
+                --destination /etc/hosts
 </code></pre>
               
             </div>
@@ -878,10 +880,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../nginx.events/" class="btn btn-neutral float-right" title="nginx.events"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../consul.watch/" class="btn btn-neutral float-right" title="consul.watch"/>Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../mysql.grant/" class="btn btn-neutral" title="mysql.grant"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../consul.service/" class="btn btn-neutral" title="consul.service"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -909,10 +911,10 @@
           <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../mysql.grant/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../consul.service/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../nginx.events/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../consul.watch/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
