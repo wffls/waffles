@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.17.0 - August 8, 2015
+
+* New resource: `stdlib.sudo_cmd`.
+* New resource: `consul.template`.
+* New resource: `augeas.generic`.
+* New function: `stdlib.hash_keys`.
+* Enhanced `stdlib.ini`: Allows for single-word entries.
+* Fixed `stdlib.directory`.
+* Fixed `stdlib.debconf`.
+* Fixed `stdlib.file`.
+* Fixed `stdlib.ini`.
+* Fixed GRANT queries in `mysql.grant`.
+* Doc updates (@reduxionist).
+
 ## 0.16.0 - July 25, 2015
 
 * New resource: Initial Consul resources.
