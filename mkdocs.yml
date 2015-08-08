@@ -59,6 +59,7 @@ pages:
     - augeas.aptconf: 'resources/augeas.aptconf.md'
     - augeas.cron: 'resources/augeas.cron.md'
     - augeas.file_line: 'resources/augeas.file_line.md'
+    - augeas.generic: 'resources/augeas.generic.md'
     - augeas.host: 'resources/augeas.host.md'
     - augeas.ini: 'resources/augeas.ini.md'
     - augeas.json_array: 'resources/augeas.json_array.md'
