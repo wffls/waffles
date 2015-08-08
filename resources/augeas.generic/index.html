@@ -437,14 +437,6 @@
                 
                     <li><a class="toctree-l4" href="#onlyif-conditional-tests">onlyif Conditional Tests</a></li>
                 
-                    <li><a class="toctree-l4" href="#size">= Size</a></li>
-                
-                    <li><a class="toctree-l4" href="#path">= Path</a></li>
-                
-                    <li><a class="toctree-l4" href="#result">= Result</a></li>
-                
-                    <li><a class="toctree-l4" href="#conditional-test-examples">= Conditional Test Examples</a></li>
-                
                     <li><a class="toctree-l4" href="#example">Example</a></li>
                 
             
@@ -885,14 +877,14 @@
 <pre><code class="shell">--onlyif &quot;&lt;path&gt; &lt;function&gt; &lt;operator&gt; &lt;comparison&gt;&quot;
 </code></pre>
 
-<h2 id="size">= Size</h2>
+<h3 id="size">Size</h3>
 <p>Size compares the amount of matches.</p>
 <ul>
 <li><code>size -lt 1</code></li>
 <li><code>size -gt 1</code></li>
 <li>Any numerical comparisons</li>
 </ul>
-<h2 id="path">= Path</h2>
+<h3 id="path">Path</h3>
 <ul>
 <li>
 <p>Will compare the returned path(s) with a string:</p>
@@ -902,13 +894,13 @@
 </li>
 <li><code>path include &lt;string&gt;</code></li>
 </ul>
-<h2 id="result">= Result</h2>
+<h3 id="result">Result</h3>
 <p>Result will compare the returned result(s) with a string:</p>
 <ul>
 <li><code>result not_include &lt;string&gt;</code></li>
 <li><code>result include &lt;string&gt;</code></li>
 </ul>
-<h2 id="conditional-test-examples">= Conditional Test Examples</h2>
+<h3 id="conditional-test-examples">Conditional Test Examples</h3>
 <p>Assume <code>/files/etc/hosts</code>:</p>
 <ul>
 <li><code>*/ipaddr[. =~ regexp("127.*")]</code></li>

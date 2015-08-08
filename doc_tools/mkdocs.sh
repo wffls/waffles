@@ -12,7 +12,7 @@ function gendoc {
     fi
 
     if [[ $line =~ ^# ]]; then
-      _line=$(echo "$line" | sed -e 's/#//g' -e 's/^ //g' -e 's/^=//' -e 's/==/##/g')
+      _line=$(echo "$line" | sed -e 's/#//g' -e 's/^ //g' -e 's/^=//' -e 's/===/###/g' -e 's/==/##/g')
       if [[ $_line_count -eq 3 ]]; then
         echo "# $_name" > "../resources/$_name.md"
       fi

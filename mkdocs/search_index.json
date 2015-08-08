@@ -1317,7 +1317,7 @@
         }, 
         {
             "location": "/resources/augeas.generic/", 
-            "text": "augeas.generic\n\n\nDescription\n\n\nChange a file using Augeas\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: An arbitrary name for the resource. Required. namevar.\n\n\nlens: The Augeas lens to use without the .lns extension. Required.\n\n\nlens_path: A custom directory that contain lenses. Optional. Multi-var.\n\n\ncommand: A single Augeas command to run. Optional. Multi-var.\n\n\nonlyif: A match conditional to check prior to running commands. If \ntrue\n, the command(s) are run. Optional.\n\n\nfile: The file to modify. Required. namevar.\n\n\n\n\nonlyif Conditional Tests\n\n\nonlyif\n tests have the following format:\n\n\n--onlyif \npath\n \nfunction\n \noperator\n \ncomparison\n\n\n\n\n\n= Size\n\n\nSize compares the amount of matches.\n\n\n\n\nsize -lt 1\n\n\nsize -gt 1\n\n\nAny numerical comparisons\n\n\n\n\n= Path\n\n\n\n\n\n\nWill compare the returned path(s) with a string:\n\n\n\n\n\n\npath not_include \nstring\n\n\n\n\npath include \nstring\n\n\n\n\n= Result\n\n\nResult will compare the returned result(s) with a string:\n\n\n\n\nresult not_include \nstring\n\n\nresult include \nstring\n\n\n\n\n= Conditional Test Examples\n\n\nAssume \n/files/etc/hosts\n:\n\n\n\n\n*/ipaddr[. =~ regexp(\"127.*\")]\n\n\n*/ipaddr[. =~ regexp(\"127.*\")] size -lt 1\n\n\n*/ipaddr[. =~ regexp(\"127.*\")] size -gt 1\n\n\n*/ipaddr[. =~ regexp(\"127.*\")] path not_include 127.0.0.1\n\n\n*/ipaddr[. = \"127.0.0.1\"]/../canonical result include localhost\n\n\n\n\nExample\n\n\naugeas.generic --name test --lens Hosts --file /root/hosts \\\n  --command \nset *[canonical = 'localhost'][1]/ipaddr '10.3.3.27'\n \\\n  --onlyif \n*/ipaddr[. = '127.0.0.1']/../canonical result include 'localhost'\n\n\naugeas.generic --name test2 --lens Hosts --file /root/hosts \\\n  --command \nset 0/ipaddr '8.8.8.8'\n \\\n  --command \nset 0/canonical 'google.com'\n \\\n  --onlyif \n*/ipaddr[. = '8.8.8.8'] result not_include '8.8.8.8'\n\n\naugeas.generic --name test3 --lens Hosts --file /root/hosts \\\n  --command \nset 0/ipaddr '1.1.1.1'\n \\\n  --command \nset 0/canonical 'foobar.com'\n \\\n  --onlyif \n*/ipaddr[. = '1.1.1.1'] path not_include 'ipaddr'\n\n\naugeas.generic --name test4 --lens Hosts --file /root/hosts \\\n  --command \nset 0/ipaddr '2.2.2.2'\n \\\n  --command \nset 0/canonical 'barfoo.com'\n \\\n  --onlyif \n*/ipaddr[. = '2.2.2.2'] size ## 0\n\n\naugeas.generic --name test5 --lens Hosts --file /root/hosts \\\n  --command \nset 0/ipaddr '3.3.3.3'\n \\\n  --command \nset 0/canonical 'bazbar.com'\n \\\n  --onlyif \n*/ipaddr[. = '3.3.3.3'] size -lt 1", 
+            "text": "augeas.generic\n\n\nDescription\n\n\nChange a file using Augeas\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: An arbitrary name for the resource. Required. namevar.\n\n\nlens: The Augeas lens to use without the .lns extension. Required.\n\n\nlens_path: A custom directory that contain lenses. Optional. Multi-var.\n\n\ncommand: A single Augeas command to run. Optional. Multi-var.\n\n\nonlyif: A match conditional to check prior to running commands. If \ntrue\n, the command(s) are run. Optional.\n\n\nfile: The file to modify. Required. namevar.\n\n\n\n\nonlyif Conditional Tests\n\n\nonlyif\n tests have the following format:\n\n\n--onlyif \npath\n \nfunction\n \noperator\n \ncomparison\n\n\n\n\n\nSize\n\n\nSize compares the amount of matches.\n\n\n\n\nsize -lt 1\n\n\nsize -gt 1\n\n\nAny numerical comparisons\n\n\n\n\nPath\n\n\n\n\n\n\nWill compare the returned path(s) with a string:\n\n\n\n\n\n\npath not_include \nstring\n\n\n\n\npath include \nstring\n\n\n\n\nResult\n\n\nResult will compare the returned result(s) with a string:\n\n\n\n\nresult not_include \nstring\n\n\nresult include \nstring\n\n\n\n\nConditional Test Examples\n\n\nAssume \n/files/etc/hosts\n:\n\n\n\n\n*/ipaddr[. =~ regexp(\"127.*\")]\n\n\n*/ipaddr[. =~ regexp(\"127.*\")] size -lt 1\n\n\n*/ipaddr[. =~ regexp(\"127.*\")] size -gt 1\n\n\n*/ipaddr[. =~ regexp(\"127.*\")] path not_include 127.0.0.1\n\n\n*/ipaddr[. = \"127.0.0.1\"]/../canonical result include localhost\n\n\n\n\nExample\n\n\naugeas.generic --name test --lens Hosts --file /root/hosts \\\n  --command \nset *[canonical = 'localhost'][1]/ipaddr '10.3.3.27'\n \\\n  --onlyif \n*/ipaddr[. = '127.0.0.1']/../canonical result include 'localhost'\n\n\naugeas.generic --name test2 --lens Hosts --file /root/hosts \\\n  --command \nset 0/ipaddr '8.8.8.8'\n \\\n  --command \nset 0/canonical 'google.com'\n \\\n  --onlyif \n*/ipaddr[. = '8.8.8.8'] result not_include '8.8.8.8'\n\n\naugeas.generic --name test3 --lens Hosts --file /root/hosts \\\n  --command \nset 0/ipaddr '1.1.1.1'\n \\\n  --command \nset 0/canonical 'foobar.com'\n \\\n  --onlyif \n*/ipaddr[. = '1.1.1.1'] path not_include 'ipaddr'\n\n\naugeas.generic --name test4 --lens Hosts --file /root/hosts \\\n  --command \nset 0/ipaddr '2.2.2.2'\n \\\n  --command \nset 0/canonical 'barfoo.com'\n \\\n  --onlyif \n*/ipaddr[. = '2.2.2.2'] size ## 0\n\n\naugeas.generic --name test5 --lens Hosts --file /root/hosts \\\n  --command \nset 0/ipaddr '3.3.3.3'\n \\\n  --command \nset 0/canonical 'bazbar.com'\n \\\n  --onlyif \n*/ipaddr[. = '3.3.3.3'] size -lt 1", 
             "title": "augeas.generic"
         }, 
         {
@@ -1337,28 +1337,8 @@
         }, 
         {
             "location": "/resources/augeas.generic/#onlyif-conditional-tests", 
-            "text": "onlyif  tests have the following format:  --onlyif  path   function   operator   comparison", 
+            "text": "onlyif  tests have the following format:  --onlyif  path   function   operator   comparison   Size  Size compares the amount of matches.   size -lt 1  size -gt 1  Any numerical comparisons   Path    Will compare the returned path(s) with a string:    path not_include  string   path include  string   Result  Result will compare the returned result(s) with a string:   result not_include  string  result include  string   Conditional Test Examples  Assume  /files/etc/hosts :   */ipaddr[. =~ regexp(\"127.*\")]  */ipaddr[. =~ regexp(\"127.*\")] size -lt 1  */ipaddr[. =~ regexp(\"127.*\")] size -gt 1  */ipaddr[. =~ regexp(\"127.*\")] path not_include 127.0.0.1  */ipaddr[. = \"127.0.0.1\"]/../canonical result include localhost", 
             "title": "onlyif Conditional Tests"
-        }, 
-        {
-            "location": "/resources/augeas.generic/#size", 
-            "text": "Size compares the amount of matches.   size -lt 1  size -gt 1  Any numerical comparisons", 
-            "title": "= Size"
-        }, 
-        {
-            "location": "/resources/augeas.generic/#path", 
-            "text": "Will compare the returned path(s) with a string:    path not_include  string   path include  string", 
-            "title": "= Path"
-        }, 
-        {
-            "location": "/resources/augeas.generic/#result", 
-            "text": "Result will compare the returned result(s) with a string:   result not_include  string  result include  string", 
-            "title": "= Result"
-        }, 
-        {
-            "location": "/resources/augeas.generic/#conditional-test-examples", 
-            "text": "Assume  /files/etc/hosts :   */ipaddr[. =~ regexp(\"127.*\")]  */ipaddr[. =~ regexp(\"127.*\")] size -lt 1  */ipaddr[. =~ regexp(\"127.*\")] size -gt 1  */ipaddr[. =~ regexp(\"127.*\")] path not_include 127.0.0.1  */ipaddr[. = \"127.0.0.1\"]/../canonical result include localhost", 
-            "title": "= Conditional Test Examples"
         }, 
         {
             "location": "/resources/augeas.generic/#example", 
