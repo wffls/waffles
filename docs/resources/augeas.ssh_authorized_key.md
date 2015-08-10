@@ -10,7 +10,7 @@ Manages ssh_authorized_keys
 * name: The ssh_authorized_key. Required. namevar.
 * key: The ssh key. Required.
 * type: The key type. Required.
-* options: A CSV list of ssh_authorized_key options. Optional
+* key_options: A CSV list of ssh_authorized_key options. Optional
 * file: The ssh_authorized_keys file. Required.
 
 ## Example

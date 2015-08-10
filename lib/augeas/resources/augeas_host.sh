@@ -41,63 +41,20 @@ function augeas.host {
   stdlib.options.create_option file    "/etc/hosts"
   stdlib.options.parse_options "$@"
 
-  # Process the resource
-  stdlib.resource.process "augeas.host" "${options[name]}"
-}
+  # Convert to an `augeas.generic` resource
+  augeas.generic --name "augeas.hosts.${options[name]}" \
+                 --lens Hosts \
+                 --file "${options[file]}" \
+                 --command "set 01/ipaddr '${options[ip]}'" \
+                 --command "set 02/canonical '${options[name]}'" \
+                 --notif "*/canonical[. = '${options[name]}']"
 
-function augeas.host.read {
-  stdlib_current_state=$(augeas.get --lens Hosts --file "${options[file]}" --path "*/canonical[. = '${options[name]}']/../ipaddr")
-  if [[ "$stdlib_current_state" != "present" ]]; then
-    return
-  fi
-
-  if [[ -n "${options[aliases]}" ]]; then
-    stdlib.split ${options[aliases]} ","
-    for a in "${__split[@]}"; do
-      _result=$(augeas.get --lens Hosts --file "${options[file]}" --path "*/canonical[. = '${options[name]}']/../alias[. = '${a}']")
-      if [[ $_result != "present" ]]; then
-        stdlib_current_state="update"
-        return
-      fi
-    done
-  fi
-
-  stdlib_current_state="present"
-}
-
-function augeas.host.create {
-  local -a _augeas_commands=()
-  _augeas_commands+=("set /files${options[file]}/01/ipaddr '${options[ip]}'")
-  _augeas_commands+=("set /files${options[file]}/01/canonical '${options[name]}'")
-
-  if [[ -n ${options[aliases]} ]]; then
-    stdlib.split ${options[aliases]} ","
-    for a in "${__split[@]}"; do
-      _augeas_commands+=("set /files${options[file]}/01/alias[last()+1] '${a}'")
-    done
-  fi
-
-  local _result=$(augeas.run --lens Hosts --file "${options[file]}" "${_augeas_commands[@]}")
-
-  if [[ $_result =~ ^error ]]; then
-    stdlib.error "Error adding creating alias with augeas: $_result"
-    return
-  fi
-}
-
-function augeas.host.update {
-  augeas.host.delete
-  augeas.host.create
-}
-
-function augeas.host.delete {
-  local -a _augeas_commands=()
-  _augeas_commands+=("rm /files${options[file]}/*/canonical[. = '${options[name]}']/../")
-
-  local _result=$(augeas.run --lens Hosts --file ${options[file]} "${_augeas_commands[@]}")
-
-  if [[ $_result =~ ^error ]]; then
-    stdlib.error "Error deleting resource with augeas: $_result"
-    return
-  fi
+  stdlib.split "${options[aliases]}" ","
+  for a in "${__split[@]}"; do
+    augeas.generic --name "augeas.hosts.$a" \
+                   --lens Hosts \
+                   --file "${options[file]}" \
+                   --command "set *[ipaddr = '${options[ip]}']/alias[0] '$a'" \
+                   --notif "*[ipaddr = '${options[ip]}']/canonical[. = '${options[name]}']/../alias[. = '$a']"
+  done
 }

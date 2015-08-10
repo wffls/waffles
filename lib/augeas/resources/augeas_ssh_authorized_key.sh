@@ -12,7 +12,7 @@
 # * name: The ssh_authorized_key. Required. namevar.
 # * key: The ssh key. Required.
 # * type: The key type. Required.
-# * options: A CSV list of ssh_authorized_key options. Optional
+# * key_options: A CSV list of ssh_authorized_key options. Optional
 # * file: The ssh_authorized_keys file. Required.
 #
 # === Example
@@ -39,89 +39,30 @@ function augeas.ssh_authorized_key {
 
   # Resource Options
   local -A options
-  stdlib.options.create_option state   "present"
-  stdlib.options.create_option name    "__required__"
-  stdlib.options.create_option key     "__required__"
-  stdlib.options.create_option type    "__required__"
-  stdlib.options.create_option options ""
-  stdlib.options.create_option file    "__required__"
+  local -a key_options
+  stdlib.options.create_option state          "present"
+  stdlib.options.create_option name           "__required__"
+  stdlib.options.create_option key            "__required__"
+  stdlib.options.create_option type           "__required__"
+  stdlib.options.create_option file           "__required__"
+  stdlib.options.create_mv_option key_options
   stdlib.options.parse_options "$@"
 
-  # Process the resource
-  stdlib.resource.process "augeas.ssh_authorized_key" "${options[name]}"
-}
+  # Local variables
+  local -a _commands
 
-function augeas.ssh_authorized_key.read {
-  local _result
+  # Internal Resource Configuration
+  for ko in "${key_options[@]}"; do
+    _commands+=("--command")
+    _commands+=("set key[. = '${options[key]}']/option[. = '$ko'] '$ko'")
+  done
 
-  # Check if the key exists
-  stdlib_current_state=$(augeas.get --lens Authorized_Keys --file "${options[file]}" --path "/key[. ='${options[key]}']")
-  if [[ $stdlib_current_state != "present" ]]; then
-    return
-  fi
-
-  # If the key exists, check if the type matches
-  _result=$(augeas.get --lens Authorized_Keys --file "${options[file]}" --path "/key[. ='${options[key]}']/type[. = '${options[type]}']")
-  if [[ $_result != "present" ]]; then
-    stdlib_current_state="update"
-    return
-  fi
-
-  # Check if the comment matches
-  _result=$(augeas.get --lens Authorized_Keys --file "${options[file]}" --path "/key[. ='${options[key]}']/comment[. = '${options[comment]}']")
-  if [[ $_result != "present" ]]; then
-    stdlib_current_state="update"
-    return
-  fi
-
-  # Check if all the options match
-  if [[ -n ${options[options]} ]]; then
-    stdlib.split ${options[options]} ","
-    for 0 in "${__split[@]}"; do
-      stdlib_current_state=$(augeas.get --lens Authorized_Keys --file ${options[file]} --path "/key[. = '${options[key]}']/options[. = '${o}']")
-      if [[ $stdlib_current_state != "present" ]]; then
-        stdlib_current_state="update"
-        return
-      fi
-    done
-  fi
-
-  stdlib_current_state="present"
-}
-
-function augeas.ssh_authorized_key.create {
-  local -a _augeas_commands=()
-  _augeas_commands+=("set /files${options[file]}/key[last()+1] '${options[key]}'")
-  _augeas_commands+=("set /files${options[file]}/key[last()]/type '${options[type]}'")
-  _augeas_commands+=("set /files${options[file]}/key[last()]/comment '${options[comment]}'")
-
-  if [[ -n ${options[options]} ]]; then
-    stdlib.split ${options[options]} ","
-    for o in "${__split[@]}"; do
-      _augeas_commands+=("set /files${options[file]}/key[last()]/option[last()+1] '${o}'")
-    done
-  fi
-
-  local _result=$(augeas.run --lens Authorized_Keys --file "${options[file]}" "${_augeas_commands[@]}")
-
-  if [[ $_result =~ ^error ]]; then
-    stdlib.error "Error adding ssh_authorized_key ${options[name]} with augeas: $_result"
-    return
-  fi
-}
-
-function augeas.ssh_authorized_key.update {
-  augeas.ssh_authorized_key.delete
-  augeas.ssh_authorized_key.create
-}
-
-function augeas.ssh_authorized_key.delete {
-  local -a _augeas_commands=()
-  _augeas_commands+=("rm /files${options[file]}/key[. = '${options[key]}']")
-  local _result=$(augeas.run --lens Authorized_Keys --file ${options[file]} "${_augeas_commands[@]}")
-
-  if [[ $_result =~ ^error ]]; then
-    stdlib.error "Error deleting ssh_authorized_key ${options[name]} with augeas: $_result"
-    return
-  fi
+  # Convert to an `augeas.generic` resource
+  augeas.generic --name "augeas.ssh_authorized_key.${options[name]}" \
+                 --lens Authorized_Keys \
+                 --file "${options[file]}" \
+                 --command "set key[. = '${options[key]}'] '${options[key]}'" \
+                 --command "set key[. = '${options[key]}']/type '${options[type]}'" \
+                 --command "set key[. = '${options[key]}']/comment '${options[comment]}'" \
+                 "${_commands[@]}"
 }

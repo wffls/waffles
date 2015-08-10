@@ -39,41 +39,10 @@ function augeas.file_line {
   stdlib.options.create_option file  "__required__"
   stdlib.options.parse_options "$@"
 
-  # Process the resource
-  stdlib.resource.process "augeas.file_line" "${options[name]}"
-}
-
-function augeas.file_line.read {
-  local _result
-
-  # Check if the line exists
-  stdlib_current_state=$(augeas.get --lens Simplelines --file "${options[file]}" --path "/*[. = '${options[line]}']")
-}
-
-function augeas.file_line.create {
-  local -a _augeas_commands=()
-  _augeas_commands+=("set /files${options[file]}/01 '${options[line]}'")
-
-  local _result=$(augeas.run --lens Simplelines --file "${options[file]}" "${_augeas_commands[@]}")
-
-  if [[ $_result =~ ^error ]]; then
-    stdlib.error "Error adding file_line ${options[name]} with augeas: $_result"
-    return
-  fi
-}
-
-function augeas.file_line.update {
-  augeas.file_line.delete
-  augeas.file_line.create
-}
-
-function augeas.file_line.delete {
-  local -a _augeas_commands=()
-  _augeas_commands+=("rm /files${options[file]}/*[. = '${options[line]}']")
-  local _result=$(augeas.run --lens Simplelines --file ${options[file]} "${_augeas_commands[@]}")
-
-  if [[ $_result =~ ^error ]]; then
-    stdlib.error "Error deleting file_line ${options[name]} with augeas: $_result"
-    return
-  fi
+  # Convert to an `augeas.generic` resource
+  augeas.generic --name "augeas.file_line.${options[name]}" \
+                 --lens Simplelines \
+                 --file "${options[file]}" \
+                 --command "set 01 '${options[line]}'" \
+                 --notif "*[. = '${options[line]}']"
 }

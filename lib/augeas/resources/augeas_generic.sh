@@ -14,11 +14,12 @@
 # * lens_path: A custom directory that contain lenses. Optional. Multi-var.
 # * command: A single Augeas command to run. Optional. Multi-var.
 # * onlyif: A match conditional to check prior to running commands. If `true`, the command(s) are run. Optional.
+# * notif: The same as `onlyif` but when the match should fail. Optional.
 # * file: The file to modify. Required. namevar.
 #
-# === onlyif Conditional Tests
+# === onlyif / notif Conditional Tests
 #
-# `onlyif` tests have the following format:
+# `onlyif` and `notif` tests have the following format:
 #
 # ```shell
 # --onlyif "<path> <function> <operator> <comparison>"
@@ -38,6 +39,8 @@
 #
 # * `path not_include <string>`
 # * `path include <string>`
+# * `path is <string>`
+# * `path is_not <string>`
 #
 # ==== Result
 #
@@ -45,6 +48,8 @@
 #
 # * `result not_include <string>`
 # * `result include <string>`
+# * `result is <string>`
+# * `result is_not <string>`
 #
 # ==== Conditional Test Examples
 #
@@ -76,7 +81,7 @@
 # augeas.generic --name test4 --lens Hosts --file /root/hosts \
 #   --command "set 0/ipaddr '2.2.2.2'" \
 #   --command "set 0/canonical 'barfoo.com'" \
-#   --onlyif "*/ipaddr[. = '2.2.2.2'] size == 0"
+#   --onlyif "*/ipaddr[. = '2.2.2.2'] size -eq 0"
 #
 # augeas.generic --name test5 --lens Hosts --file /root/hosts \
 #   --command "set 0/ipaddr '3.3.3.3'" \
@@ -107,6 +112,7 @@ function augeas.generic {
   stdlib.options.create_option file         "__required__"
   stdlib.options.create_mv_option lens_path
   stdlib.options.create_option onlyif
+  stdlib.options.create_option notif
   stdlib.options.parse_options "$@"
 
   # Local Variables
@@ -133,18 +139,25 @@ function augeas.generic {
 }
 
 function augeas.generic.read {
-  local _test _return _commands _pid _error
-  local _path _parts _function _operator _comparison _c
+  local _test _return _return_expected _commands _pid _error _testpath
+  local _path _function _operator _comparison _c
   local -a _result
+  local -a _parts
   local -a _augeas_commands=( "${_augeas_init[@]}" )
 
-  # If `onlyif` was specified, check and see the result of the command.
-  if [[ -n ${options[onlyif]} ]]; then
-    local -a _parts
-    _parts=(${options[onlyif]})
+  # If `onlyif` or `notif` was specified, check and see the result of the command.
+  if [[ -n ${options[onlyif]} ]] || [[ -n ${options[notif]} ]]; then
+    if [[ -n ${options[onlyif]} ]]; then
+      _return_expected=0
+      _parts=(${options[onlyif]})
+    else
+      _return_expected=1
+      _parts=(${options[notif]})
+    fi
 
-    # Use eval to strip surrounding quotes?
-    _comparison=$(eval echo ${_parts[-1]})
+    # Remove possible surrounding quotes
+    _comparison="${_parts[-1]}"
+    _comparison=$(echo $_comparison | sed -e 's/^"//' -e 's/"$//' -e "s/^'//" -e "s/'$//")
     stdlib.array_pop _parts >/dev/null
 
     _operator="${_parts[-1]}"
@@ -168,7 +181,11 @@ function augeas.generic.read {
         ;;
       *)
         _test="path_exists"
-        _path="${_file_path}/${options[onlyif]}"
+        if [[ -n ${options[onlyif]} ]]; then
+          _path="${_file_path}/${options[onlyif]}"
+        else
+          _path="${_file_path}/${options[notif]}"
+        fi
         ;;
     esac
 
@@ -192,10 +209,11 @@ function augeas.generic.read {
     augeas.generic.test_${_test}
     _return=$?
 
-    if [[ $_return == 0 ]]; then
+    if [[ $_return == $_return_expected ]]; then
       stdlib_current_state="absent"
       return
     fi
+
   else
     # Run the set of commands and see if they were successful.
     for c in "${command[@]}"; do
@@ -214,6 +232,10 @@ function augeas.generic.read {
 
     if [[ -s "/tmp/augeas_error.$pid" ]]; then
       _error=$(</tmp/augeas_error.$pid)
+    fi
+
+    if [[ -f "${_file}.augnew" ]]; then
+      stdlib.debug_mute rm "${_file}.augnew"
     fi
 
     stdlib.debug_mute rm /tmp/augeas_error.pid
@@ -298,29 +320,36 @@ function augeas.generic.test_size {
 
 function augeas.generic.test_path_or_result {
   local _match="false"
-  local _x
+  local _part _c
 
   for r in "${_result[@]}"; do
     stdlib.split "$r" " = "
     if [[ $_function == "path" ]]; then
-      _x="${__split[0]}"
+      _part="${__split[0]}"
     else
-      _x="${__split[1]}"
+      _part="${__split[1]}"
     fi
 
-    if [[ $_x =~ $_comparison ]]; then
-      _match="true"
-      break
+    if [[ $_operator == "include" ]] || [[ $_operator == "not_include" ]]; then
+      if [[ $_part =~ $_comparison ]]; then
+        _match="true"
+        break
+      fi
+    elif [[ $_operator == "is" ]] || [[ $_operator == "is_not" ]]; then
+      if [[ $_part == $_comparison ]]; then
+        _match="true"
+        break
+      fi
     fi
   done
 
-  if [[ $_operator == "include" ]]; then
+  if [[ $_operator == "include" ]] || [[ $_operator == "is" ]]; then
     if [[ $_match == "true" ]]; then
       return 0
     else
       return 1
     fi
-  elif [[ $_operator == "not_include" ]]; then
+  elif [[ $_operator == "not_include" ]] || [[ $_operator == "is_not" ]]; then
     if [[ $_match == "true" ]]; then
       return 1
     else
@@ -330,15 +359,9 @@ function augeas.generic.test_path_or_result {
 }
 
 function augeas.generic.test_path_exists {
-  local _match="true"
+  local _match="false"
 
-  for r in "${_result[@]}"; do
-    if [[ $r =~ "no matches" ]]; then
-      _match="false"
-    fi
-  done
-
-  if [[ $_match == "true" ]]; then
+  if [[ $(stdlib.array_length _result) -gt 0 ]]; then
     return 0
   else
     return 1
