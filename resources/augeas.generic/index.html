@@ -435,7 +435,7 @@
                 
                     <li><a class="toctree-l4" href="#parameters">Parameters</a></li>
                 
-                    <li><a class="toctree-l4" href="#onlyif-conditional-tests">onlyif Conditional Tests</a></li>
+                    <li><a class="toctree-l4" href="#onlyif-notif-conditional-tests">onlyif / notif Conditional Tests</a></li>
                 
                     <li><a class="toctree-l4" href="#example">Example</a></li>
                 
@@ -870,10 +870,11 @@
 <li>lens_path: A custom directory that contain lenses. Optional. Multi-var.</li>
 <li>command: A single Augeas command to run. Optional. Multi-var.</li>
 <li>onlyif: A match conditional to check prior to running commands. If <code>true</code>, the command(s) are run. Optional.</li>
+<li>notif: The same as <code>onlyif</code> but when the match should fail. Optional.</li>
 <li>file: The file to modify. Required. namevar.</li>
 </ul>
-<h2 id="onlyif-conditional-tests">onlyif Conditional Tests</h2>
-<p><code>onlyif</code> tests have the following format:</p>
+<h2 id="onlyif-notif-conditional-tests">onlyif / notif Conditional Tests</h2>
+<p><code>onlyif</code> and <code>notif</code> tests have the following format:</p>
 <pre><code class="shell">--onlyif &quot;&lt;path&gt; &lt;function&gt; &lt;operator&gt; &lt;comparison&gt;&quot;
 </code></pre>
 
@@ -893,12 +894,16 @@
 <p><code>path not_include &lt;string&gt;</code></p>
 </li>
 <li><code>path include &lt;string&gt;</code></li>
+<li><code>path is &lt;string&gt;</code></li>
+<li><code>path is_not &lt;string&gt;</code></li>
 </ul>
 <h3 id="result">Result</h3>
 <p>Result will compare the returned result(s) with a string:</p>
 <ul>
 <li><code>result not_include &lt;string&gt;</code></li>
 <li><code>result include &lt;string&gt;</code></li>
+<li><code>result is &lt;string&gt;</code></li>
+<li><code>result is_not &lt;string&gt;</code></li>
 </ul>
 <h3 id="conditional-test-examples">Conditional Test Examples</h3>
 <p>Assume <code>/files/etc/hosts</code>:</p>
@@ -927,7 +932,7 @@ augeas.generic --name test3 --lens Hosts --file /root/hosts \
 augeas.generic --name test4 --lens Hosts --file /root/hosts \
   --command &quot;set 0/ipaddr '2.2.2.2'&quot; \
   --command &quot;set 0/canonical 'barfoo.com'&quot; \
-  --onlyif &quot;*/ipaddr[. = '2.2.2.2'] size ## 0&quot;
+  --onlyif &quot;*/ipaddr[. = '2.2.2.2'] size -eq 0&quot;
 
 augeas.generic --name test5 --lens Hosts --file /root/hosts \
   --command &quot;set 0/ipaddr '3.3.3.3'&quot; \
