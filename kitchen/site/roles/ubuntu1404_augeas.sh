@@ -58,7 +58,7 @@ augeas.json_dict --file /root/foo.json --path / --key bar --value _dict
 augeas.json_dict --file /root/foo.json --path / --key baz --value "bar"
 augeas.json_array --file /root/foo.json --path / --key foo --value 1 --value 2 --value 3
 
-augeas.mail_alias --account root --destination /dev/null
+augeas.mail_alias --account root --destination /dev/null --alias foo@bar.com
 
 augeas.shellvar --key foo --value bar --file /root/vars
 

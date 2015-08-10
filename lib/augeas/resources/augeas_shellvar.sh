@@ -42,50 +42,9 @@ function augeas.shellvar {
   # Local Variables
   local _name="${options[file]}.${options[key]}"
 
-  # Process the resource
-  stdlib.resource.process "augeas.shellvar" "$_name"
-}
-
-function augeas.shellvar.read {
-  local _result
-
-  # Check if the key exists
-  stdlib_current_state=$(augeas.get --lens Shellvars --file "${options[file]}" --path "/${options[key]}")
-  if [[ $stdlib_current_state == "absent" ]]; then
-    return
-  fi
-
-  # Check if the value matches
-  _result=$(augeas.get --lens Shellvars --file "${options[file]}" --path "/${options[key]}[. = '${options[value]}']")
-  if [[ $_result == "absent" ]]; then
-    stdlib_current_state="update"
-  fi
-}
-
-function augeas.shellvar.create {
-  local -a _augeas_commands=()
-  _augeas_commands+=("set /files${options[file]}/${options[key]} '${options[value]}'")
-
-  local _result=$(augeas.run --lens Shellvars --file "${options[file]}" "${_augeas_commands[@]}")
-
-  if [[ $_result =~ ^error ]]; then
-    stdlib.error "Error adding shellvar $_name with augeas: $_result"
-    return
-  fi
-}
-
-function augeas.shellvar.update {
-  augeas.shellvar.delete
-  augeas.shellvar.create
-}
-
-function augeas.shellvar.delete {
-  local -a _augeas_commands=()
-  _augeas_commands+=("rm /files${options[file]}/${options[key]}")
-  local _result=$(augeas.run --lens Shellvars --file ${options[file]} "${_augeas_commands[@]}")
-
-  if [[ $_result =~ ^error ]]; then
-    stdlib.error "Error deleting shellvar $_name with augeas: $_result"
-    return
-  fi
+  # Convert to an `augeas.generic` resource
+  augeas.generic --name "augeas.shellvar.${_name}" \
+                 --lens Shellvars \
+                 --file "${options[file]}" \
+                 --command "set ${options[key]}[. = '${options[value]}'] '${options[value]}'"
 }

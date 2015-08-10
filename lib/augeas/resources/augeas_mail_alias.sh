@@ -10,7 +10,8 @@
 #
 # * state: The state of the resource. Required. Default: present.
 # * account: The mail account. Required. namevar.
-# * destination: The destination for the account. Required. Multi-value.
+# * destination: The destination for the account. Required.
+# * alias: Additional aliases for the account. Optional. Multi-value.
 # * file: The aliases file. Default: /etc/aliases.
 #
 # === Example
@@ -33,74 +34,26 @@ function augeas.mail_alias {
 
   # Resource Options
   local -A options
-  local -a destination
+  local -a alias
   stdlib.options.create_option    state       "present"
   stdlib.options.create_option    account     "__required__"
-  stdlib.options.create_mv_option destination "__required__"
+  stdlib.options.create_option    destination "__required__"
+  stdlib.options.create_mv_option alias
   stdlib.options.create_option    file        "/etc/aliases"
   stdlib.options.parse_options    "$@"
 
-  # Process the resource
-  stdlib.resource.process "augeas.mail_alias" "${options[account]}"
-}
+  # Convert to an `augeas.generic` resource
+  augeas.generic --name "augeas.mail_alias.${options[account]}" \
+                 --lens Aliases \
+                 --file "${options[file]}" \
+                 --command "set 01/name '${options[account]}'" \
+                 --command "set 01/value '${options[destination]}'" \
+                 --notif "*/name[. = '${options[account]}']/../value[. = '${options[destination]}']"
 
-function augeas.mail_alias.read {
-  local _result
-
-  stdlib_current_state=$(augeas.get --lens Aliases --file "${options[file]}" --path "*/name[. = '${options[account]}']")
-  if [[ $stdlib_current_state == "absent" ]]; then
-    return
-  fi
-
-  for d in "${destination[@]}"; do
-    _result=$(augeas.get --lens Aliases --file "${options[file]}" --path "*/name[. = '${options[account]}']/../value[. = '$d']")
-    if [[ $_result == "absent" ]]; then
-      stdlib_current_state="update"
-    fi
+  for a in "${alias[@]}"; do
+    augeas.generic --name "augeas.mail_alias.${options[account]}.$a" \
+                   --lens Aliases \
+                   --file "${options[file]}" \
+                   --command "set */name[. = '${options[account]}']/../value[. = '$a'] '$a'"
   done
-}
-
-function augeas.mail_alias.create {
-  local _augeas_commands=()
-  _augeas_commands+=("set /files${options[file]}/01/name '${options[account]}'")
-
-  for d in "${destination[@]}"; do
-    _augeas_commands+=("set /files${options[file]}/01/value[0] '$d'")
-  done
-
-  local _result=$(augeas.run --lens Aliases --file "${options[file]}" "${_augeas_commands[@]}")
-
-  if [[ $_result =~ ^error ]]; then
-    stdlib.error "Error creating mail alias with augeas: $_result"
-    return
-  fi
-}
-
-function augeas.mail_alias.update {
-  local _augeas_commands=()
-
-  for d in "${destination[@]}"; do
-    _augeas_commands+=("set /files${options[file]}/*/name[. = '${options[account]}']/../value[. = '$d'] '$d'")
-  done
-
-  local _result=$(augeas.run --lens Aliases --file "${options[file]}" "${_augeas_commands[@]}")
-
-  if [[ $_result =~ ^error ]]; then
-    stdlib.error "Error creating mail alias with augeas: $_result"
-    return
-  fi
-}
-
-function augeas.mail_alias.delete {
-  local _augeas_commands=()
-  for d in "${destination[@]}"; do
-    _augeas_commands+=("rm /files${options[file]}/*/name[. = '${options[account]}']/../value[. = '$d']")
-  done
-
-  local _result=$(augeas.run --lens Aliases --file ${options[file]} "${_augeas_commands[@]}")
-
-  if [[ $_result =~ ^error ]]; then
-    stdlib.error "Error deleting resource with augeas: $_result"
-    return
-  fi
 }

@@ -44,50 +44,10 @@ function augeas.ini {
   # Local Variables
   local _name="${options[file]}.${options[section]}.${options[option]}"
 
-  # Process the resource
-  stdlib.resource.process "augeas.ini" "$_name"
-}
-
-function augeas.ini.read {
-  local _result
-
-  # Check if the section/option
-  stdlib_current_state=$(augeas.get --lens Puppet --file "${options[file]}" --path "/${options[section]}/${options[option]}")
-  if [[ "$stdlib_current_state" == "absent" ]]; then
-    return
-  fi
-
-  # Check if the value matches
-  _result=$(augeas.get --lens Puppet --file "${options[file]}" --path "/${options[section]}/${options[option]}[. = '${options[value]}']")
-  if [[ $_result == "absent" ]]; then
-    stdlib_current_state="update"
-  fi
-}
-
-function augeas.ini.create {
-  local -a _augeas_commands=()
-  _augeas_commands+=("set /files${options[file]}/${options[section]}/${options[option]} '${options[value]}'")
-
-  local _result=$(augeas.run --lens Puppet --file "${options[file]}" "${_augeas_commands[@]}")
-
-  if [[ $_result =~ ^error ]]; then
-    stdlib.error "Error adding ini $_name with augeas: $_result"
-    return
-  fi
-}
-
-function augeas.ini.update {
-  augeas.ini.delete
-  augeas.ini.create
-}
-
-function augeas.ini.delete {
-  local -a _augeas_commands=()
-  _augeas_commands+=("rm /files${options[file]}/${options[section]}/${options[option]}")
-  local _result=$(augeas.run --lens Puppet --file ${options[file]} "${_augeas_commands[@]}")
-
-  if [[ $_result =~ ^error ]]; then
-    stdlib.error "Error deleting ini $_name with augeas: $_result"
-    return
-  fi
+  # Create an `augeas.generic` resource
+  augeas.generic --name "augeas.ini.$_name" \
+                 --lens Puppet \
+                 --file "${options[file]}" \
+                 --command "set ${options[section]}/${options[option]} '${options[value]}'" \
+                 --notif "${options[section]}/${options[option]}[. = '${options[value]}']"
 }

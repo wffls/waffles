@@ -12,11 +12,12 @@ Change a file using Augeas
 * lens_path: A custom directory that contain lenses. Optional. Multi-var.
 * command: A single Augeas command to run. Optional. Multi-var.
 * onlyif: A match conditional to check prior to running commands. If `true`, the command(s) are run. Optional.
+* notif: The same as `onlyif` but when the match should fail. Optional.
 * file: The file to modify. Required. namevar.
 
-## onlyif Conditional Tests
+## onlyif / notif Conditional Tests
 
-`onlyif` tests have the following format:
+`onlyif` and `notif` tests have the following format:
 
 ```shell
 --onlyif "<path> <function> <operator> <comparison>"
@@ -36,6 +37,8 @@ Size compares the amount of matches.
 
 * `path not_include <string>`
 * `path include <string>`
+* `path is <string>`
+* `path is_not <string>`
 
 ### Result
 
@@ -43,6 +46,8 @@ Result will compare the returned result(s) with a string:
 
 * `result not_include <string>`
 * `result include <string>`
+* `result is <string>`
+* `result is_not <string>`
 
 ### Conditional Test Examples
 
@@ -74,7 +79,7 @@ augeas.generic --name test3 --lens Hosts --file /root/hosts \
 augeas.generic --name test4 --lens Hosts --file /root/hosts \
   --command "set 0/ipaddr '2.2.2.2'" \
   --command "set 0/canonical 'barfoo.com'" \
-  --onlyif "*/ipaddr[. = '2.2.2.2'] size ## 0"
+  --onlyif "*/ipaddr[. = '2.2.2.2'] size -eq 0"
 
 augeas.generic --name test5 --lens Hosts --file /root/hosts \
   --command "set 0/ipaddr '3.3.3.3'" \
