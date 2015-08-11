@@ -192,6 +192,11 @@ function augeas.generic.read {
     _augeas_commands+=("match $_path")
     _commands=$(IFS=$'\n'; echo "${_augeas_commands[*]}")
     _pid=$$
+
+    for c in "${_augeas_commands[@]}"; do
+      stdlib.debug "$c"
+    done
+
     mapfile -t _result < <(augtool $_lens_path -A 2>/tmp/augeas_error.$pid <<< "$_commands" | grep -v "no matches")
 
     if [[ -s "/tmp/augeas_error.$pid" ]]; then
@@ -225,6 +230,10 @@ function augeas.generic.read {
     done
     _augeas_commands+=("save")
     _augeas_commands+=("print /augeas/events/saved")
+
+    for c in "${_augeas_commands[@]}"; do
+      stdlib.debug "$c"
+    done
 
     _commands=$(IFS=$'\n'; echo "${_augeas_commands[*]}")
     _pid=$$
@@ -274,6 +283,10 @@ function augeas.generic.create {
   done
   _augeas_commands+=("save")
   _augeas_commands+=("print /augeas/events/saved")
+
+  for c in "${_augeas_commands[@]}"; do
+    stdlib.debug "$c"
+  done
 
   _commands=$(IFS=$'\n'; echo "${_augeas_commands[*]}")
   _result=$(augtool $_lens_path -A 2>/tmp/augeas_error.$pid <<< "$_commands" | grep -v Saved)
