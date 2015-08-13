@@ -20,11 +20,14 @@ function stdlib.options.parse_options {
   while [ $# -gt 0 ]; do
     stdlib.debug "option $1, value $2"
     if [[ $2 =~ ^-- ]]; then
-      stdlib.error "Invalid options were passed: $1, $2"
-      exit 1
+      local _err_key=${2//--}
+      if [[ ${options[$_err_key]+isset} ]]; then
+        stdlib.error "Invalid options were passed: $1, $2"
+        exit 1
+      fi
     fi
 
-    local _opt_key=$(echo $1 | tr -d -)
+    local _opt_key=${1//--}
     if [[ ${options[$_opt_key/mv]+isset} ]]; then
       stdlib.array_push $_opt_key "$2"
       options[$_opt_key]="__set__"
