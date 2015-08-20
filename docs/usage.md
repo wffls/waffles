@@ -160,6 +160,40 @@ stdlib.profiles memcached => profiles/memcached/scripts/init.sh
 stdlib.profiles memcached/utils => profiles/memcached/scripts/utils.sh
 ```
 
+### The Hosts Profile
+
+Waffles supports an optional special profile called `host_files`, located at `site/profiles/host_files`. The purpose of this profile is to provide a designated area where files and scripts specific to individual hosts can be stored. This is beneficial because, normally, the entire profile is copied to each node that uses the profile. If you are storing files such as SSL certs in a profile, all SSL certs would be then copied to all hosts that share use the profile. This is probably not intended behavior.
+
+The `host_files` profile has the following structure:
+
+```shell
+host_files/
+├── mysql-01
+│   └── files
+│       ├── mysql-01.crt
+│       └── mysql-01.key
+├── mysql-02
+│   └── files
+│       ├── mysql-02.crt
+│       └── mysql-02.key
+└── rabbit-01
+    ├── files
+    │   ├── rabbit-01.crt
+    │   └── rabbit-01.key
+    └── scripts
+        └── custom.sh
+```
+
+Each subdirectory of the `host_files` profile is an individual host or node, named after the hostname (not FQDN). The directory of these subdirectories is like a normal profile with the usual `files` and `scripts` subdirectories.
+
+Inside your role, you can enable this special profile by doing:
+
+```shell
+stdlib.profile host_files
+```
+
+This means that a profile with the name `host_files` is a reserved name.
+
 ## Applying Roles
 
 Waffles supports two ways of applying roles:
