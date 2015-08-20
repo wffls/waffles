@@ -156,15 +156,11 @@ function augeas.generic.read {
     fi
 
     # Remove possible surrounding quotes
-    _comparison="${_parts[-1]}"
+    stdlib.array_pop _parts _comparison
     _comparison=$(echo $_comparison | sed -e 's/^"//' -e 's/"$//' -e "s/^'//" -e "s/'$//")
-    stdlib.array_pop _parts >/dev/null
 
-    _operator="${_parts[-1]}"
-    stdlib.array_pop _parts >/dev/null
-
-    _function="${_parts[-1]}"
-    stdlib.array_pop _parts >/dev/null
+    stdlib.array_pop _parts _operator
+    stdlib.array_pop _parts _function
 
     _path=$(stdlib.array_join _parts " ")
     _path="${_file_path}/$_path"
@@ -197,13 +193,13 @@ function augeas.generic.read {
       stdlib.debug "$c"
     done
 
-    mapfile -t _result < <(augtool $_lens_path -A 2>/tmp/augeas_error.$pid <<< "$_commands" | grep -v "no matches")
+    mapfile -t _result < <(augtool $_lens_path -A 2>/tmp/augeas_error.$_pid <<< "$_commands" | grep -v "no matches")
 
-    if [[ -s "/tmp/augeas_error.$pid" ]]; then
-      _error=$(</tmp/augeas_error.$pid)
+    if [[ -s "/tmp/augeas_error.$_pid" ]]; then
+      _error=$(</tmp/augeas_error.$_pid)
     fi
 
-    stdlib.debug_mute rm /tmp/augeas_error.pid
+    stdlib.debug_mute rm /tmp/augeas_error.$_pid
 
     if [[ -n $_error ]]; then
       stdlib.error "Augeas error: $_error"
@@ -237,17 +233,17 @@ function augeas.generic.read {
 
     _commands=$(IFS=$'\n'; echo "${_augeas_commands[*]}")
     _pid=$$
-    _result=$(augtool $_lens_path -An 2>/tmp/augeas_error.$pid <<< "$_commands" | grep -v Saved)
+    _result=$(augtool $_lens_path -An 2>/tmp/augeas_error.$_pid <<< "$_commands" | grep -v Saved)
 
-    if [[ -s "/tmp/augeas_error.$pid" ]]; then
-      _error=$(</tmp/augeas_error.$pid)
+    if [[ -s "/tmp/augeas_error.$_pid" ]]; then
+      _error=$(</tmp/augeas_error.$_pid)
     fi
 
     if [[ -f "${_file}.augnew" ]]; then
       stdlib.debug_mute rm "${_file}.augnew"
     fi
 
-    stdlib.debug_mute rm /tmp/augeas_error.pid
+    stdlib.debug_mute rm /tmp/augeas_error.$_pid
 
     if [[ -n $_error ]]; then
       stdlib.error "Augeas error: $_error"
@@ -289,13 +285,13 @@ function augeas.generic.create {
   done
 
   _commands=$(IFS=$'\n'; echo "${_augeas_commands[*]}")
-  _result=$(augtool $_lens_path -A 2>/tmp/augeas_error.$pid <<< "$_commands" | grep -v Saved)
+  _result=$(augtool $_lens_path -A 2>/tmp/augeas_error.$_pid <<< "$_commands" | grep -v Saved)
 
-  if [[ -s "/tmp/augeas_error.$pid" ]]; then
-    _error=$(</tmp/augeas_error.$pid)
+  if [[ -s "/tmp/augeas_error.$_pid" ]]; then
+    _error=$(</tmp/augeas_error.$_pid)
   fi
 
-  stdlib.debug_mute rm /tmp/augeas_error.pid
+  stdlib.debug_mute rm /tmp/augeas_error.$_pid
 
   if [[ -n $_error ]]; then
     stdlib.error "Augeas error: $_error"

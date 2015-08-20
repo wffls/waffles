@@ -153,28 +153,45 @@ function stdlib.profile {
   if [[ $# -gt 0 ]]; then
     local _script_path
     local _profile
+    local _file
+    local _host
     if [[ $1 =~ [/] ]]; then
       stdlib.split "$1" '/'
       _profile="${__split[0]}"
-      local _file="${__split[1]}"
-      _script_path="$WAFFLES_SITE_DIR/profiles/$_profile/scripts/$_file.sh"
+      _file="${__split[1]}"
     else
       _profile="$1"
-      if [[ -f "$WAFFLES_SITE_DIR/profiles/$_profile/scripts/init.sh" ]]; then
-        _script_path="$WAFFLES_SITE_DIR/profiles/$_profile/scripts/init.sh"
-      fi
+      _file="init.sh"
     fi
 
-    if [[ -n $_profile && -n $_script_path ]]; then
+    if [[ $_profile == "host_files" ]]; then
+      if [[ -n $server ]]; then
+        _host="${server%%.*}"
+      else
+        _host=$(hostname)
+        _host=${_host%%.*}
+      fi
+      _profile="host_files/$_host"
+    fi
+
+    if [[ -f "$WAFFLES_SITE_DIR/profiles/$_profile/scripts/${_file}.sh" ]]; then
+      _script_path="$WAFFLES_SITE_DIR/profiles/$_profile/scripts/${_file}.sh"
+    elif [[ -f "$WAFFLES_SITE_DIR/profiles/$_profile/scripts/init.sh" ]]; then
+      _script_path="$WAFFLES_SITE_DIR/profiles/$_profile/scripts/init.sh"
+    elif [[ ! -d "$WAFFLES_SITE_DIR/profiles/$_profile" ]]; then
+      _profile=""
+    fi
+
+    if [[ -n $_profile ]]; then
       if [[ -n $WAFFLES_REMOTE ]]; then
         stdlib_remote_copy[profiles/$_profile]=1
-      else
+      elif [[ -n $_script_path ]]; then
+        stdlib.debug "Running: $_script_path"
         stdlib.include "$_script_path"
       fi
     else
-      stdlib.warn "Profile not found: $1"
+      stdlib.debug "Profile not found: $1"
     fi
-
   fi
 }
 
@@ -183,11 +200,12 @@ function stdlib.data {
   if [[ $# -gt 0 ]]; then
     local _script_path
     local _data
+    local _file
     if [[ $1 =~ [/] ]]; then
       stdlib.split "$1" '/'
       _data="${__split[0]}"
-      local _file="${__split[1]}"
-      _script_path="$WAFFLES_SITE_DIR/data/$data/$_file.sh"
+      _file="${__split[1]}"
+      _script_path="$WAFFLES_SITE_DIR/data/$data/${_file}.sh"
     else
       if [[ -f "$WAFFLES_SITE_DIR/data/${1}.sh" ]]; then
         _data="data/${1}.sh"
@@ -207,7 +225,6 @@ function stdlib.data {
     else
       stdlib.warn "Data not found: $1"
     fi
-
   fi
 }
 
@@ -264,54 +281,62 @@ function stdlib.trim {
 # stdlib.array_length returns the length of an array
 # $1 = array
 function stdlib.array_length {
-  local _arr="$1"
-  if [[ -n $_arr ]]; then
-    eval "echo \${#$_arr[@]}"
-  fi
+  local -n _arr="$1"
+  echo "${#_arr[@]:-0}"
 }
 
 # stdlib.array_push adds elements to the end of an array
 # $1 = array
 # $2+ = elements to push
 function stdlib.array_push {
-  local _arr="$1"
+  local -n _arr=$1
   shift
 
-  if [[ -n $_arr ]]; then
-    eval "$_arr=(\"\${$_arr[@]}\" \"\$@\")"
-  fi
+  while [[ $# -gt 0 ]]; do
+    _arr+=("$1")
+    shift
+  done
 }
 
 # stdlib.array_pop pops the last element from an array
 # $1 = array
+# $2 = optional variable to pop to
 function stdlib.array_pop {
-  local _arr="$1"
-  local _arr_length=$(stdlib.array_length $_arr)
+  local -n _arr="$1"
+  local _arr_length=$(stdlib.array_length $1)
   local _arr_element
-  local _pop
+
+  if [[ -n $2 ]]; then
+    local -n _pop="$2"
+  else
+    local _pop
+  fi
 
   if [[ -n $_arr ]] && (( $_arr_length >= 1 )); then
     _arr_element=$(( $_arr_length - 1 ))
-    eval "_pop=\"\$(echo \"\${$_arr[$_arr_element]}\")\""
-    eval "unset $_arr[$_arr_element]"
-
-    echo "$_pop"
+    _pop="${_arr[$_arr_element]}"
+    unset "_arr[$_arr_element]"
   fi
 }
 
 # stdlib.array_shift pops the first element from an array
 # $1 = array
+# $2 = optional variable to pop to
 function stdlib.array_shift {
-  local _arr="$1"
-  local _arr_length=$(stdlib.array_length $_arr)
-  local _pop
+  local -n _arr="$1"
+  local _arr_length=$(stdlib.array_length $1)
 
-  if [[ -n $_arr ]] && (( $_arr_length >= 1 )); then
-    eval "_pop=\"\$(echo \"\${$_arr[0]}\")\""
-    eval "unset $_arr[0]"
-    eval "$_arr=(\"\${$_arr[@]}\")"
+  if [[ -n $2 ]]; then
+    local -n _pop="$2"
+  else
+    local _pop
+  fi
 
-    echo "$_pop"
+  if [[ -n ${_arr} ]] && (( $_arr_length >= 1 )); then
+    _pop="${_arr[0]}"
+    unset '_arr[0]'
+    _arr=("${_arr[@]}")
+
   fi
 }
 
@@ -319,12 +344,12 @@ function stdlib.array_shift {
 # $1 = array
 # $2+ = elements
 function stdlib.array_unshift {
-  local _arr="$1"
+  local -n _arr="$1"
   shift
 
   if [[ -n $_arr ]]; then
     while [[ $# -gt 0 ]]; do
-      eval "$_arr=(\"\$1\" \"\${$_arr[@]}\")"
+      _arr=("$1" "${_arr[@]}")
       shift
     done
   fi
@@ -335,23 +360,18 @@ function stdlib.array_unshift {
 # $2 = delimiter
 function stdlib.array_join {
   if [[ $# -eq 2 ]]; then
-    local _arr="$1"
+    local -n _arr="$1"
     local _delim="$2"
-    local _arr_length
-    local _string _pop
+    local _arr_length=$(stdlib.array_length $1)
+    local _string
+    local _pop
 
-    _arr_length=$(stdlib.array_length $_arr)
     while [[ $_arr_length -gt 0 ]]; do
-      eval "_pop=\"\$(echo \"\${$_arr[0]}\")\""
-      eval "unset $_arr[0]"
-      eval "$_arr=(\"\${$_arr[@]}\")"
-
-      if [[ -z $_string ]]; then
-        _string="${_pop}"
-      else
-        _string="${_string}${_delim}${_pop}"
-      fi
-      _arr_length=$(stdlib.array_length $_arr)
+      _pop="${_arr[0]}"
+      unset '_arr[0]'
+      _arr=("${_arr[@]}")
+      _string="${_string:+$_string$_delim}${_pop}"
+      _arr_length=$(( $_arr_length - 1 ))
     done
 
     echo "$_string"
@@ -360,14 +380,14 @@ function stdlib.array_join {
 
 # stdlib.array_contains checks if an element exists in an array
 # $1 = array
-# $2 = delimiter
+# $2 = needle
 function stdlib.array_contains {
   if [[ $# -eq 2 ]]; then
-    local _arr="$1[@]"
+    local -n _arr="$1"
     local _needle="$2"
     local _exists=1
 
-    for _element in "${!_arr}"; do
+    for _element in "${_arr[@]}"; do
       if [[ $_element == $_needle ]]; then
         _exists=0
         break
@@ -380,9 +400,12 @@ function stdlib.array_contains {
 
 # stdlib.hash_keys returns the keys of a hash / assoc array
 # $1 = hash/associative array
+# $2 = array to store keys
 function stdlib.hash_keys {
-  if [[ $# -eq 1 ]]; then
-    local _arr="$1"
-    eval "echo \${!$_arr[@]}"
+  if [[ $# -eq 2 ]]; then
+    local -n _hash="$1"
+    local -n _keys="$2"
+
+    _keys=(${!_hash[@]})
   fi
 }
