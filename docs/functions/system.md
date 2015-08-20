@@ -33,11 +33,12 @@ stdlib.array_length x
 
 ## stdlib.array_pop
 
-Removes and returns the last element from an array.
+Removes and the last element from array $1 and optionally stores it in $2
 
 ```shell
 x=(a b c)
-stdlib.array_pop x
+stdlib.array_pop x y
+echo $y
 => c
 ```
 
@@ -52,11 +53,12 @@ stdlib.array_push x foo
 
 ## stdlib.array_shift
 
-Removes and returns the first element from an array
+Removes and returns the first element from array $1 and optionally stores it in $2
 
 ```shell
 x=(a b c)
-stdlib.array_shift x
+stdlib.array_shift x y
+echo $y
 => a
 ```
 
@@ -67,6 +69,7 @@ Adds an element to the beginning of the array.
 ```shell
 x=(b c)
 stdlib.array_unshift x a
+
 ```
 
 ## stdlib.capture_error

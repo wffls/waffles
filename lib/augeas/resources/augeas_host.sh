@@ -46,7 +46,7 @@ function augeas.host {
                  --lens Hosts \
                  --file "${options[file]}" \
                  --command "set 01/ipaddr '${options[ip]}'" \
-                 --command "set 02/canonical '${options[name]}'" \
+                 --command "set 01/canonical '${options[name]}'" \
                  --notif "*/canonical[. = '${options[name]}']"
 
   stdlib.split "${options[aliases]}" ","
