@@ -953,9 +953,10 @@ stdlib.array_length x
 </code></pre>
 
 <h2 id="stdlibarray_pop">stdlib.array_pop</h2>
-<p>Removes and returns the last element from an array.</p>
+<p>Removes and the last element from array $1 and optionally stores it in $2</p>
 <pre><code class="shell">x=(a b c)
-stdlib.array_pop x
+stdlib.array_pop x y
+echo $y
 =&gt; c
 </code></pre>
 
@@ -966,9 +967,10 @@ stdlib.array_push x foo
 </code></pre>
 
 <h2 id="stdlibarray_shift">stdlib.array_shift</h2>
-<p>Removes and returns the first element from an array</p>
+<p>Removes and returns the first element from array $1 and optionally stores it in $2</p>
 <pre><code class="shell">x=(a b c)
-stdlib.array_shift x
+stdlib.array_shift x y
+echo $y
 =&gt; a
 </code></pre>
 
@@ -976,6 +978,7 @@ stdlib.array_shift x
 <p>Adds an element to the beginning of the array.</p>
 <pre><code class="shell">x=(b c)
 stdlib.array_unshift x a
+
 </code></pre>
 
 <h2 id="stdlibcapture_error">stdlib.capture_error</h2>

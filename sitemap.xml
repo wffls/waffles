@@ -4,7 +4,7 @@
     
     <url>
      <loc>https://waffles.terrarum.net/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -12,7 +12,7 @@
     
     <url>
      <loc>https://waffles.terrarum.net/about/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -20,7 +20,7 @@
     
     <url>
      <loc>https://waffles.terrarum.net/quickstart/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -28,7 +28,7 @@
     
     <url>
      <loc>https://waffles.terrarum.net/guides/install/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -36,7 +36,7 @@
     
     <url>
      <loc>https://waffles.terrarum.net/concepts/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -44,7 +44,7 @@
     
     <url>
      <loc>https://waffles.terrarum.net/usage/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -52,7 +52,7 @@
     
     <url>
      <loc>https://waffles.terrarum.net/modules/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -61,55 +61,55 @@
         
     <url>
      <loc>https://waffles.terrarum.net/functions/types/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/functions/system/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/functions/catalog/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/functions/options/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/functions/resource/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/functions/augeas/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/functions/consul/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/functions/mysql/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/functions/rabbitmq/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -119,55 +119,55 @@
         
     <url>
      <loc>https://waffles.terrarum.net/guides/environment-vars/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/guides/deploying-a-mysql-server/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/guides/deploying-a-mysql-galera-cluster/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/guides/deploying-a-consul-cluster/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/guides/override-data/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/guides/referencing-data-from-data/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/guides/testing-with-test-kitchen/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/guides/waffles-and-lxc/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/guides/waffles-and-terraform/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -177,469 +177,469 @@
         
     <url>
      <loc>https://waffles.terrarum.net/resources/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/stdlib.apt_key/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/stdlib.apt_ppa/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/stdlib.apt/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/stdlib.apt_source/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/stdlib.cron/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/stdlib.debconf/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/stdlib.directory/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/stdlib.file_line/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/stdlib.file/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/stdlib.git/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/stdlib.groupadd/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/stdlib.ini/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/stdlib.ip6tables_rule/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/stdlib.iptables_rule/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/stdlib.sudo_cmd/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/stdlib.sysvinit/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/stdlib.upstart/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/stdlib.useradd/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/apache.section/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/apache.setting/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/augeas.aptconf/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/augeas.cron/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/augeas.file_line/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/augeas.generic/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/augeas.host/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/augeas.ini/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/augeas.json_array/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/augeas.json_dict/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/augeas.mail_alias/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/augeas.shellvar/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/augeas.ssh_authorized_key/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/consul.check/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/consul.service/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/consul.template/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/consul.watch/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/keepalived.global_defs/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/keepalived.vrrp_instance/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/keepalived.vrrp_script/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/keepalived.vrrp_sync_group/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/mysql.database/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/mysql.grant/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/mysql.user/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/nginx.events/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/nginx.global/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/nginx.http/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/nginx.if/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/nginx.location/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/nginx.map/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/nginx.server/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/nginx.upstream/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/rabbitmq.auth_backend/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/rabbitmq.auth_mechanism/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/rabbitmq.backing_queue_module/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/rabbitmq.cluster_nodes/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/rabbitmq.collect_statistics_interval/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/rabbitmq.collect_statistics/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/rabbitmq.default_permissions/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/rabbitmq.default_user/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/rabbitmq.default_user_tags/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/rabbitmq.default_vhost/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/rabbitmq.delegate_count/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/rabbitmq.disk_free_limit/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/rabbitmq.frame_max/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/rabbitmq.heartbeat/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/rabbitmq.hipe_compile/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/rabbitmq.log_levels/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/rabbitmq.msg_store_file_size_limit/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/rabbitmq.msg_store_index_module/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/rabbitmq.policy/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/rabbitmq.queue_index_max_journal_entries/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/rabbitmq.ssl_listeners/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/rabbitmq.ssl_options/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/rabbitmq.tcp_listeners/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/rabbitmq.user_permissions/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/rabbitmq.user/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/rabbitmq.vhost/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>https://waffles.terrarum.net/resources/rabbitmq.vm_memory_high_watermark/</loc>
-     <lastmod>2015-08-10</lastmod>
+     <lastmod>2015-08-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         

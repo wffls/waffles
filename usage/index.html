@@ -977,6 +977,32 @@ stdlib.profiles memcached =&gt; profiles/memcached/scripts/init.sh
 stdlib.profiles memcached/utils =&gt; profiles/memcached/scripts/utils.sh
 </code></pre>
 
+<h3 id="the-hosts-profile">The Hosts Profile</h3>
+<p>Waffles supports an optional special profile called <code>host_files</code>, located at <code>site/profiles/host_files</code>. The purpose of this profile is to provide a designated area where files and scripts specific to individual hosts can be stored. This is beneficial because, normally, the entire profile is copied to each node that uses the profile. If you are storing files such as SSL certs in a profile, all SSL certs would be then copied to all hosts that share use the profile. This is probably not intended behavior.</p>
+<p>The <code>host_files</code> profile has the following structure:</p>
+<pre><code class="shell">host_files/
+├── mysql-01
+│   └── files
+│       ├── mysql-01.crt
+│       └── mysql-01.key
+├── mysql-02
+│   └── files
+│       ├── mysql-02.crt
+│       └── mysql-02.key
+└── rabbit-01
+    ├── files
+    │   ├── rabbit-01.crt
+    │   └── rabbit-01.key
+    └── scripts
+        └── custom.sh
+</code></pre>
+
+<p>Each subdirectory of the <code>host_files</code> profile is an individual host or node, named after the hostname (not FQDN). The directory of these subdirectories is like a normal profile with the usual <code>files</code> and <code>scripts</code> subdirectories.</p>
+<p>Inside your role, you can enable this special profile by doing:</p>
+<pre><code class="shell">stdlib.profile host_files
+</code></pre>
+
+<p>This means that a profile with the name <code>host_files</code> is a reserved name.</p>
 <h2 id="applying-roles">Applying Roles</h2>
 <p>Waffles supports two ways of applying roles:</p>
 <h3 id="local-execution">Local Execution</h3>
