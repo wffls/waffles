@@ -120,7 +120,11 @@ function stdlib.capture_error {
       if [[ "$WAFFLES_EXIT_ON_ERROR" == true ]]; then
         stdlib.error "Halting run."
         exit 1
+      else
+        return $?
       fi
+    else
+      return 0
     fi
   fi
 }
