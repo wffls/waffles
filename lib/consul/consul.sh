@@ -1,9 +1,9 @@
-# consul.get_nodes retrieves a list of nodes.
+# consul.get_nodes returns a list of node names.
 # Options:
 #   service. Required. Defaults to "all".
-# Results are stored in consul_nodes hash.
+# Results are stored in __consul_nodes hash.
 function consul.get_nodes {
-  declare -Ag consul_nodes
+  declare -Ag __consul_nodes
   local -A options
   stdlib.options.create_option service "all"
   stdlib.options.parse_options "$@"
@@ -31,7 +31,7 @@ function consul.get_nodes {
       local _node
       for _node in "${__split[@]}"; do
         stdlib.split "$_node" ','
-        consul_nodes[${__split[0]}]="${__split[1]}"
+        __consul_nodes[${__split[0]}]="${__split[1]}"
       done
     fi
   else
@@ -52,8 +52,7 @@ function consul.get_nodes {
       _name=$(echo $_node | cut -d. -f1)
       _address=$(dig @localhost -p8600 $_node ANY +short | head -1)
 
-      consul_nodes[$_name]="$_address"
-      consul_nodes[$_name|port]="$_port"
+      __consul_nodes[$_name]="$_address"
     done < <(dig @localhost -p8600 ${options[service]}.service.consul SRV +short)
 
   fi
@@ -175,25 +174,5 @@ function consul.delete_kv {
   _result=$(curl -s -X DELETE ${options[server]}${options[path]}/${options[key]})
   if [[ $? != 0 ]]; then
     stdlib.error "Error deleting key: ${_result}"
-  fi
-}
-
-# build_hosts_file will add known nodes in the Consul cluster to /etc/hosts and purge nodes that no longer exist.
-function consul.build_hosts_file {
-  _pid="$$"
-  consul.get_nodes
-  stdlib.capture_error grep -v \'# consul\' /etc/hosts \> /tmp/hosts.$_pid
-  for _node in "${!consul_nodes[@]}"; do
-    stdlib.file_line --name "/etc/hosts $_node" --file /tmp/hosts.$_pid --line "${consul_nodes[$_node]} $_node # consul"
-  done
-
-  _orig_md5=$(sort /etc/hosts | md5sum | cut -d" " -f1)
-  _new_md5=$(sort /tmp/hosts.$_pid | md5sum | cut -d" " -f1)
-
-  if [[ "$_orig_md5" != "$_new_md5" ]]; then
-    stdlib.capture_error mv /etc/hosts /etc/hosts.orig
-    stdlib.capture_error mv /tmp/hosts.$_pid /etc/hosts
-  else
-    stdlib.capture_error rm /tmp/hosts.$_pid
   fi
 }
