@@ -254,11 +254,13 @@ function stdlib.split {
   local _string="$1"
   local _delim="$2"
 
-  while [[ $_string != "" ]]; do
-    __split+=("${_string%%$_delim*}")
-    _string="${_string#*$_delim}"
-    if [[ "${__split[-1]}" == $_string ]]; then
+  while true ; do
+    if [[ ! $_string == *"$_delim"* ]]; then
+      __split+=("$_string")
       break
+    else
+      __split+=("${_string%%$_delim*}")
+      _string="${_string#*$_delim}"
     fi
   done
 }
