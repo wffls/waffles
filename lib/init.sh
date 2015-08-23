@@ -52,7 +52,7 @@ function stdlib.enable_mysql {
 function stdlib.enable_rabbitmq {
   source "$WAFFLES_LIB_DIR/rabbitmq/rabbitmq.sh"
   source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_cluster_nodes.sh"
-  source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_config_settings"
+  source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_config_settings.sh"
   source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_policy.sh"
   source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_user_permissions.sh"
   source "$WAFFLES_LIB_DIR/rabbitmq/resources/rabbitmq_user.sh"
