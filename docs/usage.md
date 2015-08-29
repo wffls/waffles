@@ -16,8 +16,6 @@ For the sake of simplicity, we'll call our role `memcached`.
 
 Roles are defined in `site/roles`. `site` is a special directory that will hold the configuration for your _site_ or environment. You most likely wouldn't be able to transfer `site` to a new environment and have it run without some level of modification.
 
-Note: The location of the `site` directory can be changed in `waffles.conf`, but at this time, Waffles requires it to be in the main `waffles` directory.
-
 A role is really just a Bash script, and if you'd prefer to just use Waffles to organize a collection of deployment scripts, go for it.
 
 To use roles most effectively, think of them as glue between _data_ and _profiles_:

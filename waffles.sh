@@ -18,6 +18,7 @@ function help {
   echo "  -u: (push) the remote user to connect as through SSH. Default: root"
   echo "  -y: (push) whether or not to use sudo remotely. Default: false"
   echo "  -z: (push) the remote directory to copy Waffles to. Default: /etc/waffles"
+  echo "  -k: (push) the ssh key to use. Default: ~/.ssh/id_rsa"
   echo
   echo "Usage:"
   echo "  waffles.sh -r <role>: apply a role to the local server"
@@ -41,14 +42,15 @@ function apply_role_locally {
 
 # apply_role_remotely applies the role to a remote node
 function apply_role_remotely {
+
   stdlib.include $role_script
 
   local _include
   for i in "${!stdlib_remote_copy[@]}"; do
     if [[ $i =~ sh$ ]]; then
-      _include="$_include --include=site/$i"
+      _include="$_include --include=$i"
     else
-      _include="$_include --include=site/$i/**"
+      _include="$_include --include=$i/**"
     fi
   done
 
@@ -85,8 +87,13 @@ function apply_role_remotely {
     _remote_ssh_command="bash waffles.sh"
   fi
 
-  rsync -azv --rsync-path="$_remote_rsync_path" --include='**/' --include='waffles.sh' --include='waffles.conf' --include='lib/**' $_include --include="site/roles/${role}.sh" --exclude='*' --prune-empty-dirs $WAFFLES_DIR/ "$_rsync_server:$WAFFLES_REMOTE_DIR"
-  ssh $_ssh_server "cd $WAFFLES_REMOTE_DIR && $_remote_ssh_command $_args -r $role"
+  stdlib.debug "Copying Waffles to remote server $_rsync_server"
+  rsync -azv -e "ssh -i $WAFFLES_REMOTE_SSH_KEY" --rsync-path="$_remote_rsync_path" --include='**/' --include='waffles.sh' --include='waffles.conf' --include='lib/**' --include="$WAFFLES_SITE_DIR/roles/${role}.sh" --exclude='*' --prune-empty-dirs $WAFFLES_DIR/ "$_rsync_server:$WAFFLES_REMOTE_DIR"
+
+  stdlib.debug "Copying site to remote server $_rsync_server"
+  rsync -azv -e "ssh -i $WAFFLES_REMOTE_SSH_KEY" --rsync-path="$_remote_rsync_path" --include="**/" $_include --include="roles/${role}.sh" --exclude='*' --prune-empty-dirs $WAFFLES_SITE_DIR/ "$_rsync_server:$WAFFLES_REMOTE_DIR/site/"
+
+  ssh -i $WAFFLES_REMOTE_SSH_KEY $_ssh_server "cd $WAFFLES_REMOTE_DIR && $_remote_ssh_command $_args -r $role"
 }
 
 # Main Script
@@ -119,7 +126,7 @@ fi
 source "$WAFFLES_DIR/lib/init.sh"
 
 # Parse options
-while getopts :dhnr:s:tu:z:y opt; do
+while getopts :dhnr:s:tu:z:yk: opt; do
   case $opt in
     d)
       WAFFLES_DEBUG=1
@@ -149,6 +156,9 @@ while getopts :dhnr:s:tu:z:y opt; do
       ;;
     y)
       WAFFLES_REMOTE_SUDO="true"
+      ;;
+    k)
+      WAFFLES_REMOTE_SSH_KEY="$OPTARG"
       ;;
     :)
       echo "Option -$OPTARG requires an argument." >&2
