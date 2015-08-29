@@ -60,12 +60,14 @@ function apply_role_remotely {
   done
 
   local _args
+  local _rsync_quiet="-q"
   if [[ -n $WAFFLES_NOOP ]]; then
     _args="$_args -n"
   fi
 
   if [[ -n $WAFFLES_DEBUG ]]; then
     _args="$_args -d"
+    _rsync_quiet=""
   fi
 
   # To deploy to explicit IPv6 addresses, use the bracket form ([fd00:abcd::1]) and let the following code take care of the rest.
@@ -93,10 +95,10 @@ function apply_role_remotely {
   fi
 
   stdlib.debug "Copying Waffles to remote server $_rsync_server"
-  rsync -azv -e "ssh -i $WAFFLES_REMOTE_SSH_KEY" --rsync-path="$_remote_rsync_path" --include='**/' --include='waffles.sh' --include='waffles.conf' --include='lib/**' --include="$WAFFLES_SITE_DIR/roles/${role}.sh" --exclude='*' --prune-empty-dirs $WAFFLES_DIR/ "$_rsync_server:$WAFFLES_REMOTE_DIR"
+  rsync -azv $_rsync_quiet -e "ssh -i $WAFFLES_REMOTE_SSH_KEY" --rsync-path="$_remote_rsync_path" --include='**/' --include='waffles.sh' --include='waffles.conf' --include='lib/**' --include="$WAFFLES_SITE_DIR/roles/${role}.sh" --exclude='*' --prune-empty-dirs $WAFFLES_DIR/ "$_rsync_server:$WAFFLES_REMOTE_DIR"
 
   stdlib.debug "Copying site to remote server $_rsync_server"
-  rsync -azv -e "ssh -i $WAFFLES_REMOTE_SSH_KEY" --rsync-path="$_remote_rsync_path" --include="**/" $_include --include="roles/${role}.sh" --exclude='*' --prune-empty-dirs $WAFFLES_SITE_DIR/ "$_rsync_server:$WAFFLES_REMOTE_DIR/site/"
+  rsync -azv $_rsync_quiet -e "ssh -i $WAFFLES_REMOTE_SSH_KEY" --rsync-path="$_remote_rsync_path" --include="**/" $_include --include="roles/${role}.sh" --exclude='*' --prune-empty-dirs $WAFFLES_SITE_DIR/ "$_rsync_server:$WAFFLES_REMOTE_DIR/site/"
 
   ssh -i $WAFFLES_REMOTE_SSH_KEY $_ssh_server "cd $WAFFLES_REMOTE_DIR && $_remote_ssh_command $_args -r $role"
 }
