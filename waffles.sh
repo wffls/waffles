@@ -43,6 +43,11 @@ function apply_role_locally {
 # apply_role_remotely applies the role to a remote node
 function apply_role_remotely {
 
+  if [[ -z $WAFFLES_REMOTE_SSH_KEY ]] || [[ ! -f $WAFFLES_REMOTE_SSH_KEY ]]; then
+    stdlib.error "SSH key not specified or not found."
+    exit 1
+  fi
+
   stdlib.include $role_script
 
   local _include
