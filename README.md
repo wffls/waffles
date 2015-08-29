@@ -12,7 +12,7 @@ stdlib.apt --package memcached --version latest
 stdlib.file_line --name memcached.conf/listen --file /etc/memcached.conf --line "-l $data_memcached_server_listen" --match "^-l"
 
 # Determine the amount of memory available and use half of that for memcached
-memory_bytes=$(cfacter memory.system.total_bytes 2>/dev/null)
+memory_bytes=$(terminus System.Memory.Total 2>/dev/null)
 memory=$(( $memory_bytes / 1024 / 1024 / 2 ))
 
 # Set the memory available to memcached
@@ -27,3 +27,5 @@ fi
 ```
 
 See [waffles.terrarum.net](http://waffles.terrarum.net) for more information.
+
+(See [terminus](https://github.com/jtopjian/terminus) for terminus.)
