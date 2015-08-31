@@ -10,7 +10,7 @@
 #
 # * state: The state of the resource. Required. Default: present.
 # * file: The ini file. Required.
-# * section: The ini file section. Required.
+# * section: The ini file section. Use "__none__" to not use a section. Required.
 # * option: The ini file setting/option. Required.
 # * value: The value of the option. Use "__none__" to not set a value. Required.
 #
@@ -86,7 +86,7 @@ function stdlib.ini.delete {
 # https://raw.githubusercontent.com/openstack-dev/devstack/master/inc/ini-config
 function stdlib.ini.ini_get_option {
   local _line
-  if [[ -n ${options[section]} ]]; then
+  if [[ ${options[section]} != "__none__" ]]; then
     _line=$(sed -ne "/^\[${options[section]}\]/,/^\[.*\]/ { /^${options[option]}\([ \t]*=\|$\)/ p; }" "${options[file]}")
   else
     _line=$(sed -ne "/^${options[option]}[ \t]*/ p;"  "${options[file]}")
@@ -99,7 +99,7 @@ function stdlib.ini.ini_get_option {
 function stdlib.ini.ini_option_has_value {
   local _line
   local _value=$(echo ${options[value]} | sed -e 's/[\/&]/\\&/g' | sed -e 's/[][]/\\&/g')
-  if [[ -n ${options[section]} ]]; then
+  if [[ ${options[section]} != "__none__" ]]; then
     if [[ ${options[value]} == "__none__" ]]; then
       _line=$(sed -ne "/^\[${options[section]}\]/,/^\[.*\]/ { /^${options[option]}$/ p; }" "${options[file]}")
     else
@@ -118,7 +118,7 @@ function stdlib.ini.ini_option_has_value {
 
 function stdlib.ini.inidelete {
   [[ -z ${options[option]} ]] && return
-  if [[ -n ${options[section]} ]]; then
+  if [[ ${options[section]} != "__none__" ]]; then
     sed -i -e "/^\[${options[section]}\]/,/^\[.*\]/ { /^${options[option]}[ \t]*=/ d; }" "${options[file]}"
   else
     sed -i -e "/^${options[option]}[ \t]*=/ d;" "${options[file]}"
@@ -127,7 +127,7 @@ function stdlib.ini.inidelete {
 
 function stdlib.ini.iniset {
   [[ -z ${options[option]} ]] && return
-  if [[ -n ${options[section]} ]]; then
+  if [[ ${options[section]} != "__none__" ]]; then
     # Add the section if it doesn't exist
     if ! grep -q "^\[${options[section]}\]" "${options[file]}" 2>/dev/null; then
       echo -e "\n[${options[section]}]" >>"${options[file]}"
@@ -153,6 +153,6 @@ ${options[option]} = ${options[value]}
       stdlib.ini.inidelete
     fi
 
-    echo -e "${options[option]} = ${options[value]}" >> "${options[file]}"
+    sed -i "1s/^/${options[option]} = ${options[value]}\n/" ${options[file]}
   fi
 }
