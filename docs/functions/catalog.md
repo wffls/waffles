@@ -1,3 +1,7 @@
+# Catalog Functions
+
+[TOC]
+
 `lib/catalog.sh` contains functions related to the Waffles catalog. The catalog is an inventory of all resources that have been used in a role.
 
 At this time, the catalog is built as Waffles is run. This means that you cannot use the catalog to see what resources will be used in the future.

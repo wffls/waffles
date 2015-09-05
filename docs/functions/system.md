@@ -1,4 +1,8 @@
+# System Functions
+
 `lib/system.sh` contains functions that are considered core to Waffles.
+
+[TOC]
 
 ## stdlib.array_contains
 

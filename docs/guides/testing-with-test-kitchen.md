@@ -1,5 +1,7 @@
 # Testing With Test Kitchen
 
+[TOC]
+
 ## Description
 
 This guide will show how to set up Test Kitchen so you can run various acceptance and integration tests on Waffles.

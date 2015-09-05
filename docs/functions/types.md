@@ -1,3 +1,7 @@
+# Types of Functions
+
+[TOC]
+
 Waffles is built around Bash functions. Some are only used internally, but others are available for use in your roles and profiles.
 
 ## stdlib

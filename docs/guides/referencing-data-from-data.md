@@ -1,12 +1,14 @@
 # Referencing Data from Data Files
 
+[TOC]
+
 ## Description
 
 This guide will show how you can reference previously declared data in subsequent data files.
 
 ## Steps
 
-1. Create an initial data file:
+* Create an initial data file:
 
 ```shell
 $ cat > site/data/common.sh <<EOF
@@ -17,7 +19,8 @@ data_common_packages=(
 EOF
 ```
 
-2. Create a second data file that references data from the first:
+* Create a second data file that references data from the first:
+
 ```shell
 $ cat > site/data/memcached.sh <<EOF
 data_common_packages=(
@@ -27,7 +30,7 @@ data_common_packages=(
 EOF
 ```
 
-3. Declare the data files in order in your role:
+* Declare the data files in order in your role:
 
 ```shell
 stdlib.data common

@@ -1,5 +1,7 @@
 # Deploying a Consul Cluster
 
+[TOC]
+
 ## Description
 
 This guide will show one way of deploying a Consul cluster with Waffles.

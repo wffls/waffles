@@ -1,5 +1,7 @@
 # Waffles Resources
 
+[TOC]
+
 This document will cover how resources are used in Waffles.
 
 ## Location

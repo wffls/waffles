@@ -1,3 +1,7 @@
+# Options Options
+
+[TOC]
+
 `lib/options.sh` contains functions related to parsing resource options.
 
 ## stdlib.options.create_option

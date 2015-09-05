@@ -1,19 +1,21 @@
 # Install Waffles
 
+[TOC]
+
 ## Description
 
-This guide will show how to install Waffles.
+This guide will show how to install and use Waffles.
 
 ## Steps
 
-1. Clone the repository to a directory of your choice:
+* Clone the repository to a directory of your choice:
 
 ```shell
 $ git clone https://github.com/jtopjian/waffles .waffles
 $ cd .waffles
 ```
 
-2. Create a data file:
+* Create a data file:
 
 ```shell
 $ cat > site/data/memcached.sh <<EOF
@@ -21,7 +23,7 @@ data_memcached_interface="0.0.0.0"
 EOF
 ```
 
-3. Create a profile:
+* Create a profile:
 
 ```shell
 $ cat > site/profiles/memcached/scripts/server.sh <<EOF
@@ -35,10 +37,14 @@ if [[ $stdlib_state_change == true ]]; then
 fi
 ```
 
-4. Create a role:
+* Create a role:
 
 ```shell
 $ cat > site/roles/memcached.sh <<EOF
 stdlib.data memcached
 stdlib.profile memcached/server
 ```
+
+## More Information
+
+For more information about Data, Profiles, and Roles, see the [usage](/usage) doc.
