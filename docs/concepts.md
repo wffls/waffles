@@ -1,14 +1,20 @@
 # Waffles from Scratch
 
+[TOC]
+
 To illustrate Waffles's design, I'll walk through the creation of a Bash script that can successfully run multiple times on a single server and only make changes to the server when required.
 
 ## Let's Create a Simple memcached Server in Bash
 
-`memcached` is a very simple service. It's a single daemon with a simple configuration file installed from a single package.
+`memcached` is a very simple service. It's a single daemon with a single configuration file installed from a single package.
+
+!!! note "Note"
+
+    The "package, file, service" pattern is very convenient for structuring service configurations.
 
 Let's say we want to create a `memcached` server on a Linux container or virtual machine. Rather than running the commands manually, we'll create a Bash script to do the work. This will serve two purposes:
 
-1. Documentation
+1. Build Documentation
 2. Repeatable process
 
 ### The First Draft
@@ -23,7 +29,7 @@ apt-get install -y memcached
 
 ### The Second Draft
 
-This works, and doing `ps aux` shows that `memcached` is indeed running. But then we notice that `memcached` is only listening on `localhost`:
+This works, and doing `ps aux` shows that `memcached` is running. But notice that `memcached` is only listening on `localhost`:
 
 ```shell
 $ netstat -nap | grep 11211

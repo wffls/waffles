@@ -1,5 +1,7 @@
 # Deploying a MySQL Server
 
+[TOC]
+
 ## Description
 
 This guide will show one way of deploying a MySQL server with Waffles. In particular, Percona MySQL.

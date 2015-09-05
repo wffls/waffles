@@ -1,3 +1,7 @@
+# RabbitMQ Options
+
+[TOC]
+
 `lib/rabbitmq/rabbitmq.sh` contains helper functions for the RabbitMQ resources. You should not need to use these functions directly.
 
 ## rabbitmq.generic_value_create

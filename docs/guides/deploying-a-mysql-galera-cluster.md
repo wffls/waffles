@@ -1,5 +1,7 @@
 # Deploying a MySQL Galera Cluster
 
+[TOC]
+
 ## Description
 
 This guide will show one way of deploying a MySQL Galera cluster with Waffles. In particular, Percona XtraDB Cluster.

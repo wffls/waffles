@@ -1,3 +1,7 @@
+# MySQL Functions
+
+[TOC]
+
 `lib/mysql/mysql.sh` contains helper functions for the MySQL resources
 
 ## mysql.admin_password_set?

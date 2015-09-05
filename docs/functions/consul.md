@@ -1,3 +1,7 @@
+# Consul Functions
+
+[TOC]
+
 `lib/consul/consul.sh` contains helper functions for the Consul resources
 
 ## consul.get_nodes

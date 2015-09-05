@@ -1,5 +1,9 @@
 # Using Waffles with Terraform
 
+[TOC]
+
+## Description
+
 This guide will show how to use Waffles with [Terraform](http://terraform.io). The Terraform OpenStack provider will be used, but these concepts should be applicable to any provider.
 
 ## Steps

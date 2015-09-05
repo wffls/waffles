@@ -1,5 +1,9 @@
 # Using Waffles with LXC
 
+[TOC]
+
+## Description
+
 This guide will describe how to configure LXC containers with Waffles.
 
 ## Steps

@@ -1,5 +1,7 @@
 # Environment Variable Support
 
+[TOC]
+
 ## Description
 
 This guide will show how to alter Waffles's behavior by setting different environment variables.

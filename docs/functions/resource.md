@@ -1,3 +1,7 @@
+# Resource Functions
+
+[TOC]
+
 `lib/resource.sh` contains functions that coordinate resource execution.
 
 ## stdlib.resource.process
