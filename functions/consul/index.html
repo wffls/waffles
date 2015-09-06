@@ -68,20 +68,6 @@
           
             <li>
     <li class="toctree-l1 ">
-        <a class="" href="../../about/">About</a>
-        
-    </li>
-<li>
-          
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../quickstart/">Quickstart</a>
-        
-    </li>
-<li>
-          
-            <li>
-    <li class="toctree-l1 ">
         <a class="" href="../../guides/install/">Installation</a>
         
     </li>
@@ -160,21 +146,6 @@
         <a class="current" href="./">consul</a>
         
             <ul>
-            
-                <li class="toctree-l3"><a href="#consulget_nodes">consul.get_nodes</a></li>
-                
-            
-                <li class="toctree-l3"><a href="#consulget_services">consul.get_services</a></li>
-                
-            
-                <li class="toctree-l3"><a href="#consulget_kv">consul.get_kv</a></li>
-                
-            
-                <li class="toctree-l3"><a href="#consulset_kv">consul.set_kv</a></li>
-                
-            
-                <li class="toctree-l3"><a href="#consuldelete_kv">consul.delete_kv</a></li>
-                
             
             </ul>
         
@@ -716,7 +687,20 @@
           <div role="main">
             <div class="section">
               
-                <p><code>lib/consul/consul.sh</code> contains helper functions for the Consul resources</p>
+                <h1 id="consul-functions">Consul Functions</h1>
+<div class="toc">
+<ul>
+<li><a href="#consul-functions">Consul Functions</a><ul>
+<li><a href="#consulget_nodes">consul.get_nodes</a></li>
+<li><a href="#consulget_services">consul.get_services</a></li>
+<li><a href="#consulget_kv">consul.get_kv</a></li>
+<li><a href="#consulset_kv">consul.set_kv</a></li>
+<li><a href="#consuldelete_kv">consul.delete_kv</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><code>lib/consul/consul.sh</code> contains helper functions for the Consul resources</p>
 <h2 id="consulget_nodes">consul.get_nodes</h2>
 <p>Returns a list of nodes. Results are stored in <code>$consul_nodes</code> hash.</p>
 <p>Option <code>--service</code>: Optional. Limits results to a set of services.</p>

@@ -68,20 +68,6 @@
           
             <li>
     <li class="toctree-l1 ">
-        <a class="" href="../../about/">About</a>
-        
-    </li>
-<li>
-          
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../quickstart/">Quickstart</a>
-        
-    </li>
-<li>
-          
-            <li>
-    <li class="toctree-l1 ">
         <a class="" href="../install/">Installation</a>
         
     </li>
@@ -224,15 +210,6 @@
         <a class="current" href="./">Referencing Data from Data</a>
         
             <ul>
-            
-                <li class="toctree-l3"><a href="#referencing-data-from-data-files">Referencing Data from Data Files</a></li>
-                
-                    <li><a class="toctree-l4" href="#description">Description</a></li>
-                
-                    <li><a class="toctree-l4" href="#steps">Steps</a></li>
-                
-                    <li><a class="toctree-l4" href="#comments">Comments</a></li>
-                
             
             </ul>
         
@@ -711,12 +688,22 @@
             <div class="section">
               
                 <h1 id="referencing-data-from-data-files">Referencing Data from Data Files</h1>
+<div class="toc">
+<ul>
+<li><a href="#referencing-data-from-data-files">Referencing Data from Data Files</a><ul>
+<li><a href="#description">Description</a></li>
+<li><a href="#steps">Steps</a></li>
+<li><a href="#comments">Comments</a></li>
+</ul>
+</li>
+</ul>
+</div>
 <h2 id="description">Description</h2>
 <p>This guide will show how you can reference previously declared data in subsequent data files.</p>
 <h2 id="steps">Steps</h2>
-<ol>
+<ul>
 <li>Create an initial data file:</li>
-</ol>
+</ul>
 <pre><code class="shell">$ cat &gt; site/data/common.sh &lt;&lt;EOF
 data_common_packages=(
   &quot;vim&quot;
@@ -725,9 +712,9 @@ data_common_packages=(
 EOF
 </code></pre>
 
-<ol>
+<ul>
 <li>Create a second data file that references data from the first:</li>
-</ol>
+</ul>
 <pre><code class="shell">$ cat &gt; site/data/memcached.sh &lt;&lt;EOF
 data_common_packages=(
   &quot;htop&quot;
@@ -736,9 +723,9 @@ data_common_packages=(
 EOF
 </code></pre>
 
-<ol>
+<ul>
 <li>Declare the data files in order in your role:</li>
-</ol>
+</ul>
 <pre><code class="shell">stdlib.data common
 stdlib.data memcached
 </code></pre>

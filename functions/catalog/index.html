@@ -68,20 +68,6 @@
           
             <li>
     <li class="toctree-l1 ">
-        <a class="" href="../../about/">About</a>
-        
-    </li>
-<li>
-          
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../quickstart/">Quickstart</a>
-        
-    </li>
-<li>
-          
-            <li>
-    <li class="toctree-l1 ">
         <a class="" href="../../guides/install/">Installation</a>
         
     </li>
@@ -132,12 +118,6 @@
         <a class="current" href="./">catalog</a>
         
             <ul>
-            
-                <li class="toctree-l3"><a href="#stdlibcatalogadd">stdlib.catalog.add</a></li>
-                
-            
-                <li class="toctree-l3"><a href="#stdlibcatalogexists">stdlib.catalog.exists?</a></li>
-                
             
             </ul>
         
@@ -707,7 +687,17 @@
           <div role="main">
             <div class="section">
               
-                <p><code>lib/catalog.sh</code> contains functions related to the Waffles catalog. The catalog is an inventory of all resources that have been used in a role.</p>
+                <h1 id="catalog-functions">Catalog Functions</h1>
+<div class="toc">
+<ul>
+<li><a href="#catalog-functions">Catalog Functions</a><ul>
+<li><a href="#stdlibcatalogadd">stdlib.catalog.add</a></li>
+<li><a href="#stdlibcatalogexists">stdlib.catalog.exists?</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><code>lib/catalog.sh</code> contains functions related to the Waffles catalog. The catalog is an inventory of all resources that have been used in a role.</p>
 <p>At this time, the catalog is built as Waffles is run. This means that you cannot use the catalog to see what resources will be used in the future.</p>
 <p>The catalog is used internally to Waffles.</p>
 <h2 id="stdlibcatalogadd">stdlib.catalog.add</h2>

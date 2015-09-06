@@ -68,20 +68,6 @@
           
             <li>
     <li class="toctree-l1 ">
-        <a class="" href="../about/">About</a>
-        
-    </li>
-<li>
-          
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../quickstart/">Quickstart</a>
-        
-    </li>
-<li>
-          
-            <li>
-    <li class="toctree-l1 ">
         <a class="" href="../guides/install/">Installation</a>
         
     </li>
@@ -260,19 +246,6 @@
         <a class="current" href="./">Internals</a>
         
             <ul>
-            
-                <li class="toctree-l3"><a href="#waffles-resources">Waffles Resources</a></li>
-                
-                    <li><a class="toctree-l4" href="#location">Location</a></li>
-                
-                    <li><a class="toctree-l4" href="#enabling-non-standard-resources">Enabling Non-Standard Resources</a></li>
-                
-                    <li><a class="toctree-l4" href="#anatomy-of-a-resource">Anatomy of a Resource</a></li>
-                
-                    <li><a class="toctree-l4" href="#state-changes">State Changes</a></li>
-                
-                    <li><a class="toctree-l4" href="#examples">Examples</a></li>
-                
             
             </ul>
         
@@ -715,6 +688,28 @@
             <div class="section">
               
                 <h1 id="waffles-resources">Waffles Resources</h1>
+<div class="toc">
+<ul>
+<li><a href="#waffles-resources">Waffles Resources</a><ul>
+<li><a href="#location">Location</a></li>
+<li><a href="#enabling-non-standard-resources">Enabling Non-Standard Resources</a></li>
+<li><a href="#anatomy-of-a-resource">Anatomy of a Resource</a><ul>
+<li><a href="#header">Header</a></li>
+<li><a href="#function-resourcename">function resource.name</a></li>
+<li><a href="#function-stdlibresourceprocess">function stdlib.resource.process</a></li>
+<li><a href="#function-resourcenamex">function resource.name.x</a></li>
+<li><a href="#function-resourcenameread">function resource.name.read</a></li>
+<li><a href="#function-resourcenamecreate">function resource.name.create</a></li>
+<li><a href="#function-resourcenameupdate">function resource.name.update</a></li>
+<li><a href="#function-resourcenamedelete">function resource.name.delete</a></li>
+</ul>
+</li>
+<li><a href="#state-changes">State Changes</a></li>
+<li><a href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+</div>
 <p>This document will cover how resources are used in Waffles.</p>
 <h2 id="location">Location</h2>
 <p>All resources are stored in the <code>$WAFFLES_DIR/lib</code> directory:</p>

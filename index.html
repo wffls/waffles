@@ -65,24 +65,7 @@
         
             <ul>
             
-                <li class="toctree-l3"><a href="#waffles">Waffles</a></li>
-                
-            
             </ul>
-        
-    </li>
-<li>
-          
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="about/">About</a>
-        
-    </li>
-<li>
-          
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="quickstart/">Quickstart</a>
         
     </li>
 <li>
@@ -701,7 +684,37 @@
             <div class="section">
               
                 <h1 id="waffles">Waffles</h1>
-<p>Waffles is a simple configuration management system written in Bash. It aims to be lightweight and easy to use, enabling you to focus on the environments you're creating rather than the configuration management system itself.</p>
+<div class="toc">
+<ul>
+<li><a href="#waffles">Waffles</a><ul>
+<li><a href="#about-waffles">About Waffles</a></li>
+<li><a href="#why-bash">Why Bash?</a></li>
+<li><a href="#why-waffles">Why "Waffles"?</a></li>
+<li><a href="#contributing">Contributing</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h2 id="about-waffles">About Waffles</h2>
+<p>Waffles is a configuration management system that helps you install, configure, and maintain services.</p>
+<p>It is written in Bash 4.3 and uses core Linux utilities such as <code>grep</code>, <code>sed</code>, and <code>awk</code>. <code>rsync</code> is required to push deployments to remote systems.</p>
+<p>Waffles also has a library of <a href="http://augeas.net">Augeas</a>-based components. You can use Waffles without these components, but Augeas makes handling certain situations easier.</p>
+<h2 id="why-bash">Why Bash?</h2>
+<p>I chose Bash over another language such as Python, Ruby, Golang, etc because:</p>
+<ul>
+<li>Bash is available on every Linux distribution out of the box. It's easy to install on FreeBSD and similar nix systems.</li>
+<li>Configuring a nix-based system is all about running commands in a sequence as well as editing text files. This is exactly what Bash and the core utilities do.</li>
+<li>Some configuration management systems just create Bash subprocesses to perform the underlying system changes anyway.</li>
+</ul>
+<h2 id="why-waffles">Why "Waffles"?</h2>
+<p>I had all sorts of names for this project. "Composite" was the longest running name, but I always felt it was kind of boring. <a href="https://www.youtube.com/watch?v=1L8wftRFLX0">Hecubus</a> was another front-runner. I eventually settled on "Waffles" because I wanted a name that was simple and wasn't too serious. And it's one of the first words I hear every morning when my son asks "wa-foos?".</p>
+<h2 id="contributing">Contributing</h2>
+<p>All kinds of contributions are welcome:</p>
+<ul>
+<li>More docs</li>
+<li>More resources</li>
+<li>Better ways of accomplishing something</li>
+</ul>
               
             </div>
           </div>
@@ -709,7 +722,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="about/" class="btn btn-neutral float-right" title="About"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="guides/install/" class="btn btn-neutral float-right" title="Installation"/>Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
     </div>
@@ -739,7 +752,7 @@
       
       
       
-        <span style="margin-left: 15px"><a href="about/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="guides/install/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
@@ -749,5 +762,5 @@
 
 <!--
 MkDocs version : 0.14.0
-Build Date UTC : 2015-08-23 00:40:39.060515
+Build Date UTC : 2015-09-06 02:40:44.174912
 -->

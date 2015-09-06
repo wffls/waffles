@@ -8,8 +8,6 @@ google_analytics: ['UA-75603-16', 'waffles.terrarum.net']
 
 pages:
   - Home: 'index.md'
-  - About: 'about.md'
-  - Quickstart: 'quickstart.md'
   - Installation: 'guides/install.md'
   - Concepts: 'concepts.md'
   - Usage: 'usage.md'

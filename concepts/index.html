@@ -68,20 +68,6 @@
           
             <li>
     <li class="toctree-l1 ">
-        <a class="" href="../about/">About</a>
-        
-    </li>
-<li>
-          
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../quickstart/">Quickstart</a>
-        
-    </li>
-<li>
-          
-            <li>
-    <li class="toctree-l1 ">
         <a class="" href="../guides/install/">Installation</a>
         
     </li>
@@ -92,13 +78,6 @@
         <a class="current" href="./">Concepts</a>
         
             <ul>
-            
-                <li class="toctree-l3"><a href="#waffles-from-scratch">Waffles from Scratch</a></li>
-                
-                    <li><a class="toctree-l4" href="#lets-create-a-simple-memcached-server-in-bash">Let's Create a Simple memcached Server in Bash</a></li>
-                
-                    <li><a class="toctree-l4" href="#conclusion">Conclusion</a></li>
-                
             
             </ul>
         
@@ -705,12 +684,32 @@
             <div class="section">
               
                 <h1 id="waffles-from-scratch">Waffles from Scratch</h1>
+<div class="toc">
+<ul>
+<li><a href="#waffles-from-scratch">Waffles from Scratch</a><ul>
+<li><a href="#lets-create-a-simple-memcached-server-in-bash">Let's Create a Simple memcached Server in Bash</a><ul>
+<li><a href="#the-first-draft">The First Draft</a></li>
+<li><a href="#the-second-draft">The Second Draft</a></li>
+<li><a href="#the-third-draft">The Third Draft</a></li>
+<li><a href="#the-fourth-draft">The Fourth Draft</a></li>
+<li><a href="#the-fifth-draft">The Fifth Draft</a></li>
+<li><a href="#the-sixth-draft">The Sixth Draft</a></li>
+</ul>
+</li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+</li>
+</ul>
+</div>
 <p>To illustrate Waffles's design, I'll walk through the creation of a Bash script that can successfully run multiple times on a single server and only make changes to the server when required.</p>
 <h2 id="lets-create-a-simple-memcached-server-in-bash">Let's Create a Simple memcached Server in Bash</h2>
-<p><code>memcached</code> is a very simple service. It's a single daemon with a simple configuration file installed from a single package.</p>
+<p><code>memcached</code> is a very simple service. It's a single daemon with a single configuration file installed from a single package.</p>
+<p>!!! note "Note"</p>
+<pre><code>The "package, file, service" pattern is very convenient for structuring service configurations.
+</code></pre>
 <p>Let's say we want to create a <code>memcached</code> server on a Linux container or virtual machine. Rather than running the commands manually, we'll create a Bash script to do the work. This will serve two purposes:</p>
 <ol>
-<li>Documentation</li>
+<li>Build Documentation</li>
 <li>Repeatable process</li>
 </ol>
 <h3 id="the-first-draft">The First Draft</h3>
@@ -721,7 +720,7 @@ apt-get install -y memcached
 </code></pre>
 
 <h3 id="the-second-draft">The Second Draft</h3>
-<p>This works, and doing <code>ps aux</code> shows that <code>memcached</code> is indeed running. But then we notice that <code>memcached</code> is only listening on <code>localhost</code>:</p>
+<p>This works, and doing <code>ps aux</code> shows that <code>memcached</code> is running. But notice that <code>memcached</code> is only listening on <code>localhost</code>:</p>
 <pre><code class="shell">$ netstat -nap | grep 11211
 </code></pre>
 
