@@ -704,9 +704,10 @@
 <p>To illustrate Waffles's design, I'll walk through the creation of a Bash script that can successfully run multiple times on a single server and only make changes to the server when required.</p>
 <h2 id="lets-create-a-simple-memcached-server-in-bash">Let's Create a Simple memcached Server in Bash</h2>
 <p><code>memcached</code> is a very simple service. It's a single daemon with a single configuration file installed from a single package.</p>
-<p>!!! note "Note"</p>
-<pre><code>The "package, file, service" pattern is very convenient for structuring service configurations.
-</code></pre>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The "package, file, service" pattern is very convenient for structuring service configurations.</p>
+</div>
 <p>Let's say we want to create a <code>memcached</code> server on a Linux container or virtual machine. Rather than running the commands manually, we'll create a Bash script to do the work. This will serve two purposes:</p>
 <ol>
 <li>Build Documentation</li>

@@ -715,8 +715,10 @@
 <li>The environment (environment variable)</li>
 <li>The <code>waffles/waffles.conf</code> file</li>
 </ul>
-<p>!!! Note
-    See the <a href="../guides/environment-vars">Environment Variables</a> Guide for more information.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See the <a href="../guides/environment-vars">Environment Variables</a> Guide for more information.</p>
+</div>
 <h2 id="data">Data</h2>
 <p>Data files are stored in <code>site/data</code>. They're regular Bash scripts and it's only by convention that you store "data", and not programming logic, in these files.</p>
 <p>So what is "data"? It's all of the settings that make your site or environment unique:</p>
@@ -740,10 +742,14 @@ data_user_info=(
 )
 </code></pre>
 
-<p>!!! Note
-    You can name the variables anything you'd like, though the Waffles naming convention is to start each variable with <code>data_</code>.</p>
-<p>!!! Warning
-    Bash associative arrays <em>must</em> be declared as global variables. This is because all files are sourced inside a Bash function and, for whatever reason, associative arrays are not visible outside of a function (unlike all other Bash variable types).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can name the variables anything you'd like, though the Waffles naming convention is to start each variable with <code>data_</code>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Bash associative arrays <em>must</em> be declared as global variables. This is because all files are sourced inside a Bash function and, for whatever reason, associative arrays are not visible outside of a function (unlike all other Bash variable types).</p>
+</div>
 <h3 id="referencing-data">Referencing Data</h3>
 <p>Once you've created some "data" in a data file, you can refer to it by doing the following:</p>
 <pre><code class="shell">stdlib.data memcached
@@ -770,13 +776,17 @@ stdlib.data memcached
 <p>In the above, common settings that are applicable to <em>any</em> role are stored in <code>site/data/common.sh</code>. Only data relevant to the <code>memcached</code> service is stored in <code>site/data/memcached.sh</code>.</p>
 <p>You can even declare the same variable in both data files. The data file declaring it last will overwrite all previous declarations and win.</p>
 <p>Finally, you can reference data from a previously declared data file. You can't, however, reference variables in data files <em>before</em> they are declared. To clarify: <code>site/data/memcached.sh</code> can reference data from <code>site/data/common.sh</code>, but not vice versa.</p>
-<p>!!! Note
-    See the <a href="../guides/referencing-data-from-data">Referencing Data from Data</a> and <a href="../guides/override-data">Overriding Data</a> Guides for more information.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See the <a href="../guides/referencing-data-from-data">Referencing Data from Data</a> and <a href="../guides/override-data">Overriding Data</a> Guides for more information.</p>
+</div>
 <h2 id="profiles">Profiles</h2>
 <p>Profiles are small snippets of bash scripts stored under <code>site/profiles</code>. They are meant to be distinct units of work that accomplish a single task.</p>
 <p>For example, you may have a Profile that installs the <code>memcached</code> package, a Profile that configures <code>/etc/memcached.conf</code>, and a Profile that sets up the <code>memcached</code> daemon. Or you may choose to have a single Profile that does all three tasks. Waffles does not enforce any rules to how you design your Profiles.</p>
-<p>!!! Warning
-    It's possible to call Profiles from other Profiles, but that's not an encouraged practice.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>It's possible to call Profiles from other Profiles, but that's not an encouraged practice.</p>
+</div>
 <h3 id="profile-structure">Profile Structure</h3>
 <p>Profiles have a standard structure to them:</p>
 <pre><code class="shell">site/profiles/consul/
@@ -788,8 +798,10 @@ stdlib.data memcached
 </code></pre>
 
 <p>Static files go under <code>files</code> while scripts go under <code>scripts</code>.</p>
-<p>!!! Note
-    When using the <code>stdlib.file</code> resource, you can use the <code>--source</code> option to copy files to their destination. The <code>--source</code> option is able to reference any file on the system. It's recommended to use <code>$WAFFLES_SITE_DIR/profiles/profile_name/files/file.conf</code> when "sourcing" a file.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When using the <code>stdlib.file</code> resource, you can use the <code>--source</code> option to copy files to their destination. The <code>--source</code> option is able to reference any file on the system. It's recommended to use <code>$WAFFLES_SITE_DIR/profiles/profile_name/files/file.conf</code> when "sourcing" a file.</p>
+</div>
 <p>The <code>stdlib.profile</code> function is similar to <code>stdlib.data</code>: it takes a single argument, which is the name of a profile. The following translations are possible:</p>
 <pre><code class="shell">stdlib.profile common/users    =&gt; site/profiles/common/scripts/users.sh
 stdlib.profile common/packages =&gt; site/profiles/common/scripts/packages.sh
@@ -822,8 +834,10 @@ stdlib.profile memcached/utils =&gt; site/profiles/memcached/scripts/utils.sh
 <pre><code class="shell">stdlib.profile host_files
 </code></pre>
 
-<p>!!! Warning
-    This means that <code>host_files</code> is a reserved name.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This means that <code>host_files</code> is a reserved name.</p>
+</div>
 <h2 id="roles">Roles</h2>
 <p>A "role" is a name that identifies a unique configuration set. Examples of roles could be:</p>
 <ul>
@@ -835,8 +849,10 @@ stdlib.profile memcached/utils =&gt; site/profiles/memcached/scripts/utils.sh
 </ul>
 <p>Role names are up to you -- just make sure <em>you</em> understand that applying the <code>memcached_yum_lxc</code> role to an Ubuntu-based KVM virtual machine probably won't work.</p>
 <p>Roles are defined in <code>site/roles</code>.</p>
-<p>!!! Note
-    A role is really just another Bash script. It's possible to use Waffles to organize a collection of deployment scripts simply by placing them under the <code>site/roles</code> directory.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A role is really just another Bash script. It's possible to use Waffles to organize a collection of deployment scripts simply by placing them under the <code>site/roles</code> directory.</p>
+</div>
 <p>To use roles most effectively, think of them as glue between <em>data</em> and <em>profiles</em>:</p>
 <p>A very simple role could look like this:</p>
 <pre><code class="shell"># Reads data from site/data/common.sh
@@ -869,8 +885,10 @@ stdlib.profile memcached
 </code></pre>
 
 <p>The benefit of this method is that only the data and profiles referenced in the role will be copied to the remote node. So if you have several other profiles, such as for MySQL or RabbitMQ, those profiles will not be copied to a node acting as a <code>memcached</code> node.</p>
-<p>!!! Note
-    At this time, both the Waffles server and destination node must have rsync and installed.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>At this time, both the Waffles server and destination node must have rsync and installed.</p>
+</div>
               
             </div>
           </div>
