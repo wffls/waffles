@@ -6,6 +6,9 @@ repo_url: 'https://github.com/jtopjian/waffles'
 theme: 'readthedocs'
 google_analytics: ['UA-75603-16', 'waffles.terrarum.net']
 
+markdown_extensions:
+  - admonition
+
 pages:
   - Home: 'index.md'
   - Installation: 'guides/install.md'
