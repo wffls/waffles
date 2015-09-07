@@ -44,6 +44,7 @@ function stdlib.resource.process {
 }
 
 function stdlib.resource.read {
+  stdlib_current_state=""
   "${_resource_type}.read"
 }
 
