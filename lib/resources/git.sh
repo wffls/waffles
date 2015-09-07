@@ -84,6 +84,8 @@ function stdlib.git {
 }
 
 function stdlib.git.read {
+  local _current_state
+
   if [[ -f "${options[name]}/.git/config" ]]; then
     stdlib.debug_mute pushd "${options[name]}"
 
@@ -92,11 +94,9 @@ function stdlib.git.read {
       stdlib.debug_mute git remote update
       git status -uno | grep -q up-to-date
       if [[ $? -eq 0 ]]; then
-        stdlib_current_state="present"
-        return
+        _current_state="present"
       else
-        stdlib_current_state="update"
-        return
+        _current_state="update"
       fi
 
     # Next check if a commit was specified.
@@ -104,32 +104,27 @@ function stdlib.git.read {
     elif [[ -n ${options[commit]} ]]; then
       local _commit=$(git rev-parse HEAD)
       if [[ ${options[commit]} =~ ^${_commit} ]]; then
-        stdlib_current_state="present"
-        return
+        _current_state="present"
       else
-        stdlib_current_state="update"
-        return
+        _current_state="update"
       fi
 
     # If a commit was not specified, check for a tag
     elif [[ -n ${options[tag]} ]]; then
       local _tag=$(git describe --always --tag)
       if [[ ${options[tag]} == $_tag ]]; then
-        stdlib_current_state="present"
-        return
+        _current_state="present"
       else
-        stdlib_current_state="update"
-        return
+        _current_state="update"
       fi
 
     # Finally, check for a branch, defaulting to "master"
     else
       local _branch=$(git rev-parse --abbrev-ref HEAD)
       if [[ ${options[branch]} == $_branch ]]; then
-        stdlib_current_state="present"
-        return
+        _current_state="present"
       else
-        stdlib_current_state="update"
+        _current_state="update"
       fi
     fi
     stdlib.debug_mute popd
@@ -139,18 +134,20 @@ function stdlib.git.read {
 
     local _user_check=$(find "${options[name]}" ! -uid $_uid 2> /dev/null)
     if [[ -n $_user_check ]]; then
-      stdlib_current_state="update"
-      return
+      _current_state="update"
     fi
 
     local _group_check=$(find "${options[name]}" ! -gid $_gid 2> /dev/null)
     if [[ -n $_group_check ]]; then
-      stdlib_current_state="update"
-      return
+      _current_state="update"
     fi
   fi
 
-  stdlib_current_state="absent"
+  if [[ -n $_current_state ]]; then
+    stdlib_current_state="$_current_state"
+  else
+    stdlib_current_state="absent"
+  fi
 }
 
 function stdlib.git.create {
@@ -169,6 +166,9 @@ function stdlib.git.create {
   else
     stdlib.capture_error git checkout "${options[branch]}"
   fi
+
+  # Make sure the owner and group are corrent
+  stdlib.capture_error chown -R $_uid:$_gid "${options[name]}"
 
   stdlib.debug_mute popd
 }
