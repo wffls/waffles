@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.18.0 - September 28, 2015
+
+* New Feature: Host Profile support. Can manage files for an individual host.
+* Enhanced: Added admonition plugin to docs.
+* Enhanced: Lots of documentation updates.
+* Enhanced: `stdlib.ini`: Allows settings without a `[section]`.
+* Enhanced: Run `rsync` in quiet mode unless Waffles is run in debug mode.
+* Enhanced: Waffles remote: SSH key and better SITE directory handling.
+* Enhanced: `stdlib.capture_error` returns exit codes.
+* Enhanced: Better support for required options.
+* Updated: `consul.get_nodes` only returns node names and addresses. Not ports.
+* Updated: Several Augeas-based resources were refactored to use the new `augeas.generic` resource.
+* Removed: `consul.build_hosts_file`.
+* Fixed: git repo read.
+* Fixed: Ensure the resource state is reset before each read.
+* Fixed: Typo in sourcing RabbitMQ resource.
+* Fixed: `stdlib.split` issue with repeating characters.
+* Fixed: `stdlib.array_*` functions were all refactored and tests have been created.
+
 ## 0.17.0 - August 8, 2015
 
 * New resource: `stdlib.sudo_cmd`.
