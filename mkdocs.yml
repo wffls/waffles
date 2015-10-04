@@ -87,6 +87,8 @@ pages:
     - nginx.map: 'resources/nginx.map.md'
     - nginx.server: 'resources/nginx.server.md'
     - nginx.upstream: 'resources/nginx.upstream.md'
+    - python.pip: 'resources/python.pip.md'
+    - python.virtualenv: 'resources/python.virtualenv.md'
     - rabbitmq.cluster_nodes: 'resources/rabbitmq.cluster_nodes.md'
     - rabbitmq.config_settings: 'resources/rabbitmq.config_settings.md'
     - rabbitmq.policy: 'resources/rabbitmq.policy.md'
