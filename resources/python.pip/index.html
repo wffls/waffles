@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>stdlib.apt_source - Waffles</title>
+  <title>python.pip - Waffles</title>
   
 
   <link rel="shortcut icon" href="../../img/favicon.ico">
@@ -20,7 +20,7 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "stdlib.apt_source";
+    var mkdocs_page_name = "python.pip";
   </script>
   
   <script src="../../js/jquery-2.1.1.min.js"></script>
@@ -270,21 +270,8 @@
 
         
             
-    <li class="toctree-l1 current">
-        <a class="current" href="./">stdlib.apt_source</a>
-        
-            <ul>
-            
-                <li class="toctree-l3"><a href="#stdlibapt_source">stdlib.apt_source</a></li>
-                
-                    <li><a class="toctree-l4" href="#description">Description</a></li>
-                
-                    <li><a class="toctree-l4" href="#parameters">Parameters</a></li>
-                
-                    <li><a class="toctree-l4" href="#example">Example</a></li>
-                
-            
-            </ul>
+    <li class="toctree-l1 ">
+        <a class="" href="../stdlib.apt_source/">stdlib.apt_source</a>
         
     </li>
 
@@ -612,8 +599,23 @@
 
         
             
-    <li class="toctree-l1 ">
-        <a class="" href="../python.pip/">python.pip</a>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">python.pip</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#pythonpip">python.pip</a></li>
+                
+                    <li><a class="toctree-l4" href="#description">Description</a></li>
+                
+                    <li><a class="toctree-l4" href="#parameters">Parameters</a></li>
+                
+                    <li><a class="toctree-l4" href="#example">Example</a></li>
+                
+                    <li><a class="toctree-l4" href="#notes">Notes</a></li>
+                
+            
+            </ul>
         
     </li>
 
@@ -696,7 +698,7 @@
         
       
     
-    <li>stdlib.apt_source</li>
+    <li>python.pip</li>
     <li class="wy-breadcrumbs-aside">
       
         
@@ -710,23 +712,32 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="stdlibapt_source">stdlib.apt_source</h1>
+                <h1 id="pythonpip">python.pip</h1>
 <h2 id="description">Description</h2>
-<p>Manage /etc/apt/sources.list.d entries.</p>
+<p>Manage a pip python package</p>
 <h2 id="parameters">Parameters</h2>
 <ul>
 <li>state: The state of the resource. Required. Default: present.</li>
-<li>name: The name of the apt repo. Required.</li>
-<li>uri: The URI of the apt repo. Required.</li>
-<li>distribution: The distribution of the apt repo. Required.</li>
-<li>component: The component of the apt repo. Required.</li>
-<li>include_src: Whether to include the source repo. Default: false.</li>
-<li>refresh: run apt-get update if the source was modified. Default: true.</li>
+<li>name: The name of the pip package. Required.</li>
+<li>version: The version of the pip package. Optional.</li>
+<li>virtualenv: The virtual environment to put the package in. Required. Default: system.</li>
+<li>url: A URL to install the package from. Optional.</li>
+<li>owner: The owner of the virtualenv. Required. Default: root.</li>
+<li>group: The group of the virtualenv. Required. Default: root.</li>
+<li>index: Base URL of the python package index. Optional.</li>
+<li>editable: If the package is installed as an editable resource. Required. Default: false.</li>
+<li>environment: Additional environment variables. Optional.</li>
+<li>install_args: Additional arguments to use when installing. Optional.</li>
+<li>uninstall-args: Additional arguments to use when uninstalling. Optional.</li>
 </ul>
 <h2 id="example">Example</h2>
-<pre><code class="shell">stdlib.apt_source --name lxc --uri http://ppa.launchpad.net/ubuntu-lxc/stable/ubuntu \
-                  --distribution trusty --component main
+<pre><code class="shell">python.pip --name minilanguage
+python.pip --name minilanguage --version 0.3.0
+python.pip --name minilanguage --version latest
 </code></pre>
+
+<h2 id="notes">Notes</h2>
+<p>This resource is heavily based on puppet-python</p>
               
             </div>
           </div>
@@ -734,10 +745,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../stdlib.cron/" class="btn btn-neutral float-right" title="stdlib.cron"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../python.virtualenv/" class="btn btn-neutral float-right" title="python.virtualenv"/>Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../stdlib.apt/" class="btn btn-neutral" title="stdlib.apt"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../nginx.upstream/" class="btn btn-neutral" title="nginx.upstream"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -765,10 +776,10 @@
           <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../stdlib.apt/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../nginx.upstream/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../stdlib.cron/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../python.virtualenv/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

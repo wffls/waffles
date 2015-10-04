@@ -6,9 +6,54 @@
             "title": "Home"
         }, 
         {
+            "location": "/#waffles", 
+            "text": "Waffles  About Waffles  Why Bash?  Why \"Waffles\"?  Contributing", 
+            "title": "Waffles"
+        }, 
+        {
+            "location": "/#about-waffles", 
+            "text": "Waffles is a configuration management system that helps you install, configure, and maintain services.  It is written in Bash 4.3 and uses core Linux utilities such as  grep ,  sed , and  awk .  rsync  is required to push deployments to remote systems.  Waffles also has a library of  Augeas -based components. You can use Waffles without these components, but Augeas makes handling certain situations easier.", 
+            "title": "About Waffles"
+        }, 
+        {
+            "location": "/#why-bash", 
+            "text": "I chose Bash over another language such as Python, Ruby, Golang, etc because:   Bash is available on every Linux distribution out of the box. It's easy to install on FreeBSD and similar nix systems.  Configuring a nix-based system is all about running commands in a sequence as well as editing text files. This is exactly what Bash and the core utilities do.  Some configuration management systems just create Bash subprocesses to perform the underlying system changes anyway.", 
+            "title": "Why Bash?"
+        }, 
+        {
+            "location": "/#why-waffles", 
+            "text": "I had all sorts of names for this project. \"Composite\" was the longest running name, but I always felt it was kind of boring.  Hecubus  was another front-runner. I eventually settled on \"Waffles\" because I wanted a name that was simple and wasn't too serious. And it's one of the first words I hear every morning when my son asks \"wa-foos?\".", 
+            "title": "Why \"Waffles\"?"
+        }, 
+        {
+            "location": "/#contributing", 
+            "text": "All kinds of contributions are welcome:   More docs  More resources  Better ways of accomplishing something", 
+            "title": "Contributing"
+        }, 
+        {
             "location": "/guides/install/", 
             "text": "Install Waffles\n\n\n\n\n\n\nInstall Waffles\n\n\nDescription\n\n\nSteps\n\n\nMore Information\n\n\n\n\n\n\n\n\n\n\nDescription\n\n\nThis guide will show how to install and use Waffles.\n\n\nSteps\n\n\n\n\nClone the repository to a directory of your choice:\n\n\n\n\n$ git clone https://github.com/jtopjian/waffles .waffles\n$ cd .waffles\n\n\n\n\n\n\nCreate a data file:\n\n\n\n\n$ cat \n site/data/memcached.sh \nEOF\ndata_memcached_interface=\n0.0.0.0\n\nEOF\n\n\n\n\n\n\nCreate a profile:\n\n\n\n\n$ cat \n site/profiles/memcached/scripts/server.sh \nEOF\nstdlib.title site/profiles/memcached/server\nstdlib.apt --package memcached --version latest\nstdlib.file_line --name memcached.conf/listen --file /etc/memcached.conf --line \n-l $data_memcached_server_listen\n --match \n^-l\n\nstdlib.sysvinit --name memcached\n\nif [[ $stdlib_state_change == true ]]; then\n  stdlib.mute /etc/init.d/memcached restart\nfi\n\n\n\n\n\n\nCreate a role:\n\n\n\n\n$ cat \n site/roles/memcached.sh \nEOF\nstdlib.data memcached\nstdlib.profile memcached/server\n\n\n\n\nMore Information\n\n\nFor more information about Data, Profiles, and Roles, see the \nusage\n doc.", 
             "title": "Installation"
+        }, 
+        {
+            "location": "/guides/install/#install-waffles", 
+            "text": "Install Waffles  Description  Steps  More Information", 
+            "title": "Install Waffles"
+        }, 
+        {
+            "location": "/guides/install/#description", 
+            "text": "This guide will show how to install and use Waffles.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/guides/install/#steps", 
+            "text": "Clone the repository to a directory of your choice:   $ git clone https://github.com/jtopjian/waffles .waffles\n$ cd .waffles   Create a data file:   $ cat   site/data/memcached.sh  EOF\ndata_memcached_interface= 0.0.0.0 \nEOF   Create a profile:   $ cat   site/profiles/memcached/scripts/server.sh  EOF\nstdlib.title site/profiles/memcached/server\nstdlib.apt --package memcached --version latest\nstdlib.file_line --name memcached.conf/listen --file /etc/memcached.conf --line  -l $data_memcached_server_listen  --match  ^-l \nstdlib.sysvinit --name memcached\n\nif [[ $stdlib_state_change == true ]]; then\n  stdlib.mute /etc/init.d/memcached restart\nfi   Create a role:   $ cat   site/roles/memcached.sh  EOF\nstdlib.data memcached\nstdlib.profile memcached/server", 
+            "title": "Steps"
+        }, 
+        {
+            "location": "/guides/install/#more-information", 
+            "text": "For more information about Data, Profiles, and Roles, see the  usage  doc.", 
+            "title": "More Information"
         }, 
         {
             "location": "/concepts/", 
@@ -16,9 +61,54 @@
             "title": "Concepts"
         }, 
         {
+            "location": "/concepts/#waffles-from-scratch", 
+            "text": "Waffles from Scratch  Let's Create a Simple memcached Server in Bash  The First Draft  The Second Draft  The Third Draft  The Fourth Draft  The Fifth Draft  The Sixth Draft    Conclusion      To illustrate Waffles's design, I'll walk through the creation of a Bash script that can successfully run multiple times on a single server and only make changes to the server when required.", 
+            "title": "Waffles from Scratch"
+        }, 
+        {
+            "location": "/concepts/#lets-create-a-simple-memcached-server-in-bash", 
+            "text": "memcached  is a very simple service. It's a single daemon with a single configuration file installed from a single package.   Note  The \"package, file, service\" pattern is very convenient for structuring service configurations.   Let's say we want to create a  memcached  server on a Linux container or virtual machine. Rather than running the commands manually, we'll create a Bash script to do the work. This will serve two purposes:   Build Documentation  Repeatable process   The First Draft  The initial Bash script would look something like:  #!/bin/bash\n\napt-get install -y memcached  The Second Draft  This works, and doing  ps aux  shows that  memcached  is running. But notice that  memcached  is only listening on  localhost :  $ netstat -nap | grep 11211  Since this  memcached  service will be used by other services on the network, we need to change  memcached 's interface binding to  0.0.0.0 . The following should work:  $ sed -i -e '/^-l 127.0.0.1$/c -l 0.0.0.0' /etc/memcached.conf\n$ /etc/init.d/memcached restart  And once that's tested on the command line, we add it to our script:  #!/bin/bash\n\napt-get install -y memcached\nsed -i -e '/^-l 127.0.0.1$/c -l 0.0.0.0' /etc/memcached.conf\n/etc/init.d/memcached restart  Astute readers will see an issue. In order for us to test this script, we need to run it again. However, the script is going to report that  memcached  is already installed and an unnecessary restart of  memcached  will take place.  There are two ways to resolve this issue:  The first is by starting over from scratch and running the script on a new server. There's a lot of merit to this method. For example, you can be sure that the exact steps work in sequence on new servers. However, the entire process could take a long time for some situations. Also, what if this  memcached  service was in production? Either you'd have to take the  memcached  service down temporarily while the new service builds or you'd have to find some way of seamlessly adding in the new service while removing the old. While there's benefit to this (which is similar to the current popularity of \"microservices\"), it may not always be a possible solution.  The second way is to alter the script so that changes are only made if required. If a change does not need to be made, nothing happens.  Let's say it's not possible for us to rebuild from scratch. Therefore, we'll opt for the second option.  The Third Draft  In order to run our Bash script against a running service without causing (too much of) a disruption, we must ensure that each step is executed only if it needs to be. This means that before any command has run, we must check to see what the current state of the system is, compare it to the change we want to make, and only make the change if the system state does not match.  By doing this, our Bash script becomes a \"state declaration\" that describes how the  memcached  service should be configured when the script is done running. This is known as  Idempotence  in Configuration Management.  So let's make our basic Bash script more idempotent:  dpkg -s memcached  /dev/null\nif [ $? == 1 ]; then\n  echo  Installing memcached \n  apt-get install -y memcached\nfi\n\ngrep -q '^-l 127.0.0.1' /etc/memcached.conf\nif [ $? == 0 ]; then\n  echo  Updating memcached.conf and restarting it. \n  sed -i -e '/^-l 127.0.0.1$/c -l 0.0.0.0' /etc/memcached.conf\n  /etc/init.d/memcached restart\nfi  With this in place, we can now execute this script multiple times on the same server, virtual machine, or container, and if a step has already been done it will not happen again.  The Fourth Draft  Having to do a bunch of  grep s and other checks can become very tedious. Waffles tries to resolve this by including a Standard Library of common tasks. Using the Waffles Standard Library, the above script can be re-written as:  #!/bin/bash\n\nsource ./waffles.conf\nsource ./lib/init.sh\n\nstdlib.apt --package memcached\nstdlib.file_line --name memcached.conf/listen --file /etc/memcached.conf --line  -l 0.0.0.0  --match  ^-l \nstdlib.sysvinit --name memcached\n\nif [  $stdlib_state_change  == true ]; then\n  /etc/init.d/memcached restart\nfi  There's nothing magical about these commands. They're a collection of standard Bash functions that sweep all of the messy  grep s under the carpet. You can see the full collection of Standard Library functions in the  lib/  directory.  The Fifth Draft  The core  memcached  service is up and running, but there's still a few more tasks that need to be done. For example, maybe we want to create some users:  stdlib.groupadd --group jdoe --gid 999\nstdlib.useradd --user jdoe --uid 999 --gid 999 --comment  John  --shell /bin/bash --homedir /home/jdoe --createhome true  stdlib.useradd  is another Waffles Standard Library function that enables an easy way to create and manage a user on a server.  Looking at the above command, there are a lot of settings that are hard-coded. If we end up creating a  redis  server that also needs the  jdoe  user, we could just copy that line verbatim, but what about a scenario where the  uid  must be changed to  500 ? Then we'd need to change every occurrence of  999  to  500 . In large environments, there's a chance some changes would be missed.  To resolve this issue, Waffles allows settings such as this (known as  data ) to be stored in data files.  A simple way of using data is to just throw all settings into a file called  site/data/common.sh .  Let's add a user:  data_users=(\n  jdoe\n)\n\ndeclare -Ag data_user_info\ndata_user_info=(\n  [jdoe|uid]=999\n  [jdoe|gid]=999\n  [jdoe|comment]= John doe \n  [jdoe|homedir]= /home/jdoe \n  [jdoe|shell]= /bin/bash \n  [jdoe|create_home]=true\n)  Waffles data variables can be named anything, but if you want to follow the project standards, have the variables start with  data_ .  With all of this in place, the fifth draft now looks like:  #!/bin/bash\n\nsource ./waffles.conf\nsource ./lib/init.sh\n\nstdlib.data common\n\nfor user in  ${data_users[@]} ; do\n\n  homedir= ${data_user_info[${user}|homedir]} \n  uid= ${data_user_info[${user}|uid]} \n  gid= ${data_user_info[${user}|gid]} \n  comment= ${data_user_info[${user}|comment]} \n  shell= ${data_user_info[${user}|shell]} \n  create_home= ${data_user_info[${user}|create_home]} \n\n  stdlib.groupadd --group  $user  --gid  $gid \n  stdlib.useradd --state present --user  $user  --uid  $uid  --gid  $gid  --comment  $comment  --homedir  $homedir  --shell  $shell  --createhome  $createhome \n\ndone\n\nstdlib.apt --package memcached\nstdlib.file_line --name memcached.conf/listen --file /etc/memcached.conf --line  -l 0.0.0.0  --match  ^-l \nstdlib.sysvinit --name memcached\n\nif [  $stdlib_state_change  == true ]; then\n  /etc/init.d/memcached restart\nfi  The Sixth Draft  The block of user data can be re-used in other scripts. It'd be best if we just moved it out into its own separate script. By repeating this process, we can create a library of re-usable components. Final scripts then become \"compositions\" of the collection of scripts.  Create the directory structure  site/profiles/common/scripts  and add the following to  site/profiles/common/scripts/users.sh  for user in  ${data_users[@]} ; do\n\n  homedir= ${data_user_info[${user}|homedir]} \n  uid= ${data_user_info[${user}|uid]} \n  gid= ${data_user_info[${user}|gid]} \n  comment= ${data_user_info[${user}|comment]} \n  shell= ${data_user_info[${user}|shell]} \n  create_home= ${data_user_info[${user}|create_home]} \n\n  stdlib.groupadd --group  $user  --gid  $gid \n  stdlib.useradd --state present --user  $user  --uid  $uid  --gid  $gid  --comment  $comment  --homedir  $homedir  --shell  $shell  --createhome  $createhome \n\ndone  And so the sixth draft now looks like:  #!/bin/bash\n\nsource ./waffles.conf\nsource ./lib/init.sh\n\nstdlib.data common\nstdlib.profile common/users\n\nstdlib.apt --package memcached\nstdlib.file_line --name memcached.conf/listen --file /etc/memcached.conf --line  -l 0.0.0.0  --match  ^-l \nstdlib.sysvinit --name memcached\n\nif [  $stdlib_state_change  == true ]; then\n  /etc/init.d/memcached restart\nfi  You can create this script inside the Waffles directory (where  waffles.conf  is located), and run it like so:  bash test.sh  When you run it for the first time on a new server, it'll add the group, user, and set up  memcached . Run it multiple times and note how those same actions were not performed since the script detected that no changes needed to be made.", 
+            "title": "Let's Create a Simple memcached Server in Bash"
+        }, 
+        {
+            "location": "/concepts/#conclusion", 
+            "text": "At this point, we've effectively recreated the core of Waffles. The rest of controls how Waffles runs and where to find various files that Waffles needs to read.", 
+            "title": "Conclusion"
+        }, 
+        {
             "location": "/usage/", 
             "text": "How to Use Waffles\n\n\n\n\n\n\nHow to Use Waffles\n\n\nThe \"site\" directory\n\n\nData\n\n\nReferencing Data\n\n\nData Structure\n\n\nHierarchial Data\n\n\n\n\n\n\nProfiles\n\n\nProfile Structure\n\n\nThe Hosts Profile\n\n\n\n\n\n\nRoles\n\n\nApplying Roles\n\n\nLocal Execution\n\n\nRemote Execution (push)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe \"site\" directory\n\n\nEverything you work on will go under the \"site\" directory. By default, this directory is \nwaffles/site\n, but you can change it by setting \nWAFFLES_SITE_DIR\n in either:\n\n\n\n\nThe environment (environment variable)\n\n\nThe \nwaffles/waffles.conf\n file\n\n\n\n\n\n\nNote\n\n\nSee the \nEnvironment Variables\n Guide for more information.\n\n\n\n\nData\n\n\nData files are stored in \nsite/data\n. They're regular Bash scripts and it's only by convention that you store \"data\", and not programming logic, in these files.\n\n\nSo what is \"data\"? It's all of the settings that make your site or environment unique:\n\n\n\n\nIP Addresses\n\n\nUsernames, UIDs, GIDs\n\n\nPackage versions\n\n\nFirewall rules\n\n\n\n\nA Data file called \nmemcached.sh\n could look like this:\n\n\ndata_memcached_listen=\n0.0.0.0\n\n\ndeclare -Ag data_user_info\ndata_user_info=(\n  [jdoe|uid]=999\n  [jdoe|gid]=999\n  [jdoe|comment]=\nJohn doe\n\n  [jdoe|homedir]=\n/home/jdoe\n\n  [jdoe|shell]=\n/bin/bash\n\n  [jdoe|create_home]=true\n)\n\n\n\n\n\n\nNote\n\n\nYou can name the variables anything you'd like, though the Waffles naming convention is to start each variable with \ndata_\n.\n\n\n\n\n\n\nWarning\n\n\nBash associative arrays \nmust\n be declared as global variables. This is because all files are sourced inside a Bash function and, for whatever reason, associative arrays are not visible outside of a function (unlike all other Bash variable types).\n\n\n\n\nReferencing Data\n\n\nOnce you've created some \"data\" in a data file, you can refer to it by doing the following:\n\n\nstdlib.data memcached\n\necho $data_memcached_listen\n\n\n\n\nstdlib.data\n is a function that takes a single argument: the name of a data file.\n\n\nData Structure\n\n\nThe placement of data files is flexible. You can do any of the following:\n\n\nstdlib.data common       =\n site/data/common.sh\nstdlib.data common       =\n site/data/common/init.sh\nstdlib.data common/users =\n site/data/common/users.sh\nstdlib.data memcached    =\n site/data/memcached.sh\nstdlib.data memcached    =\n site/data/memcached/init.sh\n\n\n\n\nHierarchial Data\n\n\nBy declaring multiple data files in your role, you can create a hierarchy of data. For example:\n\n\nstdlib.data common\nstdlib.data memcached\n\n\n\n\nIn the above, common settings that are applicable to \nany\n role are stored in \nsite/data/common.sh\n. Only data relevant to the \nmemcached\n service is stored in \nsite/data/memcached.sh\n.\n\n\nYou can even declare the same variable in both data files. The data file declaring it last will overwrite all previous declarations and win.\n\n\nFinally, you can reference data from a previously declared data file. You can't, however, reference variables in data files \nbefore\n they are declared. To clarify: \nsite/data/memcached.sh\n can reference data from \nsite/data/common.sh\n, but not vice versa.\n\n\n\n\nNote\n\n\nSee the \nReferencing Data from Data\n and \nOverriding Data\n Guides for more information.\n\n\n\n\nProfiles\n\n\nProfiles are small snippets of bash scripts stored under \nsite/profiles\n. They are meant to be distinct units of work that accomplish a single task.\n\n\nFor example, you may have a Profile that installs the \nmemcached\n package, a Profile that configures \n/etc/memcached.conf\n, and a Profile that sets up the \nmemcached\n daemon. Or you may choose to have a single Profile that does all three tasks. Waffles does not enforce any rules to how you design your Profiles.\n\n\n\n\nWarning\n\n\nIt's possible to call Profiles from other Profiles, but that's not an encouraged practice.\n\n\n\n\nProfile Structure\n\n\nProfiles have a standard structure to them:\n\n\nsite/profiles/consul/\n\u251c\u2500\u2500 files\n\u2502\u00a0\u00a0 \u2514\u2500\u2500 consul.conf\n\u2514\u2500\u2500 scripts\n    \u251c\u2500\u2500 install_linux.sh\n    \u2514\u2500\u2500 server.sh\n\n\n\n\nStatic files go under \nfiles\n while scripts go under \nscripts\n.\n\n\n\n\nNote\n\n\nWhen using the \nstdlib.file\n resource, you can use the \n--source\n option to copy files to their destination. The \n--source\n option is able to reference any file on the system. It's recommended to use \n$WAFFLES_SITE_DIR/profiles/profile_name/files/file.conf\n when \"sourcing\" a file.\n\n\n\n\nThe \nstdlib.profile\n function is similar to \nstdlib.data\n: it takes a single argument, which is the name of a profile. The following translations are possible:\n\n\nstdlib.profile common/users    =\n site/profiles/common/scripts/users.sh\nstdlib.profile common/packages =\n site/profiles/common/scripts/packages.sh\nstdlib.profile memcached       =\n site/profiles/memcached/scripts/init.sh\nstdlib.profile memcached/utils =\n site/profiles/memcached/scripts/utils.sh\n\n\n\n\nThe Hosts Profile\n\n\nWaffles supports an optional special profile called \nhost_files\n, located at \nsite/profiles/host_files\n. The purpose of this profile is to provide a designated area where files and scripts specific to individual hosts can be stored. This is beneficial because, normally, the entire profile is copied to each node that uses the profile. If you are storing files such as SSL certs in a profile, all SSL certs would be then copied to all hosts that share use the profile. This is probably not the intended behavior.\n\n\nThe \nhost_files\n profile has the following structure:\n\n\nsite/profiles/host_files/\n\u251c\u2500\u2500 mysql-01\n\u2502\u00a0\u00a0 \u2514\u2500\u2500 files\n\u2502\u00a0\u00a0     \u251c\u2500\u2500 mysql-01.crt\n\u2502\u00a0\u00a0     \u2514\u2500\u2500 mysql-01.key\n\u251c\u2500\u2500 mysql-02\n\u2502\u00a0\u00a0 \u2514\u2500\u2500 files\n\u2502\u00a0\u00a0     \u251c\u2500\u2500 mysql-02.crt\n\u2502\u00a0\u00a0     \u2514\u2500\u2500 mysql-02.key\n\u2514\u2500\u2500 rabbit-01\n    \u251c\u2500\u2500 files\n    \u2502\u00a0\u00a0 \u251c\u2500\u2500 rabbit-01.crt\n    \u2502\u00a0\u00a0 \u2514\u2500\u2500 rabbit-01.key\n    \u2514\u2500\u2500 scripts\n        \u2514\u2500\u2500 custom.sh\n\n\n\n\nEach subdirectory of the \nhost_files\n profile is an individual host or node, named after the hostname (not FQDN). The directory of these subdirectories is like a normal profile with the usual \nfiles\n and \nscripts\n subdirectories.\n\n\nInside your role, you can enable this special profile by doing:\n\n\nstdlib.profile host_files\n\n\n\n\n\n\nWarning\n\n\nThis means that \nhost_files\n is a reserved name.\n\n\n\n\nRoles\n\n\nA \"role\" is a name that identifies a unique configuration set. Examples of roles could be:\n\n\n\n\nmemcached\n\n\nmemcached_apt\n\n\nmemcached_yum\n\n\nmemcached_yum_lxc\n\n\nmemcached_and_redis\n\n\n\n\nRole names are up to you -- just make sure \nyou\n understand that applying the \nmemcached_yum_lxc\n role to an Ubuntu-based KVM virtual machine probably won't work.\n\n\nRoles are defined in \nsite/roles\n.\n\n\n\n\nNote\n\n\nA role is really just another Bash script. It's possible to use Waffles to organize a collection of deployment scripts simply by placing them under the \nsite/roles\n directory.\n\n\n\n\nTo use roles most effectively, think of them as glue between \ndata\n and \nprofiles\n:\n\n\nA very simple role could look like this:\n\n\n# Reads data from site/data/common.sh\nstdlib.data common\n\n# Reads data from site/data/memcached.sh\nstdlib.data memcached\n\n# Reads site/profiles/common/scripts/users.sh\nstdlib.profile common/users\n\n# Reads site/profiles/common/scripts/packages.sh\nstdlib.profile common/packages\n\n# Reads site/profiles/memcached/scripts/init.sh\nstdlib.profile memcached\n\n\n\n\nApplying Roles\n\n\nWaffles supports two ways of applying roles:\n\n\nLocal Execution\n\n\nYou can run \nwaffles.sh\n directly on a node and Waffles will apply the role to that node. For example:\n\n\n$ waffles.sh -r memcached\n\n\n\n\nThis is most useful when you copy the entire contents of the \nwaffles\n directory to a node, log into the node, and manually run \nwaffles.sh\n.\n\n\nRemote Execution (push)\n\n\nIt's possible to run Waffles on a remote node by pushing the configuration via rsync and SSH. To do this, use the \n-s \nserver\n flag. For example:\n\n\n$ waffles.sh -s www.example.com -r web\n\n\n\n\nThe benefit of this method is that only the data and profiles referenced in the role will be copied to the remote node. So if you have several other profiles, such as for MySQL or RabbitMQ, those profiles will not be copied to a node acting as a \nmemcached\n node.\n\n\n\n\nNote\n\n\nAt this time, both the Waffles server and destination node must have rsync and installed.", 
             "title": "Usage"
+        }, 
+        {
+            "location": "/usage/#how-to-use-waffles", 
+            "text": "How to Use Waffles  The \"site\" directory  Data  Referencing Data  Data Structure  Hierarchial Data    Profiles  Profile Structure  The Hosts Profile    Roles  Applying Roles  Local Execution  Remote Execution (push)", 
+            "title": "How to Use Waffles"
+        }, 
+        {
+            "location": "/usage/#the-site-directory", 
+            "text": "Everything you work on will go under the \"site\" directory. By default, this directory is  waffles/site , but you can change it by setting  WAFFLES_SITE_DIR  in either:   The environment (environment variable)  The  waffles/waffles.conf  file    Note  See the  Environment Variables  Guide for more information.", 
+            "title": "The \"site\" directory"
+        }, 
+        {
+            "location": "/usage/#data", 
+            "text": "Data files are stored in  site/data . They're regular Bash scripts and it's only by convention that you store \"data\", and not programming logic, in these files.  So what is \"data\"? It's all of the settings that make your site or environment unique:   IP Addresses  Usernames, UIDs, GIDs  Package versions  Firewall rules   A Data file called  memcached.sh  could look like this:  data_memcached_listen= 0.0.0.0 \n\ndeclare -Ag data_user_info\ndata_user_info=(\n  [jdoe|uid]=999\n  [jdoe|gid]=999\n  [jdoe|comment]= John doe \n  [jdoe|homedir]= /home/jdoe \n  [jdoe|shell]= /bin/bash \n  [jdoe|create_home]=true\n)   Note  You can name the variables anything you'd like, though the Waffles naming convention is to start each variable with  data_ .    Warning  Bash associative arrays  must  be declared as global variables. This is because all files are sourced inside a Bash function and, for whatever reason, associative arrays are not visible outside of a function (unlike all other Bash variable types).   Referencing Data  Once you've created some \"data\" in a data file, you can refer to it by doing the following:  stdlib.data memcached\n\necho $data_memcached_listen  stdlib.data  is a function that takes a single argument: the name of a data file.  Data Structure  The placement of data files is flexible. You can do any of the following:  stdlib.data common       =  site/data/common.sh\nstdlib.data common       =  site/data/common/init.sh\nstdlib.data common/users =  site/data/common/users.sh\nstdlib.data memcached    =  site/data/memcached.sh\nstdlib.data memcached    =  site/data/memcached/init.sh  Hierarchial Data  By declaring multiple data files in your role, you can create a hierarchy of data. For example:  stdlib.data common\nstdlib.data memcached  In the above, common settings that are applicable to  any  role are stored in  site/data/common.sh . Only data relevant to the  memcached  service is stored in  site/data/memcached.sh .  You can even declare the same variable in both data files. The data file declaring it last will overwrite all previous declarations and win.  Finally, you can reference data from a previously declared data file. You can't, however, reference variables in data files  before  they are declared. To clarify:  site/data/memcached.sh  can reference data from  site/data/common.sh , but not vice versa.   Note  See the  Referencing Data from Data  and  Overriding Data  Guides for more information.", 
+            "title": "Data"
+        }, 
+        {
+            "location": "/usage/#profiles", 
+            "text": "Profiles are small snippets of bash scripts stored under  site/profiles . They are meant to be distinct units of work that accomplish a single task.  For example, you may have a Profile that installs the  memcached  package, a Profile that configures  /etc/memcached.conf , and a Profile that sets up the  memcached  daemon. Or you may choose to have a single Profile that does all three tasks. Waffles does not enforce any rules to how you design your Profiles.   Warning  It's possible to call Profiles from other Profiles, but that's not an encouraged practice.   Profile Structure  Profiles have a standard structure to them:  site/profiles/consul/\n\u251c\u2500\u2500 files\n\u2502\u00a0\u00a0 \u2514\u2500\u2500 consul.conf\n\u2514\u2500\u2500 scripts\n    \u251c\u2500\u2500 install_linux.sh\n    \u2514\u2500\u2500 server.sh  Static files go under  files  while scripts go under  scripts .   Note  When using the  stdlib.file  resource, you can use the  --source  option to copy files to their destination. The  --source  option is able to reference any file on the system. It's recommended to use  $WAFFLES_SITE_DIR/profiles/profile_name/files/file.conf  when \"sourcing\" a file.   The  stdlib.profile  function is similar to  stdlib.data : it takes a single argument, which is the name of a profile. The following translations are possible:  stdlib.profile common/users    =  site/profiles/common/scripts/users.sh\nstdlib.profile common/packages =  site/profiles/common/scripts/packages.sh\nstdlib.profile memcached       =  site/profiles/memcached/scripts/init.sh\nstdlib.profile memcached/utils =  site/profiles/memcached/scripts/utils.sh  The Hosts Profile  Waffles supports an optional special profile called  host_files , located at  site/profiles/host_files . The purpose of this profile is to provide a designated area where files and scripts specific to individual hosts can be stored. This is beneficial because, normally, the entire profile is copied to each node that uses the profile. If you are storing files such as SSL certs in a profile, all SSL certs would be then copied to all hosts that share use the profile. This is probably not the intended behavior.  The  host_files  profile has the following structure:  site/profiles/host_files/\n\u251c\u2500\u2500 mysql-01\n\u2502\u00a0\u00a0 \u2514\u2500\u2500 files\n\u2502\u00a0\u00a0     \u251c\u2500\u2500 mysql-01.crt\n\u2502\u00a0\u00a0     \u2514\u2500\u2500 mysql-01.key\n\u251c\u2500\u2500 mysql-02\n\u2502\u00a0\u00a0 \u2514\u2500\u2500 files\n\u2502\u00a0\u00a0     \u251c\u2500\u2500 mysql-02.crt\n\u2502\u00a0\u00a0     \u2514\u2500\u2500 mysql-02.key\n\u2514\u2500\u2500 rabbit-01\n    \u251c\u2500\u2500 files\n    \u2502\u00a0\u00a0 \u251c\u2500\u2500 rabbit-01.crt\n    \u2502\u00a0\u00a0 \u2514\u2500\u2500 rabbit-01.key\n    \u2514\u2500\u2500 scripts\n        \u2514\u2500\u2500 custom.sh  Each subdirectory of the  host_files  profile is an individual host or node, named after the hostname (not FQDN). The directory of these subdirectories is like a normal profile with the usual  files  and  scripts  subdirectories.  Inside your role, you can enable this special profile by doing:  stdlib.profile host_files   Warning  This means that  host_files  is a reserved name.", 
+            "title": "Profiles"
+        }, 
+        {
+            "location": "/usage/#roles", 
+            "text": "A \"role\" is a name that identifies a unique configuration set. Examples of roles could be:   memcached  memcached_apt  memcached_yum  memcached_yum_lxc  memcached_and_redis   Role names are up to you -- just make sure  you  understand that applying the  memcached_yum_lxc  role to an Ubuntu-based KVM virtual machine probably won't work.  Roles are defined in  site/roles .   Note  A role is really just another Bash script. It's possible to use Waffles to organize a collection of deployment scripts simply by placing them under the  site/roles  directory.   To use roles most effectively, think of them as glue between  data  and  profiles :  A very simple role could look like this:  # Reads data from site/data/common.sh\nstdlib.data common\n\n# Reads data from site/data/memcached.sh\nstdlib.data memcached\n\n# Reads site/profiles/common/scripts/users.sh\nstdlib.profile common/users\n\n# Reads site/profiles/common/scripts/packages.sh\nstdlib.profile common/packages\n\n# Reads site/profiles/memcached/scripts/init.sh\nstdlib.profile memcached", 
+            "title": "Roles"
+        }, 
+        {
+            "location": "/usage/#applying-roles", 
+            "text": "Waffles supports two ways of applying roles:  Local Execution  You can run  waffles.sh  directly on a node and Waffles will apply the role to that node. For example:  $ waffles.sh -r memcached  This is most useful when you copy the entire contents of the  waffles  directory to a node, log into the node, and manually run  waffles.sh .  Remote Execution (push)  It's possible to run Waffles on a remote node by pushing the configuration via rsync and SSH. To do this, use the  -s  server  flag. For example:  $ waffles.sh -s www.example.com -r web  The benefit of this method is that only the data and profiles referenced in the role will be copied to the remote node. So if you have several other profiles, such as for MySQL or RabbitMQ, those profiles will not be copied to a node acting as a  memcached  node.   Note  At this time, both the Waffles server and destination node must have rsync and installed.", 
+            "title": "Applying Roles"
         }, 
         {
             "location": "/modules/", 
@@ -36,9 +126,164 @@
             "title": "Types"
         }, 
         {
+            "location": "/functions/types/#types-of-functions", 
+            "text": "Types of Functions  stdlib  non-stdlib      Waffles is built around Bash functions. Some are only used internally, but others are available for use in your roles and profiles.", 
+            "title": "Types of Functions"
+        }, 
+        {
+            "location": "/functions/types/#stdlib", 
+            "text": "Functions that are prefixed with  stdlib  are considered core to Waffles. They can be used anywhere.", 
+            "title": "stdlib"
+        }, 
+        {
+            "location": "/functions/types/#non-stdlib", 
+            "text": "Functions that are not prefixed with  stdlib  should be considered optional. Anything not prefixed with  stdlib  should  not  be used in an  stdlib  function.", 
+            "title": "non-stdlib"
+        }, 
+        {
             "location": "/functions/system/", 
             "text": "System Functions\n\n\nlib/system.sh\n contains functions that are considered core to Waffles.\n\n\n\n\n\n\nSystem Functions\n\n\nstdlib.array_contains\n\n\nstdlib.array_join\n\n\nstdlib.array_length\n\n\nstdlib.array_pop\n\n\nstdlib.array_push\n\n\nstdlib.array_shift\n\n\nstdlib.array_unshift\n\n\nstdlib.capture_error\n\n\nstdlib.command_exists\n\n\nstdlib.data\n\n\nstdlib.debug\n\n\nstdlib.debug?\n\n\nstdlib.debug_mute\n\n\nstdlib.dir\n\n\nstdlib.error\n\n\nstdlib.exec\n\n\nstdlib.hash_keys\n\n\nstdlib.include\n\n\nstdlib.info\n\n\nstdlib.mute\n\n\nstdlib.noop?\n\n\nstdlib.profile\n\n\nstdlib.split\n\n\nstdlib.subtitle\n\n\nstdlib.title\n\n\nstdlib.trim\n\n\nstdlib.warn\n\n\n\n\n\n\n\n\n\n\nstdlib.array_contains\n\n\nReports true if element exists in an array.\n\n\nx=(foo bar baz)\nif stdlib.array_contains \nx\n \nfoo\n ; then\n  echo \nExists\n\nfi\n\n\n\n\nstdlib.array_join\n\n\nJoins an array into a string.\n\n\nx=(foo bar baz)\nstdlib.array_join x ,\n=\n foo,bar,baz\n\n\n\n\nstdlib.array_length\n\n\nReturns the length of an array.\n\n\nx=(a b c)\nstdlib.array_length x\n=\n 3\n\n\n\n\nstdlib.array_pop\n\n\nRemoves and the last element from array $1 and optionally stores it in $2\n\n\nx=(a b c)\nstdlib.array_pop x y\necho $y\n=\n c\n\n\n\n\nstdlib.array_push\n\n\nAdds an element to the end of an array.\n\n\nx=()\nstdlib.array_push x foo\n\n\n\n\nstdlib.array_shift\n\n\nRemoves and returns the first element from array $1 and optionally stores it in $2\n\n\nx=(a b c)\nstdlib.array_shift x y\necho $y\n=\n a\n\n\n\n\nstdlib.array_unshift\n\n\nAdds an element to the beginning of the array.\n\n\nx=(b c)\nstdlib.array_unshift x a\n\n\n\n\n\nstdlib.capture_error\n\n\nTakes a command as input, prints the command, and detects if anything was written to \nstderr\n. If there was, the error is printed to \nstderr\n again, and if \nWAFFLES_EXIT_ON_ERROR\n is set, Waffles halts.\n\n\nstdlib.capture_error apt-get update\n\n\n\n\nstdlib.command_exists\n\n\nA simple wrapper around \nwhich\n.\n\n\nif [[ stdlib.command_exists apt-get ]]; then\n  stdlib.info \nWe're on a Debian-based system.\n\nfi\n\n\n\n\nstdlib.data\n\n\nThe same as \nstdlib.profiles\n but the shell scripts can be placed differently:\n\n\nstdlib.data common =\n data/common.sh\nstdlib.data common =\n data/common/init.sh\nstdlib.data common/users =\n data/common/users.sh\nstdlib.data memcached =\n data/memcached.sh\nstdlib.data memcached =\n data/memcached/init.sh\n\n\n\n\nstdlib.debug\n\n\nPrints a log message at \ndebug\n level.\n\n\nstdlib.debug \nFoobar\n\n\n\n\n\nstdlib.debug?\n\n\nDetermines if Waffles is being run in \ndebug\n mode.\n\n\nif stdlib.debug? ; then\n  stdlib.debug \nWe're in debug mode.\n\nfi\n\n\n\n\nstdlib.debug_mute\n\n\nLike \nstdlib.mute\n but messages only appear in \ndebug\n mode.\n\n\nstdlib.debug_mute apt-get update\n\n\n\n\nstdlib.dir\n\n\nA simple function that returns the current directory of the script currently being run.\n\n\nstdlib.error\n\n\nPrints an error message to \nstderr\n.\n\n\nstdlib.error \nFoobar\n\n\n\n\n\nstdlib.exec\n\n\nA simple function that takes a command as input, prints the command, and then executes it.\n\n\nstdlib.exec apt-get update\n\n\n\n\nstdlib.hash_keys\n\n\nReturns the keys of a hash / associative array.\n\n\ndeclare -A foo=(\n  [a]=1\n  [b]=2\n  [c]=3\n)\n\nstdlib.hash_keys \nfoo\n\n=\n a b c\n\nx=($(stdlib.hash_keys \nfoo\n))\necho \n${x[1]}\n\n=\n b\n\n\n\n\nstdlib.include\n\n\nA more intelligent \nsource\n. It checks if the file being sourced / included exists, and if not, prints a warning and moves on.\n\n\nstdlib.info\n\n\nPrints a log message at \ninfo\n level.\n\n\nstdlib.info \nFoobar\n\n\n\n\n\nstdlib.mute\n\n\nPrints the command being run, but suppresses the command output.\n\n\nstdlib.mute apt-get update\n\n\n\n\nstdlib.noop?\n\n\nDetermines if Waffles is being run in \nnoop\n mode.\n\n\nif stdlib.noop? ; then\n  stdlib.info \nWe're in noop mode.\n\nfi\n\n\n\n\nstdlib.profile\n\n\nTakes a profile as input and determines the shell script attached to the profile.\n\n\nIf Waffles is being run locally, then \nstdlib.include\n is run on the script. If Waffles is being run in push-based mode, then the profile is marked to be copied to the remote node.\n\n\nstdlib.profiles common/users =\n profiles/common/scripts/users.sh\nstdlib.profiles common/packages =\n profiles/common/scripts/packages.sh\nstdlib.profiles memcached =\n profiles/memcached/scripts/init.sh\nstdlib.profiles memcached/utils =\n profiles/memcached/scripts/utils.sh\n\n\n\n\nstdlib.split\n\n\nSplits a string into an array. Stores the result in \n__split\n. The delimiter can be multi-character.\n\n\nstdlib.split \nfoo/bar\n, \n/\n\nstdlib.info $__split[1] # bar\n\n\n\n\nstdlib.subtitle\n\n\nSets a subtitle context. This is usually used internally by resources. An internal counter to determine if the resource was changed:\n\n\n$ cat profiles/common/scripts/package.sh\nstdlib.title \nprofiles/common/packages\n\nstdlib.apt --package sl\n\nif [[ $stdlib_resource_change == true ]]; then\n  stdlib.info \nThe state of package sl changed\n\nfi\n\nstdlib.apt --package cowsay\n\nif [[ $stdlib_resource_change == true ]]; then\n  stdlib.info \nThe state of package cowsay changed\n\nfi\n\n\n\n\nstdlib.title\n\n\nSets a title context. A title is a major section of Waffles being run; for example, a profile. You usually being profiles by setting a title:\n\n\n$ cat profiles/common/scripts/package.sh\nstdlib.title \nprofiles/common/packages\n\nstdlib.apt --package sl\n\n\n\n\nInternal counters are reset whenever \nstdlib.title\n is used. This is useful for determining if any changes were made to a resource or the profile as a whole:\n\n\n$ cat profiles/common/scripts/package.sh\nstdlib.title \nprofiles/common/packages\n\nstdlib.apt --package sl\nstdlib.apt --package cowsay\n\nif [[ $stdlib_state_change == true ]]; then\n  stdlib.info \nOne of the above packages were updated.\n\nfi\n\n\n\n\nstdlib.trim\n\n\nTrims the whitespace on both sides of a string.\n\n\ntrimmed=$(stdlib.trim \n   foobar   \n\n\n\n\n\nstdlib.warn\n\n\nPrints a warning message.\n\n\nstdlib.warn \nFoobar", 
             "title": "system"
+        }, 
+        {
+            "location": "/functions/system/#system-functions", 
+            "text": "lib/system.sh  contains functions that are considered core to Waffles.    System Functions  stdlib.array_contains  stdlib.array_join  stdlib.array_length  stdlib.array_pop  stdlib.array_push  stdlib.array_shift  stdlib.array_unshift  stdlib.capture_error  stdlib.command_exists  stdlib.data  stdlib.debug  stdlib.debug?  stdlib.debug_mute  stdlib.dir  stdlib.error  stdlib.exec  stdlib.hash_keys  stdlib.include  stdlib.info  stdlib.mute  stdlib.noop?  stdlib.profile  stdlib.split  stdlib.subtitle  stdlib.title  stdlib.trim  stdlib.warn", 
+            "title": "System Functions"
+        }, 
+        {
+            "location": "/functions/system/#stdlibarray_contains", 
+            "text": "Reports true if element exists in an array.  x=(foo bar baz)\nif stdlib.array_contains  x   foo  ; then\n  echo  Exists \nfi", 
+            "title": "stdlib.array_contains"
+        }, 
+        {
+            "location": "/functions/system/#stdlibarray_join", 
+            "text": "Joins an array into a string.  x=(foo bar baz)\nstdlib.array_join x ,\n=  foo,bar,baz", 
+            "title": "stdlib.array_join"
+        }, 
+        {
+            "location": "/functions/system/#stdlibarray_length", 
+            "text": "Returns the length of an array.  x=(a b c)\nstdlib.array_length x\n=  3", 
+            "title": "stdlib.array_length"
+        }, 
+        {
+            "location": "/functions/system/#stdlibarray_pop", 
+            "text": "Removes and the last element from array $1 and optionally stores it in $2  x=(a b c)\nstdlib.array_pop x y\necho $y\n=  c", 
+            "title": "stdlib.array_pop"
+        }, 
+        {
+            "location": "/functions/system/#stdlibarray_push", 
+            "text": "Adds an element to the end of an array.  x=()\nstdlib.array_push x foo", 
+            "title": "stdlib.array_push"
+        }, 
+        {
+            "location": "/functions/system/#stdlibarray_shift", 
+            "text": "Removes and returns the first element from array $1 and optionally stores it in $2  x=(a b c)\nstdlib.array_shift x y\necho $y\n=  a", 
+            "title": "stdlib.array_shift"
+        }, 
+        {
+            "location": "/functions/system/#stdlibarray_unshift", 
+            "text": "Adds an element to the beginning of the array.  x=(b c)\nstdlib.array_unshift x a", 
+            "title": "stdlib.array_unshift"
+        }, 
+        {
+            "location": "/functions/system/#stdlibcapture_error", 
+            "text": "Takes a command as input, prints the command, and detects if anything was written to  stderr . If there was, the error is printed to  stderr  again, and if  WAFFLES_EXIT_ON_ERROR  is set, Waffles halts.  stdlib.capture_error apt-get update", 
+            "title": "stdlib.capture_error"
+        }, 
+        {
+            "location": "/functions/system/#stdlibcommand_exists", 
+            "text": "A simple wrapper around  which .  if [[ stdlib.command_exists apt-get ]]; then\n  stdlib.info  We're on a Debian-based system. \nfi", 
+            "title": "stdlib.command_exists"
+        }, 
+        {
+            "location": "/functions/system/#stdlibdata", 
+            "text": "The same as  stdlib.profiles  but the shell scripts can be placed differently:  stdlib.data common =  data/common.sh\nstdlib.data common =  data/common/init.sh\nstdlib.data common/users =  data/common/users.sh\nstdlib.data memcached =  data/memcached.sh\nstdlib.data memcached =  data/memcached/init.sh", 
+            "title": "stdlib.data"
+        }, 
+        {
+            "location": "/functions/system/#stdlibdebug", 
+            "text": "Prints a log message at  debug  level.  stdlib.debug  Foobar", 
+            "title": "stdlib.debug"
+        }, 
+        {
+            "location": "/functions/system/#stdlibdebug_1", 
+            "text": "Determines if Waffles is being run in  debug  mode.  if stdlib.debug? ; then\n  stdlib.debug  We're in debug mode. \nfi", 
+            "title": "stdlib.debug?"
+        }, 
+        {
+            "location": "/functions/system/#stdlibdebug_mute", 
+            "text": "Like  stdlib.mute  but messages only appear in  debug  mode.  stdlib.debug_mute apt-get update", 
+            "title": "stdlib.debug_mute"
+        }, 
+        {
+            "location": "/functions/system/#stdlibdir", 
+            "text": "A simple function that returns the current directory of the script currently being run.", 
+            "title": "stdlib.dir"
+        }, 
+        {
+            "location": "/functions/system/#stdliberror", 
+            "text": "Prints an error message to  stderr .  stdlib.error  Foobar", 
+            "title": "stdlib.error"
+        }, 
+        {
+            "location": "/functions/system/#stdlibexec", 
+            "text": "A simple function that takes a command as input, prints the command, and then executes it.  stdlib.exec apt-get update", 
+            "title": "stdlib.exec"
+        }, 
+        {
+            "location": "/functions/system/#stdlibhash_keys", 
+            "text": "Returns the keys of a hash / associative array.  declare -A foo=(\n  [a]=1\n  [b]=2\n  [c]=3\n)\n\nstdlib.hash_keys  foo \n=  a b c\n\nx=($(stdlib.hash_keys  foo ))\necho  ${x[1]} \n=  b", 
+            "title": "stdlib.hash_keys"
+        }, 
+        {
+            "location": "/functions/system/#stdlibinclude", 
+            "text": "A more intelligent  source . It checks if the file being sourced / included exists, and if not, prints a warning and moves on.", 
+            "title": "stdlib.include"
+        }, 
+        {
+            "location": "/functions/system/#stdlibinfo", 
+            "text": "Prints a log message at  info  level.  stdlib.info  Foobar", 
+            "title": "stdlib.info"
+        }, 
+        {
+            "location": "/functions/system/#stdlibmute", 
+            "text": "Prints the command being run, but suppresses the command output.  stdlib.mute apt-get update", 
+            "title": "stdlib.mute"
+        }, 
+        {
+            "location": "/functions/system/#stdlibnoop", 
+            "text": "Determines if Waffles is being run in  noop  mode.  if stdlib.noop? ; then\n  stdlib.info  We're in noop mode. \nfi", 
+            "title": "stdlib.noop?"
+        }, 
+        {
+            "location": "/functions/system/#stdlibprofile", 
+            "text": "Takes a profile as input and determines the shell script attached to the profile.  If Waffles is being run locally, then  stdlib.include  is run on the script. If Waffles is being run in push-based mode, then the profile is marked to be copied to the remote node.  stdlib.profiles common/users =  profiles/common/scripts/users.sh\nstdlib.profiles common/packages =  profiles/common/scripts/packages.sh\nstdlib.profiles memcached =  profiles/memcached/scripts/init.sh\nstdlib.profiles memcached/utils =  profiles/memcached/scripts/utils.sh", 
+            "title": "stdlib.profile"
+        }, 
+        {
+            "location": "/functions/system/#stdlibsplit", 
+            "text": "Splits a string into an array. Stores the result in  __split . The delimiter can be multi-character.  stdlib.split  foo/bar ,  / \nstdlib.info $__split[1] # bar", 
+            "title": "stdlib.split"
+        }, 
+        {
+            "location": "/functions/system/#stdlibsubtitle", 
+            "text": "Sets a subtitle context. This is usually used internally by resources. An internal counter to determine if the resource was changed:  $ cat profiles/common/scripts/package.sh\nstdlib.title  profiles/common/packages \nstdlib.apt --package sl\n\nif [[ $stdlib_resource_change == true ]]; then\n  stdlib.info  The state of package sl changed \nfi\n\nstdlib.apt --package cowsay\n\nif [[ $stdlib_resource_change == true ]]; then\n  stdlib.info  The state of package cowsay changed \nfi", 
+            "title": "stdlib.subtitle"
+        }, 
+        {
+            "location": "/functions/system/#stdlibtitle", 
+            "text": "Sets a title context. A title is a major section of Waffles being run; for example, a profile. You usually being profiles by setting a title:  $ cat profiles/common/scripts/package.sh\nstdlib.title  profiles/common/packages \nstdlib.apt --package sl  Internal counters are reset whenever  stdlib.title  is used. This is useful for determining if any changes were made to a resource or the profile as a whole:  $ cat profiles/common/scripts/package.sh\nstdlib.title  profiles/common/packages \nstdlib.apt --package sl\nstdlib.apt --package cowsay\n\nif [[ $stdlib_state_change == true ]]; then\n  stdlib.info  One of the above packages were updated. \nfi", 
+            "title": "stdlib.title"
+        }, 
+        {
+            "location": "/functions/system/#stdlibtrim", 
+            "text": "Trims the whitespace on both sides of a string.  trimmed=$(stdlib.trim     foobar", 
+            "title": "stdlib.trim"
+        }, 
+        {
+            "location": "/functions/system/#stdlibwarn", 
+            "text": "Prints a warning message.  stdlib.warn  Foobar", 
+            "title": "stdlib.warn"
         }, 
         {
             "location": "/functions/catalog/", 
@@ -46,9 +291,44 @@
             "title": "catalog"
         }, 
         {
+            "location": "/functions/catalog/#catalog-functions", 
+            "text": "Catalog Functions  stdlib.catalog.add  stdlib.catalog.exists?      lib/catalog.sh  contains functions related to the Waffles catalog. The catalog is an inventory of all resources that have been used in a role.  At this time, the catalog is built as Waffles is run. This means that you cannot use the catalog to see what resources will be used in the future.  The catalog is used internally to Waffles.", 
+            "title": "Catalog Functions"
+        }, 
+        {
+            "location": "/functions/catalog/#stdlibcatalogadd", 
+            "text": "Adds a resource to the catalog. If a resource of the same type and name exist, Waffles will either:   Error and halt if  WAFFLES_EXIT_ON_DUPLICATE_RESOURCE  is set.  Print a warning if not.", 
+            "title": "stdlib.catalog.add"
+        }, 
+        {
+            "location": "/functions/catalog/#stdlibcatalogexists", 
+            "text": "Returns  true  or  false  if a resource is in the catalog.", 
+            "title": "stdlib.catalog.exists?"
+        }, 
+        {
             "location": "/functions/options/", 
             "text": "Options Options\n\n\n\n\n\n\nOptions Options\n\n\nstdlib.options.create_option\n\n\nstdlib.options.create_mv_option\n\n\nstdlib.options.parse_options\n\n\n\n\n\n\n\n\n\n\nlib/options.sh\n contains functions related to parsing resource options.\n\n\nstdlib.options.create_option\n\n\nThis function creates an option in a resource.\n\n\nlocal -A options\nstdlib.options.create_option state   \npresent\n\nstdlib.options.create_option package \n__required__\n\nstdlib.options.create_option version\nstdlib.options.parse_options \n$@\n\n\n\n\n\nTo successfully create a set of options:\n\n\n\n\nA local \noptions\n variable must be created. If not, the options will be appended to the last resource declared.\n\n\nstdlib.options.create_option\n is used with the first argument being the option name and the second argument being an optional default value.\n\n\nIf the default value is \n__required__\n, Waffles will error and halt if the option was not set.\n\n\n\n\nstdlib.options.create_mv_option\n\n\nThis function creates a multi-value option. These types of options can be specified multiple times. In order to use, you must declare\nan array of the same name as the option. For example, the \naugeas.mail_alias\n resource looks like this:\n\n\nlocal -A options\nlocal -a destination\nstdlib.options.create_option    state       \npresent\n\nstdlib.options.create_option    account     \n__required__\n\nstdlib.options.create_mv_option destination \n__required__\n\nstdlib.options.create_option    file        \n/etc/aliases\n\nstdlib.options.parse_options    \n$@\n\n\n\n\n\nNow when declaring an alias, you can do:\n\n\naugeas.mail_alias --root --destination jdoe --destination jsmith --destination foobar\n\n\n\n\nstdlib.options.parse_options\n\n\nThis function cycles through all options that were given in a declared resource. It will report if any required options were not set.", 
             "title": "options"
+        }, 
+        {
+            "location": "/functions/options/#options-options", 
+            "text": "Options Options  stdlib.options.create_option  stdlib.options.create_mv_option  stdlib.options.parse_options      lib/options.sh  contains functions related to parsing resource options.", 
+            "title": "Options Options"
+        }, 
+        {
+            "location": "/functions/options/#stdliboptionscreate_option", 
+            "text": "This function creates an option in a resource.  local -A options\nstdlib.options.create_option state    present \nstdlib.options.create_option package  __required__ \nstdlib.options.create_option version\nstdlib.options.parse_options  $@   To successfully create a set of options:   A local  options  variable must be created. If not, the options will be appended to the last resource declared.  stdlib.options.create_option  is used with the first argument being the option name and the second argument being an optional default value.  If the default value is  __required__ , Waffles will error and halt if the option was not set.", 
+            "title": "stdlib.options.create_option"
+        }, 
+        {
+            "location": "/functions/options/#stdliboptionscreate_mv_option", 
+            "text": "This function creates a multi-value option. These types of options can be specified multiple times. In order to use, you must declare\nan array of the same name as the option. For example, the  augeas.mail_alias  resource looks like this:  local -A options\nlocal -a destination\nstdlib.options.create_option    state        present \nstdlib.options.create_option    account      __required__ \nstdlib.options.create_mv_option destination  __required__ \nstdlib.options.create_option    file         /etc/aliases \nstdlib.options.parse_options     $@   Now when declaring an alias, you can do:  augeas.mail_alias --root --destination jdoe --destination jsmith --destination foobar", 
+            "title": "stdlib.options.create_mv_option"
+        }, 
+        {
+            "location": "/functions/options/#stdliboptionsparse_options", 
+            "text": "This function cycles through all options that were given in a declared resource. It will report if any required options were not set.", 
+            "title": "stdlib.options.parse_options"
         }, 
         {
             "location": "/functions/resource/", 
@@ -56,9 +336,54 @@
             "title": "resource"
         }, 
         {
+            "location": "/functions/resource/#resource-functions", 
+            "text": "Resource Functions  stdlib.resource.process  stdlib.resource.read  stdlib.resource.create  stdlib.resource.update  stdlib.resource.delete      lib/resource.sh  contains functions that coordinate resource execution.", 
+            "title": "Resource Functions"
+        }, 
+        {
+            "location": "/functions/resource/#stdlibresourceprocess", 
+            "text": "This function does several things:   Creates a catalog entry of the resource.  Calls  stdlib.resource.read , which in turn calls  calling_resource.read .  Compares the resource state versus the state that the resource has been requested to be in.  Depending on the results of the above, calls  stdlib.resource.x , which in turn calls  calling_resource.x .   This function requires two arguments:   $1 : The resource type ( stdlib.apt )  $2 : The resource name ( apache2 )", 
+            "title": "stdlib.resource.process"
+        }, 
+        {
+            "location": "/functions/resource/#stdlibresourceread", 
+            "text": "Calls  resource_type.read . May also perform pre and post actions.", 
+            "title": "stdlib.resource.read"
+        }, 
+        {
+            "location": "/functions/resource/#stdlibresourcecreate", 
+            "text": "Calls  resource_type.create .  Also flags that a resource has changed and increments the amount of total changes made throughout the Waffles run.", 
+            "title": "stdlib.resource.create"
+        }, 
+        {
+            "location": "/functions/resource/#stdlibresourceupdate", 
+            "text": "Calls  resource_type.update .  Also flags that a resource has changed and increments the amount of total changes made throughout the Waffles run.", 
+            "title": "stdlib.resource.update"
+        }, 
+        {
+            "location": "/functions/resource/#stdlibresourcedelete", 
+            "text": "Calls  resource_type.delete .  Also flags that a resource has changed and increments the amount of total changes made throughout the Waffles run.", 
+            "title": "stdlib.resource.delete"
+        }, 
+        {
             "location": "/functions/augeas/", 
             "text": "Augeas Functions\n\n\n\n\n\n\nAugeas Functions\n\n\naugeas.run\n\n\naugeas.get\n\n\n\n\n\n\n\n\n\n\nlib/augeas/augeas.sh\n contains helper functions for the Augeas resources. These are all used internally in the Augeas resources and you shouldn't need to use them anywhere else.\n\n\naugeas.run\n\n\nRuns a series of Augeas commands on a file.\n\n\naugeas.get\n\n\nChecks the state of an Augeas-based resource.", 
             "title": "augeas"
+        }, 
+        {
+            "location": "/functions/augeas/#augeas-functions", 
+            "text": "Augeas Functions  augeas.run  augeas.get      lib/augeas/augeas.sh  contains helper functions for the Augeas resources. These are all used internally in the Augeas resources and you shouldn't need to use them anywhere else.", 
+            "title": "Augeas Functions"
+        }, 
+        {
+            "location": "/functions/augeas/#augeasrun", 
+            "text": "Runs a series of Augeas commands on a file.", 
+            "title": "augeas.run"
+        }, 
+        {
+            "location": "/functions/augeas/#augeasget", 
+            "text": "Checks the state of an Augeas-based resource.", 
+            "title": "augeas.get"
         }, 
         {
             "location": "/functions/consul/", 
@@ -66,9 +391,54 @@
             "title": "consul"
         }, 
         {
+            "location": "/functions/consul/#consul-functions", 
+            "text": "Consul Functions  consul.get_nodes  consul.get_services  consul.get_kv  consul.set_kv  consul.delete_kv      lib/consul/consul.sh  contains helper functions for the Consul resources", 
+            "title": "Consul Functions"
+        }, 
+        {
+            "location": "/functions/consul/#consulget_nodes", 
+            "text": "Returns a list of nodes. Results are stored in  $consul_nodes  hash.  Option  --service : Optional. Limits results to a set of services.  consul.get_nodes --service consul\n\nconsul_nodes[consul-01]= 192.168.1.1 \nconsul_nodes[consul-02]= 192.168.1.2 \nconsul_nodes[consul-03]= 192.168.1.3 \nconsul_nodes[consul-01|port]= 8300 \nconsul_nodes[consul-02|port]= 8300 \nconsul_nodes[consul-03|port]= 8300", 
+            "title": "consul.get_nodes"
+        }, 
+        {
+            "location": "/functions/consul/#consulget_services", 
+            "text": "Returns a list of services in the Consul catalog. Results are stored in  $consul_services array .  consul.get_services\n\nconsul_services=(consul mysql)", 
+            "title": "consul.get_services"
+        }, 
+        {
+            "location": "/functions/consul/#consulget_kv", 
+            "text": "Retrieves the value of a key.  consul.get_kv --key foobar\n=  barfoo", 
+            "title": "consul.get_kv"
+        }, 
+        {
+            "location": "/functions/consul/#consulset_kv", 
+            "text": "Sets a value for a key.  consul.set_kv --key foobar --value barfoo", 
+            "title": "consul.set_kv"
+        }, 
+        {
+            "location": "/functions/consul/#consuldelete_kv", 
+            "text": "Deletes a key.  consul.delete_kv --key foobar", 
+            "title": "consul.delete_kv"
+        }, 
+        {
             "location": "/functions/mysql/", 
             "text": "MySQL Functions\n\n\n\n\n\n\nMySQL Functions\n\n\nmysql.admin_password_set?\n\n\nmysql.mycnf\n\n\n\n\n\n\n\n\n\n\nlib/mysql/mysql.sh\n contains helper functions for the MySQL resources\n\n\nmysql.admin_password_set?\n\n\nA simple function that checks if the MySQL service has an admin password set.\n\n\nmysql.mycnf\n\n\nA function that generates a \n.my.cnf\n file.\n\n\nmysql.mycnf --filename \n/root/.my.cnf\n --user root --password password\n\n\n\n\nThis isn't a first-class resource because it simply builds on other resources.", 
             "title": "mysql"
+        }, 
+        {
+            "location": "/functions/mysql/#mysql-functions", 
+            "text": "MySQL Functions  mysql.admin_password_set?  mysql.mycnf      lib/mysql/mysql.sh  contains helper functions for the MySQL resources", 
+            "title": "MySQL Functions"
+        }, 
+        {
+            "location": "/functions/mysql/#mysqladmin_password_set", 
+            "text": "A simple function that checks if the MySQL service has an admin password set.", 
+            "title": "mysql.admin_password_set?"
+        }, 
+        {
+            "location": "/functions/mysql/#mysqlmycnf", 
+            "text": "A function that generates a  .my.cnf  file.  mysql.mycnf --filename  /root/.my.cnf  --user root --password password  This isn't a first-class resource because it simply builds on other resources.", 
+            "title": "mysql.mycnf"
         }, 
         {
             "location": "/functions/rabbitmq/", 
@@ -76,9 +446,69 @@
             "title": "rabbitmq"
         }, 
         {
+            "location": "/functions/rabbitmq/#rabbitmq-options", 
+            "text": "RabbitMQ Options  rabbitmq.generic_value_create  rabbitmq.generic_value_read  rabbitmq.generic_value_delete  rabbitmq.list_value_create  rabbitmq.list_value_read  rabbitmq.list_value_delete      lib/rabbitmq/rabbitmq.sh  contains helper functions for the RabbitMQ resources. You should not need to use these functions directly.", 
+            "title": "RabbitMQ Options"
+        }, 
+        {
+            "location": "/functions/rabbitmq/#rabbitmqgeneric_value_create", 
+            "text": "Creates a \"generic\" RabbitMQ config file setting.", 
+            "title": "rabbitmq.generic_value_create"
+        }, 
+        {
+            "location": "/functions/rabbitmq/#rabbitmqgeneric_value_read", 
+            "text": "Reads a \"generic\" RabbitMQ config file setting.", 
+            "title": "rabbitmq.generic_value_read"
+        }, 
+        {
+            "location": "/functions/rabbitmq/#rabbitmqgeneric_value_delete", 
+            "text": "Deletes a \"generic\" RabbitMQ config file setting.", 
+            "title": "rabbitmq.generic_value_delete"
+        }, 
+        {
+            "location": "/functions/rabbitmq/#rabbitmqlist_value_create", 
+            "text": "Creates a RabbitMQ config file setting of type \"list\".", 
+            "title": "rabbitmq.list_value_create"
+        }, 
+        {
+            "location": "/functions/rabbitmq/#rabbitmqlist_value_read", 
+            "text": "Reads a RabbitMQ config file setting of type \"list\".", 
+            "title": "rabbitmq.list_value_read"
+        }, 
+        {
+            "location": "/functions/rabbitmq/#rabbitmqlist_value_delete", 
+            "text": "Deletes a RabbitMQ config file setting of type \"list\".", 
+            "title": "rabbitmq.list_value_delete"
+        }, 
+        {
             "location": "/guides/environment-vars/", 
             "text": "Environment Variable Support\n\n\n\n\n\n\nEnvironment Variable Support\n\n\nDescription\n\n\nWAFFLES_NOOP\n\n\nSteps\n\n\nComments\n\n\n\n\n\n\nWAFFLES_DEBUG\n\n\nSteps\n\n\nComments\n\n\n\n\n\n\nTEST\n\n\nSteps\n\n\nComments\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDescription\n\n\nThis guide will show how to alter Waffles's behavior by setting different environment variables.\n\n\nWAFFLES_NOOP\n\n\nno-op stands for \"no operation\". Rather than actually executing commands, it will print what \nwould have\n happened if Waffles was run in normal mode.\n\n\nSteps\n\n\n\n\nRun Waffles with \nWAFFLES_NOOP\n set:\n\n\n\n\n$ WAFFLES_NOOP=1 waffles.sh memcached\n\n\n\n\nComments\n\n\nYou can also use the \n-n\n flag when running Waffles.\n\n\nWAFFLES_DEBUG\n\n\nThis will print extra information about each action. If Waffles is not working correctly, try running in \"debug\" mode and see if you can spot the error.\n\n\nThe output from \"debug\" mode is also the best way to report bugs.\n\n\nSteps\n\n\n\n\nRun Waffles with \nWAFFLES_DEBUG\n set:\n\n\n\n\n$ WAFFLES_DEBUG=1 waffles.sh memcached\n\n\n\n\nComments\n\n\nYou can also use the \n-d\n flag when running Waffles.\n\n\nTEST\n\n\nWhen TEST is set, Waffles will exit 1 if any changes were made. This is useful to verify the previous run was successful because no changes should need to be made upon the second execution.\n\n\nSteps\n\n\n\n\nRun Waffles with \nWAFFLES_TEST\n set:\n\n\n\n\n$ WAFFLES_TEST=1 waffles.sh memcached\n\n\n\n\nComments\n\n\nYou can also use the \n-t\n flag when running Waffles.", 
             "title": "Environment Variables"
+        }, 
+        {
+            "location": "/guides/environment-vars/#environment-variable-support", 
+            "text": "Environment Variable Support  Description  WAFFLES_NOOP  Steps  Comments    WAFFLES_DEBUG  Steps  Comments    TEST  Steps  Comments", 
+            "title": "Environment Variable Support"
+        }, 
+        {
+            "location": "/guides/environment-vars/#description", 
+            "text": "This guide will show how to alter Waffles's behavior by setting different environment variables.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/guides/environment-vars/#waffles_noop", 
+            "text": "no-op stands for \"no operation\". Rather than actually executing commands, it will print what  would have  happened if Waffles was run in normal mode.  Steps   Run Waffles with  WAFFLES_NOOP  set:   $ WAFFLES_NOOP=1 waffles.sh memcached  Comments  You can also use the  -n  flag when running Waffles.", 
+            "title": "WAFFLES_NOOP"
+        }, 
+        {
+            "location": "/guides/environment-vars/#waffles_debug", 
+            "text": "This will print extra information about each action. If Waffles is not working correctly, try running in \"debug\" mode and see if you can spot the error.  The output from \"debug\" mode is also the best way to report bugs.  Steps   Run Waffles with  WAFFLES_DEBUG  set:   $ WAFFLES_DEBUG=1 waffles.sh memcached  Comments  You can also use the  -d  flag when running Waffles.", 
+            "title": "WAFFLES_DEBUG"
+        }, 
+        {
+            "location": "/guides/environment-vars/#test", 
+            "text": "When TEST is set, Waffles will exit 1 if any changes were made. This is useful to verify the previous run was successful because no changes should need to be made upon the second execution.  Steps   Run Waffles with  WAFFLES_TEST  set:   $ WAFFLES_TEST=1 waffles.sh memcached  Comments  You can also use the  -t  flag when running Waffles.", 
+            "title": "TEST"
         }, 
         {
             "location": "/guides/deploying-a-mysql-server/", 
@@ -86,9 +516,54 @@
             "title": "Deploying a MySQL Server"
         }, 
         {
+            "location": "/guides/deploying-a-mysql-server/#deploying-a-mysql-server", 
+            "text": "Deploying a MySQL Server  Description  Steps  Data  Profiles  Roles    Comments and Conclusion", 
+            "title": "Deploying a MySQL Server"
+        }, 
+        {
+            "location": "/guides/deploying-a-mysql-server/#description", 
+            "text": "This guide will show one way of deploying a MySQL server with Waffles. In particular, Percona MySQL.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/guides/deploying-a-mysql-server/#steps", 
+            "text": "Data  There will only be one data item: the MySQL root password. This example will store the password in plain text -- note that a best practice would be to install it either in an encrypted repository, an encrypted string, or something along those lines.  $ cat site/data/mysql.sh\ndata_mysql_root_password= password   Profiles  We'll use two profile scripts for the MySQL server: the first will configure the Percona repo and the second will install and configure MySQL itself.  First, make the directory structure  $ mkdir -p site/profiles/mysql/scripts  Next, make the repo profile script, located at  site/profiles/mysql/scripts/percona_repo.sh :  stdlib.title  mysql/percona/repo \n\nsource /etc/lsb-release\n\nstdlib.apt_key --name percona --keyserver keys.gnupg.net --key 1C4CBDCDCD2EFD2A\nstdlib.apt_source --name percona --uri http://repo.percona.com/apt --distribution $DISTRIB_CODENAME --component main --include_src true  Next, make the MySQL profile script, located at  sites/profilfes/mysql/scripts/percona_server.sh :  stdlib.title  mysql/percona/server \n\nhostname=$(hostname | sed -e 's/_/\\\\\\_/g')\n\nstdlib.apt --package percona-server-server-5.6\n\nmysql.user --user root --host localhost --password password\nmysql.mycnf --filename  /root/.my.cnf  --user root --password password\n\nmysql.user --state absent --user root --host 127.0.0.1 --password  \nmysql.user --state absent --user root --host ::1 --password  \nmysql.user --state absent --user   --host localhost --password  \nmysql.user --state absent --user root --host $hostname --password  \nmysql.user --state absent --user   --host $hostname --password  \n\nmysql.database --state absent --name test\n\nstdlib.ini --file /etc/mysql/my.cnf --section mysqld --option bind-address --value 0.0.0.0\n\nif [[ $stdlib_state_change == true ]]; then\n  /etc/init.d/mysql restart\nfi  This script is rather simple in concept. Some notes about it:   The  hostname  variable is doing some shell escaping for MySQL commands.  A  root@localhost  user is being configured with the password set in the data file.  MySQL installs several other default  root  and \"blank\" users. We want to ensure these users are removed.  We also want to ensure that the  test  database is removed.  MySQL listens on localhost by default. We want it to listen on all interfaces, so we change the  bind-address  setting to  0.0.0.0 .  The special variable  $stdlib_state_change  will be  true  if any changes were made at all in the file. If they were, we want to restart the MySQL service. This will not happen if no changes were made.   Roles  Finally, combine the above Data and Profiles to build the role, located at  site/roles/mysql.sh :  stdlib.enable_mysql\n\nstdlib.data mysql\n\nstdlib.profile mysql/percona_repo\nstdlib.profile mysql/percona_server  The  stdlib.enable_mysql  function is a special function that will source all of the relevant MySQL functions and resources located under  lib .  The rest of the role should be self-explanatory.", 
+            "title": "Steps"
+        }, 
+        {
+            "location": "/guides/deploying-a-mysql-server/#comments-and-conclusion", 
+            "text": "The above example describes a simple way of deploying a Percona MySQL server using Waffles. It should be easy enough to modify and add other profiles to make a more well-rounded and robust service for you to use.", 
+            "title": "Comments and Conclusion"
+        }, 
+        {
             "location": "/guides/deploying-a-mysql-galera-cluster/", 
             "text": "Deploying a MySQL Galera Cluster\n\n\n\n\n\n\nDeploying a MySQL Galera Cluster\n\n\nDescription\n\n\nSteps\n\n\nData\n\n\nProfiles\n\n\nRoles\n\n\n\n\n\n\nRun\n\n\nComments and Conclusion\n\n\n\n\n\n\n\n\n\n\nDescription\n\n\nThis guide will show one way of deploying a MySQL Galera cluster with Waffles. In particular, Percona XtraDB Cluster.\n\n\nSteps\n\n\nData\n\n\nThe data file will contain a few items:\n\n\n\n\nThe MySQL root password\n\n\nThe SST password\n\n\nThe name of the node which will act as the \"bootstrap\" node.\n\n\n\n\nThis example will store the password in plain text -- note that a best practice would be to install it either in an encrypted repository, an encrypted string, or something along those lines.\n\n\n$ cat site/data/mysql.sh\ndata_mysql_root_password=\npassword\n\ndata_mysql_sst_password=\npassword\n\ndata_galera_bootstrap_node=\nmysql-01\n\n\n\n\n\nProfiles\n\n\nWe'll use two profile scripts for the Galera cluster: the first will configure the Percona repo and the second will install and configure MySQL and Galera.\n\n\nFirst, make the directory structure\n\n\n$ mkdir -p site/profiles/mysql/scripts\n\n\n\n\nNext, make the repo profile script, located at \nsite/profiles/mysql/scripts/percona_repo.sh\n:\n\n\nstdlib.title \nmysql/percona/repo\n\n\nsource /etc/lsb-release\n\nstdlib.apt_key --name percona --keyserver keys.gnupg.net --key 1C4CBDCDCD2EFD2A\nstdlib.apt_source --name percona --uri http://repo.percona.com/apt --distribution $DISTRIB_CODENAME --component main --include_src true\n\n\n\n\nNext, make the MySQL profile script, located at \nsites/profiles/mysql/scripts/percona_xtradb_cluster.sh\n:\n\n\nstdlib.title \nmysql/percona/xtradb-cluster\n\n\n# Get some information useful for the configuration\nhostname=$(hostname)\nmysql_hostname=$(hostname | sed -e 's/_/\\\\\\_/g')\nmy_ip=$(/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')\n\n# Install the percona cluster package\nstdlib.apt --package percona-xtradb-cluster-56\n\n# Record of the MySQL sysv service\nstdlib.sysvinit --name mysql\n\n# Configure the MySQL root user\nmysql.user --user root --host localhost --password \n$data_mysql_root_password\n\nmysql.mycnf --filename \n/root/.my.cnf\n --user root --password \n$data_mysql_root_password\n\n\n# Remove some of the default accounts\nmysql.user --state absent --user root --host 127.0.0.1 --password \n\nmysql.user --state absent --user root --host ::1 --password \n\nmysql.user --state absent --user \n --host localhost --password \n\nmysql.user --state absent --user root --host $mysql_hostname --password \n\nmysql.user --state absent --user \n --host $mysql_hostname --password \n\n\n# Create the sst user\nmysql.user --user sst --host localhost --password \n$data_mysql_sst_password\n\nmysql.grant --user sst --host localhost --database \n*\n --privileges \nRELOAD, LOCK TABLES, REPLICATION CLIENT\n\n\n# Configure `/etc/mysql/my.cnf`\nstdlib.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_provider --value /usr/lib/libgalera_smm.so\nstdlib.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_sst_method --value xtrabackup-v2\nstdlib.ini --file /etc/mysql/my.cnf --section mysqld --option binlog_format --value ROW\nstdlib.ini --file /etc/mysql/my.cnf --section mysqld --option default_storage_engine --value InnoDB\nstdlib.ini --file /etc/mysql/my.cnf --section mysqld --option innodb_autoinc_lock_mode --value 2\nstdlib.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_node_address --value $my_ip\nstdlib.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_cluster_name --value my_cluster\nstdlib.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_sst_auth --value \nsst:${data_mysql_sst_password}\n\n\n# If the hostname is config_galera1, do not set gcomm\nif [[ $hostname == $data_galera_bootstrap_node ]]; then\n  stdlib.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_cluster_address --value \ngcomm://\n\nelse\n  stdlib.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_cluster_address --value \ngcomm://mysql-01,mysql-02,mysql-03\n\nfi\n\n# If any of the above settings changed, restart MySQL\nif [[ $stdlib_state_change == true ]]; then\n  /etc/init.d/mysql restart\nfi\n\n\n\n\nThis script may be a little long, but it shouldn't be difficult to understand. Some notes about it:\n\n\n\n\nThe \nhostname\n is captured to determine if the node should be the bootstrap node. It's also used for some MySQL configuration.\n\n\nA \nroot@localhost\n user is being configured with the password set in the data file.\n\n\nMySQL installs several other default \nroot\n and \"blank\" users. We want to ensure these users are removed.\n\n\nWe also want to ensure that the \ntest\n database is removed.\n\n\nMySQL listens on localhost by default. We want it to listen on all interfaces, so we change the \nbind-address\n setting to \n0.0.0.0\n.\n\n\nThe \nstdlib.ini\n resources are configuring MySQL, wsrep, and SST.\n\n\nIf the node is the bootstrap node, the \nwsrep_cluster_address\n is set to the special \ngcomm://\n. If not, it is set to all other nodes in the cluster. Once the cluster has been bootstrapped, you should remove the \nif\n conditional and only leave the \nelse\n portion.\n\n\nThe special variable \n$stdlib_state_change\n will be \ntrue\n if any changes were made at all in the file. If they were, we want to restart the MySQL service. This will not happen if no changes were made.\n\n\n\n\nRoles\n\n\nFinally, combine the above Data and Profiles to build the role, located at \nsite/roles/mysql.sh\n:\n\n\nstdlib.enable_mysql\n\nstdlib.data mysql\n\nstdlib.profile mysql/percona_repo\nstdlib.profile mysql/percona_xtradb_cluster\n\n\n\n\nThe \nstdlib.enable_mysql\n function is a special function that will source all of the relevant MySQL functions and resources located under \nlib\n.\n\n\nThe rest of the role should be self-explanatory.\n\n\nRun\n\n\nYou should now run this against 3 servers, containers, or virtual machines of your choice. The bootstrap node must be run and completed before all others.\n\n\nComments and Conclusion\n\n\nThe above example describes a simple way of deploying a Percona MySQL Galera cluster using Waffles. It should be easy enough to modify and add other profiles to make a more well-rounded and robust service for you to use.\n\n\nPlease be aware that \nmysql-01\n, \nmysql-02\n, and \nmysql-03\n are all hostnames that can be resolved. If you are unable to add these to a DNS service, use IP addresses for testing.", 
             "title": "Deploying a MySQL Galera Cluster"
+        }, 
+        {
+            "location": "/guides/deploying-a-mysql-galera-cluster/#deploying-a-mysql-galera-cluster", 
+            "text": "Deploying a MySQL Galera Cluster  Description  Steps  Data  Profiles  Roles    Run  Comments and Conclusion", 
+            "title": "Deploying a MySQL Galera Cluster"
+        }, 
+        {
+            "location": "/guides/deploying-a-mysql-galera-cluster/#description", 
+            "text": "This guide will show one way of deploying a MySQL Galera cluster with Waffles. In particular, Percona XtraDB Cluster.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/guides/deploying-a-mysql-galera-cluster/#steps", 
+            "text": "Data  The data file will contain a few items:   The MySQL root password  The SST password  The name of the node which will act as the \"bootstrap\" node.   This example will store the password in plain text -- note that a best practice would be to install it either in an encrypted repository, an encrypted string, or something along those lines.  $ cat site/data/mysql.sh\ndata_mysql_root_password= password \ndata_mysql_sst_password= password \ndata_galera_bootstrap_node= mysql-01   Profiles  We'll use two profile scripts for the Galera cluster: the first will configure the Percona repo and the second will install and configure MySQL and Galera.  First, make the directory structure  $ mkdir -p site/profiles/mysql/scripts  Next, make the repo profile script, located at  site/profiles/mysql/scripts/percona_repo.sh :  stdlib.title  mysql/percona/repo \n\nsource /etc/lsb-release\n\nstdlib.apt_key --name percona --keyserver keys.gnupg.net --key 1C4CBDCDCD2EFD2A\nstdlib.apt_source --name percona --uri http://repo.percona.com/apt --distribution $DISTRIB_CODENAME --component main --include_src true  Next, make the MySQL profile script, located at  sites/profiles/mysql/scripts/percona_xtradb_cluster.sh :  stdlib.title  mysql/percona/xtradb-cluster \n\n# Get some information useful for the configuration\nhostname=$(hostname)\nmysql_hostname=$(hostname | sed -e 's/_/\\\\\\_/g')\nmy_ip=$(/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')\n\n# Install the percona cluster package\nstdlib.apt --package percona-xtradb-cluster-56\n\n# Record of the MySQL sysv service\nstdlib.sysvinit --name mysql\n\n# Configure the MySQL root user\nmysql.user --user root --host localhost --password  $data_mysql_root_password \nmysql.mycnf --filename  /root/.my.cnf  --user root --password  $data_mysql_root_password \n\n# Remove some of the default accounts\nmysql.user --state absent --user root --host 127.0.0.1 --password  \nmysql.user --state absent --user root --host ::1 --password  \nmysql.user --state absent --user   --host localhost --password  \nmysql.user --state absent --user root --host $mysql_hostname --password  \nmysql.user --state absent --user   --host $mysql_hostname --password  \n\n# Create the sst user\nmysql.user --user sst --host localhost --password  $data_mysql_sst_password \nmysql.grant --user sst --host localhost --database  *  --privileges  RELOAD, LOCK TABLES, REPLICATION CLIENT \n\n# Configure `/etc/mysql/my.cnf`\nstdlib.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_provider --value /usr/lib/libgalera_smm.so\nstdlib.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_sst_method --value xtrabackup-v2\nstdlib.ini --file /etc/mysql/my.cnf --section mysqld --option binlog_format --value ROW\nstdlib.ini --file /etc/mysql/my.cnf --section mysqld --option default_storage_engine --value InnoDB\nstdlib.ini --file /etc/mysql/my.cnf --section mysqld --option innodb_autoinc_lock_mode --value 2\nstdlib.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_node_address --value $my_ip\nstdlib.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_cluster_name --value my_cluster\nstdlib.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_sst_auth --value  sst:${data_mysql_sst_password} \n\n# If the hostname is config_galera1, do not set gcomm\nif [[ $hostname == $data_galera_bootstrap_node ]]; then\n  stdlib.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_cluster_address --value  gcomm:// \nelse\n  stdlib.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_cluster_address --value  gcomm://mysql-01,mysql-02,mysql-03 \nfi\n\n# If any of the above settings changed, restart MySQL\nif [[ $stdlib_state_change == true ]]; then\n  /etc/init.d/mysql restart\nfi  This script may be a little long, but it shouldn't be difficult to understand. Some notes about it:   The  hostname  is captured to determine if the node should be the bootstrap node. It's also used for some MySQL configuration.  A  root@localhost  user is being configured with the password set in the data file.  MySQL installs several other default  root  and \"blank\" users. We want to ensure these users are removed.  We also want to ensure that the  test  database is removed.  MySQL listens on localhost by default. We want it to listen on all interfaces, so we change the  bind-address  setting to  0.0.0.0 .  The  stdlib.ini  resources are configuring MySQL, wsrep, and SST.  If the node is the bootstrap node, the  wsrep_cluster_address  is set to the special  gcomm:// . If not, it is set to all other nodes in the cluster. Once the cluster has been bootstrapped, you should remove the  if  conditional and only leave the  else  portion.  The special variable  $stdlib_state_change  will be  true  if any changes were made at all in the file. If they were, we want to restart the MySQL service. This will not happen if no changes were made.   Roles  Finally, combine the above Data and Profiles to build the role, located at  site/roles/mysql.sh :  stdlib.enable_mysql\n\nstdlib.data mysql\n\nstdlib.profile mysql/percona_repo\nstdlib.profile mysql/percona_xtradb_cluster  The  stdlib.enable_mysql  function is a special function that will source all of the relevant MySQL functions and resources located under  lib .  The rest of the role should be self-explanatory.", 
+            "title": "Steps"
+        }, 
+        {
+            "location": "/guides/deploying-a-mysql-galera-cluster/#run", 
+            "text": "You should now run this against 3 servers, containers, or virtual machines of your choice. The bootstrap node must be run and completed before all others.", 
+            "title": "Run"
+        }, 
+        {
+            "location": "/guides/deploying-a-mysql-galera-cluster/#comments-and-conclusion", 
+            "text": "The above example describes a simple way of deploying a Percona MySQL Galera cluster using Waffles. It should be easy enough to modify and add other profiles to make a more well-rounded and robust service for you to use.  Please be aware that  mysql-01 ,  mysql-02 , and  mysql-03  are all hostnames that can be resolved. If you are unable to add these to a DNS service, use IP addresses for testing.", 
+            "title": "Comments and Conclusion"
         }, 
         {
             "location": "/guides/deploying-a-consul-cluster/", 
@@ -96,9 +571,54 @@
             "title": "Deploying a Consul Cluster"
         }, 
         {
+            "location": "/guides/deploying-a-consul-cluster/#deploying-a-consul-cluster", 
+            "text": "Deploying a Consul Cluster  Description  Steps  Data  Profiles  Base Packages  Consul  Augeas    Roles    Run  Comments and Conclusion", 
+            "title": "Deploying a Consul Cluster"
+        }, 
+        {
+            "location": "/guides/deploying-a-consul-cluster/#description", 
+            "text": "This guide will show one way of deploying a Consul cluster with Waffles.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/guides/deploying-a-consul-cluster/#steps", 
+            "text": "Data  The data file will have the version of Consul to install, a secret key for the cluster, the nodes that are in the cluster, and an associative array of Consul settings.  $ cat site/data/consul.sh\n# Consul Version\ndata_consul_version= 0.5.2 \n\n# Secret key\ndata_consul_key= jXwOaTXJFf4//4QGrpONBg== \n\n# Nodes in the cluster\ndata_consul_nodes=(\n  consul-01\n  consul-02\n  consul-03\n)\n\n# Bootstrap node\ndata_consul_bootstrap_node= consul-03 \n\n# Consul config\ndeclare -Ag data_consul_config\ndata_consul_config=(\n  [server]= true \n  [bootstrap_expect]= ${#data_consul_nodes[@]} \n  [client_addr]= 0.0.0.0 \n  [datacenter]= honolulu \n  [data_dir]= /var/lib/consul \n  [encrypt]= ${data_consul_key} \n  [enable_syslog]= true \n  [log_level]= INFO \n)  Profiles  Base Packages  In order to successfully execute the other profiles, we'll need to ensure the Consul server has a few base packages installed. Create  site/profiles/common/scripts/packages.sh  with the following contents:  stdlib.apt --package wget\nstdlib.apt --package software-properties-common  Consul  We'll use two profile scripts for the Consul cluster: the first will install Consul and the second will set up the Consul cluster.  First, make the directory structure  $ mkdir -p site/profiles/consul/scripts  Next, make the repo profile script, located at  site/profiles/consul/scripts/install.sh :  stdlib.title  profiles/consul/install \n\nstdlib.apt --package unzip\n\nstdlib.useradd --user consul --homedir /var/lib/consul --createhome true\nstdlib.directory --name /etc/consul.d --owner consul --group consul\n\nif [[ ! -f /usr/local/bin/consul ]]; then\n  stdlib.mute pushd /tmp\n  stdlib.capture_error wget https://dl.bintray.com/mitchellh/consul/${data_consul_version}_linux_amd64.zip\n  stdlib.capture_error unzip ${data_consul_version}_linux_amd64.zip\n  stdlib.capture_error mv consul /usr/local/bin\n  stdlib.mute popd\nfi  This install script is rather simple. It's doing the following:   Installs the  unzip  package  Creates a  consul  system user with a homedir of  /var/lib/consul  Downloads the Consul binary of the version we specified in the data  Unzips it and installs it to  /usr/local/bin .   Note: the way this script determines if Consul is installed is by the presence of the  /usr/local/bin/consul  file. If this method is too simplistic for you, feel free to package Consul into a  deb  or  rpm  package.  Next, make the Consul server script, located at  sites/profiles/consul/scripts/server.sh :  stdlib.title  profiles/consul/server \n\nstdlib.file --name /etc/init/consul.conf --source  $WAFFLES_SITE_DIR/profiles/consul/files/consul.conf \n\nfor key in  ${!data_consul_config[@]} ; do\n  augeas.json_dict --file /etc/consul.d/config.json --path / --key  $key  --value  ${data_consul_config[$key]} \ndone\n\nstdlib.upstart --name consul --state running\n\nhostname=$(hostname)\nif [[ $hostname == $data_consul_bootstrap_node ]]; then\n  sleep 10\n  for i in  ${data_consul_nodes[@]} ; do\n    if [[ $hostname != $i ]]; then\n      /usr/local/bin/consul join $i\n    fi\n  done\nfi  Here are some notes on the above:   stdlib.file  is able to copy a static file from  site/profiles/consul/files . It is  highly  recommended to bundle your static files into the profile that they are being called from. This ensures that they get copied to the remote node during remote deployment. Alternatively, while there are not yet resources for commands such as  scp  or  wget , you could use them similarly to how the Consul zip file was downloaded.  augeas.json_dict  is an Augeas-based resource that allows JSON files to be built on the command-line. In order to use Augeas, it must be installed. See the next section.  stdlib.upstart  ensures that the Consul service is running.  Finally, the  for  loop will run if the node is the bootstrap node. It'll loop through all other existing nodes and join them. The existing nodes must be up and running first, which is why the bootstrap node was set to the last node in the cluster.   Finally, create  site/profiles/consul/files/consul.conf  with the following content:  description  Consul agent \n\nstart on runlevel [2345]\nstop on runlevel [!2345]\n\nrespawn\n\nscript\n  if [ -f  /etc/default/consul  ]; then\n    # Gives us the CONSUL_FLAGS variable\n    . /etc/default/consul\n  fi\n\n  # Make sure to use all our CPUs, because Consul can block a scheduler thread\n  export GOMAXPROCS=`nproc`\n\n  exec /usr/local/bin/consul agent \\\n    -config-dir= /etc/consul.d  \\\n    ${CONSUL_FLAGS} \\\n     /var/log/consul.log 2 1\nend script  Augeas  To install Augeas, create  site/profiles/augeas/scripts/install_apt.sh  with the following content:  stdlib.title  profiles/augeas/install_apt \n\nstdlib.apt_ppa --ppa raphink/augeas\nstdlib.apt --package augeas-tools --version latest  Roles  Finally, combine the above Data and Profiles to build the role, located at  site/roles/consul.sh :  stdlib.enable_augeas\n\nstdlib.data consul\n\nstdlib.profile common/packages\nstdlib.profile augeas/install_apt\nstdlib.profile consul/install\nstdlib.profile consul/server  The  stdlib.enable_augeas  function is a special function that will source all of the relevant Augeas functions and resources located under  lib .  The rest of the role should be self-explanatory.", 
+            "title": "Steps"
+        }, 
+        {
+            "location": "/guides/deploying-a-consul-cluster/#run", 
+            "text": "You should now run this against 3 servers, containers, or virtual machines of your choice.", 
+            "title": "Run"
+        }, 
+        {
+            "location": "/guides/deploying-a-consul-cluster/#comments-and-conclusion", 
+            "text": "The above example describes a simple way of deploying a Consul cluster using Waffles. It should be easy enough to modify and add other profiles to make a more well-rounded and robust service for you to use.  Please be aware that  consul-01 ,  consul-02 , and  consul-03  are all hostnames that can be resolved. If you are unable to add these to a DNS service, use IP addresses for testing.", 
+            "title": "Comments and Conclusion"
+        }, 
+        {
             "location": "/guides/override-data/", 
             "text": "Override Data\n\n\n\n\n\n\nOverride Data\n\n\nDescription\n\n\nSteps\n\n\nComments\n\n\n\n\n\n\n\n\n\n\nDescription\n\n\nThis guide will show how to easily override data in two different data files\n\n\nSteps\n\n\n\n\nCreate the initial data file:\n\n\n\n\n$ cat site/data/common.sh \nEOF\ndata_memcached_uid=\n999\n\nEOF\n\n\n\n\n\n\nCreate the second data file:\n\n\n\n\n$ cat site/data/memcached.sh \nEOF\ndata_memcached_uid=\n700\n\nEOF\n\n\n\n\n\n\nAdd both data files to your role. The file called last will take precedence:\n\n\n\n\nsite.data common\nsite.data memcached\n\n\n\n\nComments\n\n\nThis is useful for when you want to keep data that can be used across multiple roles in a single file, but some roles need individual pieces of data overridden. A common case for this is when you are introducing a configuration management system into an existing environment and something like user UIDs have not been made standard.", 
             "title": "Overriding Data"
+        }, 
+        {
+            "location": "/guides/override-data/#override-data", 
+            "text": "Override Data  Description  Steps  Comments", 
+            "title": "Override Data"
+        }, 
+        {
+            "location": "/guides/override-data/#description", 
+            "text": "This guide will show how to easily override data in two different data files", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/guides/override-data/#steps", 
+            "text": "Create the initial data file:   $ cat site/data/common.sh  EOF\ndata_memcached_uid= 999 \nEOF   Create the second data file:   $ cat site/data/memcached.sh  EOF\ndata_memcached_uid= 700 \nEOF   Add both data files to your role. The file called last will take precedence:   site.data common\nsite.data memcached", 
+            "title": "Steps"
+        }, 
+        {
+            "location": "/guides/override-data/#comments", 
+            "text": "This is useful for when you want to keep data that can be used across multiple roles in a single file, but some roles need individual pieces of data overridden. A common case for this is when you are introducing a configuration management system into an existing environment and something like user UIDs have not been made standard.", 
+            "title": "Comments"
         }, 
         {
             "location": "/guides/referencing-data-from-data/", 
@@ -106,9 +626,49 @@
             "title": "Referencing Data from Data"
         }, 
         {
+            "location": "/guides/referencing-data-from-data/#referencing-data-from-data-files", 
+            "text": "Referencing Data from Data Files  Description  Steps  Comments", 
+            "title": "Referencing Data from Data Files"
+        }, 
+        {
+            "location": "/guides/referencing-data-from-data/#description", 
+            "text": "This guide will show how you can reference previously declared data in subsequent data files.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/guides/referencing-data-from-data/#steps", 
+            "text": "Create an initial data file:   $ cat   site/data/common.sh  EOF\ndata_common_packages=(\n   vim \n   tmux \n)\nEOF   Create a second data file that references data from the first:   $ cat   site/data/memcached.sh  EOF\ndata_common_packages=(\n   htop \n   ${data_common_packages[@]} \n)\nEOF   Declare the data files in order in your role:   stdlib.data common\nstdlib.data memcached", 
+            "title": "Steps"
+        }, 
+        {
+            "location": "/guides/referencing-data-from-data/#comments", 
+            "text": "This is possible because data files are just regular Bash scripts. The variables that have been sourced earlier in the chain are naturally available to files later in the chain. By using regular Bash syntax, you can manipulate the available data in any legal way.", 
+            "title": "Comments"
+        }, 
+        {
             "location": "/guides/testing-with-test-kitchen/", 
             "text": "Testing With Test Kitchen\n\n\n\n\n\n\nTesting With Test Kitchen\n\n\nDescription\n\n\nSteps\n\n\nComments\n\n\n\n\n\n\n\n\n\n\nDescription\n\n\nThis guide will show how to set up Test Kitchen so you can run various acceptance and integration tests on Waffles.\n\n\nSteps\n\n\n\n\n\n\nProvision a virtual machine that will be used for Test Kitchen.\n\n\n\n\n\n\nRun the following commands:\n\n\n\n\n\n\napt-get update\napt-get install -y ruby\nwget -qO- https://get.docker.com/\ngem install test-kitchen\ngem install kitchen-docker\ngem install busser-bash\ngem install busser-bats\ngem install busser-serverspec\nkitchen init --driver=kitchen-docker\n\n\n\n\n\n\n\n\nDownload Waffles to \n/root/.waffles\n.\n\n\n\n\n\n\nThe \n/root/.waffles/kitchen\n directory contains everything you need to get started with testing. Review \n/root/.waffles/kitchen/.kitchen.yml\n and make any necessary changes.\n\n\n\n\n\n\nType the following command to run all tests:\n\n\n\n\n\n\ncd /root/.waffles/kitchen\nkitchen test\n\n\n\n\nComments\n\n\nFor information on how to use Test Kitchen, see the \nTest Kitchen\n home page.", 
             "title": "Testing Waffles with Test Kitchen"
+        }, 
+        {
+            "location": "/guides/testing-with-test-kitchen/#testing-with-test-kitchen", 
+            "text": "Testing With Test Kitchen  Description  Steps  Comments", 
+            "title": "Testing With Test Kitchen"
+        }, 
+        {
+            "location": "/guides/testing-with-test-kitchen/#description", 
+            "text": "This guide will show how to set up Test Kitchen so you can run various acceptance and integration tests on Waffles.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/guides/testing-with-test-kitchen/#steps", 
+            "text": "Provision a virtual machine that will be used for Test Kitchen.    Run the following commands:    apt-get update\napt-get install -y ruby\nwget -qO- https://get.docker.com/\ngem install test-kitchen\ngem install kitchen-docker\ngem install busser-bash\ngem install busser-bats\ngem install busser-serverspec\nkitchen init --driver=kitchen-docker    Download Waffles to  /root/.waffles .    The  /root/.waffles/kitchen  directory contains everything you need to get started with testing. Review  /root/.waffles/kitchen/.kitchen.yml  and make any necessary changes.    Type the following command to run all tests:    cd /root/.waffles/kitchen\nkitchen test", 
+            "title": "Steps"
+        }, 
+        {
+            "location": "/guides/testing-with-test-kitchen/#comments", 
+            "text": "For information on how to use Test Kitchen, see the  Test Kitchen  home page.", 
+            "title": "Comments"
         }, 
         {
             "location": "/guides/waffles-and-lxc/", 
@@ -116,14 +676,89 @@
             "title": "Waffles and LXC"
         }, 
         {
+            "location": "/guides/waffles-and-lxc/#using-waffles-with-lxc", 
+            "text": "Using Waffles with LXC  Description  Steps  Installing LXC  Creating a Base Container  Waffles LXC Script    Conclusion", 
+            "title": "Using Waffles with LXC"
+        }, 
+        {
+            "location": "/guides/waffles-and-lxc/#description", 
+            "text": "This guide will describe how to configure LXC containers with Waffles.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/guides/waffles-and-lxc/#steps", 
+            "text": "Installing LXC  First, set up an LXC server. I've written a blog post  here  that may be used as a reference.  Creating a Base Container  I find it very useful to have a standard container that's used as the basis for all other containers. If anything, it makes the creation of new containers almost instant since cloning a container is much quicker than creating an entirely new container.  To create a base container, just create a standard container and turn it off with  lxc-stop .  Waffles LXC Script  I've been using the following script for the past few months and find it works very well. Comments and improvements are definitely welcome, though.  #!/bin/bash\n\nif [ -z $1 ]; then\n  echo  Role required. \n  exit 1\nfi\n\nlxc-ls | grep -q waffles_$1\nif [ $? == 0 ]; then\n  echo  Shutting down and destroying waffles_$1 \n  lxc-stop -n waffles_$1\n  lxc-destroy -n waffles_$1\nfi\n\necho  Cloning LXC container waffles_base to waffles_$1 \nlxc-clone -o waffles_base -n waffles_$1 -s\n\necho  Copying root key to container \nmkdir /var/lib/lxc/waffles_$1/rootfs/root/.ssh\ncat /root/.ssh/id_rsa.pub   /var/lib/lxc/waffles_$1/rootfs/root/.ssh/authorized_keys\n\necho  Starting waffles_$1 and waiting until it has an IP \nlxc-start -d -n waffles_$1\n\nrunning=false\nwhile [  $running  == false ]; do\n  lxc-info -i -n waffles_$1 | grep -q 10\n  if [ $? == 0 ]; then\n    ip=$(lxc-info -i -n waffles_$1 | awk '{print $2}')\n    running=true\n  else\n    echo  waffles_$1 not up yet. Sleeping... \n    sleep 2\n  fi\ndone\n\ngrep -q waffles_$1 /etc/hosts\nif [ $? == 0 ]; then\n  sed -i -e  /waffles_$1/d  /etc/hosts\nfi\necho  $ip waffles_$1    /etc/hosts\n\npkill -HUP dnsmasq\n\necho  Running waffles \nlxc-attach -n waffles_$1 -- apt-get update\nlxc-attach -n waffles_$1 -- apt-get install -y rsync\ncd /root/.waffles   bash waffles.sh -s waffles_$1 -r $1  This script assumes the following:   You have a base container called  waffles_base .  You have Waffles installed under  /root/.waffles .   To use this script, run it like so:  $ waffles_lxc.sh memcached  The script will then clone  waffles_base  as  waffles_memcached  and create an  /etc/hosts  entry for it so all other containers can reference it by name.  If you'd prefer not to have all containers prefixed with  waffles_ , just edit the script.", 
+            "title": "Steps"
+        }, 
+        {
+            "location": "/guides/waffles-and-lxc/#conclusion", 
+            "text": "This guide detailed one way of using Waffles with LXC by using a simple Bash script that automates the creation of a container and applies a role to it using Waffles.", 
+            "title": "Conclusion"
+        }, 
+        {
             "location": "/guides/waffles-and-terraform/", 
             "text": "Using Waffles with Terraform\n\n\n\n\n\n\nUsing Waffles with Terraform\n\n\nDescription\n\n\nSteps\n\n\nInstalling Terraform\n\n\nCreating a Terraform Configuration\n\n\nApply the Terraform Configuration\n\n\n\n\n\n\nComments\n\n\nConclusion\n\n\n\n\n\n\n\n\n\n\nDescription\n\n\nThis guide will show how to use Waffles with \nTerraform\n. The Terraform OpenStack provider will be used, but these concepts should be applicable to any provider.\n\n\nSteps\n\n\nInstalling Terraform\n\n\nFirst, set up and install Terraform. Instructions can be found on Terraform's \nhomepage\n.\n\n\nCreating a Terraform Configuration\n\n\nThe following Terraform Configuration is all that is required to use Waffles with Terraform:\n\n\nresource \nopenstack_compute_keypair_v2\n \nwaffles\n {\n  name = \nwaffles\n\n  public_key = \n${file(\n/root/.ssh/id_rsa.pub\n)}\n\n}\n\nresource \nopenstack_compute_instance_v2\n \nwaffles\n {\n  name = \nwaffles\n\n  image_name = \nUbuntu 14.04\n\n  flavor_name = \nm1.tiny\n\n\n  key_pair = \n${openstack_compute_keypair_v2.waffles.name}\n\n  security_groups = [\ndefault\n]\n\n  connection {\n    user = \nubuntu\n\n    key_file = \n/root/.ssh/id_rsa\n\n    host = \n${openstack_compute_instance_v2.waffles.access_ip_v6}\n\n  }\n\n  provisioner \nlocal-exec\n {\n    command = \nsleep 10 \n cd /root/.waffles \n bash waffles.sh -r memcached -s ${openstack_compute_instance_v2.waffles.access_ip_v6} -u ubuntu -y\n\n  }\n\n}\n\n\n\n\nSave the above as something like \n~/waffles-tform/main.tf\n\n\nApply the Terraform Configuration\n\n\nNow just apply the configuration with:\n\n\n$ cd waffles-tform\n$ terraform apply\n\n\n\n\nComments\n\n\nThe above configuration makes a few assumptions:\n\n\n\n\nrsync\n is already installed on the image you'll be using. If yours doesn't, use \ncloud-init\n or a similar system to pre-install it.\n\n\nThe virtual machine that Terraform creates is accessible via IPv6. If yours isn't, either attach a Floating or Elastic IP or use the fixed IP somehow.\n\n\nThe SSH key being used is \n/root/.ssh/id_rsa\n. This is because Waffles does not support non-default SSH keys yet.\n\n\nSSH access is allowed through the security group.\n\n\n\n\nConclusion\n\n\nThis guide showed one way of using Waffles with Terraform. Both systems are extremely flexible and complement each other well, so there may be other ways of achieving the same result.\n\n\nFor example, you could use Terraform's \nfile\n provisioner to copy the entire \n~/.waffles\n directory to the remote virtual machine. The benefit of using Waffles's built-in push is that only the files which the role requires are copied over.", 
             "title": "Waffles and Terraform"
         }, 
         {
+            "location": "/guides/waffles-and-terraform/#using-waffles-with-terraform", 
+            "text": "Using Waffles with Terraform  Description  Steps  Installing Terraform  Creating a Terraform Configuration  Apply the Terraform Configuration    Comments  Conclusion", 
+            "title": "Using Waffles with Terraform"
+        }, 
+        {
+            "location": "/guides/waffles-and-terraform/#description", 
+            "text": "This guide will show how to use Waffles with  Terraform . The Terraform OpenStack provider will be used, but these concepts should be applicable to any provider.", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/guides/waffles-and-terraform/#steps", 
+            "text": "Installing Terraform  First, set up and install Terraform. Instructions can be found on Terraform's  homepage .  Creating a Terraform Configuration  The following Terraform Configuration is all that is required to use Waffles with Terraform:  resource  openstack_compute_keypair_v2   waffles  {\n  name =  waffles \n  public_key =  ${file( /root/.ssh/id_rsa.pub )} \n}\n\nresource  openstack_compute_instance_v2   waffles  {\n  name =  waffles \n  image_name =  Ubuntu 14.04 \n  flavor_name =  m1.tiny \n\n  key_pair =  ${openstack_compute_keypair_v2.waffles.name} \n  security_groups = [ default ]\n\n  connection {\n    user =  ubuntu \n    key_file =  /root/.ssh/id_rsa \n    host =  ${openstack_compute_instance_v2.waffles.access_ip_v6} \n  }\n\n  provisioner  local-exec  {\n    command =  sleep 10   cd /root/.waffles   bash waffles.sh -r memcached -s ${openstack_compute_instance_v2.waffles.access_ip_v6} -u ubuntu -y \n  }\n\n}  Save the above as something like  ~/waffles-tform/main.tf  Apply the Terraform Configuration  Now just apply the configuration with:  $ cd waffles-tform\n$ terraform apply", 
+            "title": "Steps"
+        }, 
+        {
+            "location": "/guides/waffles-and-terraform/#comments", 
+            "text": "The above configuration makes a few assumptions:   rsync  is already installed on the image you'll be using. If yours doesn't, use  cloud-init  or a similar system to pre-install it.  The virtual machine that Terraform creates is accessible via IPv6. If yours isn't, either attach a Floating or Elastic IP or use the fixed IP somehow.  The SSH key being used is  /root/.ssh/id_rsa . This is because Waffles does not support non-default SSH keys yet.  SSH access is allowed through the security group.", 
+            "title": "Comments"
+        }, 
+        {
+            "location": "/guides/waffles-and-terraform/#conclusion", 
+            "text": "This guide showed one way of using Waffles with Terraform. Both systems are extremely flexible and complement each other well, so there may be other ways of achieving the same result.  For example, you could use Terraform's  file  provisioner to copy the entire  ~/.waffles  directory to the remote virtual machine. The benefit of using Waffles's built-in push is that only the files which the role requires are copied over.", 
+            "title": "Conclusion"
+        }, 
+        {
             "location": "/resources/", 
             "text": "Waffles Resources\n\n\n\n\n\n\nWaffles Resources\n\n\nLocation\n\n\nEnabling Non-Standard Resources\n\n\nAnatomy of a Resource\n\n\nHeader\n\n\nfunction resource.name\n\n\nfunction stdlib.resource.process\n\n\nfunction resource.name.x\n\n\nfunction resource.name.read\n\n\nfunction resource.name.create\n\n\nfunction resource.name.update\n\n\nfunction resource.name.delete\n\n\n\n\n\n\nState Changes\n\n\nExamples\n\n\n\n\n\n\n\n\n\n\nThis document will cover how resources are used in Waffles.\n\n\nLocation\n\n\nAll resources are stored in the \n$WAFFLES_DIR/lib\n directory:\n\n\n\n\nThe Standard Library of resources is located in \n$WAFFLES_DIR/lib/resources\n.\n\n\nApache-based resources are located in \n$WAFFLES_DIR/lib/apache\n.\n\n\nAugeas-based resources are located in \n$WAFFLES_DIR/lib/augeas\n.\n\n\nConsul-based resources are located in \n$WAFFLES_DIR/lib/consul\n.\n\n\nKeepalived-based resources are located in \n$WAFFLES_DIR/lib/keepalived\n.\n\n\nMySQL-based resources are located in \n$WAFFLES_DIR/lib/mysql\n.\n\n\nNginx-based resources are located in \n$WAFFLES_DIR/lib/nginx\n.\n\n\nRabbitMQ-based resources are located in \n$WAFFLES_DIR/lib/rabbitmq\n.\n\n\n\n\nEnabling Non-Standard Resources\n\n\nBy default, only the Standard Library is enabled in Waffles. To enable the other resources, use the following functions:\n\n\n\n\nApache: \nstdlib.enable_apache\n\n\nAugeas: \nstdlib.enable_augeas\n\n\nConsul: \nstdlib.enable_consul\n\n\nKeepalived: \nstdlib.enable_keepalived\n\n\nMySQL: \nstdlib.enable_mysql\n\n\nNginx: \nstdlib.enable_nginx\n\n\nRabbitMQ: \nstdlib.enable_rabbitmq\n\n\n\n\nAnatomy of a Resource\n\n\nHeader\n\n\nEach resource has a detailed comment header. This header describes what the resource does, what parameters it takes, how to use it, and any comments. The comment header is very important as this is where the resource documentation is generated from.\n\n\nfunction resource.name\n\n\nThe next part of a resource is the first \"function\". This first function is named after the resource name. So any time you use a resource, you're actually just calling a Bash function.\n\n\nThe first thing done inside this function is to call a \"subtitle\" with \nstdlib.subtitle\n. Subtitles serve two purposes:\n\n\n\n\nThey set the name to be printed when running Waffles.\n\n\nThey reset an internal flag for changes made in the resource. This flag is called \nstdlib_resource_change\n. See the \"State Changes\" section for more details.\n\n\n\n\nNext, an \noptions\n variable is declared. It is important that this variable is declared in each resource. If not, then the resource will share variables with the last called resource. After the \noptions\n variable is declared, any parameters for the resource are declared. Finally, variables are checked via \nstdlib.options.parse_options\n. All logic related to \noptions\n can be found in \n$WAFFLES_DIR/lib/options.sh\n.\n\n\nAfter options, any local variables are defined.\n\n\nNext, any optional custom logic is defined. This usually includes local variables just for the resource or ensuring that correctly formatted parameters were given.\n\n\nNext, \nstdlib.resource.process\n is called.\n\n\nfunction stdlib.resource.process\n\n\nThis is a centralized function that was introduced to help reduce repeated code in all resources. It does the following:\n\n\n\n\nA catalog entry is made.\n\n\nstdlib.resource.read\n is called, which in turn calls \ncalling_resource.read\n.\n\n\nA comparison is made of the resource state versus the state that the resource should be in.\n\n\nDepending on the results of the above, \nstdlib.resource.x\n is called, which in turn calls \ncalling_resource.x\n.\n\n\n\n\nEach of the \nstdlib.resource.x\n functions do a few other things like determine if a resource change was made and how many changes were made throughout the entire run. In the future, these functions may also generate summary reports of the run.\n\n\nfunction resource.name.x\n\n\nThe rest of the resource is made up of four standard functions:\n\n\n\n\nfunction.name.read\n\n\nfunction.name.create\n\n\nfunction.name.update\n\n\nfunction.name.delete\n\n\n\n\nSome resources contain extra functions, but they always tie back into those standard four. Sometimes \nfunction.name.update\n just calls \ndelete\n and \ncreate\n.\n\n\nIf you create a resource that conforms to those four functions, it'll work just fine in Waffles.\n\n\nfunction resource.name.read\n\n\nThe \nread\n function determines the current state of the resource. For example, \nstdlib.apt.read\n determines if the package is installed, and if so, what version is installed.\n\n\nfunction resource.name.create\n\n\nThe \ncreate\n function does whatever is required to create the the resource. For example, \nstdlib.apt.create\n installs a package via \napt\n and \nstdlib.file_line.create\n adds a line to a given file either by \necho\n or \nsed\n.\n\n\nIt's important to try to stick with a core philosophy of Waffles: use standard nix utilities for the creation of resources.\n\n\nfunction resource.name.update\n\n\nIf the work required to update a resource is different than creating a resource, use the \nupdate\n function. However, if it's easier to simply delete the resource and recreate it, then do that instead of an update function. Just don't use that method as an excuse.\n\n\nfunction resource.name.delete\n\n\nThis function deletes the resource. For example, \nstdlib.apt.delete\n will actually remove the package.\n\n\nState Changes\n\n\nAfter you call a resource, you can check the status of the \nstdlib_resource_change\n flag. If it is true, then a change happened when you called the resource. For example:\n\n\nstdlib.apt --package sl --version latest\n\nif [[ $stdlib_resource_change == \ntrue\n ]]; then\n  stdlib.info \nPackage sl was installed or upgraded.\n\nfi\n\n\n\n\nSimilar to \nstdlib_resource_change\n is \nstdlib_state_change\n. \nstdlib_state_change\n works in the exact same way, but it is reset when a call to \nstdlib.title\n is made. You usually use \nstdlib.title\n at the beginning of Profiles.\n\n\nExamples\n\n\nUse the Standard Library and Augeas resources as examples of how resources are built.", 
             "title": "Internals"
+        }, 
+        {
+            "location": "/resources/#waffles-resources", 
+            "text": "Waffles Resources  Location  Enabling Non-Standard Resources  Anatomy of a Resource  Header  function resource.name  function stdlib.resource.process  function resource.name.x  function resource.name.read  function resource.name.create  function resource.name.update  function resource.name.delete    State Changes  Examples      This document will cover how resources are used in Waffles.", 
+            "title": "Waffles Resources"
+        }, 
+        {
+            "location": "/resources/#location", 
+            "text": "All resources are stored in the  $WAFFLES_DIR/lib  directory:   The Standard Library of resources is located in  $WAFFLES_DIR/lib/resources .  Apache-based resources are located in  $WAFFLES_DIR/lib/apache .  Augeas-based resources are located in  $WAFFLES_DIR/lib/augeas .  Consul-based resources are located in  $WAFFLES_DIR/lib/consul .  Keepalived-based resources are located in  $WAFFLES_DIR/lib/keepalived .  MySQL-based resources are located in  $WAFFLES_DIR/lib/mysql .  Nginx-based resources are located in  $WAFFLES_DIR/lib/nginx .  RabbitMQ-based resources are located in  $WAFFLES_DIR/lib/rabbitmq .", 
+            "title": "Location"
+        }, 
+        {
+            "location": "/resources/#enabling-non-standard-resources", 
+            "text": "By default, only the Standard Library is enabled in Waffles. To enable the other resources, use the following functions:   Apache:  stdlib.enable_apache  Augeas:  stdlib.enable_augeas  Consul:  stdlib.enable_consul  Keepalived:  stdlib.enable_keepalived  MySQL:  stdlib.enable_mysql  Nginx:  stdlib.enable_nginx  RabbitMQ:  stdlib.enable_rabbitmq", 
+            "title": "Enabling Non-Standard Resources"
+        }, 
+        {
+            "location": "/resources/#anatomy-of-a-resource", 
+            "text": "Header  Each resource has a detailed comment header. This header describes what the resource does, what parameters it takes, how to use it, and any comments. The comment header is very important as this is where the resource documentation is generated from.  function resource.name  The next part of a resource is the first \"function\". This first function is named after the resource name. So any time you use a resource, you're actually just calling a Bash function.  The first thing done inside this function is to call a \"subtitle\" with  stdlib.subtitle . Subtitles serve two purposes:   They set the name to be printed when running Waffles.  They reset an internal flag for changes made in the resource. This flag is called  stdlib_resource_change . See the \"State Changes\" section for more details.   Next, an  options  variable is declared. It is important that this variable is declared in each resource. If not, then the resource will share variables with the last called resource. After the  options  variable is declared, any parameters for the resource are declared. Finally, variables are checked via  stdlib.options.parse_options . All logic related to  options  can be found in  $WAFFLES_DIR/lib/options.sh .  After options, any local variables are defined.  Next, any optional custom logic is defined. This usually includes local variables just for the resource or ensuring that correctly formatted parameters were given.  Next,  stdlib.resource.process  is called.  function stdlib.resource.process  This is a centralized function that was introduced to help reduce repeated code in all resources. It does the following:   A catalog entry is made.  stdlib.resource.read  is called, which in turn calls  calling_resource.read .  A comparison is made of the resource state versus the state that the resource should be in.  Depending on the results of the above,  stdlib.resource.x  is called, which in turn calls  calling_resource.x .   Each of the  stdlib.resource.x  functions do a few other things like determine if a resource change was made and how many changes were made throughout the entire run. In the future, these functions may also generate summary reports of the run.  function resource.name.x  The rest of the resource is made up of four standard functions:   function.name.read  function.name.create  function.name.update  function.name.delete   Some resources contain extra functions, but they always tie back into those standard four. Sometimes  function.name.update  just calls  delete  and  create .  If you create a resource that conforms to those four functions, it'll work just fine in Waffles.  function resource.name.read  The  read  function determines the current state of the resource. For example,  stdlib.apt.read  determines if the package is installed, and if so, what version is installed.  function resource.name.create  The  create  function does whatever is required to create the the resource. For example,  stdlib.apt.create  installs a package via  apt  and  stdlib.file_line.create  adds a line to a given file either by  echo  or  sed .  It's important to try to stick with a core philosophy of Waffles: use standard nix utilities for the creation of resources.  function resource.name.update  If the work required to update a resource is different than creating a resource, use the  update  function. However, if it's easier to simply delete the resource and recreate it, then do that instead of an update function. Just don't use that method as an excuse.  function resource.name.delete  This function deletes the resource. For example,  stdlib.apt.delete  will actually remove the package.", 
+            "title": "Anatomy of a Resource"
+        }, 
+        {
+            "location": "/resources/#state-changes", 
+            "text": "After you call a resource, you can check the status of the  stdlib_resource_change  flag. If it is true, then a change happened when you called the resource. For example:  stdlib.apt --package sl --version latest\n\nif [[ $stdlib_resource_change ==  true  ]]; then\n  stdlib.info  Package sl was installed or upgraded. \nfi  Similar to  stdlib_resource_change  is  stdlib_state_change .  stdlib_state_change  works in the exact same way, but it is reset when a call to  stdlib.title  is made. You usually use  stdlib.title  at the beginning of Profiles.", 
+            "title": "State Changes"
+        }, 
+        {
+            "location": "/resources/#examples", 
+            "text": "Use the Standard Library and Augeas resources as examples of how resources are built.", 
+            "title": "Examples"
         }, 
         {
             "location": "/resources/stdlib.apt_key/", 
@@ -1403,6 +2038,66 @@
         {
             "location": "/resources/nginx.upstream/#notes", 
             "text": "This is broke at the moment due to an issue with the Nginx Augeas lens.\nThis comment will be removed when it's working.", 
+            "title": "Notes"
+        }, 
+        {
+            "location": "/resources/python.pip/", 
+            "text": "python.pip\n\n\nDescription\n\n\nManage a pip python package\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The name of the pip package. Required.\n\n\nversion: The version of the pip package. Optional.\n\n\nvirtualenv: The virtual environment to put the package in. Required. Default: system.\n\n\nurl: A URL to install the package from. Optional.\n\n\nowner: The owner of the virtualenv. Required. Default: root.\n\n\ngroup: The group of the virtualenv. Required. Default: root.\n\n\nindex: Base URL of the python package index. Optional.\n\n\neditable: If the package is installed as an editable resource. Required. Default: false.\n\n\nenvironment: Additional environment variables. Optional.\n\n\ninstall_args: Additional arguments to use when installing. Optional.\n\n\nuninstall-args: Additional arguments to use when uninstalling. Optional.\n\n\n\n\nExample\n\n\npython.pip --name minilanguage\npython.pip --name minilanguage --version 0.3.0\npython.pip --name minilanguage --version latest\n\n\n\n\nNotes\n\n\nThis resource is heavily based on puppet-python", 
+            "title": "python.pip"
+        }, 
+        {
+            "location": "/resources/python.pip/#pythonpip", 
+            "text": "", 
+            "title": "python.pip"
+        }, 
+        {
+            "location": "/resources/python.pip/#description", 
+            "text": "Manage a pip python package", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/python.pip/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  name: The name of the pip package. Required.  version: The version of the pip package. Optional.  virtualenv: The virtual environment to put the package in. Required. Default: system.  url: A URL to install the package from. Optional.  owner: The owner of the virtualenv. Required. Default: root.  group: The group of the virtualenv. Required. Default: root.  index: Base URL of the python package index. Optional.  editable: If the package is installed as an editable resource. Required. Default: false.  environment: Additional environment variables. Optional.  install_args: Additional arguments to use when installing. Optional.  uninstall-args: Additional arguments to use when uninstalling. Optional.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/python.pip/#example", 
+            "text": "python.pip --name minilanguage\npython.pip --name minilanguage --version 0.3.0\npython.pip --name minilanguage --version latest", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/python.pip/#notes", 
+            "text": "This resource is heavily based on puppet-python", 
+            "title": "Notes"
+        }, 
+        {
+            "location": "/resources/python.virtualenv/", 
+            "text": "python.virtualenv\n\n\nDescription\n\n\nManage a python virtualenv\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The name of the virtualenv package. Required.\n\n\nvenv_dir: The path / parent directory to the virtual environment. Required. Default: /usr/local\"\n\n\nrequirements: The path to a requirements.txt file. Optional.\n\n\nsystempkgs: Copy system site-packages into the virtualenv. Required. Default: false.\n\n\ndistribute: Distribute method. Required. Default: distribute\n\n\nindex: An alternative pypi index file. Optional.\n\n\nowner: The owner of the virtualenv. Required. Default: root.\n\n\ngroup: The group of the virtualenv. Required. Default: root.\n\n\nmode: The directory mode of the venv. Required. Default: 755.\n\n\nenvironment: Additional environment variables. Optional.\n\n\npip_args: Extra pip args. Optional.\n\n\n\n\nExample\n\n\npython.virtualenv --name foo\n\n\n\n\nNotes\n\n\nThis resource is heavily based on puppet-python", 
+            "title": "python.virtualenv"
+        }, 
+        {
+            "location": "/resources/python.virtualenv/#pythonvirtualenv", 
+            "text": "", 
+            "title": "python.virtualenv"
+        }, 
+        {
+            "location": "/resources/python.virtualenv/#description", 
+            "text": "Manage a python virtualenv", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/python.virtualenv/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  name: The name of the virtualenv package. Required.  venv_dir: The path / parent directory to the virtual environment. Required. Default: /usr/local\"  requirements: The path to a requirements.txt file. Optional.  systempkgs: Copy system site-packages into the virtualenv. Required. Default: false.  distribute: Distribute method. Required. Default: distribute  index: An alternative pypi index file. Optional.  owner: The owner of the virtualenv. Required. Default: root.  group: The group of the virtualenv. Required. Default: root.  mode: The directory mode of the venv. Required. Default: 755.  environment: Additional environment variables. Optional.  pip_args: Extra pip args. Optional.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/python.virtualenv/#example", 
+            "text": "python.virtualenv --name foo", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/python.virtualenv/#notes", 
+            "text": "This resource is heavily based on puppet-python", 
             "title": "Notes"
         }, 
         {

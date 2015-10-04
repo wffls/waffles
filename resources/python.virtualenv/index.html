@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>stdlib.apt_source - Waffles</title>
+  <title>python.virtualenv - Waffles</title>
   
 
   <link rel="shortcut icon" href="../../img/favicon.ico">
@@ -20,7 +20,7 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "stdlib.apt_source";
+    var mkdocs_page_name = "python.virtualenv";
   </script>
   
   <script src="../../js/jquery-2.1.1.min.js"></script>
@@ -270,21 +270,8 @@
 
         
             
-    <li class="toctree-l1 current">
-        <a class="current" href="./">stdlib.apt_source</a>
-        
-            <ul>
-            
-                <li class="toctree-l3"><a href="#stdlibapt_source">stdlib.apt_source</a></li>
-                
-                    <li><a class="toctree-l4" href="#description">Description</a></li>
-                
-                    <li><a class="toctree-l4" href="#parameters">Parameters</a></li>
-                
-                    <li><a class="toctree-l4" href="#example">Example</a></li>
-                
-            
-            </ul>
+    <li class="toctree-l1 ">
+        <a class="" href="../stdlib.apt_source/">stdlib.apt_source</a>
         
     </li>
 
@@ -619,8 +606,23 @@
 
         
             
-    <li class="toctree-l1 ">
-        <a class="" href="../python.virtualenv/">python.virtualenv</a>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">python.virtualenv</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#pythonvirtualenv">python.virtualenv</a></li>
+                
+                    <li><a class="toctree-l4" href="#description">Description</a></li>
+                
+                    <li><a class="toctree-l4" href="#parameters">Parameters</a></li>
+                
+                    <li><a class="toctree-l4" href="#example">Example</a></li>
+                
+                    <li><a class="toctree-l4" href="#notes">Notes</a></li>
+                
+            
+            </ul>
         
     </li>
 
@@ -696,7 +698,7 @@
         
       
     
-    <li>stdlib.apt_source</li>
+    <li>python.virtualenv</li>
     <li class="wy-breadcrumbs-aside">
       
         
@@ -710,23 +712,30 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="stdlibapt_source">stdlib.apt_source</h1>
+                <h1 id="pythonvirtualenv">python.virtualenv</h1>
 <h2 id="description">Description</h2>
-<p>Manage /etc/apt/sources.list.d entries.</p>
+<p>Manage a python virtualenv</p>
 <h2 id="parameters">Parameters</h2>
 <ul>
 <li>state: The state of the resource. Required. Default: present.</li>
-<li>name: The name of the apt repo. Required.</li>
-<li>uri: The URI of the apt repo. Required.</li>
-<li>distribution: The distribution of the apt repo. Required.</li>
-<li>component: The component of the apt repo. Required.</li>
-<li>include_src: Whether to include the source repo. Default: false.</li>
-<li>refresh: run apt-get update if the source was modified. Default: true.</li>
+<li>name: The name of the virtualenv package. Required.</li>
+<li>venv_dir: The path / parent directory to the virtual environment. Required. Default: /usr/local"</li>
+<li>requirements: The path to a requirements.txt file. Optional.</li>
+<li>systempkgs: Copy system site-packages into the virtualenv. Required. Default: false.</li>
+<li>distribute: Distribute method. Required. Default: distribute</li>
+<li>index: An alternative pypi index file. Optional.</li>
+<li>owner: The owner of the virtualenv. Required. Default: root.</li>
+<li>group: The group of the virtualenv. Required. Default: root.</li>
+<li>mode: The directory mode of the venv. Required. Default: 755.</li>
+<li>environment: Additional environment variables. Optional.</li>
+<li>pip_args: Extra pip args. Optional.</li>
 </ul>
 <h2 id="example">Example</h2>
-<pre><code class="shell">stdlib.apt_source --name lxc --uri http://ppa.launchpad.net/ubuntu-lxc/stable/ubuntu \
-                  --distribution trusty --component main
+<pre><code class="shell">python.virtualenv --name foo
 </code></pre>
+
+<h2 id="notes">Notes</h2>
+<p>This resource is heavily based on puppet-python</p>
               
             </div>
           </div>
@@ -734,10 +743,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../stdlib.cron/" class="btn btn-neutral float-right" title="stdlib.cron"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../rabbitmq.cluster_nodes/" class="btn btn-neutral float-right" title="rabbitmq.cluster_nodes"/>Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../stdlib.apt/" class="btn btn-neutral" title="stdlib.apt"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../python.pip/" class="btn btn-neutral" title="python.pip"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -765,10 +774,10 @@
           <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../stdlib.apt/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../python.pip/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../stdlib.cron/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../rabbitmq.cluster_nodes/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
