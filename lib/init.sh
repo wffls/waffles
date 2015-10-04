@@ -93,3 +93,9 @@ function stdlib.enable_consul {
   source "$WAFFLES_LIB_DIR/consul/resources/consul_template.sh"
   source "$WAFFLES_LIB_DIR/consul/resources/consul_watch.sh"
 }
+
+# Python-based Resources and Functions
+function stdlib.enable_python {
+  source "$WAFFLES_LIB_DIR/python/resources/python_pip.sh"
+  source "$WAFFLES_LIB_DIR/python/resources/python_virtualenv.sh"
+}
