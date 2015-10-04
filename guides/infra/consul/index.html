@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Consul - Waffles</title>
+  
+
+  <link rel="shortcut icon" href="../../../img/favicon.ico">
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../../../css/highlight.css">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Consul";
+  </script>
+  
+  <script src="../../../js/jquery-2.1.1.min.js"></script>
+  <script src="../../../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../../../js/highlight.pack.js"></script>
+  <script src="../../../js/theme.js"></script> 
+
+  
+  <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-75603-16', 'waffles.terrarum.net');
+      ga('send', 'pageview');
+  </script>
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../../.." class="icon icon-home"> Waffles</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../..">Home</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../install/">Installation</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../../concepts/">Concepts</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../../usage/">Usage</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../../modules/">Modules</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Functions</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../functions/types/">Types</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../functions/system/">system</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../functions/catalog/">catalog</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../functions/options/">options</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../functions/resource/">resource</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../functions/augeas/">augeas</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../functions/consul/">consul</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../functions/mysql/">mysql</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../functions/rabbitmq/">rabbitmq</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Guides</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../environment-vars/">Environment Variables</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../deploying-a-mysql-server/">Deploying a MySQL Server</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../deploying-a-mysql-galera-cluster/">Deploying a MySQL Galera Cluster</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../deploying-a-consul-cluster/">Deploying a Consul Cluster</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../override-data/">Overriding Data</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../referencing-data-from-data/">Referencing Data from Data</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../testing-with-test-kitchen/">Testing Waffles with Test Kitchen</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../waffles-and-lxc/">Waffles and LXC</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../waffles-and-terraform/">Waffles and Terraform</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Deploying Infrastructure Series</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../intro/">Intro</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Consul</a>
+        
+            <ul>
+            
+            </ul>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Resources</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/">Internals</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/stdlib.apt_key/">stdlib.apt_key</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/stdlib.apt_ppa/">stdlib.apt_ppa</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/stdlib.apt/">stdlib.apt</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/stdlib.apt_source/">stdlib.apt_source</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/stdlib.cron/">stdlib.cron</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/stdlib.debconf/">stdlib.debconf</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/stdlib.directory/">stdlib.directory</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/stdlib.file_line/">stdlib.file_line</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/stdlib.file/">stdlib.file</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/stdlib.git/">stdlib.git</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/stdlib.groupadd/">stdlib.groupadd</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/stdlib.ini/">stdlib.ini</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/stdlib.ip6tables_rule/">stdlib.ip6tables_rule</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/stdlib.iptables_rule/">stdlib.iptables_rule</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/stdlib.sudo_cmd/">stdlib.sudo_cmd</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/stdlib.sysvinit/">stdlib.sysvinit</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/stdlib.upstart/">stdlib.upstart</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/stdlib.useradd/">stdlib.useradd</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/apache.section/">apache.section</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/apache.setting/">apache.setting</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/augeas.aptconf/">augeas.aptconf</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/augeas.cron/">augeas.cron</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/augeas.file_line/">augeas.file_line</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/augeas.generic/">augeas.generic</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/augeas.host/">augeas.host</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/augeas.ini/">augeas.ini</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/augeas.json_array/">augeas.json_array</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/augeas.json_dict/">augeas.json_dict</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/augeas.mail_alias/">augeas.mail_alias</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/augeas.shellvar/">augeas.shellvar</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/augeas.ssh_authorized_key/">augeas.ssh_authorized_key</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/consul.check/">consul.check</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/consul.service/">consul.service</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/consul.template/">consul.template</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/consul.watch/">consul.watch</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/keepalived.global_defs/">keepalived.global_defs</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/keepalived.vrrp_instance/">keepalived.vrrp_instance</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/keepalived.vrrp_script/">keepalived.vrrp_script</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/keepalived.vrrp_sync_group/">keepalived.vrrp_sync_group</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/mysql.database/">mysql.database</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/mysql.grant/">mysql.grant</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/mysql.user/">mysql.user</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/nginx.events/">nginx.events</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/nginx.global/">nginx.global</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/nginx.http/">nginx.http</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/nginx.if/">nginx.if</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/nginx.location/">nginx.location</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/nginx.map/">nginx.map</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/nginx.server/">nginx.server</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/nginx.upstream/">nginx.upstream</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/python.pip/">python.pip</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/python.virtualenv/">python.virtualenv</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/rabbitmq.cluster_nodes/">rabbitmq.cluster_nodes</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/rabbitmq.config_settings/">rabbitmq.config_settings</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/rabbitmq.policy/">rabbitmq.policy</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/rabbitmq.user_permissions/">rabbitmq.user_permissions</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/rabbitmq.user/">rabbitmq.user</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../../resources/rabbitmq.vhost/">rabbitmq.vhost</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../..">Waffles</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Deploying Infrastructure Series &raquo;</li>
+        
+      
+    
+    <li>Consul</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        
+          <a href="https://github.com/jtopjian/waffles" class="icon icon-github"> Edit on GitHub</a>
+        
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="deploying-consul">Deploying Consul</h1>
+<div class="toc">
+<ul>
+<li><a href="#deploying-consul">Deploying Consul</a><ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#terraform">Terraform</a><ul>
+<li><a href="#count">Count</a></li>
+<li><a href="#server-group">Server Group</a></li>
+<li><a href="#instance">Instance</a></li>
+<li><a href="#dns-records">DNS Records</a></li>
+<li><a href="#provisioner">Provisioner</a></li>
+</ul>
+</li>
+<li><a href="#waffles">Waffles</a><ul>
+<li><a href="#data">Data</a><ul>
+<li><a href="#consulsh">consul.sh</a></li>
+</ul>
+</li>
+<li><a href="#profile">Profile</a><ul>
+<li><a href="#clientsh">client.sh</a></li>
+<li><a href="#serversh">server.sh</a></li>
+<li><a href="#templatesh">template.sh</a></li>
+<li><a href="#template-hostssh">template-hosts.sh</a></li>
+<li><a href="#files">Files</a></li>
+</ul>
+</li>
+<li><a href="#role">Role</a></li>
+</ul>
+</li>
+<li><a href="#deploying">Deploying</a></li>
+<li><a href="#consul-key-value-storage">Consul Key-Value Storage</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h2 id="introduction">Introduction</h2>
+<p>To efficiently build and maintain infrastructure, we need to be able to monitor the running nodes, the services they host, and enable them to share information amongst each other. Since this service is so core to the infrastructure, it will be the first service deployed.</p>
+<p>This guide will use Consul for this service. Alternatives could be Etcd in combination with Nagios or Sensu.</p>
+<h2 id="terraform">Terraform</h2>
+<p>Let's begin by creating the Terraform structure. First, create the required directories:</p>
+<pre><code class="shell">$ mkdir -p terraform/consul/scripts
+</code></pre>
+
+<p>Next, create a small bootstrap script for the Consul nodes that will be launched. Save this script as <code>terraform/consul/scripts/bootstrap.sh</code>:</p>
+<pre><code class="shell">#!/bin/bash                                    
+
+cp /home/ubuntu/.ssh/authorized_keys /root/.ssh
+</code></pre>
+
+<p>This is just a quick hack to allow us to log into the nodes as the <code>root</code> user.</p>
+<p>Next, create the <code>terraform/consul/main.tf</code> file:</p>
+<pre><code class="ruby">variable &quot;count&quot; {
+  default = 3
+}
+
+resource &quot;openstack_compute_servergroup_v2&quot; &quot;consul&quot; {
+  name = &quot;consul&quot;
+  policies = [&quot;anti-affinity&quot;]
+}
+
+resource &quot;openstack_compute_instance_v2&quot; &quot;consul&quot; {
+  count = &quot;${var.count}&quot;
+  name = &quot;${format(&quot;consul-%02d&quot;, count.index+1)}&quot;
+  image_name = &quot;Ubuntu 14.04&quot;
+  flavor_name = &quot;m1.small&quot;
+  key_pair = &quot;infra&quot;
+  security_groups = [&quot;AllowAll&quot;]
+  config_drive = true
+  user_data = &quot;${file(&quot;scripts/bootstrap.sh&quot;)}&quot;
+  scheduler_hints {
+    group = &quot;${openstack_compute_servergroup_v2.consul.id}&quot;
+  }
+
+  provisioner &quot;local-exec&quot; {
+    command = &quot;sed -i -e '/${self.name}/d' ~/infrastructure/nodes &amp;&amp; echo ${self.name} ${self.access_ip_v6} consul &gt;&gt; ~/infrastructure/nodes&quot;
+  }
+}
+
+resource &quot;aws_route53_record&quot; &quot;consul-v6&quot; {
+  zone_id = &quot;REPLACEME&quot;
+  name = &quot;consul.example.com&quot;
+  type = &quot;AAAA&quot;
+  ttl = &quot;60&quot;
+  records = [&quot;${replace(openstack_compute_instance_v2.consul.*.access_ip_v6, &quot;/[\[\]]/&quot;, &quot;&quot;)}&quot;]
+}
+
+resource &quot;aws_route53_record&quot; &quot;consul-txt&quot; {
+  zone_id = &quot;REPLACEME&quot;
+  name = &quot;consul.example.com&quot;
+  type = &quot;TXT&quot;
+  ttl = &quot;60&quot;
+  records = [&quot;${formatlist(&quot;%s.example.com&quot;, openstack_compute_instance_v2.consul.*.name)}&quot;]
+}
+
+resource &quot;aws_route53_record&quot; &quot;consul-individual&quot; {
+  count = &quot;${var.count}&quot;
+
+  zone_id = &quot;REPLACEME&quot;
+  name = &quot;${format(&quot;consul-%02d.example.com&quot;, count.index+1)}&quot;
+  type = &quot;AAAA&quot;
+  ttl = &quot;60&quot;
+  records = [&quot;${replace(element(openstack_compute_instance_v2.consul.*.access_ip_v6, count.index), &quot;/[\[\]]/&quot;, &quot;&quot;)}&quot;]
+}
+
+
+resource &quot;null_resource&quot; &quot;consul&quot; {
+  count = &quot;${var.count}&quot;
+
+  provisioner &quot;local-exec&quot; {
+    command = &quot;sleep 10 &amp;&amp; cd ~/infrastructure &amp;&amp; make waffles NODE=${element(aws_route53_record.consul-individual.*.name, count.index)} KEY=keys/infra ROLE=consul&quot;
+  }
+}
+</code></pre>
+
+<p>There's a lot going on here, so let's go over each component. Some of these components will become common to see as they'll be re-used many times in future Terraform configurations.</p>
+<h3 id="count">Count</h3>
+<pre><code class="ruby">variable &quot;count&quot; {
+  default = 3
+}
+</code></pre>
+
+<p>This determines how many nodes will make up the Consul cluster. By default, this configuration will create three, however, you can choose a larger number when Terraform prompts you.</p>
+<h3 id="server-group">Server Group</h3>
+<pre><code class="ruby">resource &quot;openstack_compute_servergroup_v2&quot; &quot;consul&quot; {
+  name = &quot;consul&quot;
+  policies = [&quot;anti-affinity&quot;]
+}
+</code></pre>
+
+<p>A "Server Group" is an OpenStack-specific feature that allows instances (virtual machines / nodes) to have a common policy applied to them. In this case, an "anti-affinity" policy is applied. This ensures that each Consul node is hosted on a different Compute Node. This way, if there's an underlying hardware failure on one of the Compute Nodes in the OpenStack cloud, the entire Consul cluster will not be affected.</p>
+<h3 id="instance">Instance</h3>
+<pre><code class="ruby">resource &quot;openstack_compute_instance_v2&quot; &quot;consul&quot; {
+  count = &quot;${var.count}&quot;
+  name = &quot;${format(&quot;consul-%02d&quot;, count.index+1)}&quot;
+  image_name = &quot;Ubuntu 14.04&quot;
+  flavor_name = &quot;m1.small&quot;
+  key_pair = &quot;infra&quot;
+  security_groups = [&quot;AllowAll&quot;]
+  config_drive = true
+  user_data = &quot;${file(&quot;scripts/bootstrap.sh&quot;)}&quot;
+  scheduler_hints {
+    group = &quot;${openstack_compute_servergroup_v2.consul.id}&quot;
+  }
+
+  provisioner &quot;local-exec&quot; {
+    command = &quot;sed -i -e '/${self.name}/d' ~/infrastructure/nodes &amp;&amp; echo ${self.name} ${self.access_ip_v6} consul &gt;&gt; ~/infrastructure/nodes&quot;
+  }
+}
+</code></pre>
+
+<p>The "Instance" resource is the heart of this configuration. Some notes:</p>
+<ul>
+<li>Notice that there's only one "Instance" defined, but because <code>count</code> is set to the "count" variable, three (by default) will be created.</li>
+<li>The name of each instance will take the format <code>consul-NN</code> where <code>NN</code> is the count in sequence.</li>
+<li>The <code>user_data</code> parameter will cause the <code>scripts/bootstrap.sh</code> script to run when the instance launches.</li>
+<li><code>scheduler_hints</code> places the instance in the Server Group previously created.</li>
+</ul>
+<p>Also note the <code>local-exec</code> provisioner. This runs a simple shell command that adds the following pieces of information to <code>infrastructure/nodes</code>:
+  * name
+  * IPv6 Address
+  * Role</p>
+<h3 id="dns-records">DNS Records</h3>
+<pre><code class="ruby">resource &quot;aws_route53_record&quot; &quot;consul-v6&quot; {
+  zone_id = &quot;REPLACEME&quot;
+  name = &quot;consul.example.com&quot;
+  type = &quot;AAAA&quot;
+  ttl = &quot;60&quot;
+  records = [&quot;${replace(openstack_compute_instance_v2.consul.*.access_ip_v6, &quot;/[\[\]]/&quot;, &quot;&quot;)}&quot;]
+}
+
+resource &quot;aws_route53_record&quot; &quot;consul-txt&quot; {
+  zone_id = &quot;REPLACEME&quot;
+  name = &quot;consul.example.com&quot;
+  type = &quot;TXT&quot;
+  ttl = &quot;60&quot;
+  records = [&quot;${formatlist(&quot;%s.example.com&quot;, openstack_compute_instance_v2.consul.*.name)}&quot;]
+}
+
+resource &quot;aws_route53_record&quot; &quot;consul-individual&quot; {
+  count = &quot;${var.count}&quot;
+
+  zone_id = &quot;REPLACEME&quot;
+  name = &quot;${format(&quot;consul-%02d.example.com&quot;, count.index+1)}&quot;
+  type = &quot;AAAA&quot;
+  ttl = &quot;60&quot;
+  records = [&quot;${replace(element(openstack_compute_instance_v2.consul.*.access_ip_v6, count.index), &quot;/[\[\]]/&quot;, &quot;&quot;)}&quot;]
+}
+</code></pre>
+
+<p>These three resources create a series of DNS records on Amazon Route53. The first record creates an <code>AAAA</code> record called <code>consul.example.com</code>. This record contains the IPv6 address of each created Consul node. Since this record holds more than one IP address, Route53 will return each address in a round-robin fashion.</p>
+<p>The second DNS record creates a <code>TXT</code> record. This record acts as a piece of scratch paper in the DNS system. It holds the hostnames of each created Consul node and will help with bootstrapping Consul.</p>
+<p>The third DNS record creates individual <code>AAAA</code> records for each of the Consul nodes.</p>
+<h3 id="provisioner">Provisioner</h3>
+<pre><code class="ruby">resource &quot;null_resource&quot; &quot;consul&quot; {
+  count = &quot;${var.count}&quot;
+
+  provisioner &quot;local-exec&quot; {
+    command = &quot;sleep 10 &amp;&amp; cd ~/infrastructure &amp;&amp; make waffles NODE=${element(aws_route53_record.consul-individual.*.name, count.index)} KEY=keys/infra ROLE=consul&quot;
+  }
+}
+</code></pre>
+
+<p>The final resource is a "Null" resource. This is a bit of a hack in Terraform to get around the fact that "Provisioners" must be attached to a resource of some type. It's not possible to simply have a "Provisioning" step.</p>
+<p>This resource will run the commands in the <code>command</code> parameter for each of the created Consul nodes. An example of the rendered command is:</p>
+<pre><code class="shell">sleep 10
+make waffles NODE=consul-01.example.com KEY=keys/infra ROLE=consul
+</code></pre>
+
+<p><code>make</code> corresponds to the <code>Makefile</code> created in the Intro part of this guide. <code>make waffles</code> is an actual task that was added to the <code>Makefile</code>.</p>
+<p>Of course, the Provisioner could have just gone in the Instance resource, but we want <em>all</em> resources to be created before any provisioning begins to take place. In this specific case, it's because we want the DNS records to be populated before Consul is built.</p>
+<p>With all of this in place, let's move on to the Waffles side:</p>
+<h2 id="waffles">Waffles</h2>
+<h3 id="data">Data</h3>
+<p>To begin, create a Waffles <code>data</code> file to hold the Consul configuration data. This file will be <code>waffles/data/consul.sh</code>:</p>
+<h4 id="consulsh">consul.sh</h4>
+<pre><code class="shell"># Tell Waffles about the user and service
+stdlib.array_push data_users &quot;consul&quot;
+stdlib.array_push data_services &quot;consul&quot;
+
+# Consul Version
+data_consul_version=&quot;0.5.2&quot;
+data_consul_template_version=&quot;0.10.0&quot;
+
+# Consul Tokens and Keys
+data_consul_encrypt_key=&quot;CHANGEME&quot;
+data_consul_cluster_name=&quot;consul.example.com&quot;
+
+# Describe the user
+# This user is added by common/users
+data_user_info[consul|name]=&quot;consul&quot;
+data_user_info[consul|uid]=&quot;900&quot;
+data_user_info[consul|gid]=&quot;900&quot;
+data_user_info[consul|homedir]=&quot;/var/lib/consul&quot;
+
+# Any extra generic packages
+# This package is installed by common/packages
+stdlib.array_push data_packages unzip
+
+# Consul config
+declare -Ag data_consul_server_config=(
+  [server]=&quot;true&quot;
+  [advertise_addr]=&quot;${data_node_info[ip6]}&quot;
+  [client_addr]=&quot;127.0.0.1&quot;
+  [bind_addr]=&quot;0.0.0.0&quot;
+  [bootstrap_expect]=&quot;3&quot;
+  [datacenter]=&quot;honolulu&quot;
+  [data_dir]=&quot;/var/lib/consul&quot;
+  [encrypt]=&quot;${data_consul_encrypt_key}&quot;
+  [enable_syslog]=&quot;true&quot;
+  [log_level]=&quot;INFO&quot;
+  [rejoin_after_leave]=&quot;true&quot;
+  [retry_interval]=&quot;30s&quot;
+  [ui_dir]=&quot;/opt/consul-web/dist&quot;
+)
+
+declare -Ag data_consul_client_config=(
+  [advertise_addr]=&quot;${data_node_info[ip6]}&quot;
+  [client_addr]=&quot;127.0.0.1&quot;
+  [datacenter]=&quot;honolulu&quot;
+  [data_dir]=&quot;/var/lib/consul&quot;
+  [encrypt]=&quot;${data_consul_encrypt_key}&quot;
+  [enable_syslog]=&quot;true&quot;
+  [log_level]=&quot;INFO&quot;
+  [rejoin_after_leave]=&quot;true&quot;
+  [retry_interval]=&quot;30s&quot;
+)
+
+declare -Ag data_consul_template_config=(
+  [global|consul]=&quot;localhost:8500&quot;
+  [global|retry]=&quot;10s&quot;
+  [global|max_stale]=&quot;10m&quot;
+  [global|log_level]=&quot;INFO&quot;
+  [syslog|enabled]=&quot;true&quot;
+  [syslog|facility]=&quot;LOCAL5&quot;
+)
+</code></pre>
+
+<h3 id="profile">Profile</h3>
+<p>Next, create the Consul profile. Start with the directory structure: <code>waffles/profiles/consul/scripts</code>. Inside <code>scripts</code>, create the following scripts:</p>
+<h4 id="clientsh">client.sh</h4>
+<pre><code class="shell">stdlib.title &quot;consul/client&quot;
+
+_user=&quot;${data_user_info[consul|name]}&quot;
+
+# Consul Directories
+stdlib.directory --name /var/lib/consul --owner $_user --group $_user --mode 750
+stdlib.directory --name /etc/consul --owner $_user --group $_user --mode 750
+stdlib.directory --name /etc/consul/agent --owner $_user --group $_user --mode 750
+stdlib.directory --name /etc/consul/agent/conf.d --owner $_user --group $_user --mode 750
+stdlib.file --name /var/log/consul.log --owner $_user --group $_user --mode 640
+
+# Install Consul
+if [[ ! -f /usr/local/bin/consul ]]; then
+  stdlib.mute pushd /tmp
+    stdlib.capture_error wget https://dl.bintray.com/mitchellh/consul/${data_consul_version}_linux_amd64.zip
+    stdlib.capture_error unzip ${data_consul_version}_linux_amd64.zip
+    stdlib.capture_error mv consul /usr/local/bin
+  stdlib.mute popd
+fi
+
+# Configure Consul
+for key in &quot;${!data_consul_client_config[@]}&quot;; do
+  augeas.json_dict --file &quot;/etc/consul/agent/conf.d/config.json&quot; --path / --key &quot;$key&quot; --value &quot;${data_consul_client_config[$key]}&quot;
+done
+
+augeas.json_array --file &quot;/etc/consul/agent/conf.d/config.json&quot; --path / --key &quot;retry_join&quot; --value &quot;$data_consul_cluster_name&quot;
+
+# Consul Service
+stdlib.file --name /etc/init/consul.conf --source &quot;$WAFFLES_SITE_DIR/profiles/consul/files/consul.conf&quot;
+stdlib.upstart --name consul --state running
+</code></pre>
+
+<h4 id="serversh">server.sh</h4>
+<pre><code class="shell">stdlib.title &quot;consul/server&quot;
+
+_user=&quot;${data_user_info[consul|name]}&quot;
+
+# Consul Directories
+stdlib.directory --name /var/lib/consul --owner $_user --group $_user --mode 750
+stdlib.directory --name /etc/consul --owner $_user --group $_user --mode 750
+stdlib.directory --name /etc/consul/agent --owner $_user --group $_user --mode 750
+stdlib.directory --name /etc/consul/agent/conf.d --owner $_user --group $_user --mode 750
+stdlib.directory --name /opt/consul-web --owner $_user --group $_user --mode 750
+stdlib.file --name /var/log/consul.log --owner $_user --group $_user --mode 640
+
+# Install Consul
+if [[ ! -f /usr/local/bin/consul ]]; then
+  stdlib.mute pushd /tmp
+    stdlib.capture_error wget https://dl.bintray.com/mitchellh/consul/${data_consul_version}_linux_amd64.zip
+    stdlib.capture_error unzip ${data_consul_version}_linux_amd64.zip
+    stdlib.capture_error mv consul /usr/local/bin
+  stdlib.mute popd
+fi
+
+# Configure Consul
+for key in &quot;${!data_consul_server_config[@]}&quot;; do
+  augeas.json_dict --file &quot;/etc/consul/agent/conf.d/config.json&quot; --path / --key &quot;$key&quot; --value &quot;${data_consul_server_config[$key]}&quot;
+done
+
+for attempt in {1..10}; do
+  _nodes=($(dig +short -t txt $data_consul_cluster_name | sort | tr -d \&quot;))
+  if [[ -z &quot;$_nodes&quot; ]]; then
+    stdlib.warn &quot;No consul nodes found. Sleeping&quot;
+    sleep 60
+  else
+    break
+  fi
+done
+
+for _node in &quot;${_nodes[@]}&quot;; do
+  _consul_nodes=&quot;${_consul_nodes}--value ${_node} &quot;
+done
+
+augeas.json_array --file &quot;/etc/consul/agent/conf.d/config.json&quot; --path / --key &quot;retry_join&quot; $_consul_nodes
+
+stdlib.file --name /usr/local/bin/purge_failed.sh --mode &quot;750&quot; --source &quot;$WAFFLES_SITE_DIR/profiles/consul/files/purge_failed.sh&quot;
+stdlib.cron --name consul_purge_failed_nodes --cmd /usr/local/bin/purge_failed.sh
+
+# Server nodes get the web UI
+if [[ ! -d /opt/consul-web/dist ]]; then
+  stdlib.mute pushd /tmp
+    stdlib.capture_error wget https://dl.bintray.com/mitchellh/consul/${data_consul_version}_web_ui.zip
+    stdlib.capture_error unzip -d /opt/consul-web ${data_consul_version}_web_ui.zip
+    stdlib.capture_error chown -R consul: /opt/consul-web
+  stdlib.mute popd
+fi
+
+# Consul Service
+stdlib.file --name /etc/init/consul.conf --source &quot;$WAFFLES_SITE_DIR/profiles/consul/files/consul.conf&quot;
+stdlib.upstart --name consul --state running
+</code></pre>
+
+<p>The unique thing about this script is the use of polling the <code>TXT</code> file created by Terraform. In order for Consul to bootstrap itself, it needs to first know of a few neighboring nodes. By polling the <code>TXT</code> record, it can get a list of those nodes.</p>
+<h4 id="templatesh">template.sh</h4>
+<pre><code class="shell">stdlib.title &quot;consul/template&quot;
+
+stdlib.directory --name /etc/consul/template --mode 750
+stdlib.directory --name /etc/consul/template/ctmpl --mode 750
+stdlib.directory --name /etc/consul/template/conf.d --mode 750
+stdlib.file --name /var/log/consul-template.log --owner root --group syslog --mode 640
+stdlib.file --name /etc/init/consul-template.conf --source &quot;$WAFFLES_SITE_DIR/profiles/consul/files/consul-template.conf&quot;
+
+if [[ ! -f /usr/local/bin/consul-template ]]; then
+  stdlib.mute pushd /tmp
+    stdlib.capture_error wget https://github.com/hashicorp/consul-template/releases/download/v${data_consul_template_version}/consul-template_${data_consul_template_version}_linux_amd64.tar.gz
+    stdlib.capture_error tar xzvf consul-template_${data_consul_template_version}_linux_amd64.tar.gz
+    stdlib.capture_error mv consul-template_${data_consul_template_version}_linux_amd64/consul-template /usr/local/bin
+  stdlib.mute popd
+fi
+
+for key in &quot;${!data_consul_template_config[@]}&quot;; do
+  stdlib.split $key &quot;|&quot;
+  _section=&quot;${__split[0]}&quot;
+  _option=&quot;${__split[1]}&quot;
+
+  if [[ $_section == &quot;global&quot; ]]; then
+    augeas.json_dict --file &quot;/etc/consul/template/conf.d/config.json&quot; --path / --key &quot;$_option&quot; --value &quot;${data_consul_template_config[$key]}&quot;
+  else
+    augeas.json_dict --file &quot;/etc/consul/template/conf.d/config.json&quot; --path &quot;/$_section&quot; --key &quot;$_option&quot; --value &quot;${data_consul_template_config[$key]}&quot;
+  fi
+done
+
+stdlib.upstart --name consul-template --state running
+</code></pre>
+
+<p>The above script sets up <a href="https://github.com/hashicorp/consul-template">Consul Template</a></p>
+<h4 id="template-hostssh">template-hosts.sh</h4>
+<pre><code class="shell">stdlib.title &quot;consul/template_hosts&quot;
+
+consul.template --name hosts --destination /etc/hosts
+stdlib.file --name /etc/consul/template/ctmpl/hosts.ctmpl --mode 640 --source &quot;$WAFFLES_SITE_DIR/profiles/consul/files/hosts.ctmpl&quot;
+
+if [[ $stdlib_state_change == &quot;true&quot; ]]; then
+  restart consul-template
+fi
+</code></pre>
+
+<p>The above script configures the <code>/etc/hosts</code> file to be populated by the nodes that Consul knows about.</p>
+<h4 id="files">Files</h4>
+<p>The above scripts reference some static files that need to be installed on the nodes. For brevity, you can find these scripts in the Git repo linked at the end of this document.</p>
+<h3 id="role">Role</h3>
+<p>With the Consul Data and Profile in place, it's time to build the role. Create the file <code>waffles/roles/consul.sh</code> with the following contents:</p>
+<pre><code class="shell">stdlib.enable_augeas
+stdlib.enable_consul
+
+stdlib.data common
+stdlib.data consul
+
+stdlib.profile common/acng
+stdlib.profile common/packages
+stdlib.profile common/users
+stdlib.profile common/updates
+stdlib.profile common/sudo
+
+stdlib.profile augeas/apt_install
+stdlib.profile augeas/update_lenses
+
+stdlib.profile consul/server
+stdlib.profile consul/template
+stdlib.profile consul/template_hosts
+</code></pre>
+
+<p>The <code>stdlib.enable_augeas</code> and <code>stdlib.enable_consul</code> commands are built-in to Waffles. They enable augeas and consul-specific functions and resources. See the Waffles documentation for more information.</p>
+<p>The rest of the role should be self-explanatory: the <code>common</code> and <code>consul</code> data files are being read, then the <code>common</code>, <code>augeas</code> and <code>consul</code> profiles. Everything combined makes up a unique "Consul" role.</p>
+<h2 id="deploying">Deploying</h2>
+<p>To deploy the cluster, do the following:</p>
+<pre><code class="shell">$ make tplan ROLE=consul
+$ make tapply ROLE=consul
+</code></pre>
+
+<p>If everything was successful, you should have a running Consul cluster. You can verify this by doing:</p>
+<pre><code class="shell">$ ssh -i keys/infra consul.example.com
+$ consul status
+</code></pre>
+
+<h2 id="consul-key-value-storage">Consul Key-Value Storage</h2>
+<p>Consul was setup in a way that restricts access to the key-value store to only nodes running Consul. Terraform provides a <code>consul_keys</code> resource that can store data from the Terraform configuration in Consul. Rather than installing Consul on your workstation, an alternative is to SSH into the Consul cluster and forward the port 8500. To do this, make a new task in the <code>Makefile</code> called <code>ctunnel</code>:</p>
+<pre><code class="makefile">ctunnel:                                                        
+  ssh -i keys/infra -L 8500:localhost:8500 consul.example.com
+</code></pre>
+
+<p>Now run the task:</p>
+<pre><code class="shell">$ make ctunnel
+</code></pre>
+
+<p>You should now have forwarded access to your Consul cluster.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>This part of the Infrastructure guide detailed how to deploy a Consul cluster. At this point, your directory structure should look like:</p>
+<pre><code class="shell">infrastructure
+├── keys
+│   ├── infra
+│   └── infra.pub
+├── Makefile
+├── nodes
+├── rc
+│   ├── aws
+│   └── openstack
+├── terraform
+│   ├── consul
+│   │   ├── main.tf
+│   │   └── scripts
+│   │       └── bootstrap.sh
+│   └── support
+│       └── main.tf
+└── waffles
+    ├── data
+    │   ├── common.sh
+    │   └── consul.sh
+    ├── profiles
+    │   ├── augeas
+    │   │   └── scripts
+    │   │       ├── apt_install.sh
+    │   │       └── update_lenses.sh
+    │   ├── common
+    │   │   └── scripts
+    │   │       ├── acng.sh
+    │   │       ├── packages.sh
+    │   │       ├── sudo.sh
+    │   │       ├── updates.sh
+    │   │       └── users.sh
+    │   └── consul
+    │       ├── files
+    │       │   ├── consul.conf
+    │       │   ├── consul-template.conf
+    │       │   ├── hosts.ctmpl
+    │       │   └── purge_failed.sh
+    │       └── scripts
+    │           ├── client.sh
+    │           ├── server.sh
+    │           ├── template_hosts.sh
+    │           └── template.sh
+    └── roles
+        └── consul.sh
+</code></pre>
+
+<p>You can find the final scripts and structure <a href="https://github.com/jtopjian/waffles-infrastructure-guide/tree/consul">here</a>.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../../../resources/" class="btn btn-neutral float-right" title="Internals"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../intro/" class="btn btn-neutral" title="Intro"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../intro/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../../../resources/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+
+</body>
+</html>

@@ -35,5 +35,8 @@ pages:
     - 'Testing Waffles with Test Kitchen': 'guides/testing-with-test-kitchen.md'
     - 'Waffles and LXC': 'guides/waffles-and-lxc.md'
     - 'Waffles and Terraform': 'guides/waffles-and-terraform.md'
+  - Deploying Infrastructure Series:
+    - 'Intro': 'guides/infra/intro.md'
+    - 'Consul': 'guides/infra/consul.md'
   - Resources:
     - Internals: 'resources.md'

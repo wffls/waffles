@@ -160,6 +160,22 @@
     
         
     <url>
+     <loc>https://waffles.terrarum.net/guides/infra/intro/</loc>
+     <lastmod>2015-10-04</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>https://waffles.terrarum.net/guides/infra/consul/</loc>
+     <lastmod>2015-10-04</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    
+
+    
+        
+    <url>
      <loc>https://waffles.terrarum.net/resources/</loc>
      <lastmod>2015-10-04</lastmod>
      <changefreq>daily</changefreq>
