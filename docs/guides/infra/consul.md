@@ -19,7 +19,7 @@ $ mkdir -p terraform/consul/scripts
 Next, create a small bootstrap script for the Consul nodes that will be launched. Save this script as `terraform/consul/scripts/bootstrap.sh`:
 
 ```shell
-#!/bin/bash                                    
+#!/bin/bash
 
 cp /home/ubuntu/.ssh/authorized_keys /root/.ssh
 ```
@@ -391,9 +391,12 @@ The unique thing about this script is the use of polling the `TXT` file created 
 ```shell
 stdlib.title "consul/template"
 
-stdlib.directory --name /etc/consul/template --mode 750
-stdlib.directory --name /etc/consul/template/ctmpl --mode 750
-stdlib.directory --name /etc/consul/template/conf.d --mode 750
+_user="${data_user_info[consul|name]}"
+
+# Consul Template Directories
+stdlib.directory --name /etc/consul/template --owner $_user --group $_user --mode 750
+stdlib.directory --name /etc/consul/template/ctmpl --owner $_user --group $_user --mode 750
+stdlib.directory --name /etc/consul/template/conf.d --owner $_user --group $_user --mode 750
 stdlib.file --name /var/log/consul-template.log --owner root --group syslog --mode 640
 stdlib.file --name /etc/init/consul-template.conf --source "$WAFFLES_SITE_DIR/profiles/consul/files/consul-template.conf"
 
@@ -491,7 +494,7 @@ $ consul status
 Consul was setup in a way that restricts access to the key-value store to only nodes running Consul. Terraform provides a `consul_keys` resource that can store data from the Terraform configuration in Consul. Rather than installing Consul on your workstation, an alternative is to SSH into the Consul cluster and forward the port 8500. To do this, make a new task in the `Makefile` called `ctunnel`:
 
 ```makefile
-ctunnel:                                                        
+ctunnel:
   ssh -i keys/infra -L 8500:localhost:8500 consul.example.com
 ```
 
