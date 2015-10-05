@@ -768,7 +768,7 @@
 </code></pre>
 
 <p>Next, create a small bootstrap script for the Consul nodes that will be launched. Save this script as <code>terraform/consul/scripts/bootstrap.sh</code>:</p>
-<pre><code class="shell">#!/bin/bash                                    
+<pre><code class="shell">#!/bin/bash
 
 cp /home/ubuntu/.ssh/authorized_keys /root/.ssh
 </code></pre>
@@ -1100,9 +1100,12 @@ stdlib.upstart --name consul --state running
 <h4 id="templatesh">template.sh</h4>
 <pre><code class="shell">stdlib.title &quot;consul/template&quot;
 
-stdlib.directory --name /etc/consul/template --mode 750
-stdlib.directory --name /etc/consul/template/ctmpl --mode 750
-stdlib.directory --name /etc/consul/template/conf.d --mode 750
+_user=&quot;${data_user_info[consul|name]}&quot;
+
+# Consul Template Directories
+stdlib.directory --name /etc/consul/template --owner $_user --group $_user --mode 750
+stdlib.directory --name /etc/consul/template/ctmpl --owner $_user --group $_user --mode 750
+stdlib.directory --name /etc/consul/template/conf.d --owner $_user --group $_user --mode 750
 stdlib.file --name /var/log/consul-template.log --owner root --group syslog --mode 640
 stdlib.file --name /etc/init/consul-template.conf --source &quot;$WAFFLES_SITE_DIR/profiles/consul/files/consul-template.conf&quot;
 
@@ -1181,7 +1184,7 @@ $ consul status
 
 <h2 id="consul-key-value-storage">Consul Key-Value Storage</h2>
 <p>Consul was setup in a way that restricts access to the key-value store to only nodes running Consul. Terraform provides a <code>consul_keys</code> resource that can store data from the Terraform configuration in Consul. Rather than installing Consul on your workstation, an alternative is to SSH into the Consul cluster and forward the port 8500. To do this, make a new task in the <code>Makefile</code> called <code>ctunnel</code>:</p>
-<pre><code class="makefile">ctunnel:                                                        
+<pre><code class="makefile">ctunnel:
   ssh -i keys/infra -L 8500:localhost:8500 consul.example.com
 </code></pre>
 
