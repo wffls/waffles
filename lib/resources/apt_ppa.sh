@@ -44,7 +44,7 @@ function stdlib.apt_ppa {
 
 function stdlib.apt_ppa.read {
   local _repo_file_name="$(echo ${options[ppa]} | sed -e "s|[/:]|-|" -e "s|\.|_|")-*.list"
-  if [ -f "/etc/apt/sources.list.d/$_repo_file_name" ]; then
+  if [ -f /etc/apt/sources.list.d/$_repo_file_name ]; then
     stdlib_current_state="present"
     return
   fi
