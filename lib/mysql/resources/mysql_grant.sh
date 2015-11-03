@@ -35,12 +35,19 @@ function mysql.grant {
   # Local Variables
   local _name="'${options[user]}'@'${options[host]}'"
   local _grant
+  local _privileges
 
   # Internal Resource Configuration
-  if [[ ${options[database]} == "*" ]]; then
-    _grant="GRANT ${options[privileges]} ON *.* TO $_name"
+  if [[ "${options[privileges]}" == "ALL" ]]; then
+    _privileges="ALL PRIVILEGES"
   else
-    _grant="GRANT ${options[privileges]} ON \`${options[database]}\`.* TO $_name"
+    _privileges="${options[privileges]}"
+  fi
+
+  if [[ ${options[database]} == "*" ]]; then
+    _grant="GRANT $_privileges ON *.* TO $_name"
+  else
+    _grant="GRANT $_privileges ON \`${options[database]}\`.* TO $_name"
   fi
 
   # Process the resource
