@@ -19,8 +19,8 @@ function stdlib.resource.process {
     fi
 
     if [[ "${options[state]}" == "absent" ]] || [[ "${options[state]}" == "stopped" ]]; then
-      if [[ "$stdlib_current_state" != "absent" ]] && [[ "${options[state]}" != "stopped" ]]; then
-        stdlib.info "$_resource_name state: $stdlib_current_state, should be absent."
+      if [[ "$stdlib_current_state" != "absent" ]] && [[ "$stdlib_current_state" != "stopped" ]]; then
+        stdlib.info "$_resource_name state: $stdlib_current_state, should be ${options[state]}"
         stdlib.resource.delete
       fi
     else
@@ -29,8 +29,15 @@ function stdlib.resource.process {
           stdlib.info "$_resource_name state: absent, should be installed."
           stdlib.resource.create
           ;;
+        stopped)
+          stdlib.info "$_resource_name state: stopped, should be running."
+          stdlib.resource.create
+          ;;
         present)
           stdlib.debug "$_resource_name state: present."
+          ;;
+        running)
+          stdlib.debug "$_resource_name state: running."
           ;;
         update)
           stdlib.info "$_resource_name state: out of date."
