@@ -38,12 +38,12 @@ function stdlib.upstart.read {
   else
     local _status=$(status ${options[name]})
     if [[ $_status =~ "stop" ]]; then
-      stdlib_current_state="absent"
+      stdlib_current_state="stopped"
       return
     fi
   fi
 
-  stdlib_current_state="present"
+  stdlib_current_state="running"
 }
 
 function stdlib.upstart.create {
@@ -55,5 +55,5 @@ function stdlib.upstart.update {
 }
 
 function stdlib.upstart.delete {
-  stdlib.capture_error stop {$options[name]}
+  stdlib.capture_error stop ${options[name]}
 }
