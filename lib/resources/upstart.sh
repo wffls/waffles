@@ -33,11 +33,8 @@ function stdlib.upstart {
 function stdlib.upstart.read {
   if [[ ! -f "/etc/init/${options[name]}.conf" ]]; then
     stdlib.error "/etc/init/${options[name]}.conf does not exist."
-    if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
-      exit 1
-    else
-      return 1
-    fi
+    stdlib_current_state="error"
+    return
   else
     local _status=$(status ${options[name]})
     if [[ $_status =~ "stop" ]]; then

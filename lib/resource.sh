@@ -10,8 +10,16 @@ function stdlib.resource.process {
     stdlib.resource.read
 
     # Determine action based on state
-    if [[ ${options[state]} == "absent" ]]; then
-      if [[ $stdlib_current_state != "absent" ]]; then
+    if [[ "$stdlib_current_state" == "error" ]]; then
+      if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
+        exit 1
+      else
+        return 1
+      fi
+    fi
+
+    if [[ "${options[state]}" == "absent" ]] || [[ "${options[state]}" == "stopped" ]]; then
+      if [[ "$stdlib_current_state" != "absent" ]] && [[ "${options[state]}" != "stopped" ]]; then
         stdlib.info "$_resource_name state: $stdlib_current_state, should be absent."
         stdlib.resource.delete
       fi
@@ -27,13 +35,6 @@ function stdlib.resource.process {
         update)
           stdlib.info "$_resource_name state: out of date."
           stdlib.resource.update
-          ;;
-        error)
-          if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
-            exit 1
-          else
-            return 1
-          fi
           ;;
         *)
           "${_resource_type}.${stdlib_current_state}"
