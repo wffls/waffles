@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.19.0 - November 5, 2015
+
+* New Resource: `python.virtualenv`
+* New Resource: `python.pip`
+* Updated: Documentation
+* Updated: `mysql.grant` can use `ALL` as an alias for `ALL PRIVILEGES`.
+* Fixed: `stdlib.apt_ppa` state. Thanks @primeroz.
+* Fixed: Determining Upstart-based statuses.
+
 ## 0.18.0 - September 28, 2015
 
 * New Feature: Host Profile support. Can manage files for an individual host.
