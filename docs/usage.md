@@ -102,6 +102,7 @@ Profiles have a standard structure to them:
 
 ```shell
 site/profiles/consul/
+├── data.sh
 ├── files
 │   └── consul.conf
 └── scripts
@@ -109,7 +110,7 @@ site/profiles/consul/
     └── server.sh
 ```
 
-Static files go under `files` while scripts go under `scripts`.
+Static files go under `files` while scripts go under `scripts`. Profile-specific data can be stored in `data.sh`
 
 !!! Note
     When using the `stdlib.file` resource, you can use the `--source` option to copy files to their destination. The `--source` option is able to reference any file on the system. It's recommended to use `$WAFFLES_SITE_DIR/profiles/profile_name/files/file.conf` when "sourcing" a file.
@@ -122,6 +123,13 @@ stdlib.profile common/packages => site/profiles/common/scripts/packages.sh
 stdlib.profile memcached       => site/profiles/memcached/scripts/init.sh
 stdlib.profile memcached/utils => site/profiles/memcached/scripts/utils.sh
 ```
+
+### Profile Data
+
+Profile-specific data can be stored in `profile_name/data.sh`. This enables data unique to the profile to be bundled within the profile and stored in a repository outside of `$WAFFLES_SITE_DIR`.
+
+!!! Warning
+    Profile data is sourced when the profile is applied. This means that profile data can override or overwrite previously declared data that uses the same name. It is not possible to source profile data at the beginning of the role like with `stdlib.data`.
 
 ### Git Profiles
 
