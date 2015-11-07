@@ -152,6 +152,25 @@ A simple function that takes a command as input, prints the command, and then ex
 stdlib.exec apt-get update
 ```
 
+## stdlib.git_profile
+
+stdlib.git_profile will check a profile out from a git repository. It will be ignored if running in REMOTE mode, so repositories are only created when Waffles is run locally.
+
+stdlib.git_profile repositories must be named:
+
+```shell
+waffles-profile-$profile_name
+```
+
+stdlib.git_profiles must follow the following syntax:
+
+```
+stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack
+stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack branch dev
+stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack tag 0.5.1
+stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack commit 023a83
+```
+
 ## stdlib.hash_keys
 
 Returns the keys of a hash / associative array.

@@ -199,6 +199,52 @@ function stdlib.profile {
   fi
 }
 
+# stdlib.git_profile will check a profile out from a git repository.
+# It will be ignored if running in REMOTE mode,
+# so repositories are only created when Waffles is run locally.
+#
+# stdlib.git_profile repositories must be named:
+#
+#   waffles-profile-$profile_name
+#
+# stdlib.git_profiles must follow the following syntax:
+#
+#   stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack
+#   stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack branch dev
+#   stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack tag 0.5.1
+#   stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack commit 023a83
+function stdlib.git_profile {
+  # Only act if Waffles is being run locally
+  if [[ -z $WAFFLES_REMOTE ]]; then
+    if [[ $# -gt 0 ]]; then
+      stdlib.split "$1" "/"
+      stdlib.array_pop __split _repo_name
+      stdlib.split "$_repo_name" "-"
+      stdlib.array_pop __split _profile
+      stdlib.debug "git profile repo: $_repo_name"
+      stdlib.debug "git profile profile name: $_profile"
+      if [[ $# -eq 1 ]]; then
+        stdlib.git --state latest --name "$WAFFLES_SITE_DIR/profiles/$_profile" --source "$1"
+      elif [[ $# -eq 3 ]]; then
+        case "$2" in
+          branch)
+            stdlib.git --state latest --name "$WAFFLES_SITE_DIR/profiles/$_profile" --branch "$3" --source "$1"
+            ;;
+          tag)
+            stdlib.git --name "$WAFFLES_SITE_DIR/profiles/$_profile" --tag "$3" --source "$1"
+            ;;
+          commit)
+            stdlib.git --name "$WAFFLES_SITE_DIR/profiles/$_profile" --commit "$3" --source "$1"
+            ;;
+          *)
+            stdlib.git --state latest --name "$WAFFLES_SITE_DIR/profiles/$_profile" --source "$1"
+            ;;
+        esac
+      fi
+    fi
+  fi
+}
+
 # stdlib.data is a shortcut to source data in "$WAFFLES_SITE_DIR/data"
 function stdlib.data {
   if [[ $# -gt 0 ]]; then
