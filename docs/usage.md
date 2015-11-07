@@ -123,9 +123,36 @@ stdlib.profile memcached       => site/profiles/memcached/scripts/init.sh
 stdlib.profile memcached/utils => site/profiles/memcached/scripts/utils.sh
 ```
 
+### Git Profiles
+
+Waffles supports the ability to store profiles in a git repository. To use this feature, include the following in the role:
+
+```shell
+stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack branch dev
+```
+
+This will clone https://github.com/jtopjian/waffles-profile-openstack as `$WAFFLES_SITE_DIR/profiles/openstack` with the `dev` branch checked out.
+
+Once the above is declared, profile scripts can be referenced like normal:
+
+```shell
+stdlib.profile openstack/keystone
+```
+
+Profile names are based on the repository name. Waffles will split the repository name by dashes (`-`) and use the last portion of the name.
+
+`stdlib.git_profile` has the following syntax:
+
+```
+stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack
+stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack branch dev
+stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack tag 0.5.1
+stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack commit 023a83
+```
+
 ### The Hosts Profile
 
-Waffles supports an optional special profile called `host_files`, located at `site/profiles/host_files`. The purpose of this profile is to provide a designated area where files and scripts specific to individual hosts can be stored. This is beneficial because, normally, the entire profile is copied to each node that uses the profile. If you are storing files such as SSL certs in a profile, all SSL certs would be then copied to all hosts that share use the profile. This is probably not the intended behavior.
+Waffles supports an optional special profile called `host_files`, located at `site/profiles/host_files`. The purpose of this profile is to provide an area where files and scripts specific to individual hosts can be stored. This is beneficial because, normally, the entire profile is copied to each node that uses the profile. If you are storing files such as SSL certs in a profile, all SSL certs would be then copied to all hosts that share the profile.
 
 The `host_files` profile has the following structure:
 
