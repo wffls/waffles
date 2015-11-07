@@ -1,4 +1,4 @@
-source ../lib/system.sh
+source ../lib/stdlib/system.sh
 
 stdlib.info "stdlib.split"
 stdlib.info "single-character"
