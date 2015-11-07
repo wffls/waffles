@@ -190,7 +190,13 @@ function stdlib.profile {
       if [[ -n $WAFFLES_REMOTE ]]; then
         stdlib_remote_copy[profiles/$_profile]=1
       elif [[ -n $_script_path ]]; then
-        stdlib.debug "Running: $_script_path"
+        stdlib.debug "Applying Profile: $_profile"
+        # Check for profile data
+        if [[ -f "$WAFFLES_SITE_DIR/profiles/$_profile/data.sh" ]]; then
+          stdlib.debug "Found Profile data for $_profile"
+          stdlib.include "$WAFFLES_SITE_DIR/profiles/$_profile/data.sh"
+        fi
+        stdlib.debug "Running Profile script: $_script_path"
         stdlib.include "$_script_path"
       fi
     else
