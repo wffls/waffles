@@ -86,6 +86,19 @@
         
             <ul>
             
+                <li class="toctree-l3"><a href="#how-to-use-waffles">How to Use Waffles</a></li>
+                
+                    <li><a class="toctree-l4" href="#the-site-directory">The "site" directory</a></li>
+                
+                    <li><a class="toctree-l4" href="#data">Data</a></li>
+                
+                    <li><a class="toctree-l4" href="#profiles">Profiles</a></li>
+                
+                    <li><a class="toctree-l4" href="#roles">Roles</a></li>
+                
+                    <li><a class="toctree-l4" href="#applying-roles">Applying Roles</a></li>
+                
+            
             </ul>
         
     </li>
@@ -732,6 +745,8 @@
 </li>
 <li><a href="#profiles">Profiles</a><ul>
 <li><a href="#profile-structure">Profile Structure</a></li>
+<li><a href="#profile-data">Profile Data</a></li>
+<li><a href="#git-profiles">Git Profiles</a></li>
 <li><a href="#the-hosts-profile">The Hosts Profile</a></li>
 </ul>
 </li>
@@ -826,6 +841,7 @@ stdlib.data memcached
 <h3 id="profile-structure">Profile Structure</h3>
 <p>Profiles have a standard structure to them:</p>
 <pre><code class="shell">site/profiles/consul/
+├── data.sh
 ├── files
 │   └── consul.conf
 └── scripts
@@ -833,7 +849,7 @@ stdlib.data memcached
     └── server.sh
 </code></pre>
 
-<p>Static files go under <code>files</code> while scripts go under <code>scripts</code>.</p>
+<p>Static files go under <code>files</code> while scripts go under <code>scripts</code>. Profile-specific data can be stored in <code>data.sh</code></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>When using the <code>stdlib.file</code> resource, you can use the <code>--source</code> option to copy files to their destination. The <code>--source</code> option is able to reference any file on the system. It's recommended to use <code>$WAFFLES_SITE_DIR/profiles/profile_name/files/file.conf</code> when "sourcing" a file.</p>
@@ -845,8 +861,33 @@ stdlib.profile memcached       =&gt; site/profiles/memcached/scripts/init.sh
 stdlib.profile memcached/utils =&gt; site/profiles/memcached/scripts/utils.sh
 </code></pre>
 
+<h3 id="profile-data">Profile Data</h3>
+<p>Profile-specific data can be stored in <code>profile_name/data.sh</code>. This enables data unique to the profile to be bundled within the profile and stored in a repository outside of <code>$WAFFLES_SITE_DIR</code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Profile data is sourced when the profile is applied. This means that profile data can override or overwrite previously declared data that uses the same name. It is not possible to source profile data at the beginning of the role like with <code>stdlib.data</code>.</p>
+</div>
+<h3 id="git-profiles">Git Profiles</h3>
+<p>Waffles supports the ability to store profiles in a git repository. To use this feature, include the following in the role:</p>
+<pre><code class="shell">stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack branch dev
+</code></pre>
+
+<p>This will clone https://github.com/jtopjian/waffles-profile-openstack as <code>$WAFFLES_SITE_DIR/profiles/openstack</code> with the <code>dev</code> branch checked out.</p>
+<p>Once the above is declared, profile scripts can be referenced like normal:</p>
+<pre><code class="shell">stdlib.profile openstack/keystone
+</code></pre>
+
+<p>Profile names are based on the repository name. Waffles will split the repository name by dashes (<code>-</code>) and use the last portion of the name.</p>
+<p><code>stdlib.git_profile</code> has the following syntax:</p>
+<pre><code>stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack
+stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack branch dev
+stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack tag 0.5.1
+stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack commit 023a83
+</code></pre>
+
+<p>In addition to <code>stdlib.git_profile</code>, there is <code>stdlib.git_profile_push</code> which works the same way as <code>stdlib.git_profile</code>, but the repository is downloaded on the Waffles "server" and then pushed to the remote node. This is useful in cases when the nodes do not have direct access to the git repository.</p>
 <h3 id="the-hosts-profile">The Hosts Profile</h3>
-<p>Waffles supports an optional special profile called <code>host_files</code>, located at <code>site/profiles/host_files</code>. The purpose of this profile is to provide a designated area where files and scripts specific to individual hosts can be stored. This is beneficial because, normally, the entire profile is copied to each node that uses the profile. If you are storing files such as SSL certs in a profile, all SSL certs would be then copied to all hosts that share use the profile. This is probably not the intended behavior.</p>
+<p>Waffles supports an optional special profile called <code>host_files</code>, located at <code>site/profiles/host_files</code>. The purpose of this profile is to provide an area where files and scripts specific to individual hosts can be stored. This is beneficial because, normally, the entire profile is copied to each node that uses the profile. If you are storing files such as SSL certs in a profile, all SSL certs would be then copied to all hosts that share the profile.</p>
 <p>The <code>host_files</code> profile has the following structure:</p>
 <pre><code class="shell">site/profiles/host_files/
 ├── mysql-01

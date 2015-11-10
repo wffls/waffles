@@ -112,6 +112,67 @@
         
             <ul>
             
+                <li class="toctree-l3"><a href="#system-functions">System Functions</a></li>
+                
+                    <li><a class="toctree-l4" href="#stdlibarray_contains">stdlib.array_contains</a></li>
+                
+                    <li><a class="toctree-l4" href="#stdlibarray_join">stdlib.array_join</a></li>
+                
+                    <li><a class="toctree-l4" href="#stdlibarray_length">stdlib.array_length</a></li>
+                
+                    <li><a class="toctree-l4" href="#stdlibarray_pop">stdlib.array_pop</a></li>
+                
+                    <li><a class="toctree-l4" href="#stdlibarray_push">stdlib.array_push</a></li>
+                
+                    <li><a class="toctree-l4" href="#stdlibarray_shift">stdlib.array_shift</a></li>
+                
+                    <li><a class="toctree-l4" href="#stdlibarray_unshift">stdlib.array_unshift</a></li>
+                
+                    <li><a class="toctree-l4" href="#stdlibcapture_error">stdlib.capture_error</a></li>
+                
+                    <li><a class="toctree-l4" href="#stdlibcommand_exists">stdlib.command_exists</a></li>
+                
+                    <li><a class="toctree-l4" href="#stdlibdata">stdlib.data</a></li>
+                
+                    <li><a class="toctree-l4" href="#stdlibdebug">stdlib.debug</a></li>
+                
+                    <li><a class="toctree-l4" href="#stdlibdebug_1">stdlib.debug?</a></li>
+                
+                    <li><a class="toctree-l4" href="#stdlibdebug_mute">stdlib.debug_mute</a></li>
+                
+                    <li><a class="toctree-l4" href="#stdlibdir">stdlib.dir</a></li>
+                
+                    <li><a class="toctree-l4" href="#stdliberror">stdlib.error</a></li>
+                
+                    <li><a class="toctree-l4" href="#stdlibexec">stdlib.exec</a></li>
+                
+                    <li><a class="toctree-l4" href="#stdlibgit_profile">stdlib.git_profile</a></li>
+                
+                    <li><a class="toctree-l4" href="#stdlibgit_profile_push">stdlib.git_profile_push</a></li>
+                
+                    <li><a class="toctree-l4" href="#stdlibhash_keys">stdlib.hash_keys</a></li>
+                
+                    <li><a class="toctree-l4" href="#stdlibinclude">stdlib.include</a></li>
+                
+                    <li><a class="toctree-l4" href="#stdlibinfo">stdlib.info</a></li>
+                
+                    <li><a class="toctree-l4" href="#stdlibmute">stdlib.mute</a></li>
+                
+                    <li><a class="toctree-l4" href="#stdlibnoop">stdlib.noop?</a></li>
+                
+                    <li><a class="toctree-l4" href="#stdlibprofile">stdlib.profile</a></li>
+                
+                    <li><a class="toctree-l4" href="#stdlibsplit">stdlib.split</a></li>
+                
+                    <li><a class="toctree-l4" href="#stdlibsubtitle">stdlib.subtitle</a></li>
+                
+                    <li><a class="toctree-l4" href="#stdlibtitle">stdlib.title</a></li>
+                
+                    <li><a class="toctree-l4" href="#stdlibtrim">stdlib.trim</a></li>
+                
+                    <li><a class="toctree-l4" href="#stdlibwarn">stdlib.warn</a></li>
+                
+            
             </ul>
         
     </li>
@@ -744,6 +805,8 @@
 <li><a href="#stdlibdir">stdlib.dir</a></li>
 <li><a href="#stdliberror">stdlib.error</a></li>
 <li><a href="#stdlibexec">stdlib.exec</a></li>
+<li><a href="#stdlibgit_profile">stdlib.git_profile</a></li>
+<li><a href="#stdlibgit_profile_push">stdlib.git_profile_push</a></li>
 <li><a href="#stdlibhash_keys">stdlib.hash_keys</a></li>
 <li><a href="#stdlibinclude">stdlib.include</a></li>
 <li><a href="#stdlibinfo">stdlib.info</a></li>
@@ -860,6 +923,21 @@ fi
 <pre><code class="shell">stdlib.exec apt-get update
 </code></pre>
 
+<h2 id="stdlibgit_profile">stdlib.git_profile</h2>
+<p>stdlib.git_profile will check a profile out from a git repository. It will be ignored if running in REMOTE mode, so repositories are only created when Waffles is run locally.</p>
+<p>stdlib.git_profile repositories must be named:</p>
+<pre><code class="shell">waffles-profile-$profile_name
+</code></pre>
+
+<p>stdlib.git_profiles must follow the following syntax:</p>
+<pre><code>stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack
+stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack branch dev
+stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack tag 0.5.1
+stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack commit 023a83
+</code></pre>
+
+<h2 id="stdlibgit_profile_push">stdlib.git_profile_push</h2>
+<p>Works the same way as stdlib.git_profile, but the git repository is downloaded on the Waffles "server" and pushed to the node. This is useful in cases when the nodes do not have direct access to the git repository.</p>
 <h2 id="stdlibhash_keys">stdlib.hash_keys</h2>
 <p>Returns the keys of a hash / associative array.</p>
 <pre><code class="shell">declare -A foo=(
