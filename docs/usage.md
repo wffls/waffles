@@ -158,6 +158,8 @@ stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack tag 0.5
 stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack commit 023a83
 ```
 
+In addition to `stdlib.git_profile`, there is `stdlib.git_profile_push` which works the same way as `stdlib.git_profile`, but the repository is downloaded on the Waffles "server" and then pushed to the remote node. This is useful in cases when the nodes do not have direct access to the git repository.
+
 ### The Hosts Profile
 
 Waffles supports an optional special profile called `host_files`, located at `site/profiles/host_files`. The purpose of this profile is to provide an area where files and scripts specific to individual hosts can be stored. This is beneficial because, normally, the entire profile is copied to each node that uses the profile. If you are storing files such as SSL certs in a profile, all SSL certs would be then copied to all hosts that share the profile.

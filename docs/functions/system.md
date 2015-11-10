@@ -171,6 +171,10 @@ stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack tag 0.5
 stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack commit 023a83
 ```
 
+## stdlib.git_profile_push
+
+Works the same way as stdlib.git_profile, but the git repository is downloaded on the Waffles "server" and pushed to the node. This is useful in cases when the nodes do not have direct access to the git repository.
+
 ## stdlib.hash_keys
 
 Returns the keys of a hash / associative array.

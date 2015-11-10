@@ -251,6 +251,47 @@ function stdlib.git_profile {
   fi
 }
 
+# stdlib.git_profile_push works just like stdlib.git_profile,
+# but the git repository is downloaded on the Waffles "server" and pushed to the node.
+# This is useful in cases when the nodes do not have direct access to the git repository.
+function stdlib.git_profile_push {
+  # Only act if Waffles is being run in REMOTE mode
+  if [[ -n $WAFFLES_REMOTE ]]; then
+    if [[ $# -gt 0 ]]; then
+      stdlib.split "$1" "/"
+      stdlib.array_pop __split _repo_name
+      stdlib.split "$_repo_name" "-"
+      stdlib.array_pop __split _profile
+      stdlib.debug "git profile repo: $_repo_name"
+      stdlib.debug "git profile profile name: $_profile"
+
+      # Create and manage a local cache directory for the git repository
+      _whoami=$(id -un)
+      _cache_dir="$WAFFLES_SITE_DIR/.gitcache/roles/$role/profiles"
+      stdlib.directory --name "$_cache_dir" --owner $_whoami --group $_whoami --parent true
+      if [[ $# -eq 1 ]]; then
+        stdlib.git --state latest --name "$_cache_dir/$_profile" --source "$1"
+      elif [[ $# -eq 3 ]]; then
+        case "$2" in
+          branch)
+            stdlib.git --state latest --name "$_cache_dir/$_profile" --branch "$3" --source "$1"
+            ;;
+          tag)
+            stdlib.git --name "$_cache_dir/$_profile" --tag "$3" --source "$1"
+            ;;
+          commit)
+            stdlib.git --name "$_cache_dir/$_profile" --commit "$3" --source "$1"
+            ;;
+          *)
+            stdlib.git --state latest --name "$_cache_dir/$_profile" --source "$1"
+            ;;
+        esac
+        stdlib_remote_copy[$_cache_dir/$_profile]=1
+      fi
+    fi
+  fi
+}
+
 # stdlib.data is a shortcut to source data in "$WAFFLES_SITE_DIR/data"
 function stdlib.data {
   if [[ $# -gt 0 ]]; then
