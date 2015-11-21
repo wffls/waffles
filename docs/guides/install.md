@@ -18,6 +18,7 @@ $ cd .waffles
 * Create a data file:
 
 ```shell
+$ mkdir site/data
 $ cat > site/data/memcached.sh <<EOF
 data_memcached_interface="0.0.0.0"
 EOF
@@ -26,8 +27,9 @@ EOF
 * Create a profile:
 
 ```shell
+$ mkdir -p site/profiles/memcached/scripts
 $ cat > site/profiles/memcached/scripts/server.sh <<EOF
-stdlib.title site/profiles/memcached/server
+stdlib.title memcached/server
 stdlib.apt --package memcached --version latest
 stdlib.file_line --name memcached.conf/listen --file /etc/memcached.conf --line "-l $data_memcached_server_listen" --match "^-l"
 stdlib.sysvinit --name memcached
@@ -40,6 +42,7 @@ fi
 * Create a role:
 
 ```shell
+$ mkdir site/roles
 $ cat > site/roles/memcached.sh <<EOF
 stdlib.data memcached
 stdlib.profile memcached/server
