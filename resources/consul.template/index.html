@@ -238,28 +238,6 @@
           
             <li>
     <ul class="subnav">
-    <li><span>Deploying Infrastructure Series</span></li>
-
-        
-            
-    <li class="toctree-l1 ">
-        <a class="" href="../../guides/infra/intro/">Intro</a>
-        
-    </li>
-
-        
-            
-    <li class="toctree-l1 ">
-        <a class="" href="../../guides/infra/consul/">Consul</a>
-        
-    </li>
-
-        
-    </ul>
-<li>
-          
-            <li>
-    <ul class="subnav">
     <li><span>Resources</span></li>
 
         
@@ -739,7 +717,7 @@
 <ul>
 <li>state: The state of the resource. Required. Default: present.</li>
 <li>name: The name of the template. Required. namevar.</li>
-<li>source: The source of the template. Optional. Defaults to /etc/consul/template/tpl/name.tpl</li>
+<li>source: The source of the template. Optional. Defaults to /etc/consul/template/ctmpl/name.ctmpl</li>
 <li>destination: The destination of the rendered template. Required.</li>
 <li>command: An optional command to run after the template is rendered. Optional.</li>
 <li>file: The file to store the template in. Required. Defaults to /etc/consul/template/conf.d/name.json</li>

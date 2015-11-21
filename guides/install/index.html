@@ -251,28 +251,6 @@
           
             <li>
     <ul class="subnav">
-    <li><span>Deploying Infrastructure Series</span></li>
-
-        
-            
-    <li class="toctree-l1 ">
-        <a class="" href="../infra/intro/">Intro</a>
-        
-    </li>
-
-        
-            
-    <li class="toctree-l1 ">
-        <a class="" href="../infra/consul/">Consul</a>
-        
-    </li>
-
-        
-    </ul>
-<li>
-          
-            <li>
-    <ul class="subnav">
     <li><span>Resources</span></li>
 
         
@@ -752,7 +730,8 @@ $ cd .waffles
 <ul>
 <li>Create a data file:</li>
 </ul>
-<pre><code class="shell">$ cat &gt; site/data/memcached.sh &lt;&lt;EOF
+<pre><code class="shell">$ mkdir site/data
+$ cat &gt; site/data/memcached.sh &lt;&lt;EOF
 data_memcached_interface=&quot;0.0.0.0&quot;
 EOF
 </code></pre>
@@ -760,8 +739,9 @@ EOF
 <ul>
 <li>Create a profile:</li>
 </ul>
-<pre><code class="shell">$ cat &gt; site/profiles/memcached/scripts/server.sh &lt;&lt;EOF
-stdlib.title site/profiles/memcached/server
+<pre><code class="shell">$ mkdir -p site/profiles/memcached/scripts
+$ cat &gt; site/profiles/memcached/scripts/server.sh &lt;&lt;EOF
+stdlib.title memcached/server
 stdlib.apt --package memcached --version latest
 stdlib.file_line --name memcached.conf/listen --file /etc/memcached.conf --line &quot;-l $data_memcached_server_listen&quot; --match &quot;^-l&quot;
 stdlib.sysvinit --name memcached
@@ -774,7 +754,8 @@ fi
 <ul>
 <li>Create a role:</li>
 </ul>
-<pre><code class="shell">$ cat &gt; site/roles/memcached.sh &lt;&lt;EOF
+<pre><code class="shell">$ mkdir site/roles
+$ cat &gt; site/roles/memcached.sh &lt;&lt;EOF
 stdlib.data memcached
 stdlib.profile memcached/server
 </code></pre>
