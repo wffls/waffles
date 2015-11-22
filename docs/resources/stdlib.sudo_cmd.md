@@ -14,6 +14,6 @@ Provides an easy way to give a user sudo access to a single command.
 ## Example
 
 ```shell
-sudo_cmd --user consul --command /usr/local/bin/consul_build_hosts_file.sh
+stdlib.sudo_cmd --user consul --command /usr/local/bin/consul_build_hosts_file.sh
 ```
 
