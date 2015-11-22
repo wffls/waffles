@@ -332,6 +332,18 @@ function stdlib.command_exists {
 }
 
 
+# stdlib.sudo_exec runs a command as another user via sudo
+# $1 = user
+# $@ = command
+function stdlib.sudo_exec {
+  if [[ $# -gt 1 ]]; then
+    local _user
+    stdlib.array_shift "$@" _user
+    stdlib.capture_error sudo -u "$_user" "$@"
+  fi
+}
+
+
 # String functions
 
 # stdlib.split splits a string

@@ -266,6 +266,14 @@ if [[ $stdlib_resource_change == true ]]; then
 fi
 ```
 
+## stdlib.sudo_exec
+
+Runs a command as another user via sudo:
+
+```shell
+stdlib.sudo_exec username tar xzvf foobar.tar.gz
+```
+
 ## stdlib.title
 
 Sets a title context. A title is a major section of Waffles being run; for example, a profile. You usually being profiles by setting a title:
