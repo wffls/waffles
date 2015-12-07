@@ -16,7 +16,7 @@
 # === Example
 #
 # ```shell
-# sudo_cmd --user consul --command /usr/local/bin/consul_build_hosts_file.sh
+# stdlib.sudo_cmd --user consul --command /usr/local/bin/consul_build_hosts_file.sh
 # ```
 #
 function stdlib.sudo_cmd {

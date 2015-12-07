@@ -27,14 +27,12 @@ function gendoc {
 
 cp mkdocs.yml.base ../../mkdocs.yml
 
-for file in $(find ../../lib/resources -name \*.sh | sort); do
-  _name="stdlib.$(basename $file | sed -e 's/\.sh//g')"
-  gendoc "$_name" "$file"
-done
-
-for category in apache augeas consul keepalived mysql nginx python rabbitmq; do
+for category in stdlib apache augeas consul keepalived mysql nginx python rabbitmq; do
   for file in $(find ../../lib/$category/resources -name \*.sh | sort); do
     _name="$(basename $file | sed -e 's/\.sh//g' -e "s/${category}_/${category}./")"
+    if [[ $category == "stdlib" ]]; then
+      _name="stdlib.$_name"
+    fi
     gendoc "$_name" "$file"
   done
 done

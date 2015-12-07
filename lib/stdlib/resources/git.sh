@@ -166,11 +166,11 @@ function stdlib.git.create {
   else
     stdlib.capture_error git checkout "${options[branch]}"
   fi
+  stdlib.debug_mute popd
+
 
   # Make sure the owner and group are corrent
   stdlib.capture_error chown -R $_uid:$_gid "${options[name]}"
-
-  stdlib.debug_mute popd
 }
 
 function stdlib.git.update {
@@ -196,10 +196,10 @@ function stdlib.git.update {
     stdlib.capture_error git checkout "${options[branch]}"
   fi
 
+  stdlib.debug_mute popd
+
   # Make sure the owner and group are corrent
   stdlib.capture_error chown -R $_uid:$_gid "${options[name]}"
-
-  stdlib.debug_mute popd
 }
 
 function stdlib.git.delete {

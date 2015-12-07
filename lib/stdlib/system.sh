@@ -190,11 +190,104 @@ function stdlib.profile {
       if [[ -n $WAFFLES_REMOTE ]]; then
         stdlib_remote_copy[profiles/$_profile]=1
       elif [[ -n $_script_path ]]; then
-        stdlib.debug "Running: $_script_path"
+        stdlib.debug "Applying Profile: $_profile"
+        # Check for profile data
+        if [[ -f "$WAFFLES_SITE_DIR/profiles/$_profile/data.sh" ]]; then
+          stdlib.debug "Found Profile data for $_profile"
+          stdlib.include "$WAFFLES_SITE_DIR/profiles/$_profile/data.sh"
+        fi
+        stdlib.debug "Running Profile script: $_script_path"
         stdlib.include "$_script_path"
       fi
     else
       stdlib.debug "Profile not found: $1"
+    fi
+  fi
+}
+
+# stdlib.git_profile will check a profile out from a git repository.
+# It will be ignored if running in REMOTE mode,
+# so repositories are only created when Waffles is run locally.
+#
+# stdlib.git_profile repositories must be named:
+#
+#   waffles-profile-$profile_name
+#
+# stdlib.git_profiles must follow the following syntax:
+#
+#   stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack
+#   stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack branch dev
+#   stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack tag 0.5.1
+#   stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack commit 023a83
+function stdlib.git_profile {
+  # Only act if Waffles is being run locally
+  if [[ -z $WAFFLES_REMOTE ]]; then
+    if [[ $# -gt 0 ]]; then
+      stdlib.split "$1" "/"
+      stdlib.array_pop __split _repo_name
+      stdlib.split "$_repo_name" "-"
+      stdlib.array_pop __split _profile
+      stdlib.debug "git profile repo: $_repo_name"
+      stdlib.debug "git profile profile name: $_profile"
+      if [[ $# -eq 1 ]]; then
+        stdlib.git --state latest --name "$WAFFLES_SITE_DIR/profiles/$_profile" --source "$1"
+      elif [[ $# -eq 3 ]]; then
+        case "$2" in
+          branch)
+            stdlib.git --state latest --name "$WAFFLES_SITE_DIR/profiles/$_profile" --branch "$3" --source "$1"
+            ;;
+          tag)
+            stdlib.git --name "$WAFFLES_SITE_DIR/profiles/$_profile" --tag "$3" --source "$1"
+            ;;
+          commit)
+            stdlib.git --name "$WAFFLES_SITE_DIR/profiles/$_profile" --commit "$3" --source "$1"
+            ;;
+          *)
+            stdlib.git --state latest --name "$WAFFLES_SITE_DIR/profiles/$_profile" --source "$1"
+            ;;
+        esac
+      fi
+    fi
+  fi
+}
+
+# stdlib.git_profile_push works just like stdlib.git_profile,
+# but the git repository is downloaded on the Waffles "server" and pushed to the node.
+# This is useful in cases when the nodes do not have direct access to the git repository.
+function stdlib.git_profile_push {
+  # Only act if Waffles is being run in REMOTE mode
+  if [[ -n $WAFFLES_REMOTE ]]; then
+    if [[ $# -gt 0 ]]; then
+      stdlib.split "$1" "/"
+      stdlib.array_pop __split _repo_name
+      stdlib.split "$_repo_name" "-"
+      stdlib.array_pop __split _profile
+      stdlib.debug "git profile repo: $_repo_name"
+      stdlib.debug "git profile profile name: $_profile"
+
+      # Create and manage a local cache directory for the git repository
+      _whoami=$(id -un)
+      _cache_dir="$WAFFLES_SITE_DIR/.gitcache/roles/$role/profiles"
+      stdlib.directory --name "$_cache_dir" --owner $_whoami --group $_whoami --parent true
+      if [[ $# -eq 1 ]]; then
+        stdlib.git --state latest --name "$_cache_dir/$_profile" --source "$1"
+      elif [[ $# -eq 3 ]]; then
+        case "$2" in
+          branch)
+            stdlib.git --state latest --name "$_cache_dir/$_profile" --branch "$3" --source "$1"
+            ;;
+          tag)
+            stdlib.git --name "$_cache_dir/$_profile" --tag "$3" --source "$1"
+            ;;
+          commit)
+            stdlib.git --name "$_cache_dir/$_profile" --commit "$3" --source "$1"
+            ;;
+          *)
+            stdlib.git --state latest --name "$_cache_dir/$_profile" --source "$1"
+            ;;
+        esac
+        stdlib_remote_copy[$_cache_dir/$_profile]=1
+      fi
     fi
   fi
 }
@@ -236,6 +329,18 @@ function stdlib.data {
 # stdlib.command_exists is a simple alias for `which`
 function stdlib.command_exists {
   which $1 &>/dev/null
+}
+
+
+# stdlib.sudo_exec runs a command as another user via sudo
+# $1 = user
+# $@ = command
+function stdlib.sudo_exec {
+  if [[ $# -gt 1 ]]; then
+    local _user
+    stdlib.array_shift "$@" _user
+    stdlib.capture_error sudo -u "$_user" "$@"
+  fi
 }
 
 

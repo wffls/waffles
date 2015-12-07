@@ -152,6 +152,29 @@ A simple function that takes a command as input, prints the command, and then ex
 stdlib.exec apt-get update
 ```
 
+## stdlib.git_profile
+
+stdlib.git_profile will check a profile out from a git repository. It will be ignored if running in REMOTE mode, so repositories are only created when Waffles is run locally.
+
+stdlib.git_profile repositories must be named:
+
+```shell
+waffles-profile-$profile_name
+```
+
+stdlib.git_profiles must follow the following syntax:
+
+```
+stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack
+stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack branch dev
+stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack tag 0.5.1
+stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack commit 023a83
+```
+
+## stdlib.git_profile_push
+
+Works the same way as stdlib.git_profile, but the git repository is downloaded on the Waffles "server" and pushed to the node. This is useful in cases when the nodes do not have direct access to the git repository.
+
 ## stdlib.hash_keys
 
 Returns the keys of a hash / associative array.
@@ -241,6 +264,14 @@ stdlib.apt --package cowsay
 if [[ $stdlib_resource_change == true ]]; then
   stdlib.info "The state of package cowsay changed"
 fi
+```
+
+## stdlib.sudo_exec
+
+Runs a command as another user via sudo:
+
+```shell
+stdlib.sudo_exec username tar xzvf foobar.tar.gz
 ```
 
 ## stdlib.title
