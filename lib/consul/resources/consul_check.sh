@@ -19,6 +19,9 @@
 # * interval: The interval to run the script. Optional.
 # * ttl: The TTL of the check. Optional.
 # * file: The file to store the check in. Required. Defaults to /etc/consul/agent/conf.d/check-name.json
+# * file_owner: The owner of the service file. Optional. Defaults to root.
+# * file_group: The group of the service file. Optional. Defaults to root.
+# * file_mode: The mode of the service file. Optional. Defaults to 0640
 #
 # === Example
 #
@@ -32,8 +35,8 @@
 function consul.check {
   stdlib.subtitle "consul.check"
 
-  if ! stdlib.command_exists augtool ; then
-    stdlib.error "Cannot find augtool."
+  if ! stdlib.command_exists jsed ; then
+    stdlib.error "Cannot find jsed"
     if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
       exit 1
     else
@@ -54,6 +57,9 @@ function consul.check {
   stdlib.options.create_option interval
   stdlib.options.create_option ttl
   stdlib.options.create_option file
+  stdlib.options.create_option    file_owner "root"
+  stdlib.options.create_option    file_group "root"
+  stdlib.options.create_option    file_mode  "640"
   stdlib.options.parse_options "$@"
 
   # Local Variables
@@ -79,69 +85,25 @@ function consul.check.read {
     return
   fi
 
-  # Check if simple options exist and match
-  for _o in "${_simple_options[@]}"; do
-    if [[ -n ${options[$_o]} ]]; then
-      _result=$(augeas.get --lens Json --file "$_file" --path "/dict/entry[. = 'check']/dict/entry[. = '$_o']/*[. = '${options[$_o]}']")
-      if [[ $_result == "absent" ]]; then
-        stdlib_current_state="update"
-        return
-      fi
-    fi
-  done
+  _check=$(consul.check.build_check)
+  _existing_md5=$(md5sum "$_file" | cut -d' ' -f1)
+  _new_md5=$(echo $_service | md5sum | cut -d' ' -f1)
 
-  # Check if check exist, if it's not of type ttl
-  if [[ ${options[type]} != "ttl" ]]; then
-    _result=$(augeas.get --lens Json --file "$_file" --path "/dict/entry[. = 'check']/dict/entry[. = '${options[type]}']/string[. = '${options[check]}']")
-    if [[ $_result == "absent" ]]; then
-      stdlib_current_state="update"
-      return
-    fi
-  fi
-
-  if [[ $stdlib_current_state == "update" ]]; then
+  if [[ "$_existing_md5" != "$_new_md5" ]]; then
+    stdlib_current_state="update"
     return
-  else
-    stdlib_current_state="present"
   fi
+
+  stdlib_current_state="present"
 }
 
 function consul.check.create {
-  local _result
-  local -a _augeas_commands=()
-
   if [[ ! -d $_dir ]]; then
     stdlib.capture_error mkdir -p "$_dir"
   fi
 
-  if [[ ! -f $_file ]]; then
-    stdlib.debug "Creating empty JSON file."
-    stdlib.mute "echo '{}' > $_file"
-    _augeas_commands+=("rm /files/${_file}/dict")
-  fi
-
-  # Create the check entry
-  _augeas_commands+=("set /files/${_file}/dict/entry 'check'")
-  _augeas_commands+=("touch /files/${_file}/dict/entry[. = 'check']/dict")
-
-  # Create the simple options
-  for _o in "${_simple_options[@]}"; do
-    if [[ -n ${options[$_o]} ]]; then
-      _augeas_commands+=("set /files/${_file}/dict/entry[. = 'check']/dict/entry[. = '$_o'] '$_o'")
-      _augeas_commands+=("set /files/${_file}/dict/entry[. = 'check']/dict/entry[. = '$_o']/string '${options[$_o]}'")
-    fi
-  done
-
-  # Add check
-  if [[ ${options[type]} != "ttl" ]]; then
-    _augeas_commands+=("set /files/${_file}/dict/entry[. = 'check']/dict/entry[. = '${options[type]}'] '${options[type]}'")
-    _augeas_commands+=("set /files/${_file}/dict/entry[. = 'check']/dict/entry[. = '${options[type]}']/string '${options[check]}'")
-  fi
-
-  _result=$(augeas.run --lens Json --file "$_file" "${_augeas_commands[@]}")
-  if [[ $_result =~ ^error ]]; then
-    stdlib.error "Error adding $_name with augeas: $_result"
-  fi
+  _check=$(consul.check.build_check)
+  stdlib.file --name "$_file" --content "$_service" --owner "${options[file_owner]}" --group "${options[file_group]}" --mode "${options[file_mode]}"
 }
 
 function consul.check.update {
@@ -150,13 +112,22 @@ function consul.check.update {
 }
 
 function consul.check.delete {
-  local _result
-  local -a _augeas_commands=()
+  stdlib.file -state absent --name "$_file"
+}
 
-  _augeas_commands+=("rm /files/${_file}/dict/entry[. = 'check']")
+function consul.check.build_check {
+  _check="{}"
 
-  _result=$(augeas.run --lens Json --file "$_file" "${_augeas_commands[@]}")
-  if [[ $_result =~ ^error ]]; then
-    stdlib.error "Error adding $_name with augeas: $_result"
+  # Build simple options
+  for _o in "${_simple_options[@]}"; do
+    if [[ -n ${options[$_o]} ]]; then
+      _check=$(echo "$_check" | jsed add object --path "check.${_o}" --value "${options[$_]}")
+    fi
+  done
+
+  if [[ ${options[type]} != "ttl" ]]; then
+    _check=$(echo  "$_check" | jsed add object --path check --key "${options[type]}" --value "${options[check]}")
   fi
+
+  echo "$_check"
 }

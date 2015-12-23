@@ -20,6 +20,9 @@
 # * check_interval: The interval to run the script. Optional. Multi-var.
 # * check_ttl: The TTL of the check. Optional. Multi-var.
 # * file: The file to store the service in. Required. Defaults to /etc/consul/agent/conf.d/service-name.json
+# * file_owner: The owner of the service file. Optional. Defaults to root.
+# * file_group: The group of the service file. Optional. Defaults to root.
+# * file_mode: The mode of the service file. Optional. Defaults to 0640
 #
 # === Example
 #
@@ -34,8 +37,8 @@
 function consul.service {
   stdlib.subtitle "consul.service"
 
-  if ! stdlib.command_exists augtool ; then
-    stdlib.error "Cannot find augtool."
+  if ! stdlib.command_exists jsed ; then
+    stdlib.error "Cannot find jsed"
     if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
       exit 1
     else
@@ -62,6 +65,9 @@ function consul.service {
   stdlib.options.create_mv_option check_interval
   stdlib.options.create_mv_option check_ttl
   stdlib.options.create_option    file
+  stdlib.options.create_option    file_owner "root"
+  stdlib.options.create_option    file_group "root"
+  stdlib.options.create_option    file_mode  "640"
   stdlib.options.parse_options "$@"
 
   # Local Variables
@@ -80,29 +86,6 @@ function consul.service {
 
   # Process the resource
   stdlib.resource.process "consul.service" "$_name"
-
-  consul.service.read
-  if [[ ${options[state]} == "absent" ]]; then
-    if [[ $stdlib_current_state != "absent" ]]; then
-      stdlib.info "$_name state: $stdlib_current_state, should be absent."
-      consul.service.delete
-    fi
-  else
-    case "$stdlib_current_state" in
-      absent)
-        stdlib.info "$_name state: absent, should be present."
-        consul.service.create
-        ;;
-      present)
-        stdlib.debug "$_name state: present."
-        ;;
-      update)
-        stdlib.info "$_name state: present, needs updated."
-        consul.service.delete
-        consul.service.create
-        ;;
-    esac
-  fi
 }
 
 function consul.service.read {
@@ -111,126 +94,26 @@ function consul.service.read {
     return
   fi
 
-  # Check if simple options exist and match
-  for _o in "${_simple_options[@]}"; do
-    if [[ -n ${options[$_o]} ]]; then
-      _result=$(augeas.get --lens Json --file "$_file" --path "/dict/entry[. = 'service']/dict/entry[. = '$_o']/*[. = '${options[$_o]}']")
-      if [[ $_result == "absent" ]]; then
-        stdlib_current_state="update"
-        return
-      fi
-    fi
-  done
+  _service=$(consul.service.build_service)
+  _existing_md5=$(md5sum "$_file" | cut -d' ' -f1)
+  _new_md5=$(echo $_service | md5sum | cut -d' ' -f1)
 
-  # Check if tags exist
-  for _t in "${tag[@]}"; do
-    _result=$(augeas.get --lens Json --file "$_file" --path "/dict/entry[. = 'service']/dict/entry[. = 'tags']/array/string[. = '$_t']")
-    if [[ $_result == "absent" ]]; then
-      stdlib_current_state="update"
-      return
-    fi
-  done
-
-  # Check if checks exist
-  _i=0
-  for _o in "${check[@]}"; do
-    _result=$(augeas.get --lens Json --file "$_file" --path "/dict/entry[. = 'service']/dict/entry[. = 'checks']/array/dict/entry[. = '${check_type[$_i]}']/*[. = '${check[$_i]}']")
-    if [[ $_result == "absent" ]]; then
-      stdlib_current_state="update"
-      return
-    fi
-
-    if [[ -n ${check_interval[$_i]} ]]; then
-      _result=$(augeas.get --lens Json --file "$_file" --path "/dict/entry[. = 'service']/dict/entry[. = 'checks']/array/dict/entry[. = 'interval']/*[. = '${check_interval[$_i]}']")
-      if [[ $_result == "absent" ]]; then
-        stdlib_current_state="update"
-        return
-      fi
-    fi
-
-    if [[ -n ${check_ttl[$_i]} ]]; then
-      _result=$(augeas.get --lens Json --file "$_file" --path "/dict/entry[. = 'service']/dict/entry[. = 'checks']/array/dict/entry[. = 'ttl']/*[. = '${check_ttl[$_i]}']")
-      if [[ $_result == "absent" ]]; then
-        stdlib_current_state="update"
-        return
-      fi
-    fi
-
-    _i=$(( _i+1 ))
-  done
-
-  if [[ $stdlib_current_state == "update" ]]; then
+  if [[ "$_existing_md5" != "$_new_md5" ]]; then
+    stdlib_current_state="update"
     return
-  else
-    stdlib_current_state="present"
   fi
+
+  stdlib_current_state="present"
 }
 
 function consul.service.create {
-  local _result
-  local -a _augeas_commands=()
-
   if [[ ! -d $_dir ]]; then
     stdlib.capture_error mkdir -p "$_dir"
   fi
 
-  if [[ ! -f $_file ]]; then
-    stdlib.debug "Creating empty JSON file."
-    stdlib.mute "echo '{}' > $_file"
-    _augeas_commands+=("rm /files/${_file}/dict")
-  fi
-
-  # Create the service entry
-  _augeas_commands+=("set /files/${_file}/dict/entry 'service'")
-  _augeas_commands+=("touch /files/${_file}/dict/entry[. = 'service']/dict")
-
-  # Create the simple options
-  for _o in "${_simple_options[@]}"; do
-    if [[ -n ${options[$_o]} ]]; then
-      local _type
-      if [[ $_o == "port" ]]; then
-        _type="number"
-      else
-        _type="string"
-      fi
-      _augeas_commands+=("set /files/${_file}/dict/entry[. = 'service']/dict/entry[. = '$_o'] '$_o'")
-      _augeas_commands+=("set /files/${_file}/dict/entry[. = 'service']/dict/entry[. = '$_o']/$_type '${options[$_o]}'")
-    fi
-  done
-
-  for _t in "${tag[@]}"; do
-    _augeas_commands+=("set /files/${_file}/dict/entry[. = 'service']/dict/entry[. = 'tags'] 'tags'")
-    _augeas_commands+=("touch /files/${_file}/dict/entry[. = 'service']/dict/entry[. = 'tags']/array")
-    _augeas_commands+=("set /files/${_file}/dict/entry[. = 'service']/dict/entry[. = 'tags']/array/string[0] '$_t'")
-  done
-
-  # Add checks
-  _i=0
-  _x=1
-  for _o in "${check[@]}"; do
-    _augeas_commands+=("set /files/${_file}/dict/entry[. = 'service']/dict/entry[. = 'checks'] 'checks'")
-    _augeas_commands+=("touch /files/${_file}/dict/entry[. = 'service']/dict/entry[. = 'checks']/array")
-    _augeas_commands+=("set /files/${_file}/dict/entry[. = 'service']/dict/entry[. = 'checks']/array/dict[$_x]/entry[. = '${check_type[$_i]}'] '${check_type[$_i]}'")
-    _augeas_commands+=("set /files/${_file}/dict/entry[. = 'service']/dict/entry[. = 'checks']/array/dict[$_x]/entry[. = '${check_type[$_i]}']/string '${check[$_i]}'")
-
-    if [[ -n ${check_interval[$_i]} ]]; then
-      _augeas_commands+=("set /files/${_file}/dict/entry[. = 'service']/dict/entry[. = 'checks']/array/dict[$_x]/entry[. = 'interval'] 'interval'")
-      _augeas_commands+=("set /files/${_file}/dict/entry[. = 'service']/dict/entry[. = 'checks']/array/dict[$_x]/entry[. = 'interval']/string '${check_interval[$_i]}'")
-    fi
-
-    if [[ -n ${check_ttl[$_i]} ]]; then
-      _augeas_commands+=("set /files/${_file}/dict/entry[. = 'service']/dict/entry[. = 'checks']/array/dict[$_x]/entry[. = 'ttl'] 'ttl'")
-      _augeas_commands+=("set /files/${_file}/dict/entry[. = 'service']/dict/entry[. = 'checks']/array/dict[$_x]/entry[. = 'ttl']/string '${check_ttl[$_i]}'")
-    fi
-
-    _i=$(( _i+1 ))
-    _x=$(( _x+1 ))
-  done
-
-  _result=$(augeas.run --lens Json --file "$_file" "${_augeas_commands[@]}")
-  if [[ $_result =~ ^error ]]; then
-    stdlib.error "Error adding $_name with augeas: $_result"
-  fi
+  _service=$(consul.service.build_service)
+  echo "$_service" > "$_file"
+  stdlib.file --name "$_file" --content "$_service" --owner "${options[file_owner]}" --group "${options[file_group]}" --mode "${options[file_mode]}"
 }
 
 function consul.service.update {
@@ -239,13 +122,50 @@ function consul.service.update {
 }
 
 function consul.service.delete {
-  local _result
-  local -a _augeas_commands=()
+  stdlib.capture_error rm "$_file"
+}
 
-  _augeas_commands+=("rm /files/${_file}/dict/entry[. = 'service']")
+function consul.service.build_service {
+  _service="{}"
 
-  _result=$(augeas.run --lens Json --file "$_file" "${_augeas_commands[@]}")
-  if [[ $_result =~ ^error ]]; then
-    stdlib.error "Error adding $_name with augeas: $_result"
+  # Build simple options
+  for _o in "${_simple_options[@]}"; do
+    if [[ -n ${options[$_o]} ]]; then
+      _service=$(echo "$_service" | jsed add object --path service --key "$_o" --value "${options[$_o]}")
+    fi
+  done
+
+  # Build tags
+  for _tag in "${tag[@]}"; do
+    _tags="$_tags --value $_tag"
+  done
+
+  if [[ -n $_tags ]]; then
+    _service=$(echo "$_service" | jsed add array --path service.tags $_tags)
   fi
+
+  # Build check(s)
+  _service=$(echo "$_service" | jsed add object --path service --key checks --value [])
+  _i=0
+  for _o in "${check[@]}"; do
+    _check="--key script --value ${check[$_i]}"
+
+    if  [[ -n ${check_interval[$_i]} ]]; then
+      _check="${_check} --key interval --value ${check_interval[$_i]}"
+    fi
+
+    if [[ -n ${check_ttl[$_i]} ]]; then
+      _check="${_check} --key ttl --value ${check_ttl[$_i]}"
+    fi
+
+    if [[ -n ${check_type[$_i]} ]]; then
+      _check="${_check} --key type --value ${check_type[$_i]}"
+    fi
+
+    _service=$(echo "$_service" | jsed add object --path service.checks $_check)
+
+    _i=$(( _i+1 ))
+  done
+
+  echo "$_service"
 }

@@ -22,6 +22,9 @@
 # * token: Can be provided to override the agent's default ACL token. Optional.
 # * handler: The handler to invoke when the data view updates. Required.
 # * file: The file to store the watch in. Required. Defaults to /etc/consul/agent/conf.d/watch-name.json
+# * file_owner: The owner of the service file. Optional. Defaults to root.
+# * file_group: The group of the service file. Optional. Defaults to root.
+# * file_mode: The mode of the service file. Optional. Defaults to 0640
 #
 # === Example
 #
@@ -34,8 +37,8 @@
 function consul.watch {
   stdlib.subtitle "consul.watch"
 
-  if ! stdlib.command_exists augtool ; then
-    stdlib.error "Cannot find augtool."
+  if ! stdlib.command_exists jsed ; then
+    stdlib.error "Cannot find jsed"
     if [[ -n "$WAFFLES_EXIT_ON_ERROR" ]]; then
       exit 1
     else
@@ -68,6 +71,9 @@ function consul.watch {
   stdlib.options.create_option check_state
   stdlib.options.create_option event_name
   stdlib.options.create_option file
+  stdlib.options.create_option file_owner "root"
+  stdlib.options.create_option file_group "root"
+  stdlib.options.create_option file_mode  "640"
   stdlib.options.parse_options "$@"
 
   # Local Variables
@@ -93,82 +99,25 @@ function consul.watch.read {
     return
   fi
 
-  # Check if simple options exist and match
-  for _o in "${_simple_options[@]}"; do
-    if [[ -n ${options[$_o]} ]]; then
-      _result=$(augeas.get --lens Json --file "$_file" --path "/dict/entry[. = 'watches']/array/dict/entry[. = '$_o']/*[. = '${options[$_o]}']")
-      if [[ $_result == "absent" ]]; then
-        stdlib_current_state="update"
-        return
-      fi
-    fi
-  done
+  _watch=$(consul.watch.build_watch)
+  _existing_md5=$(md5sum "$_file" | cut -d' ' -f1)
+  _new_md5=$(echo $_watch | md5sum | cut -d' ' -f1)
 
-  # check_state conflicts with "state" option, so we need to make a special check here
-  if [[ -n ${options[check_state]} ]]; then
-    _result=$(augeas.get --lens Json --file "$_file" --path "/dict/entry[. = 'watches']/array/dict/entry[. = 'state']/*[. = '${options[check_state]}']")
-    if [[ $_result == "absent" ]]; then
-      stdlib_current_state="update"
-      return
-    fi
-  fi
-
-  # event_name conflicts with "name" option, so we need to make a special check here
-  if [[ -n ${options[event_name]} ]]; then
-    _result=$(augeas.get --lens Json --file "$_file" --path "/dict/entry[. = 'watches']/array/dict/entry[. = 'name']/*[. = '${options[event_name]}']")
-    if [[ $_result == "absent" ]]; then
-      stdlib_current_state="update"
-      return
-    fi
-  fi
-
-  if [[ $stdlib_current_state == "update" ]]; then
+  if [[ "$_existing_md5" != "$_new_md5" ]]; then
+    stdlib_current_state="update"
     return
-  else
-    stdlib_current_state="present"
   fi
+
+  stdlib_current_state="present"
 }
 
 function consul.watch.create {
-  local _result
-  local -a _augeas_commands=()
-
   if [[ ! -d $_dir ]]; then
     stdlib.capture_error mkdir -p "$_dir"
   fi
 
-  if [[ ! -f $_file ]]; then
-    stdlib.debug "Creating empty JSON file."
-    stdlib.mute "echo '{}' > $_file"
-    _augeas_commands+=("rm /files/${_file}/dict")
-  fi
-
-  # Create the check entry
-  _augeas_commands+=("set /files/${_file}/dict/entry 'watches'")
-  _augeas_commands+=("touch /files/${_file}/dict/entry[. = 'watches']/array")
-
-  # Create the simple options
-  for _o in "${_simple_options[@]}"; do
-    if [[ -n ${options[$_o]} ]]; then
-      _augeas_commands+=("set /files/${_file}/dict/entry[. = 'watches']/array/dict/entry[. = '$_o'] '$_o'")
-      _augeas_commands+=("set /files/${_file}/dict/entry[. = 'watches']/array/dict/entry[. = '$_o']/string '${options[$_o]}'")
-    fi
-  done
-
-  if [[ -n ${options[check_state]} ]]; then
-    _augeas_commands+=("set /files/${_file}/dict/entry[. = 'watches']/array/dict/entry[. = 'state'] 'state'")
-    _augeas_commands+=("set /files/${_file}/dict/entry[. = 'watches']/array/dict/entry[. = 'state']/string '${options[check_state]}'")
-  fi
-
-  if [[ -n ${options[event_name]} ]]; then
-    _augeas_commands+=("set /files/${_file}/dict/entry[. = 'watches']/array/dict/entry[. = 'name'] 'name'")
-    _augeas_commands+=("set /files/${_file}/dict/entry[. = 'watches']/array/dict/entry[. = 'name']/string '${options[event_name]}'")
-  fi
-
-  _result=$(augeas.run --lens Json --file "$_file" "${_augeas_commands[@]}")
-  if [[ $_result =~ ^error ]]; then
-    stdlib.error "Error adding $_name with augeas: $_result"
-  fi
+  _watch=$(consul.watch.build_watch)
+  stdlib.file --name "$_file" --content "$_watch" --owner "${options[file_owner]}" --group "${options[file_group]}" --mode "${options[file_mode]}"
 }
 
 function consul.watch.update {
@@ -177,13 +126,31 @@ function consul.watch.update {
 }
 
 function consul.watch.delete {
-  local _result
-  local -a _augeas_commands=()
+  stdlib.file --state absent --name "$_file"
+}
 
-  _augeas_commands+=("rm /files/${_file}/dict")
+function consul.watch.build_watch {
+  _watch='{"watches":[]}'
+  _options=""
 
-  _result=$(augeas.run --lens Json --file "$_file" "${_augeas_commands[@]}")
-  if [[ $_result =~ ^error ]]; then
-    stdlib.error "Error adding $_name with augeas: $_result"
+  # Build simple options
+  for _o in "${_simple_options[@]}"; do
+    if [[ -n ${options[$_o]} ]]; then
+      _watch_options="${_options} --key '$_o' --value '${options[$_o]}'"
+    fi
+  done
+
+  _watch=$(echo "$_watch" | jsed add object --path watches "$_watch_options")
+
+  # check_state conflicts with "state" option, so we need to make a special check here
+  if [[ -n ${options[check_state]} ]]; then
+    _watch=$(echo "$_watch" | jsed add object --path watches.0.state --key "${options[check_state]}")
   fi
+
+  # event_name conflicts with "name" option, so we need to make a special check here
+  if [[ -n ${options[event_name]} ]]; then
+    _watch=$(echo "$_watch" | jsed add object --path watches.0.name --key "${options[event_name]}")
+  fi
+
+  echo "$_watch"
 }
