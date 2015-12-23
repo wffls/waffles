@@ -24,20 +24,20 @@ declare stdlib_color_reset='\e[0m'
 # These functions print colored lines
 function stdlib.debug {
   if stdlib.debug? ; then
-    echo -e "${stdlib_color_blue} ===> (debug) ${stdlib_title} ${stdlib_subtitle}${stdlib_color_reset} ${@}" >&2
+    echo -e "${stdlib_color_blue}(debug) ${stdlib_title}${stdlib_subtitle}${stdlib_color_reset}${@}" >&2
   fi
 }
 
 function stdlib.info {
-  echo -e "${stdlib_color_green} ===> (info)  ${stdlib_title} ${stdlib_subtitle}${stdlib_color_reset} ${@}"
+  echo -e "${stdlib_color_green}(info)  ${stdlib_title}${stdlib_subtitle}${stdlib_color_reset}${@}"
 }
 
 function stdlib.warn {
-  echo -e "${stdlib_color_yellow} ===> (warn)  ${stdlib_title} ${stdlib_subtitle}${stdlib_color_reset} ${@}"
+  echo -e "${stdlib_color_yellow}(warn)  ${stdlib_title}${stdlib_subtitle}${stdlib_color_reset}${@}"
 }
 
 function stdlib.error {
-  echo -e "${stdlib_color_red} ===> (error) ${stdlib_title} ${stdlib_subtitle}${stdlib_color_reset} ${@}" >&2
+  echo -e "${stdlib_color_red}(error) ${stdlib_title}${stdlib_subtitle}${stdlib_color_reset}${@}" >&2
 }
 
 
@@ -55,14 +55,18 @@ function stdlib.debug? {
 function stdlib.title {
   stdlib_title=""
   stdlib_subtitle=""
-  stdlib_title="$@"
+  if [[ -n $@ ]]; then
+    stdlib_title="$@ "
+  fi
   stdlib_state_change="false"
   stdlib_resource_change="false"
 }
 
 function stdlib.subtitle {
   stdlib_subtitle=""
-  stdlib_subtitle="$@"
+  if [[ -n $@ ]]; then
+    stdlib_subtitle="$@ "
+  fi
   stdlib_resource_change="false"
 }
 
@@ -190,12 +194,6 @@ function stdlib.profile {
       if [[ -n $WAFFLES_REMOTE ]]; then
         stdlib_remote_copy[profiles/$_profile]=1
       elif [[ -n $_script_path ]]; then
-        stdlib.debug "Applying Profile: $_profile"
-        # Check for profile data
-        if [[ -f "$WAFFLES_SITE_DIR/profiles/$_profile/data.sh" ]]; then
-          stdlib.debug "Found Profile data for $_profile"
-          stdlib.include "$WAFFLES_SITE_DIR/profiles/$_profile/data.sh"
-        fi
         stdlib.debug "Running Profile script: $_script_path"
         stdlib.include "$_script_path"
       fi
@@ -298,6 +296,7 @@ function stdlib.data {
     local _script_path
     local _data
     local _file
+    local _pdata
     if [[ $1 =~ [/] ]]; then
       stdlib.split "$1" '/'
       _data="${__split[0]}"
@@ -313,6 +312,17 @@ function stdlib.data {
       fi
     fi
 
+    # Check and see if the data file matches a profile with included data
+    # If so, and if Waffles is not being run in REMOTE mode, source it now
+    # so that data under $WAFFLES_SITE_DIR/data can overwrite it later.
+    if [[ -f "$WAFFLES_SITE_DIR/profiles/${1}/data.sh" ]]; then
+      _pdata=1
+      if [[ -z $WAFFLES_REMOTE ]]; then
+        stdlib.debug "Found Profile data for $1"
+        stdlib.include "$WAFFLES_SITE_DIR/profiles/$1/data.sh"
+      fi
+    fi
+
     if [[ -n $_data && -n $_script_path ]]; then
       if [[ -n $WAFFLES_REMOTE ]]; then
         stdlib_remote_copy[$_data]=1
@@ -320,7 +330,9 @@ function stdlib.data {
         stdlib.include "$_script_path"
       fi
     else
-      stdlib.warn "Data not found: $1"
+      if [[ -z $_pdata ]]; then
+        stdlib.warn "Data not found: $1"
+      fi
     fi
   fi
 }
@@ -342,7 +354,6 @@ function stdlib.sudo_exec {
     stdlib.capture_error sudo -u "$_user" "$@"
   fi
 }
-
 
 # String functions
 
@@ -518,5 +529,33 @@ function stdlib.hash_keys {
     local -n _keys="$2"
 
     _keys=(${!_hash[@]})
+  fi
+}
+
+# Convenience functions
+
+# stdlib.build_ini_file will build an ini file from a given hash
+# $1 = config hash
+# $2 = destination file
+#
+# Example hash:
+#
+#   declare -Ag data_openstack_keystone_settings
+#   data_openstack_keystone_settings=(
+#     [DEFAULT/verbose]="true"
+#     [DEFAULT/debug]="true"
+#   )
+function stdlib.build_ini_file {
+  if [[ $# -eq 2 ]]; then
+    local -n _config="$1"
+    local _file="$2"
+
+    for setting in "${!_config[@]}"; do
+      stdlib.split "$setting" "/"
+      section="${__split[0]}"
+      option="${__split[1]}"
+      value="${_config[$setting]}"
+      stdlib.ini --file "$_file" --section "$section" --option "$option" --value "$value"
+    done
   fi
 }
