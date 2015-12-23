@@ -14,11 +14,13 @@ function help {
   echo "  -r: role, stored in site/roles"
   echo "  -t: run in test mode. exit 1 if changes were made"
   echo
+  echo "  -c: (push) the number of times to retry connecting. Default: 5"
+  echo "  -k: (push) the ssh key to use. Default: ~/.ssh/id_rsa"
   echo "  -s: (push) remote server to connect to through SSH"
   echo "  -u: (push) the remote user to connect as through SSH. Default: root"
+  echo "  -w: (push) the amount of time in seconds to wait between retrying. Default: 5"
   echo "  -y: (push) whether or not to use sudo remotely. Default: false"
   echo "  -z: (push) the remote directory to copy Waffles to. Default: /etc/waffles"
-  echo "  -k: (push) the ssh key to use. Default: ~/.ssh/id_rsa"
   echo
   echo "Usage:"
   echo "  waffles.sh -r <role>: apply a role to the local server"
@@ -94,6 +96,27 @@ function apply_role_remotely {
     _remote_ssh_command="bash waffles.sh"
   fi
 
+  stdlib.debug "Testing connectivity to $_ssh_server"
+  _ssh_status=255
+  _attempt=0
+  while [[ $_ssh_status -ne 0 && $_attempt -lt $WAFFLES_REMOTE_SSH_ATTEMPTS ]]; do
+    _attempt=$(( _attempt+1 ))
+    stdlib.debug "Attempt $_attempt of $WAFFLES_REMOTE_SSH_ATTEMPTS."
+    stdlib.debug_mute ssh -i $WAFFLES_REMOTE_SSH_KEY $_ssh_server pwd
+    _ssh_status=$?
+    if [[ $_ssh_status -ne 0 ]]; then
+      if [[ $_attempt -lt $WAFFLES_REMOTE_SSH_ATTEMPTS ]]; then
+        stdlib.debug "Unable to connect. Waiting $WAFFLES_REMOTE_SSH_WAIT seconds."
+        sleep $WAFFLES_REMOTE_SSH_WAIT
+      fi
+    fi
+  done
+
+  if [[ $_ssh_status != 0 ]]; then
+    stdlib.error "Unable to connect to $_ssh_server. Exiting."
+    exit 1
+  fi
+
   stdlib.debug "Copying Waffles to remote server $_rsync_server"
   rsync -azv $_rsync_quiet -e "ssh -i $WAFFLES_REMOTE_SSH_KEY" --rsync-path="$_remote_rsync_path" --include='**/' --include='waffles.sh' --include='waffles.conf' --include='lib/**' --include="$WAFFLES_SITE_DIR/roles/${role}.sh" --exclude='*' --prune-empty-dirs $WAFFLES_DIR/ "$_rsync_server:$WAFFLES_REMOTE_DIR"
 
@@ -133,14 +156,20 @@ fi
 source "$WAFFLES_DIR/lib/init.sh"
 
 # Parse options
-while getopts :dhnr:s:tu:z:yk: opt; do
+while getopts :c:dhk:nr:s:tu:w:yz: opt; do
   case $opt in
+    c)
+      WAFFLES_REMOTE_SSH_ATTEMPTS="$OPTARG"
+      ;;
     d)
       WAFFLES_DEBUG=1
       ;;
     h)
       help
       exit 1
+      ;;
+    k)
+      WAFFLES_REMOTE_SSH_KEY="$OPTARG"
       ;;
     n)
       WAFFLES_NOOP=1
@@ -158,14 +187,14 @@ while getopts :dhnr:s:tu:z:yk: opt; do
     u)
       WAFFLES_SSH_USER="$OPTARG"
       ;;
-    z)
-      WAFFLES_REMOTE_DIR="$OPTARG"
+    w)
+      WAFFLES_REMOTE_SSH_WAIT="$OPTARG"
       ;;
     y)
       WAFFLES_REMOTE_SUDO="true"
       ;;
-    k)
-      WAFFLES_REMOTE_SSH_KEY="$OPTARG"
+    z)
+      WAFFLES_REMOTE_DIR="$OPTARG"
       ;;
     :)
       echo "Option -$OPTARG requires an argument." >&2
