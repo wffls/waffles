@@ -20,6 +20,9 @@ Manages a consul.watch.
 * token: Can be provided to override the agent's default ACL token. Optional.
 * handler: The handler to invoke when the data view updates. Required.
 * file: The file to store the watch in. Required. Defaults to /etc/consul/agent/conf.d/watch-name.json
+* file_owner: The owner of the service file. Optional. Defaults to root.
+* file_group: The group of the service file. Optional. Defaults to root.
+* file_mode: The mode of the service file. Optional. Defaults to 0640
 
 ## Example
 

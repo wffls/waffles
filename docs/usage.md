@@ -87,6 +87,26 @@ Finally, you can reference data from a previously declared data file. You can't,
 !!! Note
     See the [Referencing Data from Data](/guides/referencing-data-from-data) and [Overriding Data](/guides/override-data) Guides for more information.
 
+### Profile Data
+
+Profile-specific data can be stored in `profile_name/data.sh`. This enables data unique to the profile, but generic to the site, to be bundled within the profile and stored in a repository outside of `$WAFFLES_SITE_DIR`.
+
+To use profile data, simply declare it as you would with site data:
+
+```shell
+stdlib.data memcached
+```
+
+When both site and profile data exists, the site data will be referenced _first_. This means that you can create variables in the site data and use them in the profile data. This might seem counter-intuitive, but allows the ability to embed site-specific data into profile-wide data structures:
+
+```shell
+declare -Ag data_openstack_keystone_settings=(
+  [DEFAULT/admin_token]="$set_this_in_the_site_data.sh"
+  [DEFAULT/debug]="true"
+  [DEFAULT/verbose]="true"
+)
+```
+
 ## Profiles
 
 Profiles are small snippets of bash scripts stored under `site/profiles`. They are meant to be distinct units of work that accomplish a single task.
@@ -123,13 +143,6 @@ stdlib.profile common/packages => site/profiles/common/scripts/packages.sh
 stdlib.profile memcached       => site/profiles/memcached/scripts/init.sh
 stdlib.profile memcached/utils => site/profiles/memcached/scripts/utils.sh
 ```
-
-### Profile Data
-
-Profile-specific data can be stored in `profile_name/data.sh`. This enables data unique to the profile to be bundled within the profile and stored in a repository outside of `$WAFFLES_SITE_DIR`.
-
-!!! Warning
-    Profile data is sourced when the profile is applied. This means that profile data can override or overwrite previously declared data that uses the same name. It is not possible to source profile data at the beginning of the role like with `stdlib.data`.
 
 ### Git Profiles
 

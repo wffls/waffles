@@ -12,6 +12,9 @@ Manages a consul.template.
 * destination: The destination of the rendered template. Required.
 * command: An optional command to run after the template is rendered. Optional.
 * file: The file to store the template in. Required. Defaults to /etc/consul/template/conf.d/name.json
+* file_owner: The owner of the service file. Optional. Defaults to root.
+* file_group: The group of the service file. Optional. Defaults to root.
+* file_mode: The mode of the service file. Optional. Defaults to 0640
 
 ## Example
 
