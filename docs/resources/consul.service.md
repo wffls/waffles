@@ -18,6 +18,9 @@ Manages a consul service.
 * check_interval: The interval to run the script. Optional. Multi-var.
 * check_ttl: The TTL of the check. Optional. Multi-var.
 * file: The file to store the service in. Required. Defaults to /etc/consul/agent/conf.d/service-name.json
+* file_owner: The owner of the service file. Optional. Defaults to root.
+* file_group: The group of the service file. Optional. Defaults to root.
+* file_mode: The mode of the service file. Optional. Defaults to 0640
 
 ## Example
 

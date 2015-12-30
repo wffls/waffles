@@ -76,6 +76,14 @@ stdlib.array_unshift x a
 
 ```
 
+## stdlib.build_ini_file
+
+Builds an ini file from a given hash.
+
+```shell
+stdlib.build_ini_file data_openstack_keystone_settings /etc/keystone/keystone.conf
+```
+
 ## stdlib.capture_error
 
 Takes a command as input, prints the command, and detects if anything was written to `stderr`. If there was, the error is printed to `stderr` again, and if `WAFFLES_EXIT_ON_ERROR` is set, Waffles halts.
