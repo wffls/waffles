@@ -49,9 +49,6 @@ function stdlib.resource.process {
       esac
     fi
   fi
-
-  stdlib.title
-  stdlib.subtitle
 }
 
 function stdlib.resource.read {
