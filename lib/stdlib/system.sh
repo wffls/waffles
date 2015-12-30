@@ -195,7 +195,10 @@ function stdlib.profile {
         stdlib_remote_copy[profiles/$_profile]=1
       elif [[ -n $_script_path ]]; then
         stdlib.debug "Running Profile script: $_script_path"
+        stdlib.title "$_profile/$_file"
         stdlib.include "$_script_path"
+        stdlib.title
+        stdlib.subtitle
       fi
     else
       stdlib.debug "Profile not found: $1"
@@ -312,9 +315,18 @@ function stdlib.data {
       fi
     fi
 
+    if [[ -n $_data && -n $_script_path ]]; then
+      _pdata=1
+      if [[ -n $WAFFLES_REMOTE ]]; then
+        stdlib_remote_copy[$_data]=1
+      else
+        stdlib.include "$_script_path"
+      fi
+    fi
+
     # Check and see if the data file matches a profile with included data
-    # If so, and if Waffles is not being run in REMOTE mode, source it now
-    # so that data under $WAFFLES_SITE_DIR/data can overwrite it later.
+    # If so, and if Waffles is not being run in REMOTE mode, source it after
+    # data under $WAFFLES_SITE_DIR/data has been sourced.
     if [[ -f "$WAFFLES_SITE_DIR/profiles/${1}/data.sh" ]]; then
       _pdata=1
       if [[ -z $WAFFLES_REMOTE ]]; then
@@ -323,16 +335,8 @@ function stdlib.data {
       fi
     fi
 
-    if [[ -n $_data && -n $_script_path ]]; then
-      if [[ -n $WAFFLES_REMOTE ]]; then
-        stdlib_remote_copy[$_data]=1
-      else
-        stdlib.include "$_script_path"
-      fi
-    else
-      if [[ -z $_pdata ]]; then
-        stdlib.warn "Data not found: $1"
-      fi
+    if [[ -z $_pdata ]]; then
+      stdlib.warn "Data not found: $1"
     fi
   fi
 }
