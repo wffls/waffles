@@ -209,16 +209,12 @@ Next, we'll create a "common" profile. This profile will contain scripts that ar
 #### acng.sh
 
 ```shell
-stdlib.title "common/acng"
-
 stdlib.file --name /etc/apt/apt.conf.d/01acng --content "Acquire::http { Proxy \"http://$data_acng_server:3142\"; };"
 ```
 
 #### packages.sh
 
 ```shell
-stdlib.title "common/packages"
-
 for pkg in "${data_packages[@]}"; do
   stdlib.split $pkg '='
   stdlib.apt --state present --package "${__split[0]}" --version "${__split[1]}"
@@ -228,16 +224,12 @@ done
 #### sudo.sh
 
 ```shell
-stdlib.title "common/sudo"
-
 stdlib.file_line --name "sudoers.d/00-common/always_set_home" --file /etc/sudoers.d/00-common --line "Defaults always_set_home"
 ```
 
 #### updates.sh
 
 ```shell
-stdlib.title "common/updates"
-
 read -r -d '' _security_updates <<EOF
 APT::Periodic::Update-Package-Lists "1";
 APT::Periodic::Unattended-Upgrade "1";
@@ -248,8 +240,6 @@ stdlib.file --name /etc/apt/apt.conf.d/20auto-upgrades --content "$_security_upd
 #### users.sh
 
 ```shell
-stdlib.title "common/users"
-
 for user in "${data_users[@]}"; do
   _state="${data_user_info[$user|state]:-present}"
   _username="${data_user_info[$user|name]:-present}"
@@ -284,8 +274,6 @@ Create the `infrastructure/waffles/profiles/augeas/scripts` directory and the fo
 #### apt_install.sh
 
 ```shell
-stdlib.title "augeas/apt_install"
-
 stdlib.apt_key --name augeas --key AE498453 --keyserver keyserver.ubuntu.com
 stdlib.apt_source --name augeas --uri http://ppa.launchpad.net/raphink/augeas/ubuntu --distribution trusty --component main
 stdlib.apt --package augeas-tools --version latest
@@ -294,8 +282,6 @@ stdlib.apt --package augeas-tools --version latest
 #### update_lenses.sh
 
 ```shell
-stdlib.title "augeas/update_lenses"
-
 stdlib.git --state latest --name /usr/src/augeas --source https://github.com/hercules-team/augeas
 
 if [[ $stdlib_resource_change == "true" ]]; then

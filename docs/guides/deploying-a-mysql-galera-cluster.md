@@ -38,8 +38,6 @@ $ mkdir -p site/profiles/mysql/scripts
 Next, make the repo profile script, located at `site/profiles/mysql/scripts/percona_repo.sh`:
 
 ```shell
-stdlib.title "mysql/percona/repo"
-
 source /etc/lsb-release
 
 stdlib.apt_key --name percona --keyserver keys.gnupg.net --key 1C4CBDCDCD2EFD2A
@@ -49,8 +47,6 @@ stdlib.apt_source --name percona --uri http://repo.percona.com/apt --distributio
 Next, make the MySQL profile script, located at `sites/profiles/mysql/scripts/percona_xtradb_cluster.sh`:
 
 ```shell
-stdlib.title "mysql/percona/xtradb-cluster"
-
 # Get some information useful for the configuration
 hostname=$(hostname)
 mysql_hostname=$(hostname | sed -e 's/_/\\\_/g')

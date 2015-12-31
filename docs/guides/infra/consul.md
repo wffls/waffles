@@ -290,8 +290,6 @@ Next, create the Consul profile. Start with the directory structure: `waffles/pr
 #### client.sh
 
 ```shell
-stdlib.title "consul/client"
-
 _user="${data_user_info[consul|name]}"
 
 # Consul Directories
@@ -325,8 +323,6 @@ stdlib.upstart --name consul --state running
 #### server.sh
 
 ```shell
-stdlib.title "consul/server"
-
 _user="${data_user_info[consul|name]}"
 
 # Consul Directories
@@ -389,8 +385,6 @@ The unique thing about this script is the use of polling the `TXT` file created 
 #### template.sh
 
 ```shell
-stdlib.title "consul/template"
-
 _user="${data_user_info[consul|name]}"
 
 # Consul Template Directories
@@ -428,8 +422,6 @@ The above script sets up [Consul Template](https://github.com/hashicorp/consul-t
 #### template-hosts.sh
 
 ```shell
-stdlib.title "consul/template_hosts"
-
 consul.template --name hosts --destination /etc/hosts
 stdlib.file --name /etc/consul/template/ctmpl/hosts.ctmpl --mode 640 --source "$WAFFLES_SITE_DIR/profiles/consul/files/hosts.ctmpl"
 

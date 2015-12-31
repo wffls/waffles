@@ -1,5 +1,3 @@
-stdlib.title ubuntu1204/tests
-
 source /etc/lsb-release
 
 stdlib.info "syntax check"

@@ -30,8 +30,6 @@ $ mkdir -p site/profiles/mysql/scripts
 Next, make the repo profile script, located at `site/profiles/mysql/scripts/percona_repo.sh`:
 
 ```shell
-stdlib.title "mysql/percona/repo"
-
 source /etc/lsb-release
 
 stdlib.apt_key --name percona --keyserver keys.gnupg.net --key 1C4CBDCDCD2EFD2A
@@ -41,8 +39,6 @@ stdlib.apt_source --name percona --uri http://repo.percona.com/apt --distributio
 Next, make the MySQL profile script, located at `sites/profilfes/mysql/scripts/percona_server.sh`:
 
 ```shell
-stdlib.title "mysql/percona/server"
-
 hostname=$(hostname | sed -e 's/_/\\\_/g')
 
 stdlib.apt --package percona-server-server-5.6

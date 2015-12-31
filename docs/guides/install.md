@@ -29,7 +29,6 @@ EOF
 ```shell
 $ mkdir -p site/profiles/memcached/scripts
 $ cat > site/profiles/memcached/scripts/server.sh <<EOF
-stdlib.title memcached/server
 stdlib.apt --package memcached --version latest
 stdlib.file_line --name memcached.conf/listen --file /etc/memcached.conf --line "-l $data_memcached_server_listen" --match "^-l"
 stdlib.sysvinit --name memcached
