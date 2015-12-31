@@ -68,8 +68,6 @@ $ mkdir -p site/profiles/consul/scripts
 Next, make the repo profile script, located at `site/profiles/consul/scripts/install.sh`:
 
 ```shell
-stdlib.title "profiles/consul/install"
-
 stdlib.apt --package unzip
 
 stdlib.useradd --user consul --homedir /var/lib/consul --createhome true
@@ -96,8 +94,6 @@ Note: the way this script determines if Consul is installed is by the presence o
 Next, make the Consul server script, located at `sites/profiles/consul/scripts/server.sh`:
 
 ```shell
-stdlib.title "profiles/consul/server"
-
 stdlib.file --name /etc/init/consul.conf --source "$WAFFLES_SITE_DIR/profiles/consul/files/consul.conf"
 
 for key in "${!data_consul_config[@]}"; do
@@ -156,8 +152,6 @@ end script
 To install Augeas, create `site/profiles/augeas/scripts/install_apt.sh` with the following content:
 
 ```shell
-stdlib.title "profiles/augeas/install_apt"
-
 stdlib.apt_ppa --ppa raphink/augeas
 stdlib.apt --package augeas-tools --version latest
 ```

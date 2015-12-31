@@ -3,8 +3,6 @@
 Waffles is a simple configuration management and deployment system written in Bash.
 
 ```shell
-stdlib.title profiles/memcached/server
-
 # Install memcached
 stdlib.apt --package memcached --version latest
 

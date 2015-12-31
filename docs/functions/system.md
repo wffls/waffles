@@ -260,14 +260,14 @@ Sets a subtitle context. This is usually used internally by resources. An intern
 
 ```shell
 $ cat profiles/common/scripts/package.sh
-stdlib.title "profiles/common/packages"
-stdlib.apt --package sl
+# stdlib.title = `common/package`
+stdlib.apt --package sl # stdlib.subtitle = stdlib.apt
 
 if [[ $stdlib_resource_change == true ]]; then
   stdlib.info "The state of package sl changed"
 fi
 
-stdlib.apt --package cowsay
+stdlib.apt --package cowsay # stdlib.subtitle = stdlib.apt
 
 if [[ $stdlib_resource_change == true ]]; then
   stdlib.info "The state of package cowsay changed"
@@ -284,21 +284,15 @@ stdlib.sudo_exec username tar xzvf foobar.tar.gz
 
 ## stdlib.title
 
-Sets a title context. A title is a major section of Waffles being run; for example, a profile. You usually being profiles by setting a title:
-
-```shell
-$ cat profiles/common/scripts/package.sh
-stdlib.title "profiles/common/packages"
-stdlib.apt --package sl
-```
+Sets a title context. This is usually used internally. Whenever a new profile script is run, Waffles will set the title automatically to `profile_name/script_name`.
 
 Internal counters are reset whenever `stdlib.title` is used. This is useful for determining if any changes were made to a resource or the profile as a whole:
 
 ```shell
 $ cat profiles/common/scripts/package.sh
-stdlib.title "profiles/common/packages"
-stdlib.apt --package sl
-stdlib.apt --package cowsay
+# stdlib.title = `common/package`
+stdlib.apt --package sl # stdlib.subtitle = stdlib.apt
+stdlib.apt --package cowsay # new stdlib.subtitle = stdlib.apt
 
 if [[ $stdlib_state_change == true ]]; then
   stdlib.info "One of the above packages were updated."
