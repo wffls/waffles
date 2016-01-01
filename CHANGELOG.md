@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.20.0 January 1, 2016
+
+* New Resource: `stdlib.sudo_exec`.
+* New Feature: `stdlib.title` is no longer required in profiles. *Possible breakage*.
+* New Feature: SSH retry and backoff.
+* New Feature: Profile data.
+* New Feature: git profiles.
+* Enhanced: Moved stdlib-related things to an explicit `stdlib` directory.
+
 ## 0.19.0 - November 5, 2015
 
 * New Resource: `python.virtualenv`
