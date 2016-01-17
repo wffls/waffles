@@ -9,12 +9,12 @@
 # === Parameters
 #
 # * state: The state of the resource. Required. Default: present.
-# * owner: The owner of the directory. Default: root.
-# * group: The group of the directory. Default: root.
-# * mode: The perms/mode of the directory. Default: 750.
+# * owner: The owner of the file Default: root.
+# * group: The group of the file Default: root.
+# * mode: The perms/mode of the file Default: 0640.
 # * name: The destination file. Required. namevar.
 # * content: STDIN content for the file. Optional.
-# * source: Source directory to copy. Optional.
+# * source: Source file to copy. Optional.
 #
 # === Example
 #
@@ -30,7 +30,7 @@ function stdlib.file {
   stdlib.options.create_option state   "present"
   stdlib.options.create_option owner   "root"
   stdlib.options.create_option group   "root"
-  stdlib.options.create_option mode    "640"
+  stdlib.options.create_option mode    "0640"
   stdlib.options.create_option name    "__required__"
   stdlib.options.create_option content
   stdlib.options.create_option source
@@ -102,7 +102,7 @@ function stdlib.file.read {
     return
   fi
 
-  if [[ ${options[mode]} != $_mode ]]; then
+  if [[ ${options[mode]} != $_mode ]] && [[ ${options[mode]} != "0${_mode}" ]]; then
     stdlib_current_state="update"
     return
   fi
@@ -146,7 +146,7 @@ function stdlib.file.update {
     stdlib.capture_error chgrp ${options[group]} "${options[name]}"
   fi
 
-  if [[ ${options[mode]} != $_mode ]]; then
+  if [[ ${options[mode]} != $_mode ]] && [[ ${options[mode]} != "0${_mode}" ]]; then
     stdlib.capture_error chmod ${options[mode]} "${options[name]}"
   fi
 
