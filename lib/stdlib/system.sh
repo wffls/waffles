@@ -182,11 +182,13 @@ function stdlib.profile {
       _profile="host_files/$_host"
     fi
 
-    if [[ -f "$WAFFLES_SITE_DIR/profiles/$_profile/scripts/${_file}.sh" ]]; then
-      _script_path="$WAFFLES_SITE_DIR/profiles/$_profile/scripts/${_file}.sh"
-    elif [[ -f "$WAFFLES_SITE_DIR/profiles/$_profile/scripts/init.sh" ]]; then
-      _script_path="$WAFFLES_SITE_DIR/profiles/$_profile/scripts/init.sh"
-    elif [[ ! -d "$WAFFLES_SITE_DIR/profiles/$_profile" ]]; then
+    profile_path="$WAFFLES_SITE_DIR/profiles/$_profile"
+
+    if [[ -f "$profile_path/scripts/${_file}.sh" ]]; then
+      _script_path="$profile_path/scripts/${_file}.sh"
+    elif [[ -f "$profile_path/scripts/init.sh" ]]; then
+      _script_path="$profile_path/scripts/init.sh"
+    elif [[ ! -d "$profile_path" ]]; then
       _profile=""
     fi
 
