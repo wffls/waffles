@@ -328,9 +328,11 @@ function stdlib.data {
     # If so, and if Waffles is not being run in REMOTE mode, source it after
     # data under $WAFFLES_SITE_DIR/data has been sourced.
     if [[ -f "$WAFFLES_SITE_DIR/profiles/${1}/data.sh" ]]; then
+      stdlib.debug "Found Profile data for $1"
       _pdata=1
-      if [[ -z $WAFFLES_REMOTE ]]; then
-        stdlib.debug "Found Profile data for $1"
+      if [[ -n $WAFFLES_REMOTE ]]; then
+        stdlib_remote_copy[profiles/$1]=1
+      else
         stdlib.include "$WAFFLES_SITE_DIR/profiles/$1/data.sh"
       fi
     fi
