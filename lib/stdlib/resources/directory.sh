@@ -11,7 +11,7 @@
 # * state: The state of the resource. Required. Default: present.
 # * owner: The owner of the directory. Default: root.
 # * group: The group of the directory. Default: root.
-# * mode: The perms/mode of the directory. Default: 750.
+# * mode: The perms/mode of the directory. Default: 0750.
 # * name: The destination directory. Required. namevar.
 # * source: Optional source directory to copy.
 # * recurse: Whether to apply all settings recursively. Optional.
@@ -31,8 +31,8 @@ function stdlib.directory {
   stdlib.options.create_option state     "present"
   stdlib.options.create_option owner     "root"
   stdlib.options.create_option group     "root"
-  stdlib.options.create_option mode      "750"
-  stdlib.options.create_option name "__required__"
+  stdlib.options.create_option mode      "0750"
+  stdlib.options.create_option name      "__required__"
   stdlib.options.create_option recurse   "false"
   stdlib.options.create_option parent    "false"
   stdlib.options.create_option source
@@ -87,7 +87,7 @@ function stdlib.directory.read {
     return
   fi
 
-  if [[ ${options[mode]} != $_mode ]]; then
+  if [[ ${options[mode]} != $_mode ]] && [[ ${options[mode]} != "0${_mode}" ]]; then
     stdlib_current_state="update"
     return
   fi
@@ -124,7 +124,7 @@ function stdlib.directory.update {
     stdlib.capture_error chgrp $_recurse ${options[group]} "${options[name]}"
   fi
 
-  if [[ ${options[mode]} != $_mode ]]; then
+  if [[ ${options[mode]} != $_mode ]] && [[ ${options[mode]} != "0${_mode}" ]]; then
     stdlib.capture_error chmod $_recurse ${options[mode]} "${options[name]}"
   fi
 
