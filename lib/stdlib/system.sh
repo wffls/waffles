@@ -173,11 +173,10 @@ function stdlib.profile {
     fi
 
     if [[ $_profile == "host_files" ]]; then
-      if [[ -n $server ]]; then
-        _host="${server%%.*}"
+      if [[ -n $WAFFLES_REMOTE ]]; then
+        _host="$server"
       else
         _host=$(hostname)
-        _host=${_host%%.*}
       fi
       _profile="host_files/$_host"
     fi
