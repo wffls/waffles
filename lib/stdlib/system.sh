@@ -160,43 +160,44 @@ function stdlib.include {
 function stdlib.profile {
   if [[ $# -gt 0 ]]; then
     local _script_path
-    local _profile
     local _file
     local _host
+    local profile_name
+    local profile_path
     if [[ $1 =~ [/] ]]; then
       stdlib.split "$1" '/'
-      _profile="${__split[0]}"
+      profile_name="${__split[0]}"
       _file="${__split[1]}"
     else
-      _profile="$1"
+      profile_name="$1"
       _file="init.sh"
     fi
 
-    if [[ $_profile == "host_files" ]]; then
+    if [[ $profile_name == "host_files" ]]; then
       if [[ -n $WAFFLES_REMOTE ]]; then
         _host="$server"
       else
         _host=$(hostname)
       fi
-      _profile="host_files/$_host"
+      profile_name="host_files/$_host"
     fi
 
-    profile_path="$WAFFLES_SITE_DIR/profiles/$_profile"
+    profile_path="$WAFFLES_SITE_DIR/profiles/$profile_name"
 
     if [[ -f "$profile_path/scripts/${_file}.sh" ]]; then
       _script_path="$profile_path/scripts/${_file}.sh"
     elif [[ -f "$profile_path/scripts/init.sh" ]]; then
       _script_path="$profile_path/scripts/init.sh"
     elif [[ ! -d "$profile_path" ]]; then
-      _profile=""
+      profile_name=""
     fi
 
-    if [[ -n $_profile ]]; then
+    if [[ -n $profile_name ]]; then
       if [[ -n $WAFFLES_REMOTE ]]; then
-        stdlib_remote_copy[profiles/$_profile]=1
+        stdlib_remote_copy[profiles/$profile_name]=1
       elif [[ -n $_script_path ]]; then
         stdlib.debug "Running Profile script: $_script_path"
-        stdlib.title "$_profile/$_file"
+        stdlib.title "$profile_name/$_file"
         stdlib.include "$_script_path"
         stdlib.title
         stdlib.subtitle
