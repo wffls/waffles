@@ -164,6 +164,7 @@ function stdlib.profile {
     local _host
     local profile_name
     local profile_path
+    local profile_files
     if [[ $1 =~ [/] ]]; then
       stdlib.split "$1" '/'
       profile_name="${__split[0]}"
@@ -183,6 +184,7 @@ function stdlib.profile {
     fi
 
     profile_path="$WAFFLES_SITE_DIR/profiles/$profile_name"
+    profile_files="$WAFFLES_SITE_DIR/profiles/$profile_name/files"
 
     if [[ -f "$profile_path/scripts/${_file}.sh" ]]; then
       _script_path="$profile_path/scripts/${_file}.sh"
