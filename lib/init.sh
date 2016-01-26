@@ -3,6 +3,7 @@ source "$WAFFLES_DIR/lib/stdlib/catalog.sh"
 source "$WAFFLES_DIR/lib/stdlib/options.sh"
 source "$WAFFLES_DIR/lib/stdlib/resource.sh"
 source "$WAFFLES_DIR/lib/stdlib/system.sh"
+source "$WAFFLES_DIR/lib/stdlib/template.sh"
 
 # Standard Library of Resources
 source "$WAFFLES_DIR/lib/stdlib/resources/apt.sh"
