@@ -124,11 +124,17 @@ function stdlib.file.create {
     stdlib.capture_error chown ${options[owner]}:${options[group]} "${options[name]}"
   else
     if [[ -n ${options[content]} ]]; then
-      local _script
-      read -r -d '' _script<<EOF
-echo '${options[content]}' > "${options[name]}"
-EOF
-      stdlib.capture_error "$_script"
+      echo "${options[content]}" > "${options[name]}"
+      _ret="$?"
+      if [[ $_ret != 0 ]]; then
+        stdlib.error "Errors occurred writing content to file."
+        if [[ $WAFFLES_EXIT_ON_ERROR == "true" ]]; then
+          stdlib.error "Halting run."
+          exit 1
+        else
+          return $_ret
+        fi
+      fi
     else
       stdlib.capture_error touch "${options[name]}"
     fi
@@ -152,12 +158,19 @@ function stdlib.file.update {
 
   if [[ -n $_md5 && $md5 != $_md5 ]]; then
     if [[ -n ${options[content]} ]]; then
-      local _script
-      read -r -d '' _script<<EOF
-echo '${options[content]}' > "${options[name]}"
-EOF
-      stdlib.capture_error "$_script"
+      echo "${options[content]}" > "${options[name]}"
+      _ret="$?"
+      if [[ $_ret != 0 ]]; then
+        stdlib.error "Errors occurred writing content to file."
+        if [[ $WAFFLES_EXIT_ON_ERROR == "true" ]]; then
+          stdlib.error "Halting run."
+          exit 1
+        else
+          return $_ret
+        fi
+      fi
     fi
+
     if [[ -n ${options[source]} ]]; then
       stdlib.capture_error cp "${options[source]}" "${options[name]}"
     fi

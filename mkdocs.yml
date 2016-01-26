@@ -21,6 +21,7 @@ pages:
     - 'catalog': 'functions/catalog.md'
     - 'options': 'functions/options.md'
     - 'resource': 'functions/resource.md'
+    - 'template': 'functions/template.md'
     - 'augeas': 'functions/augeas.md'
     - 'consul': 'functions/consul.md'
     - 'mysql': 'functions/mysql.md'
