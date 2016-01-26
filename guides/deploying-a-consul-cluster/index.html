@@ -136,6 +136,13 @@
         
             
     <li class="toctree-l1 ">
+        <a class="" href="../../functions/template/">template</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
         <a class="" href="../../functions/augeas/">augeas</a>
         
     </li>
@@ -784,9 +791,7 @@ stdlib.apt --package software-properties-common
 </code></pre>
 
 <p>Next, make the repo profile script, located at <code>site/profiles/consul/scripts/install.sh</code>:</p>
-<pre><code class="shell">stdlib.title &quot;profiles/consul/install&quot;
-
-stdlib.apt --package unzip
+<pre><code class="shell">stdlib.apt --package unzip
 
 stdlib.useradd --user consul --homedir /var/lib/consul --createhome true
 stdlib.directory --name /etc/consul.d --owner consul --group consul
@@ -809,9 +814,7 @@ fi
 </ul>
 <p>Note: the way this script determines if Consul is installed is by the presence of the <code>/usr/local/bin/consul</code> file. If this method is too simplistic for you, feel free to package Consul into a <code>deb</code> or <code>rpm</code> package.</p>
 <p>Next, make the Consul server script, located at <code>sites/profiles/consul/scripts/server.sh</code>:</p>
-<pre><code class="shell">stdlib.title &quot;profiles/consul/server&quot;
-
-stdlib.file --name /etc/init/consul.conf --source &quot;$WAFFLES_SITE_DIR/profiles/consul/files/consul.conf&quot;
+<pre><code class="shell">stdlib.file --name /etc/init/consul.conf --source &quot;$WAFFLES_SITE_DIR/profiles/consul/files/consul.conf&quot;
 
 for key in &quot;${!data_consul_config[@]}&quot;; do
   augeas.json_dict --file /etc/consul.d/config.json --path / --key &quot;$key&quot; --value &quot;${data_consul_config[$key]}&quot;
@@ -864,9 +867,7 @@ end script
 
 <h4 id="augeas">Augeas</h4>
 <p>To install Augeas, create <code>site/profiles/augeas/scripts/install_apt.sh</code> with the following content:</p>
-<pre><code class="shell">stdlib.title &quot;profiles/augeas/install_apt&quot;
-
-stdlib.apt_ppa --ppa raphink/augeas
+<pre><code class="shell">stdlib.apt_ppa --ppa raphink/augeas
 stdlib.apt --package augeas-tools --version latest
 </code></pre>
 

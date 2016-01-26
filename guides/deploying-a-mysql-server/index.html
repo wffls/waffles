@@ -136,6 +136,13 @@
         
             
     <li class="toctree-l1 ">
+        <a class="" href="../../functions/template/">template</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
         <a class="" href="../../functions/augeas/">augeas</a>
         
     </li>
@@ -742,18 +749,14 @@ data_mysql_root_password=&quot;password&quot;
 </code></pre>
 
 <p>Next, make the repo profile script, located at <code>site/profiles/mysql/scripts/percona_repo.sh</code>:</p>
-<pre><code class="shell">stdlib.title &quot;mysql/percona/repo&quot;
-
-source /etc/lsb-release
+<pre><code class="shell">source /etc/lsb-release
 
 stdlib.apt_key --name percona --keyserver keys.gnupg.net --key 1C4CBDCDCD2EFD2A
 stdlib.apt_source --name percona --uri http://repo.percona.com/apt --distribution $DISTRIB_CODENAME --component main --include_src true
 </code></pre>
 
 <p>Next, make the MySQL profile script, located at <code>sites/profilfes/mysql/scripts/percona_server.sh</code>:</p>
-<pre><code class="shell">stdlib.title &quot;mysql/percona/server&quot;
-
-hostname=$(hostname | sed -e 's/_/\\\_/g')
+<pre><code class="shell">hostname=$(hostname | sed -e 's/_/\\\_/g')
 
 stdlib.apt --package percona-server-server-5.6
 

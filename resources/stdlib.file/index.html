@@ -136,6 +136,13 @@
         
             
     <li class="toctree-l1 ">
+        <a class="" href="../../functions/template/">template</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
         <a class="" href="../../functions/augeas/">augeas</a>
         
     </li>
@@ -716,12 +723,12 @@
 <h2 id="parameters">Parameters</h2>
 <ul>
 <li>state: The state of the resource. Required. Default: present.</li>
-<li>owner: The owner of the directory. Default: root.</li>
-<li>group: The group of the directory. Default: root.</li>
-<li>mode: The perms/mode of the directory. Default: 750.</li>
+<li>owner: The owner of the file Default: root.</li>
+<li>group: The group of the file Default: root.</li>
+<li>mode: The perms/mode of the file Default: 0640.</li>
 <li>name: The destination file. Required. namevar.</li>
 <li>content: STDIN content for the file. Optional.</li>
-<li>source: Source directory to copy. Optional.</li>
+<li>source: Source file to copy. Optional.</li>
 </ul>
 <h2 id="example">Example</h2>
 <pre><code class="shell">stdlib.file --name /etc/foobar --content &quot;Hello, World!&quot;

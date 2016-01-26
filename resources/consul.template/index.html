@@ -136,6 +136,13 @@
         
             
     <li class="toctree-l1 ">
+        <a class="" href="../../functions/template/">template</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
         <a class="" href="../../functions/augeas/">augeas</a>
         
     </li>
@@ -721,6 +728,9 @@
 <li>destination: The destination of the rendered template. Required.</li>
 <li>command: An optional command to run after the template is rendered. Optional.</li>
 <li>file: The file to store the template in. Required. Defaults to /etc/consul/template/conf.d/name.json</li>
+<li>file_owner: The owner of the service file. Optional. Defaults to root.</li>
+<li>file_group: The group of the service file. Optional. Defaults to root.</li>
+<li>file_mode: The mode of the service file. Optional. Defaults to 0640</li>
 </ul>
 <h2 id="example">Example</h2>
 <pre><code class="shell">consul.template --name hosts \

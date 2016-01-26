@@ -153,6 +153,13 @@
         
             
     <li class="toctree-l1 ">
+        <a class="" href="../functions/template/">template</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
         <a class="" href="../functions/augeas/">augeas</a>
         
     </li>
@@ -719,11 +726,11 @@
 <li><a href="#referencing-data">Referencing Data</a></li>
 <li><a href="#data-structure">Data Structure</a></li>
 <li><a href="#hierarchial-data">Hierarchial Data</a></li>
+<li><a href="#profile-data">Profile Data</a></li>
 </ul>
 </li>
 <li><a href="#profiles">Profiles</a><ul>
 <li><a href="#profile-structure">Profile Structure</a></li>
-<li><a href="#profile-data">Profile Data</a></li>
 <li><a href="#git-profiles">Git Profiles</a></li>
 <li><a href="#the-hosts-profile">The Hosts Profile</a></li>
 </ul>
@@ -809,6 +816,20 @@ stdlib.data memcached
 <p class="admonition-title">Note</p>
 <p>See the <a href="../guides/referencing-data-from-data">Referencing Data from Data</a> and <a href="../guides/override-data">Overriding Data</a> Guides for more information.</p>
 </div>
+<h3 id="profile-data">Profile Data</h3>
+<p>Profile-specific data can be stored in <code>profile_name/data.sh</code>. This enables data unique to the profile, but generic to the site, to be bundled within the profile and stored in a repository outside of <code>$WAFFLES_SITE_DIR</code>.</p>
+<p>To use profile data, simply declare it as you would with site data:</p>
+<pre><code class="shell">stdlib.data memcached
+</code></pre>
+
+<p>When both site and profile data exists, the site data will be referenced <em>first</em>. This means that you can create variables in the site data and use them in the profile data. This might seem counter-intuitive, but allows the ability to embed site-specific data into profile-wide data structures:</p>
+<pre><code class="shell">declare -Ag data_openstack_keystone_settings=(
+  [DEFAULT/admin_token]=&quot;$set_this_in_the_site_data.sh&quot;
+  [DEFAULT/debug]=&quot;true&quot;
+  [DEFAULT/verbose]=&quot;true&quot;
+)
+</code></pre>
+
 <h2 id="profiles">Profiles</h2>
 <p>Profiles are small snippets of bash scripts stored under <code>site/profiles</code>. They are meant to be distinct units of work that accomplish a single task.</p>
 <p>For example, you may have a Profile that installs the <code>memcached</code> package, a Profile that configures <code>/etc/memcached.conf</code>, and a Profile that sets up the <code>memcached</code> daemon. Or you may choose to have a single Profile that does all three tasks. Waffles does not enforce any rules to how you design your Profiles.</p>
@@ -839,12 +860,6 @@ stdlib.profile memcached       =&gt; site/profiles/memcached/scripts/init.sh
 stdlib.profile memcached/utils =&gt; site/profiles/memcached/scripts/utils.sh
 </code></pre>
 
-<h3 id="profile-data">Profile Data</h3>
-<p>Profile-specific data can be stored in <code>profile_name/data.sh</code>. This enables data unique to the profile to be bundled within the profile and stored in a repository outside of <code>$WAFFLES_SITE_DIR</code>.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Profile data is sourced when the profile is applied. This means that profile data can override or overwrite previously declared data that uses the same name. It is not possible to source profile data at the beginning of the role like with <code>stdlib.data</code>.</p>
-</div>
 <h3 id="git-profiles">Git Profiles</h3>
 <p>Waffles supports the ability to store profiles in a git repository. To use this feature, include the following in the role:</p>
 <pre><code class="shell">stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack branch dev

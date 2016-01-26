@@ -128,6 +128,8 @@
                 
                     <li><a class="toctree-l4" href="#stdlibarray_unshift">stdlib.array_unshift</a></li>
                 
+                    <li><a class="toctree-l4" href="#stdlibbuild_ini_file">stdlib.build_ini_file</a></li>
+                
                     <li><a class="toctree-l4" href="#stdlibcapture_error">stdlib.capture_error</a></li>
                 
                     <li><a class="toctree-l4" href="#stdlibcommand_exists">stdlib.command_exists</a></li>
@@ -166,6 +168,8 @@
                 
                     <li><a class="toctree-l4" href="#stdlibsubtitle">stdlib.subtitle</a></li>
                 
+                    <li><a class="toctree-l4" href="#stdlibsudo_exec">stdlib.sudo_exec</a></li>
+                
                     <li><a class="toctree-l4" href="#stdlibtitle">stdlib.title</a></li>
                 
                     <li><a class="toctree-l4" href="#stdlibtrim">stdlib.trim</a></li>
@@ -195,6 +199,13 @@
             
     <li class="toctree-l1 ">
         <a class="" href="../resource/">resource</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../template/">template</a>
         
     </li>
 
@@ -774,6 +785,7 @@
 <li><a href="#stdlibarray_push">stdlib.array_push</a></li>
 <li><a href="#stdlibarray_shift">stdlib.array_shift</a></li>
 <li><a href="#stdlibarray_unshift">stdlib.array_unshift</a></li>
+<li><a href="#stdlibbuild_ini_file">stdlib.build_ini_file</a></li>
 <li><a href="#stdlibcapture_error">stdlib.capture_error</a></li>
 <li><a href="#stdlibcommand_exists">stdlib.command_exists</a></li>
 <li><a href="#stdlibdata">stdlib.data</a></li>
@@ -793,6 +805,7 @@
 <li><a href="#stdlibprofile">stdlib.profile</a></li>
 <li><a href="#stdlibsplit">stdlib.split</a></li>
 <li><a href="#stdlibsubtitle">stdlib.subtitle</a></li>
+<li><a href="#stdlibsudo_exec">stdlib.sudo_exec</a></li>
 <li><a href="#stdlibtitle">stdlib.title</a></li>
 <li><a href="#stdlibtrim">stdlib.trim</a></li>
 <li><a href="#stdlibwarn">stdlib.warn</a></li>
@@ -849,6 +862,11 @@ echo $y
 <pre><code class="shell">x=(b c)
 stdlib.array_unshift x a
 
+</code></pre>
+
+<h2 id="stdlibbuild_ini_file">stdlib.build_ini_file</h2>
+<p>Builds an ini file from a given hash.</p>
+<pre><code class="shell">stdlib.build_ini_file data_openstack_keystone_settings /etc/keystone/keystone.conf
 </code></pre>
 
 <h2 id="stdlibcapture_error">stdlib.capture_error</h2>
@@ -969,32 +987,32 @@ stdlib.info $__split[1] # bar
 <h2 id="stdlibsubtitle">stdlib.subtitle</h2>
 <p>Sets a subtitle context. This is usually used internally by resources. An internal counter to determine if the resource was changed:</p>
 <pre><code class="shell">$ cat profiles/common/scripts/package.sh
-stdlib.title &quot;profiles/common/packages&quot;
-stdlib.apt --package sl
+# stdlib.title = `common/package`
+stdlib.apt --package sl # stdlib.subtitle = stdlib.apt
 
 if [[ $stdlib_resource_change == true ]]; then
   stdlib.info &quot;The state of package sl changed&quot;
 fi
 
-stdlib.apt --package cowsay
+stdlib.apt --package cowsay # stdlib.subtitle = stdlib.apt
 
 if [[ $stdlib_resource_change == true ]]; then
   stdlib.info &quot;The state of package cowsay changed&quot;
 fi
 </code></pre>
 
-<h2 id="stdlibtitle">stdlib.title</h2>
-<p>Sets a title context. A title is a major section of Waffles being run; for example, a profile. You usually being profiles by setting a title:</p>
-<pre><code class="shell">$ cat profiles/common/scripts/package.sh
-stdlib.title &quot;profiles/common/packages&quot;
-stdlib.apt --package sl
+<h2 id="stdlibsudo_exec">stdlib.sudo_exec</h2>
+<p>Runs a command as another user via sudo:</p>
+<pre><code class="shell">stdlib.sudo_exec username tar xzvf foobar.tar.gz
 </code></pre>
 
+<h2 id="stdlibtitle">stdlib.title</h2>
+<p>Sets a title context. This is usually used internally. Whenever a new profile script is run, Waffles will set the title automatically to <code>profile_name/script_name</code>.</p>
 <p>Internal counters are reset whenever <code>stdlib.title</code> is used. This is useful for determining if any changes were made to a resource or the profile as a whole:</p>
 <pre><code class="shell">$ cat profiles/common/scripts/package.sh
-stdlib.title &quot;profiles/common/packages&quot;
-stdlib.apt --package sl
-stdlib.apt --package cowsay
+# stdlib.title = `common/package`
+stdlib.apt --package sl # stdlib.subtitle = stdlib.apt
+stdlib.apt --package cowsay # new stdlib.subtitle = stdlib.apt
 
 if [[ $stdlib_state_change == true ]]; then
   stdlib.info &quot;One of the above packages were updated.&quot;

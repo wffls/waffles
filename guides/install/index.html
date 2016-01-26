@@ -149,6 +149,13 @@
         
             
     <li class="toctree-l1 ">
+        <a class="" href="../../functions/template/">template</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
         <a class="" href="../../functions/augeas/">augeas</a>
         
     </li>
@@ -741,7 +748,6 @@ EOF
 </ul>
 <pre><code class="shell">$ mkdir -p site/profiles/memcached/scripts
 $ cat &gt; site/profiles/memcached/scripts/server.sh &lt;&lt;EOF
-stdlib.title memcached/server
 stdlib.apt --package memcached --version latest
 stdlib.file_line --name memcached.conf/listen --file /etc/memcached.conf --line &quot;-l $data_memcached_server_listen&quot; --match &quot;^-l&quot;
 stdlib.sysvinit --name memcached

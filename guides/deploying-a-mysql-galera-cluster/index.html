@@ -136,6 +136,13 @@
         
             
     <li class="toctree-l1 ">
+        <a class="" href="../../functions/template/">template</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
         <a class="" href="../../functions/augeas/">augeas</a>
         
     </li>
@@ -753,18 +760,14 @@ data_galera_bootstrap_node=&quot;mysql-01&quot;
 </code></pre>
 
 <p>Next, make the repo profile script, located at <code>site/profiles/mysql/scripts/percona_repo.sh</code>:</p>
-<pre><code class="shell">stdlib.title &quot;mysql/percona/repo&quot;
-
-source /etc/lsb-release
+<pre><code class="shell">source /etc/lsb-release
 
 stdlib.apt_key --name percona --keyserver keys.gnupg.net --key 1C4CBDCDCD2EFD2A
 stdlib.apt_source --name percona --uri http://repo.percona.com/apt --distribution $DISTRIB_CODENAME --component main --include_src true
 </code></pre>
 
 <p>Next, make the MySQL profile script, located at <code>sites/profiles/mysql/scripts/percona_xtradb_cluster.sh</code>:</p>
-<pre><code class="shell">stdlib.title &quot;mysql/percona/xtradb-cluster&quot;
-
-# Get some information useful for the configuration
+<pre><code class="shell"># Get some information useful for the configuration
 hostname=$(hostname)
 mysql_hostname=$(hostname | sed -e 's/_/\\\_/g')
 my_ip=$(/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
