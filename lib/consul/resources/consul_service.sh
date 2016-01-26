@@ -148,7 +148,7 @@ function consul.service.build_service {
   _service=$(echo "$_service" | jsed add object --path service --key checks --value [])
   _i=0
   for _o in "${check[@]}"; do
-    _check="--key script --value ${check[$_i]}"
+    _check="--key ${check_type[$_i]} --value ${check[$_i]}"
 
     if  [[ -n ${check_interval[$_i]} ]]; then
       _check="${_check} --key interval --value ${check_interval[$_i]}"
@@ -156,10 +156,6 @@ function consul.service.build_service {
 
     if [[ -n ${check_ttl[$_i]} ]]; then
       _check="${_check} --key ttl --value ${check_ttl[$_i]}"
-    fi
-
-    if [[ -n ${check_type[$_i]} ]]; then
-      _check="${_check} --key type --value ${check_type[$_i]}"
     fi
 
     _service=$(echo "$_service" | jsed add object --path service.checks $_check)
