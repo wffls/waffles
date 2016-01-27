@@ -125,7 +125,7 @@ function stdlib.file.create {
   else
     if [[ -n ${options[content]} ]]; then
       echo "${options[content]}" > "${options[name]}"
-      _ret="$?"
+      local _ret="$?"
       if [[ $_ret != 0 ]]; then
         stdlib.error "Errors occurred writing content to file."
         if [[ $WAFFLES_EXIT_ON_ERROR == "true" ]]; then
@@ -159,7 +159,7 @@ function stdlib.file.update {
   if [[ -n $_md5 && $md5 != $_md5 ]]; then
     if [[ -n ${options[content]} ]]; then
       echo "${options[content]}" > "${options[name]}"
-      _ret="$?"
+      local _ret="$?"
       if [[ $_ret != 0 ]]; then
         stdlib.error "Errors occurred writing content to file."
         if [[ $WAFFLES_EXIT_ON_ERROR == "true" ]]; then
