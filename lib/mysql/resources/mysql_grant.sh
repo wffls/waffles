@@ -65,12 +65,14 @@ function mysql.grant.read {
     return
   fi
 
-  if [[ ! $_grant_result =~ ^$_grant ]]; then
-    stdlib_current_state="update"
-    return
-  fi
+  stdlib_current_state="update"
+  while IFS= read -r _line ; do
+    if [[ $_line =~ ^$_grant ]]; then
+      stdlib_current_state="present"
+      return
+    fi
+  done <<< "$_grant_result"
 
-  stdlib_current_state="present"
 }
 
 function mysql.grant.create {
