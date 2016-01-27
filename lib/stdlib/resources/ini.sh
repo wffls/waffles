@@ -127,6 +127,7 @@ function stdlib.ini.inidelete {
 
 function stdlib.ini.iniset {
   [[ -z ${options[option]} ]] && return
+  local _value=$(echo ${options[value]} | sed -e 's/[\/&]/\\&/g' | sed -e 's/[][]/\\&/g')
   if [[ ${options[section]} != "__none__" ]]; then
     # Add the section if it doesn't exist
     if ! grep -q "^\[${options[section]}\]" "${options[file]}" 2>/dev/null; then
@@ -137,7 +138,7 @@ function stdlib.ini.iniset {
       stdlib.ini.inidelete
     fi
 
-    if [[ ${options[value]} == "__none__" ]]; then
+    if [[ $_value == "__none__" ]]; then
       # Add it
       sed -i -e "/^\[${options[section]}\]/ a\\
 ${options[option]}
@@ -145,7 +146,7 @@ ${options[option]}
     else
       # Add it
       sed -i -e "/^\[${options[section]}\]/ a\\
-${options[option]} = ${options[value]}
+${options[option]} = $_value
 " "${options[file]}"
     fi
   else
@@ -153,6 +154,10 @@ ${options[option]} = ${options[value]}
       stdlib.ini.inidelete
     fi
 
-    sed -i "1s/^/${options[option]} = ${options[value]}\n/" ${options[file]}
+    if ! grep -q "^${options[option]}" "${options[file]}" 2>/dev/null; then
+      echo "${options[option]} = ${options[value]}" >>"${options[file]}"
+    else
+      sed -i "1s/^/${options[option]} = $_value\n/" ${options[file]}
+    fi
   fi
 }
