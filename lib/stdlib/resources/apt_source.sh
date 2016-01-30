@@ -12,7 +12,7 @@
 # * name: The name of the apt repo. Required.
 # * uri: The URI of the apt repo. Required.
 # * distribution: The distribution of the apt repo. Required.
-# * component: The component of the apt repo. Required.
+# * component: The component of the apt repo. Optional.
 # * include_src: Whether to include the source repo. Default: false.
 # * refresh: run apt-get update if the source was modified. Default: true.
 #
@@ -32,9 +32,9 @@ function stdlib.apt_source {
   stdlib.options.create_option name         "__required__"
   stdlib.options.create_option uri          "__required__"
   stdlib.options.create_option distribution "__required__"
-  stdlib.options.create_option component    "__required__"
   stdlib.options.create_option include_src  "false"
   stdlib.options.create_option refresh      "true"
+  stdlib.options.create_option component
   stdlib.options.parse_options "$@"
 
   # Process the resource
