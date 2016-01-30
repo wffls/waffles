@@ -104,7 +104,7 @@ fi
 
 ## stdlib.data
 
-The same as `stdlib.profiles` but the shell scripts can be placed differently:
+The same as `stdlib.profile` but the shell scripts can be placed differently:
 
 ```shell
 stdlib.data common => data/common.sh
@@ -239,10 +239,10 @@ Takes a profile as input and determines the shell script attached to the profile
 If Waffles is being run locally, then `stdlib.include` is run on the script. If Waffles is being run in push-based mode, then the profile is marked to be copied to the remote node.
 
 ```shell
-stdlib.profiles common/users => profiles/common/scripts/users.sh
-stdlib.profiles common/packages => profiles/common/scripts/packages.sh
-stdlib.profiles memcached => profiles/memcached/scripts/init.sh
-stdlib.profiles memcached/utils => profiles/memcached/scripts/utils.sh
+stdlib.profile common/users => profiles/common/scripts/users.sh
+stdlib.profile common/packages => profiles/common/scripts/packages.sh
+stdlib.profile memcached => profiles/memcached/scripts/init.sh
+stdlib.profile memcached/utils => profiles/memcached/scripts/utils.sh
 ```
 
 ## stdlib.split
