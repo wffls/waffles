@@ -29,11 +29,11 @@ function stdlib.debug {
 }
 
 function stdlib.info {
-  echo -e "${stdlib_color_green}(info)  ${stdlib_title}${stdlib_subtitle}${stdlib_color_reset}${@}"
+  echo -e "${stdlib_color_green}(info)  ${stdlib_title}${stdlib_subtitle}${stdlib_color_reset}${@}" >&2
 }
 
 function stdlib.warn {
-  echo -e "${stdlib_color_yellow}(warn)  ${stdlib_title}${stdlib_subtitle}${stdlib_color_reset}${@}"
+  echo -e "${stdlib_color_yellow}(warn)  ${stdlib_title}${stdlib_subtitle}${stdlib_color_reset}${@}" >&2
 }
 
 function stdlib.error {
