@@ -59,7 +59,7 @@ function stdlib.debconf {
 }
 
 function stdlib.debconf.read {
-  local _dc=$(echo get ${options[question]} | debconf-communicate ${options[package]})
+  local _dc=$(echo get ${options[question]} | debconf-communicate ${options[package]} 2>/dev/null)
   if [[ $_dc =~ ^10 ]]; then
     stdlib_current_state="absent"
   elif [[ $_dc == "0" ]]; then
