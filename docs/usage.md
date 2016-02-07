@@ -133,7 +133,7 @@ site/profiles/consul/
 Static files go under `files` while scripts go under `scripts`. Profile-specific data can be stored in `data.sh`
 
 !!! Note
-    When using the `stdlib.file` resource, you can use the `--source` option to copy files to their destination. The `--source` option is able to reference any file on the system. It's recommended to use `$WAFFLES_SITE_DIR/profiles/profile_name/files/file.conf` when "sourcing" a file.
+    When using the `stdlib.file` resource, you can use the `--source` option to copy files to their destination. The `--source` option is able to reference any file on the system. It's recommended to use `$profile_files/file.conf` when "sourcing" a file.
 
 The `stdlib.profile` function is similar to `stdlib.data`: it takes a single argument, which is the name of a profile. The following translations are possible:
 
