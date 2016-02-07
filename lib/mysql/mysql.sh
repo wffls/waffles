@@ -28,14 +28,17 @@ function mysql.mycnf {
   stdlib.options.create_option state    "present"
   stdlib.options.create_option filename "__required__"
   stdlib.options.create_option user     "__required__"
-  stdlib.options.create_option host     "localhost"
   stdlib.options.create_option socket   "/var/run/mysqld/mysqld.sock"
+  stdlib.options.create_option host
   stdlib.options.create_option password
   stdlib.options.parse_options "$@"
 
   stdlib.ini --file "${options[filename]}" --section client --option user --value "${options[user]}"
-  stdlib.ini --file "${options[filename]}" --section client --option host --value "${options[host]}"
-  stdlib.ini --file "${options[filename]}" --section client --option socket --value "${options[socket]}"
+  if [[ -n "${options[host]}" ]]; then
+    stdlib.ini --file "${options[filename]}" --section client --option host --value "${options[host]}"
+  else
+    stdlib.ini --file "${options[filename]}" --section client --option socket --value "${options[socket]}"
+  fi
 
   if [[ -n ${options[password]} ]]; then
     stdlib.ini --file "${options[filename]}" --section client --option password --value "${options[password]}"
