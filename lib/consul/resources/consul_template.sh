@@ -100,10 +100,6 @@ function consul.template.read {
 function consul.template.create {
   _template=$(consul.template.build_template)
   stdlib.file --name "$_file" --content "$_template" --owner "${options[file_owner]}" --group "${options[file_group]}" --mode "${options[file_mode]}"
-
-  stdlib.capture_error service consul-template restart
-  stdlib.debug "Sleeping five seconds"
-  stdlib.debug_mute sleep 5
 }
 
 function consul.template.update {
