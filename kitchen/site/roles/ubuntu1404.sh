@@ -49,3 +49,7 @@ stdlib.sysvinit --name memcached
 stdlib.info "git"
 stdlib.apt --package git
 stdlib.git --name /root/.dotfiles --source https://github.com/jtopjian/dotfiles
+
+stdlib.info "symlink"
+stdlib.file --name /usr/local/bin/foo
+stdlib.symlink --source /usr/local/bin/foo --destination /usr/bin/foo
