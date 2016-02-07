@@ -86,10 +86,11 @@ function stdlib.ini.delete {
 # https://raw.githubusercontent.com/openstack-dev/devstack/master/inc/ini-config
 function stdlib.ini.ini_get_option {
   local _line
+  local _option=$(echo ${options[option]} | sed -e 's/[\/&]/\\&/g' | sed -e 's/[][]/\\&/g')
   if [[ ${options[section]} != "__none__" ]]; then
-    _line=$(sed -ne "/^\[${options[section]}\]/,/^\[.*\]/ { /^${options[option]}\([ \t]*=\|$\)/ p; }" "${options[file]}")
+    _line=$(sed -ne "/^\[${options[section]}\]/,/^\[.*\]/ { /^${_option}\([ \t]*=\|$\)/ p; }" "${options[file]}")
   else
-    _line=$(sed -ne "/^${options[option]}[ \t]*/ p;"  "${options[file]}")
+    _line=$(sed -ne "/^${_option}[ \t]*/ p;"  "${options[file]}")
   fi
 
   [[ -n $_line ]]
@@ -99,17 +100,18 @@ function stdlib.ini.ini_get_option {
 function stdlib.ini.ini_option_has_value {
   local _line
   local _value=$(echo ${options[value]} | sed -e 's/[\/&]/\\&/g' | sed -e 's/[][]/\\&/g')
+  local _option=$(echo ${options[option]} | sed -e 's/[\/&]/\\&/g' | sed -e 's/[][]/\\&/g')
   if [[ ${options[section]} != "__none__" ]]; then
     if [[ ${options[value]} == "__none__" ]]; then
-      _line=$(sed -ne "/^\[${options[section]}\]/,/^\[.*\]/ { /^${options[option]}$/ p; }" "${options[file]}")
+      _line=$(sed -ne "/^\[${options[section]}\]/,/^\[.*\]/ { /^${_option}$/ p; }" "${options[file]}")
     else
-      _line=$(sed -ne "/^\[${options[section]}\]/,/^\[.*\]/ { /^${options[option]}[ \t]*=[ \t]*${_value}$/ p; }" "${options[file]}")
+      _line=$(sed -ne "/^\[${options[section]}\]/,/^\[.*\]/ { /^${_option}[ \t]*=[ \t]*${_value}$/ p; }" "${options[file]}")
     fi
   else
     if [[ ${options[value]} == "__none__" ]]; then
-      _line=$(sed -ne "/^${options[option]}$/ p;" "${options[file]}")
+      _line=$(sed -ne "/^${_option}$/ p;" "${options[file]}")
     else
-      _line=$(sed -ne "/^${options[option]}[ \t]*=[ \t]*${_value}$/ p;" "${options[file]}")
+      _line=$(sed -ne "/^${_option}[ \t]*=[ \t]*${_value}$/ p;" "${options[file]}")
     fi
   fi
 
@@ -128,6 +130,7 @@ function stdlib.ini.inidelete {
 function stdlib.ini.iniset {
   [[ -z ${options[option]} ]] && return
   local _value=$(echo ${options[value]} | sed -e 's/[\/&]/\\&/g' | sed -e 's/[][]/\\&/g')
+  local _option=$(echo ${options[option]} | sed -e 's/[\/&]/\\&/g' | sed -e 's/[][]/\\&/g')
   if [[ ${options[section]} != "__none__" ]]; then
     # Add the section if it doesn't exist
     if ! grep -q "^\[${options[section]}\]" "${options[file]}" 2>/dev/null; then
@@ -141,12 +144,12 @@ function stdlib.ini.iniset {
     if [[ $_value == "__none__" ]]; then
       # Add it
       sed -i -e "/^\[${options[section]}\]/ a\\
-${options[option]}
+${_option}
 " "${options[file]}"
     else
       # Add it
       sed -i -e "/^\[${options[section]}\]/ a\\
-${options[option]} = $_value
+${_option} = $_value
 " "${options[file]}"
     fi
   else
