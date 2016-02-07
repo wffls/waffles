@@ -20,7 +20,7 @@
 # === Example
 #
 # ```shell
-# stdlib.directory --source $WAFFLES_SITE_DIR/profiles/foo/files/mydir --name /var/lib/mydir
+# stdlib.directory --source "$profile_files/mydir" --name /var/lib/mydir
 # ```
 #
 function stdlib.directory {

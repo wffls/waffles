@@ -94,7 +94,7 @@ Note: the way this script determines if Consul is installed is by the presence o
 Next, make the Consul server script, located at `sites/profiles/consul/scripts/server.sh`:
 
 ```shell
-stdlib.file --name /etc/init/consul.conf --source "$WAFFLES_SITE_DIR/profiles/consul/files/consul.conf"
+stdlib.file --name /etc/init/consul.conf --source "$profile_files/consul.conf"
 
 for key in "${!data_consul_config[@]}"; do
   augeas.json_dict --file /etc/consul.d/config.json --path / --key "$key" --value "${data_consul_config[$key]}"
