@@ -7,7 +7,6 @@ Manages debconf entries
 ## Parameters
 
 * state: The state of the resource. Required. Default: present.
-* name: An arbitrary name. Required. namevar.
 * package: The package to configure. Required.
 * question: The debconf question. Required.
 * vtype: The vtype of the debconf setting. Required.

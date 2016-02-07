@@ -9,7 +9,6 @@
 # === Parameters
 #
 # * state: The state of the resource. Required. Default: present.
-# * name: An arbitrary name. Required. namevar.
 # * package: The package to configure. Required.
 # * question: The debconf question. Required.
 # * vtype: The vtype of the debconf setting. Required.
@@ -37,7 +36,6 @@ function stdlib.debconf {
   # Resource Options
   local -A options
   stdlib.options.create_option state    "present"
-  stdlib.options.create_option name     "__required__"
   stdlib.options.create_option package  "__required__"
   stdlib.options.create_option question "__required__"
   stdlib.options.create_option vtype    "__required__"
@@ -45,7 +43,7 @@ function stdlib.debconf {
   stdlib.options.parse_options "$@"
 
   # Local Variables
-  local _value
+  local _value _name
 
   # Internal Resource Configuration
   if [[ -n ${options[unseen]} ]]; then
@@ -54,8 +52,10 @@ function stdlib.debconf {
     _unseen=""
   fi
 
+  _name="${options[package]}/${options[question]}/${options[vtype]}"
+
   # Process the resource
-  stdlib.resource.process "stdlib.debconf" "${options[name]}"
+  stdlib.resource.process "stdlib.debconf" "$_name"
 }
 
 function stdlib.debconf.read {
