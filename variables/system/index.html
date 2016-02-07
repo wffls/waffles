@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>augeas.host - Waffles</title>
+  <title>system - Waffles</title>
   
 
   <link rel="shortcut icon" href="../../img/favicon.ico">
@@ -20,7 +20,7 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "augeas.host";
+    var mkdocs_page_name = "system";
   </script>
   
   <script src="../../js/jquery-2.1.1.min.js"></script>
@@ -178,8 +178,23 @@
 
         
             
-    <li class="toctree-l1 ">
-        <a class="" href="../../variables/system/">system</a>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">system</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#system-variables">System Variables</a></li>
+                
+                    <li><a class="toctree-l4" href="#profile_files">profile_files</a></li>
+                
+                    <li><a class="toctree-l4" href="#profile_name">profile_name</a></li>
+                
+                    <li><a class="toctree-l4" href="#profile_path">profile_path</a></li>
+                
+                    <li><a class="toctree-l4" href="#role">role</a></li>
+                
+            
+            </ul>
         
     </li>
 
@@ -265,426 +280,413 @@
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../">Internals</a>
+        <a class="" href="../../resources/">Internals</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.apt_key/">stdlib.apt_key</a>
+        <a class="" href="../../resources/stdlib.apt_key/">stdlib.apt_key</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.apt_ppa/">stdlib.apt_ppa</a>
+        <a class="" href="../../resources/stdlib.apt_ppa/">stdlib.apt_ppa</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.apt/">stdlib.apt</a>
+        <a class="" href="../../resources/stdlib.apt/">stdlib.apt</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.apt_source/">stdlib.apt_source</a>
+        <a class="" href="../../resources/stdlib.apt_source/">stdlib.apt_source</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.cron/">stdlib.cron</a>
+        <a class="" href="../../resources/stdlib.cron/">stdlib.cron</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.debconf/">stdlib.debconf</a>
+        <a class="" href="../../resources/stdlib.debconf/">stdlib.debconf</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.directory/">stdlib.directory</a>
+        <a class="" href="../../resources/stdlib.directory/">stdlib.directory</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.file_line/">stdlib.file_line</a>
+        <a class="" href="../../resources/stdlib.file_line/">stdlib.file_line</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.file/">stdlib.file</a>
+        <a class="" href="../../resources/stdlib.file/">stdlib.file</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.git/">stdlib.git</a>
+        <a class="" href="../../resources/stdlib.git/">stdlib.git</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.groupadd/">stdlib.groupadd</a>
+        <a class="" href="../../resources/stdlib.groupadd/">stdlib.groupadd</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.ini/">stdlib.ini</a>
+        <a class="" href="../../resources/stdlib.ini/">stdlib.ini</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.ip6tables_rule/">stdlib.ip6tables_rule</a>
+        <a class="" href="../../resources/stdlib.ip6tables_rule/">stdlib.ip6tables_rule</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.iptables_rule/">stdlib.iptables_rule</a>
+        <a class="" href="../../resources/stdlib.iptables_rule/">stdlib.iptables_rule</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.sudo_cmd/">stdlib.sudo_cmd</a>
+        <a class="" href="../../resources/stdlib.sudo_cmd/">stdlib.sudo_cmd</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.sysvinit/">stdlib.sysvinit</a>
+        <a class="" href="../../resources/stdlib.sysvinit/">stdlib.sysvinit</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.upstart/">stdlib.upstart</a>
+        <a class="" href="../../resources/stdlib.upstart/">stdlib.upstart</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../stdlib.useradd/">stdlib.useradd</a>
+        <a class="" href="../../resources/stdlib.useradd/">stdlib.useradd</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../apache.section/">apache.section</a>
+        <a class="" href="../../resources/apache.section/">apache.section</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../apache.setting/">apache.setting</a>
+        <a class="" href="../../resources/apache.setting/">apache.setting</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../augeas.aptconf/">augeas.aptconf</a>
+        <a class="" href="../../resources/augeas.aptconf/">augeas.aptconf</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../augeas.cron/">augeas.cron</a>
+        <a class="" href="../../resources/augeas.cron/">augeas.cron</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../augeas.file_line/">augeas.file_line</a>
+        <a class="" href="../../resources/augeas.file_line/">augeas.file_line</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../augeas.generic/">augeas.generic</a>
-        
-    </li>
-
-        
-            
-    <li class="toctree-l1 current">
-        <a class="current" href="./">augeas.host</a>
-        
-            <ul>
-            
-                <li class="toctree-l3"><a href="#augeashost">augeas.host</a></li>
-                
-                    <li><a class="toctree-l4" href="#description">Description</a></li>
-                
-                    <li><a class="toctree-l4" href="#parameters">Parameters</a></li>
-                
-                    <li><a class="toctree-l4" href="#example">Example</a></li>
-                
-            
-            </ul>
+        <a class="" href="../../resources/augeas.generic/">augeas.generic</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../augeas.ini/">augeas.ini</a>
+        <a class="" href="../../resources/augeas.host/">augeas.host</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../augeas.json_array/">augeas.json_array</a>
+        <a class="" href="../../resources/augeas.ini/">augeas.ini</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../augeas.json_dict/">augeas.json_dict</a>
+        <a class="" href="../../resources/augeas.json_array/">augeas.json_array</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../augeas.mail_alias/">augeas.mail_alias</a>
+        <a class="" href="../../resources/augeas.json_dict/">augeas.json_dict</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../augeas.shellvar/">augeas.shellvar</a>
+        <a class="" href="../../resources/augeas.mail_alias/">augeas.mail_alias</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../augeas.ssh_authorized_key/">augeas.ssh_authorized_key</a>
+        <a class="" href="../../resources/augeas.shellvar/">augeas.shellvar</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../consul.check/">consul.check</a>
+        <a class="" href="../../resources/augeas.ssh_authorized_key/">augeas.ssh_authorized_key</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../consul.service/">consul.service</a>
+        <a class="" href="../../resources/consul.check/">consul.check</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../consul.template/">consul.template</a>
+        <a class="" href="../../resources/consul.service/">consul.service</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../consul.watch/">consul.watch</a>
+        <a class="" href="../../resources/consul.template/">consul.template</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../keepalived.global_defs/">keepalived.global_defs</a>
+        <a class="" href="../../resources/consul.watch/">consul.watch</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../keepalived.vrrp_instance/">keepalived.vrrp_instance</a>
+        <a class="" href="../../resources/keepalived.global_defs/">keepalived.global_defs</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../keepalived.vrrp_script/">keepalived.vrrp_script</a>
+        <a class="" href="../../resources/keepalived.vrrp_instance/">keepalived.vrrp_instance</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../keepalived.vrrp_sync_group/">keepalived.vrrp_sync_group</a>
+        <a class="" href="../../resources/keepalived.vrrp_script/">keepalived.vrrp_script</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../mysql.database/">mysql.database</a>
+        <a class="" href="../../resources/keepalived.vrrp_sync_group/">keepalived.vrrp_sync_group</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../mysql.grant/">mysql.grant</a>
+        <a class="" href="../../resources/mysql.database/">mysql.database</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../mysql.user/">mysql.user</a>
+        <a class="" href="../../resources/mysql.grant/">mysql.grant</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../nginx.events/">nginx.events</a>
+        <a class="" href="../../resources/mysql.user/">mysql.user</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../nginx.global/">nginx.global</a>
+        <a class="" href="../../resources/nginx.events/">nginx.events</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../nginx.http/">nginx.http</a>
+        <a class="" href="../../resources/nginx.global/">nginx.global</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../nginx.if/">nginx.if</a>
+        <a class="" href="../../resources/nginx.http/">nginx.http</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../nginx.location/">nginx.location</a>
+        <a class="" href="../../resources/nginx.if/">nginx.if</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../nginx.map/">nginx.map</a>
+        <a class="" href="../../resources/nginx.location/">nginx.location</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../nginx.server/">nginx.server</a>
+        <a class="" href="../../resources/nginx.map/">nginx.map</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../nginx.upstream/">nginx.upstream</a>
+        <a class="" href="../../resources/nginx.server/">nginx.server</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../python.pip/">python.pip</a>
+        <a class="" href="../../resources/nginx.upstream/">nginx.upstream</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../python.virtualenv/">python.virtualenv</a>
+        <a class="" href="../../resources/python.pip/">python.pip</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.cluster_nodes/">rabbitmq.cluster_nodes</a>
+        <a class="" href="../../resources/python.virtualenv/">python.virtualenv</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.config_settings/">rabbitmq.config_settings</a>
+        <a class="" href="../../resources/rabbitmq.cluster_nodes/">rabbitmq.cluster_nodes</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.policy/">rabbitmq.policy</a>
+        <a class="" href="../../resources/rabbitmq.config_settings/">rabbitmq.config_settings</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.user_permissions/">rabbitmq.user_permissions</a>
+        <a class="" href="../../resources/rabbitmq.policy/">rabbitmq.policy</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.user/">rabbitmq.user</a>
+        <a class="" href="../../resources/rabbitmq.user_permissions/">rabbitmq.user_permissions</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../rabbitmq.vhost/">rabbitmq.vhost</a>
+        <a class="" href="../../resources/rabbitmq.user/">rabbitmq.user</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../resources/rabbitmq.vhost/">rabbitmq.vhost</a>
         
     </li>
 
@@ -714,11 +716,11 @@
     
       
         
-          <li>Resources &raquo;</li>
+          <li>Variables &raquo;</li>
         
       
     
-    <li>augeas.host</li>
+    <li>system</li>
     <li class="wy-breadcrumbs-aside">
       
         
@@ -732,20 +734,34 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="augeashost">augeas.host</h1>
-<h2 id="description">Description</h2>
-<p>Manages hosts in /etc/hosts</p>
-<h2 id="parameters">Parameters</h2>
-<ul>
-<li>state: The state of the resource. Required. Default: present.</li>
-<li>name: The host. Required. namevar.</li>
-<li>ip: The IP address of the host. Required.</li>
-<li>aliases: A CSV list of host aliases. Optional</li>
-<li>file: The hosts file. Default: /etc/hosts.</li>
-</ul>
-<h2 id="example">Example</h2>
-<pre><code class="shell">augeas.host --name example.com --ip 192.168.1.1 --aliases www,db
+                <h1 id="system-variables">System Variables</h1>
+<p><code>lib/system.sh</code> contains variables that can be used throughout your scripts.</p>
+<h2 id="profile_files">profile_files</h2>
+<p>Returns the path to the profile files directory.</p>
+<pre><code class="shell">echo $profile_files
+/etc/waffles/site/profiles/memcached/files
+
+stdlib.file --name /tmp/foo.txt --source &quot;$profile_files/foo.txt&quot;
 </code></pre>
+
+<h2 id="profile_name">profile_name</h2>
+<p>Returns the name of the profile currently being run.</p>
+<pre><code class="shell">echo $profile_name
+memcached
+</code></pre>
+
+<h2 id="profile_path">profile_path</h2>
+<p>Returns the path of the profle currently being run.</p>
+<pre><code class="shell">echo $profile_path
+/etc/waffles/site/profiles/memcached
+</code></pre>
+
+<h2 id="role">role</h2>
+<p>Returns the role currently being run.</p>
+<p>``shell
+echo $role
+memcached_server
+```</p>
               
             </div>
           </div>
@@ -753,10 +769,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../augeas.ini/" class="btn btn-neutral float-right" title="augeas.ini"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../../guides/environment-vars/" class="btn btn-neutral float-right" title="Environment Variables"/>Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../augeas.generic/" class="btn btn-neutral" title="augeas.generic"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../functions/rabbitmq/" class="btn btn-neutral" title="rabbitmq"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -784,10 +800,10 @@
           <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../augeas.generic/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../../functions/rabbitmq/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../augeas.ini/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../../guides/environment-vars/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

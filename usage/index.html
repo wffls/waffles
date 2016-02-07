@@ -191,6 +191,21 @@
           
             <li>
     <ul class="subnav">
+    <li><span>Variables</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../variables/system/">system</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <ul class="subnav">
     <li><span>Guides</span></li>
 
         
@@ -851,7 +866,7 @@ stdlib.data memcached
 <p>Static files go under <code>files</code> while scripts go under <code>scripts</code>. Profile-specific data can be stored in <code>data.sh</code></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>When using the <code>stdlib.file</code> resource, you can use the <code>--source</code> option to copy files to their destination. The <code>--source</code> option is able to reference any file on the system. It's recommended to use <code>$WAFFLES_SITE_DIR/profiles/profile_name/files/file.conf</code> when "sourcing" a file.</p>
+<p>When using the <code>stdlib.file</code> resource, you can use the <code>--source</code> option to copy files to their destination. The <code>--source</code> option is able to reference any file on the system. It's recommended to use <code>$profile_files/file.conf</code> when "sourcing" a file.</p>
 </div>
 <p>The <code>stdlib.profile</code> function is similar to <code>stdlib.data</code>: it takes a single argument, which is the name of a profile. The following translations are possible:</p>
 <pre><code class="shell">stdlib.profile common/users    =&gt; site/profiles/common/scripts/users.sh

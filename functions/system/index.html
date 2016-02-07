@@ -177,6 +177,17 @@
                     <li><a class="toctree-l4" href="#stdlibwarn">stdlib.warn</a></li>
                 
             
+                <li class="toctree-l3"><a href="#system-variables">System Variables</a></li>
+                
+                    <li><a class="toctree-l4" href="#profile_files">profile_files</a></li>
+                
+                    <li><a class="toctree-l4" href="#profile_name">profile_name</a></li>
+                
+                    <li><a class="toctree-l4" href="#profile_path">profile_path</a></li>
+                
+                    <li><a class="toctree-l4" href="#role">role</a></li>
+                
+            
             </ul>
         
     </li>
@@ -234,6 +245,21 @@
             
     <li class="toctree-l1 ">
         <a class="" href="../rabbitmq/">rabbitmq</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Variables</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../variables/system/">system</a>
         
     </li>
 
@@ -811,6 +837,13 @@
 <li><a href="#stdlibwarn">stdlib.warn</a></li>
 </ul>
 </li>
+<li><a href="#system-variables">System Variables</a><ul>
+<li><a href="#profile_files">profile_files</a></li>
+<li><a href="#profile_name">profile_name</a></li>
+<li><a href="#profile_path">profile_path</a></li>
+<li><a href="#role">role</a></li>
+</ul>
+</li>
 </ul>
 </div>
 <h2 id="stdlibarray_contains">stdlib.array_contains</h2>
@@ -882,7 +915,7 @@ fi
 </code></pre>
 
 <h2 id="stdlibdata">stdlib.data</h2>
-<p>The same as <code>stdlib.profiles</code> but the shell scripts can be placed differently:</p>
+<p>The same as <code>stdlib.profile</code> but the shell scripts can be placed differently:</p>
 <pre><code class="shell">stdlib.data common =&gt; data/common.sh
 stdlib.data common =&gt; data/common/init.sh
 stdlib.data common/users =&gt; data/common/users.sh
@@ -972,10 +1005,10 @@ fi
 <h2 id="stdlibprofile">stdlib.profile</h2>
 <p>Takes a profile as input and determines the shell script attached to the profile.</p>
 <p>If Waffles is being run locally, then <code>stdlib.include</code> is run on the script. If Waffles is being run in push-based mode, then the profile is marked to be copied to the remote node.</p>
-<pre><code class="shell">stdlib.profiles common/users =&gt; profiles/common/scripts/users.sh
-stdlib.profiles common/packages =&gt; profiles/common/scripts/packages.sh
-stdlib.profiles memcached =&gt; profiles/memcached/scripts/init.sh
-stdlib.profiles memcached/utils =&gt; profiles/memcached/scripts/utils.sh
+<pre><code class="shell">stdlib.profile common/users =&gt; profiles/common/scripts/users.sh
+stdlib.profile common/packages =&gt; profiles/common/scripts/packages.sh
+stdlib.profile memcached =&gt; profiles/memcached/scripts/init.sh
+stdlib.profile memcached/utils =&gt; profiles/memcached/scripts/utils.sh
 </code></pre>
 
 <h2 id="stdlibsplit">stdlib.split</h2>
@@ -1028,6 +1061,35 @@ fi
 <p>Prints a warning message.</p>
 <pre><code class="shell">stdlib.warn &quot;Foobar&quot;
 </code></pre>
+
+<h1 id="system-variables">System Variables</h1>
+<p><code>lib/system.sh</code> contains variables that can be used throughout your scripts.</p>
+<h2 id="profile_files">profile_files</h2>
+<p>Returns the path to the profile files directory.</p>
+<pre><code class="shell">echo $profile_files
+/etc/waffles/site/profiles/memcached/files
+
+stdlib.file --name /tmp/foo.txt --source &quot;$profile_files/foo.txt&quot;
+</code></pre>
+
+<h2 id="profile_name">profile_name</h2>
+<p>Returns the name of the profile currently being run.</p>
+<pre><code class="shell">echo $profile_name
+memcached
+</code></pre>
+
+<h2 id="profile_path">profile_path</h2>
+<p>Returns the path of the profle currently being run.</p>
+<pre><code class="shell">echo $profile_path
+/etc/waffles/site/profiles/memcached
+</code></pre>
+
+<h2 id="role">role</h2>
+<p>Returns the role currently being run.</p>
+<p>``shell
+echo $role
+memcached_server
+```</p>
               
             </div>
           </div>
