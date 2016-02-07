@@ -55,6 +55,7 @@ pages:
     - stdlib.ip6tables_rule: 'resources/stdlib.ip6tables_rule.md'
     - stdlib.iptables_rule: 'resources/stdlib.iptables_rule.md'
     - stdlib.sudo_cmd: 'resources/stdlib.sudo_cmd.md'
+    - stdlib.symlink: 'resources/stdlib.symlink.md'
     - stdlib.sysvinit: 'resources/stdlib.sysvinit.md'
     - stdlib.upstart: 'resources/stdlib.upstart.md'
     - stdlib.useradd: 'resources/stdlib.useradd.md'
