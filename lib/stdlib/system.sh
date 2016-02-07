@@ -22,24 +22,43 @@ declare stdlib_color_yellow='\e[1;33m'
 declare stdlib_color_reset='\e[0m'
 
 # These functions print colored lines
+function stdlib.color? {
+  [[ -n $WAFFLES_COLOR_OUTPUT ]]
+}
+
 function stdlib.debug {
   if stdlib.debug? ; then
-    echo -e "${stdlib_color_blue}(debug) ${stdlib_title}${stdlib_subtitle}${stdlib_color_reset}${@}" >&2
+    if stdlib.color? ; then
+      echo -e "${stdlib_color_blue}(debug) ${stdlib_title}${stdlib_subtitle}${stdlib_color_reset}${@}" >&2
+    else
+      echo -e "(debug) ${stdlib_title}${stdlib_subtitle}${@}" >&2
+    fi
   fi
 }
 
 function stdlib.info {
-  echo -e "${stdlib_color_green}(info)  ${stdlib_title}${stdlib_subtitle}${stdlib_color_reset}${@}" >&2
+  if stdlib.color? ; then
+    echo -e "${stdlib_color_green}(info)  ${stdlib_title}${stdlib_subtitle}${stdlib_color_reset}${@}" >&2
+  else
+    echo -e "(info)  ${stdlib_title}${stdlib_subtitle}${@}" >&2
+  fi
 }
 
 function stdlib.warn {
-  echo -e "${stdlib_color_yellow}(warn)  ${stdlib_title}${stdlib_subtitle}${stdlib_color_reset}${@}" >&2
+  if stdlib.color? ; then
+    echo -e "${stdlib_color_yellow}(warn)  ${stdlib_title}${stdlib_subtitle}${stdlib_color_reset}${@}" >&2
+  else
+    echo -e "(warn)  ${stdlib_title}${stdlib_subtitle}${@}" >&2
+  fi
 }
 
 function stdlib.error {
-  echo -e "${stdlib_color_red}(error) ${stdlib_title}${stdlib_subtitle}${stdlib_color_reset}${@}" >&2
+  if stdlib.color? ; then
+    echo -e "${stdlib_color_red}(error) ${stdlib_title}${stdlib_subtitle}${stdlib_color_reset}${@}" >&2
+  else
+    echo -e "(error) ${stdlib_title}${stdlib_subtitle}${@}" >&2
+  fi
 }
-
 
 # These commands are simple helpers to detect how Waffles was run.
 function stdlib.noop? {

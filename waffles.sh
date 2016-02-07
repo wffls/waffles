@@ -11,6 +11,7 @@ function help {
   echo "  -h: help"
   echo "  -d: debug"
   echo "  -n: noop"
+  echo "  -p: color (pretty) output"
   echo "  -r: role, stored in site/roles"
   echo "  -t: run in test mode. exit 1 if changes were made"
   echo
@@ -156,7 +157,7 @@ fi
 source "$WAFFLES_DIR/lib/init.sh"
 
 # Parse options
-while getopts :c:dhk:nr:s:tu:w:yz: opt; do
+while getopts :c:dhk:npr:s:tu:w:yz: opt; do
   case $opt in
     c)
       WAFFLES_REMOTE_SSH_ATTEMPTS="$OPTARG"
@@ -173,6 +174,9 @@ while getopts :c:dhk:nr:s:tu:w:yz: opt; do
       ;;
     n)
       WAFFLES_NOOP=1
+      ;;
+    p)
+      WAFFLES_COLOR_OUTPUT=1
       ;;
     r)
       role="$OPTARG"
