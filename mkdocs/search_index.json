@@ -541,6 +541,31 @@
             "title": "rabbitmq.list_value_delete"
         }, 
         {
+            "location": "/variables/environment/", 
+            "text": "Environment Variables\n\n\nThe following environment variables are available for use.\n\n\nWAFFLES_NOOP\n\n\nno-op stands for \"no operation\". Rather than actually executing commands, it will print what \nwould have\n happened if Waffles was run in normal mode.\n\n\n$ WAFFLES_NOOP=1 waffles.sh -r memcached\n\n\n\n\n\n\nNote\n\n\nYou can also use the \n-n\n flag when running Waffles.\n\n\n\n\nWAFFLES_DEBUG\n\n\nThis will print extra information about each action. If Waffles is not working correctly, try running in \"debug\" mode and see if you can spot the error.\n\n\nThe output from \"debug\" mode is also the best way to report bugs.\n\n\n$ WAFFLES_DEBUG=1 waffles.sh -r memcached\n\n\n\n\n\n\nComments\n\n\nYou can also use the \n-d\n flag when running Waffles.\n\n\n\n\nTEST\n\n\nWhen TEST is set, Waffles will exit 1 if any changes were made. This is mostly used for the Waffles acceptance test suite, but it's also useful to verify if the previous run was successful because no changes should need to be made upon the second execution.\n\n\n$ WAFFLES_TEST=1 waffles.sh -r memcached\n\n\n\n\n\n\nComments\n\n\nYou can also use the \n-t\n flag when running Waffles.", 
+            "title": "environment"
+        }, 
+        {
+            "location": "/variables/environment/#environment-variables", 
+            "text": "The following environment variables are available for use.", 
+            "title": "Environment Variables"
+        }, 
+        {
+            "location": "/variables/environment/#waffles_noop", 
+            "text": "no-op stands for \"no operation\". Rather than actually executing commands, it will print what  would have  happened if Waffles was run in normal mode.  $ WAFFLES_NOOP=1 waffles.sh -r memcached   Note  You can also use the  -n  flag when running Waffles.", 
+            "title": "WAFFLES_NOOP"
+        }, 
+        {
+            "location": "/variables/environment/#waffles_debug", 
+            "text": "This will print extra information about each action. If Waffles is not working correctly, try running in \"debug\" mode and see if you can spot the error.  The output from \"debug\" mode is also the best way to report bugs.  $ WAFFLES_DEBUG=1 waffles.sh -r memcached   Comments  You can also use the  -d  flag when running Waffles.", 
+            "title": "WAFFLES_DEBUG"
+        }, 
+        {
+            "location": "/variables/environment/#test", 
+            "text": "When TEST is set, Waffles will exit 1 if any changes were made. This is mostly used for the Waffles acceptance test suite, but it's also useful to verify if the previous run was successful because no changes should need to be made upon the second execution.  $ WAFFLES_TEST=1 waffles.sh -r memcached   Comments  You can also use the  -t  flag when running Waffles.", 
+            "title": "TEST"
+        }, 
+        {
             "location": "/variables/system/", 
             "text": "System Variables\n\n\nlib/system.sh\n contains variables that can be used throughout your scripts.\n\n\nprofile_files\n\n\nReturns the path to the profile files directory.\n\n\necho $profile_files\n/etc/waffles/site/profiles/memcached/files\n\nstdlib.file --name /tmp/foo.txt --source \n$profile_files/foo.txt\n\n\n\n\n\nprofile_name\n\n\nReturns the name of the profile currently being run.\n\n\necho $profile_name\nmemcached\n\n\n\n\nprofile_path\n\n\nReturns the path of the profle currently being run.\n\n\necho $profile_path\n/etc/waffles/site/profiles/memcached\n\n\n\n\nrole\n\n\nReturns the role currently being run.\n\n\n``shell\necho $role\nmemcached_server\n```", 
             "title": "system"
@@ -569,36 +594,6 @@
             "location": "/variables/system/#role", 
             "text": "Returns the role currently being run.  ``shell\necho $role\nmemcached_server\n```", 
             "title": "role"
-        }, 
-        {
-            "location": "/guides/environment-vars/", 
-            "text": "Environment Variable Support\n\n\n\n\n\n\nEnvironment Variable Support\n\n\nDescription\n\n\nWAFFLES_NOOP\n\n\nSteps\n\n\nComments\n\n\n\n\n\n\nWAFFLES_DEBUG\n\n\nSteps\n\n\nComments\n\n\n\n\n\n\nTEST\n\n\nSteps\n\n\nComments\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDescription\n\n\nThis guide will show how to alter Waffles's behavior by setting different environment variables.\n\n\nWAFFLES_NOOP\n\n\nno-op stands for \"no operation\". Rather than actually executing commands, it will print what \nwould have\n happened if Waffles was run in normal mode.\n\n\nSteps\n\n\n\n\nRun Waffles with \nWAFFLES_NOOP\n set:\n\n\n\n\n$ WAFFLES_NOOP=1 waffles.sh memcached\n\n\n\n\nComments\n\n\nYou can also use the \n-n\n flag when running Waffles.\n\n\nWAFFLES_DEBUG\n\n\nThis will print extra information about each action. If Waffles is not working correctly, try running in \"debug\" mode and see if you can spot the error.\n\n\nThe output from \"debug\" mode is also the best way to report bugs.\n\n\nSteps\n\n\n\n\nRun Waffles with \nWAFFLES_DEBUG\n set:\n\n\n\n\n$ WAFFLES_DEBUG=1 waffles.sh memcached\n\n\n\n\nComments\n\n\nYou can also use the \n-d\n flag when running Waffles.\n\n\nTEST\n\n\nWhen TEST is set, Waffles will exit 1 if any changes were made. This is useful to verify the previous run was successful because no changes should need to be made upon the second execution.\n\n\nSteps\n\n\n\n\nRun Waffles with \nWAFFLES_TEST\n set:\n\n\n\n\n$ WAFFLES_TEST=1 waffles.sh memcached\n\n\n\n\nComments\n\n\nYou can also use the \n-t\n flag when running Waffles.", 
-            "title": "Environment Variables"
-        }, 
-        {
-            "location": "/guides/environment-vars/#environment-variable-support", 
-            "text": "Environment Variable Support  Description  WAFFLES_NOOP  Steps  Comments    WAFFLES_DEBUG  Steps  Comments    TEST  Steps  Comments", 
-            "title": "Environment Variable Support"
-        }, 
-        {
-            "location": "/guides/environment-vars/#description", 
-            "text": "This guide will show how to alter Waffles's behavior by setting different environment variables.", 
-            "title": "Description"
-        }, 
-        {
-            "location": "/guides/environment-vars/#waffles_noop", 
-            "text": "no-op stands for \"no operation\". Rather than actually executing commands, it will print what  would have  happened if Waffles was run in normal mode.  Steps   Run Waffles with  WAFFLES_NOOP  set:   $ WAFFLES_NOOP=1 waffles.sh memcached  Comments  You can also use the  -n  flag when running Waffles.", 
-            "title": "WAFFLES_NOOP"
-        }, 
-        {
-            "location": "/guides/environment-vars/#waffles_debug", 
-            "text": "This will print extra information about each action. If Waffles is not working correctly, try running in \"debug\" mode and see if you can spot the error.  The output from \"debug\" mode is also the best way to report bugs.  Steps   Run Waffles with  WAFFLES_DEBUG  set:   $ WAFFLES_DEBUG=1 waffles.sh memcached  Comments  You can also use the  -d  flag when running Waffles.", 
-            "title": "WAFFLES_DEBUG"
-        }, 
-        {
-            "location": "/guides/environment-vars/#test", 
-            "text": "When TEST is set, Waffles will exit 1 if any changes were made. This is useful to verify the previous run was successful because no changes should need to be made upon the second execution.  Steps   Run Waffles with  WAFFLES_TEST  set:   $ WAFFLES_TEST=1 waffles.sh memcached  Comments  You can also use the  -t  flag when running Waffles.", 
-            "title": "TEST"
         }, 
         {
             "location": "/guides/deploying-a-mysql-server/", 
@@ -982,7 +977,7 @@
         }, 
         {
             "location": "/resources/stdlib.debconf/", 
-            "text": "stdlib.debconf\n\n\nDescription\n\n\nManages debconf entries\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: An arbitrary name. Required. namevar.\n\n\npackage: The package to configure. Required.\n\n\nquestion: The debconf question. Required.\n\n\nvtype: The vtype of the debconf setting. Required.\n\n\nvalue: The answer/setting. Required.\n\n\n\n\nExample\n\n\nstdlib.debconf --package mysql-server --question mysql-server/root_password\n               --vtype password --value mypassword", 
+            "text": "stdlib.debconf\n\n\nDescription\n\n\nManages debconf entries\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\npackage: The package to configure. Required.\n\n\nquestion: The debconf question. Required.\n\n\nvtype: The vtype of the debconf setting. Required.\n\n\nvalue: The answer/setting. Required.\n\n\n\n\nExample\n\n\nstdlib.debconf --package mysql-server --question mysql-server/root_password\n               --vtype password --value mypassword", 
             "title": "stdlib.debconf"
         }, 
         {
@@ -997,7 +992,7 @@
         }, 
         {
             "location": "/resources/stdlib.debconf/#parameters", 
-            "text": "state: The state of the resource. Required. Default: present.  name: An arbitrary name. Required. namevar.  package: The package to configure. Required.  question: The debconf question. Required.  vtype: The vtype of the debconf setting. Required.  value: The answer/setting. Required.", 
+            "text": "state: The state of the resource. Required. Default: present.  package: The package to configure. Required.  question: The debconf question. Required.  vtype: The vtype of the debconf setting. Required.  value: The answer/setting. Required.", 
             "title": "Parameters"
         }, 
         {
@@ -1233,6 +1228,31 @@
         {
             "location": "/resources/stdlib.sudo_cmd/#example", 
             "text": "stdlib.sudo_cmd --user consul --command /usr/local/bin/consul_build_hosts_file.sh", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/resources/stdlib.symlink/", 
+            "text": "stdlib.symlink\n\n\nDescription\n\n\nManages symlinks\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\ndestination: The destination link. Required. namevar.\n\n\nsource: Source file. Required.\n\n\n\n\nExample\n\n\nstdlib.symlink --source /usr/local/bin/foo --destination /usr/bin/foo", 
+            "title": "stdlib.symlink"
+        }, 
+        {
+            "location": "/resources/stdlib.symlink/#stdlibsymlink", 
+            "text": "", 
+            "title": "stdlib.symlink"
+        }, 
+        {
+            "location": "/resources/stdlib.symlink/#description", 
+            "text": "Manages symlinks", 
+            "title": "Description"
+        }, 
+        {
+            "location": "/resources/stdlib.symlink/#parameters", 
+            "text": "state: The state of the resource. Required. Default: present.  destination: The destination link. Required. namevar.  source: Source file. Required.", 
+            "title": "Parameters"
+        }, 
+        {
+            "location": "/resources/stdlib.symlink/#example", 
+            "text": "stdlib.symlink --source /usr/local/bin/foo --destination /usr/bin/foo", 
             "title": "Example"
         }, 
         {
