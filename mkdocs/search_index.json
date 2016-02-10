@@ -567,7 +567,7 @@
         }, 
         {
             "location": "/variables/system/", 
-            "text": "System Variables\n\n\nlib/system.sh\n contains variables that can be used throughout your scripts.\n\n\nprofile_files\n\n\nReturns the path to the profile files directory.\n\n\necho $profile_files\n/etc/waffles/site/profiles/memcached/files\n\nstdlib.file --name /tmp/foo.txt --source \n$profile_files/foo.txt\n\n\n\n\n\nprofile_name\n\n\nReturns the name of the profile currently being run.\n\n\necho $profile_name\nmemcached\n\n\n\n\nprofile_path\n\n\nReturns the path of the profle currently being run.\n\n\necho $profile_path\n/etc/waffles/site/profiles/memcached\n\n\n\n\nrole\n\n\nReturns the role currently being run.\n\n\n``shell\necho $role\nmemcached_server\n```", 
+            "text": "System Variables\n\n\nlib/system.sh\n contains variables that can be used throughout your scripts.\n\n\nprofile_files\n\n\nReturns the path to the profile files directory.\n\n\necho $profile_files\n/etc/waffles/site/profiles/memcached/files\n\nstdlib.file --name /tmp/foo.txt --source \n$profile_files/foo.txt\n\n\n\n\n\nprofile_name\n\n\nReturns the name of the profile currently being run.\n\n\necho $profile_name\nmemcached\n\n\n\n\nprofile_path\n\n\nReturns the path of the profle currently being run.\n\n\necho $profile_path\n/etc/waffles/site/profiles/memcached\n\n\n\n\nrole\n\n\nReturns the role currently being run.\n\n\necho $role\nmemcached_server", 
             "title": "system"
         }, 
         {
@@ -592,7 +592,7 @@
         }, 
         {
             "location": "/variables/system/#role", 
-            "text": "Returns the role currently being run.  ``shell\necho $role\nmemcached_server\n```", 
+            "text": "Returns the role currently being run.  echo $role\nmemcached_server", 
             "title": "role"
         }, 
         {
