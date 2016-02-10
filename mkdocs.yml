@@ -27,9 +27,9 @@ pages:
     - 'mysql': 'functions/mysql.md'
     - 'rabbitmq': 'functions/rabbitmq.md'
   - Variables:
+    - 'environment': 'variables/environment.md'
     - 'system': 'variables/system.md'
   - Guides:
-    - 'Environment Variables': 'guides/environment-vars.md'
     - 'Deploying a MySQL Server': 'guides/deploying-a-mysql-server.md'
     - 'Deploying a MySQL Galera Cluster': 'guides/deploying-a-mysql-galera-cluster.md'
     - 'Deploying a Consul Cluster': 'guides/deploying-a-consul-cluster.md'

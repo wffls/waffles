@@ -35,7 +35,7 @@ echo $profile_path
 
 Returns the role currently being run.
 
-``shell
+```shell
 echo $role
 memcached_server
 ```
