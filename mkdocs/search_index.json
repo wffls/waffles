@@ -542,7 +542,7 @@
         }, 
         {
             "location": "/variables/environment/", 
-            "text": "Environment Variables\n\n\nThe following environment variables are available for use.\n\n\nWAFFLES_NOOP\n\n\nno-op stands for \"no operation\". Rather than actually executing commands, it will print what \nwould have\n happened if Waffles was run in normal mode.\n\n\n$ WAFFLES_NOOP=1 waffles.sh -r memcached\n\n\n\n\n\n\nNote\n\n\nYou can also use the \n-n\n flag when running Waffles.\n\n\n\n\nWAFFLES_DEBUG\n\n\nThis will print extra information about each action. If Waffles is not working correctly, try running in \"debug\" mode and see if you can spot the error.\n\n\nThe output from \"debug\" mode is also the best way to report bugs.\n\n\n$ WAFFLES_DEBUG=1 waffles.sh -r memcached\n\n\n\n\n\n\nComments\n\n\nYou can also use the \n-d\n flag when running Waffles.\n\n\n\n\nTEST\n\n\nWhen TEST is set, Waffles will exit 1 if any changes were made. This is mostly used for the Waffles acceptance test suite, but it's also useful to verify if the previous run was successful because no changes should need to be made upon the second execution.\n\n\n$ WAFFLES_TEST=1 waffles.sh -r memcached\n\n\n\n\n\n\nComments\n\n\nYou can also use the \n-t\n flag when running Waffles.", 
+            "text": "Environment Variables\n\n\nThe following environment variables are available for use.\n\n\nWAFFLES_NOOP\n\n\nno-op stands for \"no operation\". Rather than actually executing commands, it will print what \nwould have\n happened if Waffles was run in normal mode.\n\n\n$ WAFFLES_NOOP=1 waffles.sh -r memcached\n\n\n\n\n\n\nNote\n\n\nYou can also use the \n-n\n flag when running Waffles.\n\n\n\n\nWAFFLES_DEBUG\n\n\nThis will print extra information about each action. If Waffles is not working correctly, try running in \"debug\" mode and see if you can spot the error.\n\n\nThe output from \"debug\" mode is also the best way to report bugs.\n\n\n$ WAFFLES_DEBUG=1 waffles.sh -r memcached\n\n\n\n\n\n\nNote\n\n\nYou can also use the \n-d\n flag when running Waffles.\n\n\n\n\nTEST\n\n\nWhen TEST is set, Waffles will exit 1 if any changes were made. This is mostly used for the Waffles acceptance test suite, but it's also useful to verify if the previous run was successful because no changes should need to be made upon the second execution.\n\n\n$ WAFFLES_TEST=1 waffles.sh -r memcached\n\n\n\n\n\n\nNote\n\n\nYou can also use the \n-t\n flag when running Waffles.", 
             "title": "environment"
         }, 
         {
@@ -557,12 +557,12 @@
         }, 
         {
             "location": "/variables/environment/#waffles_debug", 
-            "text": "This will print extra information about each action. If Waffles is not working correctly, try running in \"debug\" mode and see if you can spot the error.  The output from \"debug\" mode is also the best way to report bugs.  $ WAFFLES_DEBUG=1 waffles.sh -r memcached   Comments  You can also use the  -d  flag when running Waffles.", 
+            "text": "This will print extra information about each action. If Waffles is not working correctly, try running in \"debug\" mode and see if you can spot the error.  The output from \"debug\" mode is also the best way to report bugs.  $ WAFFLES_DEBUG=1 waffles.sh -r memcached   Note  You can also use the  -d  flag when running Waffles.", 
             "title": "WAFFLES_DEBUG"
         }, 
         {
             "location": "/variables/environment/#test", 
-            "text": "When TEST is set, Waffles will exit 1 if any changes were made. This is mostly used for the Waffles acceptance test suite, but it's also useful to verify if the previous run was successful because no changes should need to be made upon the second execution.  $ WAFFLES_TEST=1 waffles.sh -r memcached   Comments  You can also use the  -t  flag when running Waffles.", 
+            "text": "When TEST is set, Waffles will exit 1 if any changes were made. This is mostly used for the Waffles acceptance test suite, but it's also useful to verify if the previous run was successful because no changes should need to be made upon the second execution.  $ WAFFLES_TEST=1 waffles.sh -r memcached   Note  You can also use the  -t  flag when running Waffles.", 
             "title": "TEST"
         }, 
         {
