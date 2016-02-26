@@ -1077,7 +1077,7 @@
         }, 
         {
             "location": "/resources/stdlib.git/", 
-            "text": "stdlib.git\n\n\nDescription\n\n\nManage a git repository\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The name (path) of the git repo destination. Required.\n\n\nsource: The URI of the source git repo. Required.\n\n\nbranch: The branch to checkout. Optional. Default: master.\n\n\ntag: The tag to checkout. Optional.\n\n\ncommit: the commit to checkout. Optional.\n\n\nowner: The owner of the repo. Default: root.\n\n\ngroup: The group owner of the repo. Default: root.\n\n\n\n\nExample\n\n\ngit --state latest --name /root/.dotfiles --source https://github.com/jtopjian/dotfiles\n\n\n\n\nNotes\n\n\nIf state is set to \"latest\", Waffles will do a \ngit pull\n, if it's able to.\n\n\nThe order of checkout preferences is:\n\n\n\n\ncommit\n\n\ntag\n\n\nbranch", 
+            "text": "stdlib.git\n\n\nDescription\n\n\nManage a git repository\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The name (path) of the git repo destination. Required.\n\n\nsource: The URI of the source git repo. Required.\n\n\nbranch: The branch to checkout. Optional. Default: master.\n\n\ntag: The tag to checkout. Optional.\n\n\ncommit: the commit to checkout. Optional.\n\n\nowner: The owner of the repo. Default: root.\n\n\ngroup: The group owner of the repo. Default: root.\n\n\n\n\nExample\n\n\nstdlib.git --state latest --name /root/.dotfiles --source https://github.com/jtopjian/dotfiles\n\n\n\n\nNotes\n\n\nIf state is set to \"latest\", Waffles will do a \ngit pull\n, if it's able to.\n\n\nThe order of checkout preferences is:\n\n\n\n\ncommit\n\n\ntag\n\n\nbranch", 
             "title": "stdlib.git"
         }, 
         {
@@ -1097,7 +1097,7 @@
         }, 
         {
             "location": "/resources/stdlib.git/#example", 
-            "text": "git --state latest --name /root/.dotfiles --source https://github.com/jtopjian/dotfiles", 
+            "text": "stdlib.git --state latest --name /root/.dotfiles --source https://github.com/jtopjian/dotfiles", 
             "title": "Example"
         }, 
         {
@@ -1872,7 +1872,7 @@
         }, 
         {
             "location": "/resources/mysql.database/", 
-            "text": "mysql.database\n\n\nDescription\n\n\nManages MySQL databases\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The name of the database. Required. namevar.\n\n\ncharset: The character set of the database.\n\n\ncollate: The collation of the database.\n\n\n\n\nExample\n\n\nmysql.database --name root --password password", 
+            "text": "mysql.database\n\n\nDescription\n\n\nManages MySQL databases\n\n\nParameters\n\n\n\n\nstate: The state of the resource. Required. Default: present.\n\n\nname: The name of the database. Required. namevar.\n\n\ncharset: The character set of the database.\n\n\ncollate: The collation of the database.\n\n\n\n\nExample\n\n\nmysql.database --name mydb", 
             "title": "mysql.database"
         }, 
         {
@@ -1892,7 +1892,7 @@
         }, 
         {
             "location": "/resources/mysql.database/#example", 
-            "text": "mysql.database --name root --password password", 
+            "text": "mysql.database --name mydb", 
             "title": "Example"
         }, 
         {
