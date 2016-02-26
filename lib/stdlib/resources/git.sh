@@ -20,7 +20,7 @@
 # === Example
 #
 # ```shell
-# git --state latest --name /root/.dotfiles --source https://github.com/jtopjian/dotfiles
+# stdlib.git --state latest --name /root/.dotfiles --source https://github.com/jtopjian/dotfiles
 # ```
 #
 # === Notes

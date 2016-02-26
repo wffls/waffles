@@ -14,6 +14,6 @@ Manages MySQL databases
 ## Example
 
 ```shell
-mysql.database --name root --password password
+mysql.database --name mydb
 ```
 
