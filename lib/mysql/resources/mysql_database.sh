@@ -16,7 +16,7 @@
 # === Example
 #
 # ```shell
-# mysql.database --name root --password password
+# mysql.database --name mydb
 # ```
 #
 function mysql.database {
