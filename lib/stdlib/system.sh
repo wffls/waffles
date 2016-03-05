@@ -11,7 +11,7 @@ declare -g stdlib_resource_change
 declare -g stdlib_resource_changes=0
 
 ## stdlib_remote_copy is a list of data and profiles that need copied to a remote node
-declare -Ag stdlib_remote_copy
+declare -Ag _stdlib_remote_copy
 
 
 # Colors
@@ -215,7 +215,7 @@ function stdlib.profile {
 
     if [[ -n $profile_name ]]; then
       if [[ -n $WAFFLES_REMOTE ]]; then
-        stdlib_remote_copy[profiles/$profile_name]=1
+        _stdlib_remote_copy[profiles/$profile_name]=1
       elif [[ -n $_script_path ]]; then
         stdlib.debug "Running Profile script: $_script_path"
         stdlib.title "$profile_name/$_file"
@@ -310,7 +310,7 @@ function stdlib.git_profile_push {
             stdlib.git --state latest --name "$_cache_dir/$_profile" --source "$1"
             ;;
         esac
-        stdlib_remote_copy[$_cache_dir/$_profile]=1
+        _stdlib_remote_copy[$_cache_dir/$_profile]=1
       fi
     fi
   fi
@@ -341,7 +341,7 @@ function stdlib.data {
     if [[ -n $_data && -n $_script_path ]]; then
       _pdata=1
       if [[ -n $WAFFLES_REMOTE ]]; then
-        stdlib_remote_copy[$_data]=1
+        _stdlib_remote_copy[$_data]=1
       else
         stdlib.include "$_script_path"
       fi
@@ -354,7 +354,7 @@ function stdlib.data {
       stdlib.debug "Found Profile data for $1"
       _pdata=1
       if [[ -n $WAFFLES_REMOTE ]]; then
-        stdlib_remote_copy[profiles/$1]=1
+        _stdlib_remote_copy[profiles/$1]=1
       else
         stdlib.include "$WAFFLES_SITE_DIR/profiles/$1/data.sh"
       fi

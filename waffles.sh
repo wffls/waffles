@@ -53,7 +53,7 @@ function apply_role_remotely {
   stdlib.include $role_script
 
   local _include
-  for i in "${!stdlib_remote_copy[@]}"; do
+  for i in "${!_stdlib_remote_copy[@]}"; do
     if [[ $i =~ sh$ ]]; then
       _include="$_include --include=$i"
     else
