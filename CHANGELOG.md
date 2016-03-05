@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.21.0 March 5, 2016
+
+* New Resource: `stdlib.symlink`.
+* New Feature: Basic template support.
+* New Feature: `$profile_name`, `$profile_path`, `$profile_file` variables.
+* New Feature: All output goes to STDOUT.
+* New Feature: `stdlib.file_line` no longer requires a `--name` parameter. *Possible breakage*.
+* New Feature: `stdlib.debconf` no longer requires a `--name` parameter. *Possible breakage.
+* New Feature: Toggle color output.
+* Fixed: zero-prefixed permissions (750 -> 0750)
+* Fixed: several `stdlib.ini` fixes.
+* Fixed: Account for multiple grants when checking with `mysql.grant`.
+* Fixed: Hostname and socket conflicts in `mysql.mycnf`.
+
 ## 0.20.0 January 1, 2016
 
 * New Resource: `stdlib.sudo_exec`.
