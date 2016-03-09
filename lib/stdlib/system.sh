@@ -12,6 +12,7 @@ declare -g stdlib_resource_changes=0
 
 ## stdlib_remote_copy is a list of data and profiles that need copied to a remote node
 declare -Ag _stdlib_remote_copy
+declare -Ag _stdlib_remote_gitcache_copy
 
 
 # Colors
@@ -230,8 +231,6 @@ function stdlib.profile {
 }
 
 # stdlib.git_profile will check a profile out from a git repository.
-# It will be ignored if running in REMOTE mode,
-# so repositories are only created when Waffles is run locally.
 #
 # stdlib.git_profile repositories must be named:
 #
@@ -240,77 +239,61 @@ function stdlib.profile {
 # stdlib.git_profiles must follow the following syntax:
 #
 #   stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack
-#   stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack branch dev
-#   stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack tag 0.5.1
-#   stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack commit 023a83
+#   stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack --branch dev
+#   stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack --tag 0.5.1
+#   stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack --commit 023a83
+#
+# If you are deploying to remote nodes and those nodes do not have access to the git server:
+#
+#   stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack --branch dev --push true
+#
 function stdlib.git_profile {
-  # Only act if Waffles is being run locally
-  if [[ -z $WAFFLES_REMOTE ]]; then
-    if [[ $# -gt 0 ]]; then
-      stdlib.split "$1" "/"
-      stdlib.array_pop __split _repo_name
-      stdlib.split "$_repo_name" "-"
-      stdlib.array_pop __split _profile
-      stdlib.debug "git profile repo: $_repo_name"
-      stdlib.debug "git profile profile name: $_profile"
-      if [[ $# -eq 1 ]]; then
-        stdlib.git --state latest --name "$WAFFLES_SITE_DIR/profiles/$_profile" --source "$1"
-      elif [[ $# -eq 3 ]]; then
-        case "$2" in
-          branch)
-            stdlib.git --state latest --name "$WAFFLES_SITE_DIR/profiles/$_profile" --branch "$3" --source "$1"
-            ;;
-          tag)
-            stdlib.git --name "$WAFFLES_SITE_DIR/profiles/$_profile" --tag "$3" --source "$1"
-            ;;
-          commit)
-            stdlib.git --name "$WAFFLES_SITE_DIR/profiles/$_profile" --commit "$3" --source "$1"
-            ;;
-          *)
-            stdlib.git --state latest --name "$WAFFLES_SITE_DIR/profiles/$_profile" --source "$1"
-            ;;
-        esac
-      fi
+  if [[ $# -gt 0 ]]; then
+    local -A options
+    local -a _arg_copy=("$@")
+    local _git_repo _git_repo_name _profile
+    local _git_repo_details
+
+    stdlib.array_shift _arg_copy _git_repo
+    stdlib.split "$_git_repo" "/"
+    stdlib.array_pop __split _git_repo_name
+    stdlib.split "$_git_repo_name" "-"
+    stdlib.array_pop __split _profile
+
+    stdlib.options.create_option branch "master"
+    stdlib.options.create_option commit
+    stdlib.options.create_option tag
+    stdlib.options.create_option push
+    stdlib.options.parse_options "${_arg_copy[@]}"
+
+    stdlib.debug "git profile repo: $_repo_name"
+    stdlib.debug "git profile profile name: $_profile"
+
+    local _whoami=$(id -un)
+
+    if [[ -n ${options[commit]} ]]; then
+      _git_repo_details="--commit ${options[commit]} --source $_git_repo --owner $_whoami --group $_whoami"
+    elif [[ -n ${options[tag]} ]]; then
+      _git_repo_details="--tag ${options[tag]} --source $_git_repo --owner $_whoami --group $_whoami"
+    else
+      _git_repo_details="--branch ${options[branch]} --source $_git_repo --owner $_whoami --group $_whoami"
     fi
-  fi
-}
 
-# stdlib.git_profile_push works just like stdlib.git_profile,
-# but the git repository is downloaded on the Waffles "server" and pushed to the node.
-# This is useful in cases when the nodes do not have direct access to the git repository.
-function stdlib.git_profile_push {
-  # Only act if Waffles is being run in REMOTE mode
-  if [[ -n $WAFFLES_REMOTE ]]; then
-    if [[ $# -gt 0 ]]; then
-      stdlib.split "$1" "/"
-      stdlib.array_pop __split _repo_name
-      stdlib.split "$_repo_name" "-"
-      stdlib.array_pop __split _profile
-      stdlib.debug "git profile repo: $_repo_name"
-      stdlib.debug "git profile profile name: $_profile"
+    if [[ -n $WAFFLES_REMOTE ]]; then
+      if [[ -n ${options[push]} ]]; then
+        # Create and manage a local cache directory for the git repository
+        local _local_cache_dir="$WAFFLES_SITE_DIR/.gitcache/roles/$role/profiles/$_profile"
+        stdlib.directory --name "$_local_cache_dir" --owner $_whoami --group $_whoami --parent true
+        stdlib.git --name "$_local_cache_dir" $_git_repo_details
 
-      # Create and manage a local cache directory for the git repository
-      _whoami=$(id -un)
-      _cache_dir="$WAFFLES_SITE_DIR/.gitcache/roles/$role/profiles"
-      stdlib.directory --name "$_cache_dir" --owner $_whoami --group $_whoami --parent true
-      if [[ $# -eq 1 ]]; then
-        stdlib.git --state latest --name "$_cache_dir/$_profile" --source "$1"
-      elif [[ $# -eq 3 ]]; then
-        case "$2" in
-          branch)
-            stdlib.git --state latest --name "$_cache_dir/$_profile" --branch "$3" --source "$1"
-            ;;
-          tag)
-            stdlib.git --name "$_cache_dir/$_profile" --tag "$3" --source "$1"
-            ;;
-          commit)
-            stdlib.git --name "$_cache_dir/$_profile" --commit "$3" --source "$1"
-            ;;
-          *)
-            stdlib.git --state latest --name "$_cache_dir/$_profile" --source "$1"
-            ;;
-        esac
-        _stdlib_remote_copy[$_cache_dir/$_profile]=1
+        # Mark the cache to be copied to the remote node
+        _stdlib_remote_gitcache_copy[$_profile]=1
+      fi
+    else
+      # If this is not REMOTE mode and push is set,
+      # assume Waffles is being executed on a remote node and the profile has been copied
+      if [[ -z ${options[push]} ]]; then
+        stdlib.git --name "$WAFFLES_SITE_DIR/profiles/$_profile" $_git_repo_details
       fi
     fi
   fi
