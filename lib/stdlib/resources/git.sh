@@ -121,7 +121,7 @@ function stdlib.git.read {
     # Finally, check for a branch, defaulting to "master"
     else
       local _branch=$(git rev-parse --abbrev-ref HEAD)
-      if [[ ${options[branch]} == $_branch ]]; then
+      if [[ ${options[branch]} == "$_branch" ]]; then
         _current_state="present"
       else
         _current_state="update"

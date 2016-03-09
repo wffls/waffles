@@ -162,11 +162,11 @@ stdlib.exec apt-get update
 
 ## stdlib.git_profile
 
-stdlib.git_profile will check a profile out from a git repository. It will be ignored if running in REMOTE mode, so repositories are only created when Waffles is run locally.
+stdlib.git_profile will check a profile out from a git repository.
 
 stdlib.git_profile repositories must be named:
 
-```shell
+```
 waffles-profile-$profile_name
 ```
 
@@ -174,14 +174,16 @@ stdlib.git_profiles must follow the following syntax:
 
 ```
 stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack
-stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack branch dev
-stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack tag 0.5.1
-stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack commit 023a83
+stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack --branch dev
+stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack --tag 0.5.1
+stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack --commit 023a83
 ```
 
-## stdlib.git_profile_push
+If you are deploying to remote nodes and those nodes do not have access to the git server:
 
-Works the same way as stdlib.git_profile, but the git repository is downloaded on the Waffles "server" and pushed to the node. This is useful in cases when the nodes do not have direct access to the git repository.
+```
+stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack --branch dev --push true
+```
 
 ## stdlib.hash_keys
 

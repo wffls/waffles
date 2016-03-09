@@ -149,7 +149,7 @@ stdlib.profile memcached/utils => site/profiles/memcached/scripts/utils.sh
 Waffles supports the ability to store profiles in a git repository. To use this feature, include the following in the role:
 
 ```shell
-stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack branch dev
+stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack --branch dev
 ```
 
 This will clone https://github.com/jtopjian/waffles-profile-openstack as `$WAFFLES_SITE_DIR/profiles/openstack` with the `dev` branch checked out.
@@ -166,12 +166,16 @@ Profile names are based on the repository name. Waffles will split the repositor
 
 ```
 stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack
-stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack branch dev
-stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack tag 0.5.1
-stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack commit 023a83
+stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack --branch dev
+stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack --tag 0.5.1
+stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack --commit 023a83
 ```
 
-In addition to `stdlib.git_profile`, there is `stdlib.git_profile_push` which works the same way as `stdlib.git_profile`, but the repository is downloaded on the Waffles "server" and then pushed to the remote node. This is useful in cases when the nodes do not have direct access to the git repository.
+If you are pushing to a remote node and the remote node does not have access to the git repository, you can check out the repository on the Waffles "server" and then push it to the remote node by using `--push`:
+
+```
+stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack --branch dev --push true
+```
 
 ### The Hosts Profile
 
