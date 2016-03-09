@@ -21,7 +21,7 @@ function help {
   echo "  -u: (push) the remote user to connect as through SSH. Default: root"
   echo "  -w: (push) the amount of time in seconds to wait between retrying. Default: 5"
   echo "  -y: (push) whether or not to use sudo remotely. Default: false"
-  echo "  -z: (push) the remote directory to copy Waffles to. Default: /etc/waffles"
+  echo "  -z: (push) the remote directory to copy Waffles to. Default: ~/.waffles"
   echo
   echo "Usage:"
   echo "  waffles.sh -r <role>: apply a role to the local server"
@@ -45,7 +45,6 @@ function apply_role_locally {
 
 # apply_role_remotely applies the role to a remote node
 function apply_role_remotely {
-
   if [[ -z $WAFFLES_REMOTE_SSH_KEY ]] || [[ ! -f $WAFFLES_REMOTE_SSH_KEY ]]; then
     stdlib.error "SSH key not specified or not found."
     exit 1
@@ -54,7 +53,7 @@ function apply_role_remotely {
   stdlib.include $role_script
 
   local _include
-  for i in "${!stdlib_remote_copy[@]}"; do
+  for i in "${!_stdlib_remote_copy[@]}"; do
     if [[ $i =~ sh$ ]]; then
       _include="$_include --include=$i"
     else
