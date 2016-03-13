@@ -39,12 +39,12 @@ Each resource has a detailed comment header. This header describes what the reso
 
 The next part of a resource is the first "function". This first function is named after the resource name. So any time you use a resource, you're actually just calling a Bash function.
 
-The first thing done inside this function is to call a "subtitle" with `stdlib.subtitle`. Subtitles serve two purposes:
+The first thing done inside this function is to call a "subtitle" with `waffles.subtitle`. Subtitles serve two purposes:
 
 1. They set the name to be printed when running Waffles.
 2. They reset an internal flag for changes made in the resource. This flag is called `stdlib_resource_change`. See the "State Changes" section for more details.
 
-Next, an `options` variable is declared. It is important that this variable is declared in each resource. If not, then the resource will share variables with the last called resource. After the `options` variable is declared, any parameters for the resource are declared. Finally, variables are checked via `stdlib.options.parse_options`. All logic related to `options` can be found in `$WAFFLES_DIR/lib/options.sh`.
+Next, an `options` variable is declared. It is important that this variable is declared in each resource. If not, then the resource will share variables with the last called resource. After the `options` variable is declared, any parameters for the resource are declared. Finally, variables are checked via `options.parse_options`. All logic related to `options` can be found in `$WAFFLES_DIR/lib/options.sh`.
 
 After options, any local variables are defined.
 
@@ -102,11 +102,11 @@ After you call a resource, you can check the status of the `stdlib_resource_chan
 stdlib.apt --package sl --version latest
 
 if [[ $stdlib_resource_change == "true" ]]; then
-  stdlib.info "Package sl was installed or upgraded."
+  log.info "Package sl was installed or upgraded."
 fi
 ```
 
-Similar to `stdlib_resource_change` is `stdlib_state_change`. `stdlib_state_change` works in the exact same way, but it is reset when a call to `stdlib.title` is made. You usually use `stdlib.title` at the beginning of Profiles.
+Similar to `stdlib_resource_change` is `stdlib_state_change`. `stdlib_state_change` works in the exact same way, but it is reset when a call to `waffles.title` is made. You usually use `waffles.title` at the beginning of Profiles.
 
 ## Examples
 

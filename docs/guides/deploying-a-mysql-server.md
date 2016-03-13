@@ -32,8 +32,8 @@ Next, make the repo profile script, located at `site/profiles/mysql/scripts/perc
 ```shell
 source /etc/lsb-release
 
-stdlib.apt_key --name percona --keyserver keys.gnupg.net --key 1C4CBDCDCD2EFD2A
-stdlib.apt_source --name percona --uri http://repo.percona.com/apt --distribution $DISTRIB_CODENAME --component main --include_src true
+apt.key --name percona --keyserver keys.gnupg.net --key 1C4CBDCDCD2EFD2A
+apt.source --name percona --uri http://repo.percona.com/apt --distribution $DISTRIB_CODENAME --component main --include_src true
 ```
 
 Next, make the MySQL profile script, located at `sites/profilfes/mysql/scripts/percona_server.sh`:
@@ -41,7 +41,7 @@ Next, make the MySQL profile script, located at `sites/profilfes/mysql/scripts/p
 ```shell
 hostname=$(hostname | sed -e 's/_/\\\_/g')
 
-stdlib.apt --package percona-server-server-5.6
+apt.pkg --package percona-server-server-5.6
 
 mysql.user --user root --host localhost --password password
 mysql.mycnf --filename "/root/.my.cnf" --user root --password password
@@ -54,9 +54,9 @@ mysql.user --state absent --user "" --host $hostname --password ""
 
 mysql.database --state absent --name test
 
-stdlib.ini --file /etc/mysql/my.cnf --section mysqld --option bind-address --value 0.0.0.0
+file.ini --file /etc/mysql/my.cnf --section mysqld --option bind-address --value 0.0.0.0
 
-if [[ $stdlib_state_change == true ]]; then
+if [[ $waffles_state_changed == true ]]; then
   /etc/init.d/mysql restart
 fi
 ```
@@ -68,24 +68,18 @@ This script is rather simple in concept. Some notes about it:
 * MySQL installs several other default `root` and "blank" users. We want to ensure these users are removed.
 * We also want to ensure that the `test` database is removed.
 * MySQL listens on localhost by default. We want it to listen on all interfaces, so we change the `bind-address` setting to `0.0.0.0`.
-* The special variable `$stdlib_state_change` will be `true` if any changes were made at all in the file. If they were, we want to restart the MySQL service. This will not happen if no changes were made.
+* The special variable `$waffles_state_changed` will be `true` if any changes were made at all in the file. If they were, we want to restart the MySQL service. This will not happen if no changes were made.
 
 ### Roles
 
 Finally, combine the above Data and Profiles to build the role, located at `site/roles/mysql.sh`:
 
 ```shell
-stdlib.enable_mysql
+waffles.data mysql
 
-stdlib.data mysql
-
-stdlib.profile mysql/percona_repo
-stdlib.profile mysql/percona_server
+waffles.profile mysql/percona_repo
+waffles.profile mysql/percona_server
 ```
-
-The `stdlib.enable_mysql` function is a special function that will source all of the relevant MySQL functions and resources located under `lib`.
-
-The rest of the role should be self-explanatory.
 
 ## Comments and Conclusion
 

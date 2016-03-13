@@ -33,8 +33,8 @@ EOF
 * Declare the data files in order in your role:
 
 ```shell
-stdlib.data common
-stdlib.data memcached
+waffles.data common
+waffles.data memcached
 ```
 
 ## Comments

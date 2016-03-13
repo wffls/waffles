@@ -2,16 +2,16 @@
 
 [TOC]
 
-`lib/stdlib/template.sh` contains functions related to templating.
+`lib/functions/template.sh` contains functions related to templating.
 
-## stdlib.render_template
+## waffles.template.render
 
-`stdlib.render_template` requires the following two options:
+`waffles.template.render` requires the following two options:
 
 * `--template`: The path to the template file.
 * `--variables`: The name of a Bash associative array / hash that contains the variables to interpolate.
 
-`stdlib.render_template` will then echo the rendered template.
+`waffles.template.render` will then echo the rendered template.
 
 ### Example ###
 
@@ -31,6 +31,6 @@ data_template_vars[bar]="barfoo"
 
 $ cat profiles/test/scripts/template_test.sh
 
-output=$(stdlib.render_template --template "$profile_files/test.tpl" --variables data_template_vars)
-stdlib.file --name /tmp/rendered.txt --contents "$output"
+output=$(waffles.template.render --template "$profile_files/test.tpl" --variables data_template_vars)
+os.file --name /tmp/rendered.txt --contents "$output"
 ```
