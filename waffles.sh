@@ -137,6 +137,11 @@ function apply_role_remotely {
   ssh -i $WAFFLES_REMOTE_SSH_KEY $_ssh_server "cd $WAFFLES_REMOTE_DIR && $_remote_ssh_command $_args -r $role"
 }
 
+function apply_wafflescript {
+  stdlib.debug "Running wafflescript"
+  source "${1:-/dev/stdin}"
+}
+
 # Main Script
 
 # Try to find waffles.conf in either /etc/waffles or ~/.waffles
@@ -165,6 +170,13 @@ fi
 
 # Read in the standard library
 source "$WAFFLES_DIR/lib/init.sh"
+
+# Determine if this is a wafflescript
+_my_name=$(basename $0)
+if [[ $_my_name == "wafflescript" ]]; then
+  (apply_wafflescript $1)
+  exit 0
+fi
 
 # Parse options
 while getopts :c:dhk:npr:s:tu:w:yz: opt; do
