@@ -2,26 +2,23 @@
 
 source /etc/lsb-release
 
-stdlib.enable_augeas
-stdlib.enable_rabbitmq
+apt.pkg --name augeas --key AE498453 --keyserver keyserver.ubuntu.com
+apt.source --name augeas --uri http://ppa.launchpad.net/raphink/augeas/ubuntu --distribution trusty --component main
+apt.pkg --package augeas-tools --version latest
+apt.pkg --package git
 
-stdlib.apt_key --name augeas --key AE498453 --keyserver keyserver.ubuntu.com
-stdlib.apt_source --name augeas --uri http://ppa.launchpad.net/raphink/augeas/ubuntu --distribution trusty --component main
-stdlib.apt --package augeas-tools --version latest
-stdlib.apt --package git
+git.repo --state latest --name /usr/src/augeas --source https://github.com/hercules-team/augeas
 
-stdlib.git --state latest --name /usr/src/augeas --source https://github.com/hercules-team/augeas
-
-if [[ $stdlib_resource_change == "true" ]]; then
-  stdlib.info "Updating lenses"
-  stdlib.capture_error cp "/usr/src/augeas/lenses/*.aug" /usr/share/augeas/lenses/dist/
+if [[ $waffles_state_changed == "true" ]]; then
+  log.info "Updating lenses"
+  exec.capture_error cp "/usr/src/augeas/lenses/*.aug" /usr/share/augeas/lenses/dist/
 fi
 
-stdlib.apt_key --name rabbitmq --key 056E8E56 --remote_keyfile https://www.rabbitmq.com/rabbitmq-signing-key-public.asc
-stdlib.apt_source --name rabbitmq --uri http://www.rabbitmq.com/debian/ --distribution testing --component main --include_src false
+apt.key --name rabbitmq --key 056E8E56 --remote_keyfile https://www.rabbitmq.com/rabbitmq-signing-key-public.asc
+apt.source --name rabbitmq --uri http://www.rabbitmq.com/debian/ --distribution testing --component main --include_src false
 
-stdlib.apt --package rabbitmq-server
-stdlib.sysvinit --name rabbitmq-server
+apt.pkg --package rabbitmq-server
+service.sysv --name rabbitmq-server
 rabbitmq.user --state absent --user guest
 
 rabbitmq.auth_backend --backend PLAIN

@@ -35,25 +35,25 @@ function help {
 
 # apply_role_locally applies the role to the local node
 function apply_role_locally {
-  stdlib.include $role_script
+  waffles.include $role_script
 
   # If WAFFLES_TEST is set, exit 1 if any changes where made
   if [[ -n $WAFFLES_TEST ]]; then
-    [[ $stdlib_resource_changes -eq 0 ]] || exit 1
+    [[ $waffles_state_changed -eq 0 ]] || exit 1
   fi
 }
 
 # apply_role_remotely applies the role to a remote node
 function apply_role_remotely {
   if [[ -z $WAFFLES_REMOTE_SSH_KEY ]] || [[ ! -f $WAFFLES_REMOTE_SSH_KEY ]]; then
-    stdlib.error "SSH key not specified or not found."
+    log.error "SSH key not specified or not found."
     exit 1
   fi
 
-  stdlib.include $role_script
+  waffles.include $role_script
 
   local _include
-  for i in "${!_stdlib_remote_copy[@]}"; do
+  for i in "${!_waffles_remote_copy[@]}"; do
     if [[ $i =~ sh$ ]]; then
       _include="$_include --include=$i"
     else
@@ -62,7 +62,7 @@ function apply_role_remotely {
   done
 
   local _git_include
-  for i in "${!_stdlib_remote_gitcache_copy[@]}"; do
+  for i in "${!_waffles_remote_gitcache_copy[@]}"; do
     _git_include="$_git_include --include=$i/**"
   done
 
@@ -102,35 +102,35 @@ function apply_role_remotely {
     _remote_ssh_command="bash waffles.sh"
   fi
 
-  stdlib.debug "Testing connectivity to $_ssh_server"
+  log.debug "Testing connectivity to $_ssh_server"
   _ssh_status=255
   _attempt=0
   while [[ $_ssh_status -ne 0 && $_attempt -lt $WAFFLES_REMOTE_SSH_ATTEMPTS ]]; do
     _attempt=$(( _attempt+1 ))
-    stdlib.debug "Attempt $_attempt of $WAFFLES_REMOTE_SSH_ATTEMPTS."
-    stdlib.debug_mute ssh -i $WAFFLES_REMOTE_SSH_KEY $_ssh_server pwd
+    log.debug "Attempt $_attempt of $WAFFLES_REMOTE_SSH_ATTEMPTS."
+    exec.debug_mute ssh -i $WAFFLES_REMOTE_SSH_KEY $_ssh_server pwd
     _ssh_status=$?
     if [[ $_ssh_status -ne 0 ]]; then
       if [[ $_attempt -lt $WAFFLES_REMOTE_SSH_ATTEMPTS ]]; then
-        stdlib.debug "Unable to connect. Waiting $WAFFLES_REMOTE_SSH_WAIT seconds."
+        log.debug "Unable to connect. Waiting $WAFFLES_REMOTE_SSH_WAIT seconds."
         sleep $WAFFLES_REMOTE_SSH_WAIT
       fi
     fi
   done
 
   if [[ $_ssh_status != 0 ]]; then
-    stdlib.error "Unable to connect to $_ssh_server. Exiting."
+    log.error "Unable to connect to $_ssh_server. Exiting."
     exit 1
   fi
 
-  stdlib.debug "Copying Waffles to remote server $_rsync_server"
+  log.debug "Copying Waffles to remote server $_rsync_server"
   rsync -azv $_rsync_quiet -e "ssh -i $WAFFLES_REMOTE_SSH_KEY" --rsync-path="$_remote_rsync_path" --include='**/' --include='waffles.sh' --include='waffles.conf' --include='lib/**' --exclude='*' --prune-empty-dirs $WAFFLES_DIR/ "$_rsync_server:$WAFFLES_REMOTE_DIR"
 
-  stdlib.debug "Copying site to remote server $_rsync_server"
+  log.debug "Copying site to remote server $_rsync_server"
   rsync -azv $_rsync_quiet -e "ssh -i $WAFFLES_REMOTE_SSH_KEY" --rsync-path="$_remote_rsync_path" --include="**/" $_include --include="roles/${role}.sh" --exclude='*' --prune-empty-dirs $WAFFLES_SITE_DIR/ "$_rsync_server:$WAFFLES_REMOTE_DIR/site/"
 
   if [[ -n $_git_include ]]; then
-    stdlib.debug "Copying git profiles to remote server $_rsync_server"
+    log.debug "Copying git profiles to remote server $_rsync_server"
     rsync -azv $_rsync_quiet -e "ssh -i $WAFFLES_REMOTE_SSH_KEY" --rsync-path="$_remote_rsync_path" --include="**/" $_git_include --exclude='*' --prune-empty-dirs $WAFFLES_SITE_DIR/.gitcache/roles/$role/profiles/ "$_rsync_server:$WAFFLES_REMOTE_DIR/site/profiles/"
   fi
 
@@ -138,7 +138,7 @@ function apply_role_remotely {
 }
 
 function apply_wafflescript {
-  stdlib.debug "Running wafflescript"
+  log.debug "Running wafflescript"
   source "${1:-/dev/stdin}"
 }
 
@@ -243,7 +243,7 @@ fi
 # Make sure the role is defined in a script.
 role_script="${WAFFLES_SITE_DIR}/roles/${role}.sh"
 if [[ ! -f $role_script ]]; then
-  stdlib.error "File $role_script does not exist for role $role."
+  log.error "File $role_script does not exist for role $role."
   exit 1
 fi
 

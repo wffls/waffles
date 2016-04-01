@@ -97,11 +97,11 @@ Having to do a bunch of `grep`s and other checks can become very tedious. Waffle
 source ./waffles.conf
 source ./lib/init.sh
 
-stdlib.apt --package memcached
-stdlib.file_line --name memcached.conf/listen --file /etc/memcached.conf --line "-l 0.0.0.0" --match "^-l"
-stdlib.sysvinit --name memcached
+apt.pkg --package memcached
+os.file_lien --name memcached.conf/listen --file /etc/memcached.conf --line "-l 0.0.0.0" --match "^-l"
+service.sysv --name memcached
 
-if [ "$stdlib_state_change" == true ]; then
+if [ "$waffles_state_changed" == true ]; then
   /etc/init.d/memcached restart
 fi
 ```
@@ -113,11 +113,11 @@ There's nothing magical about these commands. They're a collection of standard B
 The core `memcached` service is up and running, but there's still a few more tasks that need to be done. For example, maybe we want to create some users:
 
 ```shell
-stdlib.groupadd --group jdoe --gid 999
-stdlib.useradd --user jdoe --uid 999 --gid 999 --comment "John" --shell /bin/bash --homedir /home/jdoe --createhome true
+os.groupadd --group jdoe --gid 999
+os.useradd --user jdoe --uid 999 --gid 999 --comment "John" --shell /bin/bash --homedir /home/jdoe --createhome true
 ```
 
-`stdlib.useradd` is another Waffles Standard Library function that enables an easy way to create and manage a user on a server.
+`os.useradd` is another Waffles Standard Library function that enables an easy way to create and manage a user on a server.
 
 Looking at the above command, there are a lot of settings that are hard-coded. If we end up creating a `redis` server that also needs the `jdoe` user, we could just copy that line verbatim, but what about a scenario where the `uid` must be changed to `500`? Then we'd need to change every occurrence of `999` to `500`. In large environments, there's a chance some changes would be missed.
 
@@ -153,7 +153,7 @@ With all of this in place, the fifth draft now looks like:
 source ./waffles.conf
 source ./lib/init.sh
 
-stdlib.data common
+waffles.data common
 
 for user in "${data_users[@]}"; do
 
@@ -164,16 +164,16 @@ for user in "${data_users[@]}"; do
   shell="${data_user_info[${user}|shell]}"
   create_home="${data_user_info[${user}|create_home]}"
 
-  stdlib.groupadd --group "$user" --gid "$gid"
-  stdlib.useradd --state present --user "$user" --uid "$uid" --gid "$gid" --comment "$comment" --homedir "$homedir" --shell "$shell" --createhome "$createhome"
+  os.groupadd --group "$user" --gid "$gid"
+  os.useradd --state present --user "$user" --uid "$uid" --gid "$gid" --comment "$comment" --homedir "$homedir" --shell "$shell" --createhome "$createhome"
 
 done
 
-stdlib.apt --package memcached
-stdlib.file_line --name memcached.conf/listen --file /etc/memcached.conf --line "-l 0.0.0.0" --match "^-l"
-stdlib.sysvinit --name memcached
+apt.pkg --package memcached
+file.line --file /etc/memcached.conf --line "-l 0.0.0.0" --match "^-l"
+service.sysv --name memcached
 
-if [ "$stdlib_state_change" == true ]; then
+if [ "$waffles_state_changed" == true ]; then
   /etc/init.d/memcached restart
 fi
 ```
@@ -194,8 +194,8 @@ for user in "${data_users[@]}"; do
   shell="${data_user_info[${user}|shell]}"
   create_home="${data_user_info[${user}|create_home]}"
 
-  stdlib.groupadd --group "$user" --gid "$gid"
-  stdlib.useradd --state present --user "$user" --uid "$uid" --gid "$gid" --comment "$comment" --homedir "$homedir" --shell "$shell" --createhome "$createhome"
+  os.groupadd --group "$user" --gid "$gid"
+  os.useradd --state present --user "$user" --uid "$uid" --gid "$gid" --comment "$comment" --homedir "$homedir" --shell "$shell" --createhome "$createhome"
 
 done
 ```
@@ -208,14 +208,14 @@ And so the sixth draft now looks like:
 source ./waffles.conf
 source ./lib/init.sh
 
-stdlib.data common
-stdlib.profile common/users
+waffles.data common
+waffles.profile common/users
 
-stdlib.apt --package memcached
-stdlib.file_line --name memcached.conf/listen --file /etc/memcached.conf --line "-l 0.0.0.0" --match "^-l"
-stdlib.sysvinit --name memcached
+apt.pkg --package memcached
+file.line --file /etc/memcached.conf --line "-l 0.0.0.0" --match "^-l"
+service.sysv --name memcached
 
-if [ "$stdlib_state_change" == true ]; then
+if [ "$waffles_state_changed" == true ]; then
   /etc/init.d/memcached restart
 fi
 ```

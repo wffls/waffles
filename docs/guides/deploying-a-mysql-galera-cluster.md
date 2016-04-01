@@ -40,8 +40,8 @@ Next, make the repo profile script, located at `site/profiles/mysql/scripts/perc
 ```shell
 source /etc/lsb-release
 
-stdlib.apt_key --name percona --keyserver keys.gnupg.net --key 1C4CBDCDCD2EFD2A
-stdlib.apt_source --name percona --uri http://repo.percona.com/apt --distribution $DISTRIB_CODENAME --component main --include_src true
+apt.key --name percona --keyserver keys.gnupg.net --key 1C4CBDCDCD2EFD2A
+apt.source --name percona --uri http://repo.percona.com/apt --distribution $DISTRIB_CODENAME --component main --include_src true
 ```
 
 Next, make the MySQL profile script, located at `sites/profiles/mysql/scripts/percona_xtradb_cluster.sh`:
@@ -53,10 +53,10 @@ mysql_hostname=$(hostname | sed -e 's/_/\\\_/g')
 my_ip=$(/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
 
 # Install the percona cluster package
-stdlib.apt --package percona-xtradb-cluster-56
+apt.pkg --package percona-xtradb-cluster-56
 
 # Record of the MySQL sysv service
-stdlib.sysvinit --name mysql
+service.sysv --name mysql
 
 # Configure the MySQL root user
 mysql.user --user root --host localhost --password "$data_mysql_root_password"
@@ -74,24 +74,24 @@ mysql.user --user sst --host localhost --password "$data_mysql_sst_password"
 mysql.grant --user sst --host localhost --database "*" --privileges "RELOAD, LOCK TABLES, REPLICATION CLIENT"
 
 # Configure `/etc/mysql/my.cnf`
-stdlib.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_provider --value /usr/lib/libgalera_smm.so
-stdlib.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_sst_method --value xtrabackup-v2
-stdlib.ini --file /etc/mysql/my.cnf --section mysqld --option binlog_format --value ROW
-stdlib.ini --file /etc/mysql/my.cnf --section mysqld --option default_storage_engine --value InnoDB
-stdlib.ini --file /etc/mysql/my.cnf --section mysqld --option innodb_autoinc_lock_mode --value 2
-stdlib.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_node_address --value $my_ip
-stdlib.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_cluster_name --value my_cluster
-stdlib.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_sst_auth --value "sst:${data_mysql_sst_password}"
+file.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_provider --value /usr/lib/libgalera_smm.so
+file.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_sst_method --value xtrabackup-v2
+file.ini --file /etc/mysql/my.cnf --section mysqld --option binlog_format --value ROW
+file.ini --file /etc/mysql/my.cnf --section mysqld --option default_storage_engine --value InnoDB
+file.ini --file /etc/mysql/my.cnf --section mysqld --option innodb_autoinc_lock_mode --value 2
+file.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_node_address --value $my_ip
+file.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_cluster_name --value my_cluster
+file.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_sst_auth --value "sst:${data_mysql_sst_password}"
 
 # If the hostname is config_galera1, do not set gcomm
 if [[ $hostname == $data_galera_bootstrap_node ]]; then
-  stdlib.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_cluster_address --value "gcomm://"
+  file.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_cluster_address --value "gcomm://"
 else
-  stdlib.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_cluster_address --value "gcomm://mysql-01,mysql-02,mysql-03"
+  file.ini --file /etc/mysql/my.cnf --section mysqld --option wsrep_cluster_address --value "gcomm://mysql-01,mysql-02,mysql-03"
 fi
 
 # If any of the above settings changed, restart MySQL
-if [[ $stdlib_state_change == true ]]; then
+if [[ $waffles_state_changed == true ]]; then
   /etc/init.d/mysql restart
 fi
 ```
@@ -103,24 +103,20 @@ This script may be a little long, but it shouldn't be difficult to understand. S
 * MySQL installs several other default `root` and "blank" users. We want to ensure these users are removed.
 * We also want to ensure that the `test` database is removed.
 * MySQL listens on localhost by default. We want it to listen on all interfaces, so we change the `bind-address` setting to `0.0.0.0`.
-* The `stdlib.ini` resources are configuring MySQL, wsrep, and SST.
+* The `file.ini` resources are configuring MySQL, wsrep, and SST.
 * If the node is the bootstrap node, the `wsrep_cluster_address` is set to the special `gcomm://`. If not, it is set to all other nodes in the cluster. Once the cluster has been bootstrapped, you should remove the `if` conditional and only leave the `else` portion.
-* The special variable `$stdlib_state_change` will be `true` if any changes were made at all in the file. If they were, we want to restart the MySQL service. This will not happen if no changes were made.
+* The special variable `$waffles_state_changed` will be `true` if any changes were made at all in the file. If they were, we want to restart the MySQL service. This will not happen if no changes were made.
 
 ### Roles
 
 Finally, combine the above Data and Profiles to build the role, located at `site/roles/mysql.sh`:
 
 ```shell
-stdlib.enable_mysql
+waffles.data mysql
 
-stdlib.data mysql
-
-stdlib.profile mysql/percona_repo
-stdlib.profile mysql/percona_xtradb_cluster
+waffles.profile mysql/percona_repo
+waffles.profile mysql/percona_xtradb_cluster
 ```
-
-The `stdlib.enable_mysql` function is a special function that will source all of the relevant MySQL functions and resources located under `lib`.
 
 The rest of the role should be self-explanatory.
 

@@ -10,4 +10,4 @@ Runs a series of Augeas commands on a file.
 
 ## augeas.get
 
-Checks the state of an Augeas-based resource.
+Checks the state of an Augeas-based waffles.resource.

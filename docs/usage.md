@@ -2,9 +2,32 @@
 
 [TOC]
 
+## Execution Methods
+
+You can run Waffles in two different ways:
+
+* Wafflescripts: a convenient way to create simple shell scripts that take advantage of Waffles's rich library of functions and resources.
+* Data, Roles, and Profiles: enables the design of reusable components that can then be composed into various roles. These roles can then be pushed to remote nodes for easy provisioning.
+
+## Wafflescripts
+
+Creating a Wafflescript is the easist way to get up and running with Waffles. However, Wafflescripts are not as flexible or scalable as Data, Roles, and Profiles. In addition, Wafflescripts can only be run locally at this time.
+
+Wafflescripts look like any other shell script. Simply create a file with the `wafflescript` shebang and then execute one or more Waffles functions and resources as well as any other shell code:
+
+```shell
+#!/usr/local/bin/wafflescript
+
+log.info "Hello, World!"
+apt.pkg --package memcached --version latest
+echo "Goodbye, World!"
+```
+
+The rest of this document will describe Waffles by using the Data, Roles, and Profiles method. All functions described throughout this document can be used in a Wafflescript. It is up to the user to determine the most appropriate execution method to use.
+
 ## The "site" directory
 
-Everything you work on will go under the "site" directory. By default, this directory is `waffles/site`, but you can change it by setting `WAFFLES_SITE_DIR` in either:
+All of your Data, Roles, and Profiles will go under the "site" directory. By default, this directory is `waffles/site`, but you can change it by setting `WAFFLES_SITE_DIR` in either:
 
 * The environment (environment variable)
 * The `waffles/waffles.conf` file
@@ -50,23 +73,23 @@ data_user_info=(
 Once you've created some "data" in a data file, you can refer to it by doing the following:
 
 ```shell
-stdlib.data memcached
+waffles.data memcached
 
 echo $data_memcached_listen
 ```
 
-`stdlib.data` is a function that takes a single argument: the name of a data file.
+`waffles.data` is a function that takes a single argument: the name of a data file.
 
 ### Data Structure
 
 The placement of data files is flexible. You can do any of the following:
 
 ```shell
-stdlib.data common       => site/data/common.sh
-stdlib.data common       => site/data/common/init.sh
-stdlib.data common/users => site/data/common/users.sh
-stdlib.data memcached    => site/data/memcached.sh
-stdlib.data memcached    => site/data/memcached/init.sh
+waffles.data common       => site/data/common.sh
+waffles.data common       => site/data/common/init.sh
+waffles.data common/users => site/data/common/users.sh
+waffles.data memcached    => site/data/memcached.sh
+waffles.data memcached    => site/data/memcached/init.sh
 ```
 
 ### Hierarchial Data
@@ -74,8 +97,8 @@ stdlib.data memcached    => site/data/memcached/init.sh
 By declaring multiple data files in your role, you can create a hierarchy of data. For example:
 
 ```shell
-stdlib.data common
-stdlib.data memcached
+waffles.data common
+waffles.data memcached
 ```
 
 In the above, common settings that are applicable to _any_ role are stored in `site/data/common.sh`. Only data relevant to the `memcached` service is stored in `site/data/memcached.sh`.
@@ -94,7 +117,7 @@ Profile-specific data can be stored in `profile_name/data.sh`. This enables data
 To use profile data, simply declare it as you would with site data:
 
 ```shell
-stdlib.data memcached
+waffles.data memcached
 ```
 
 When both site and profile data exists, the site data will be referenced _first_. This means that you can create variables in the site data and use them in the profile data. This might seem counter-intuitive, but allows the ability to embed site-specific data into profile-wide data structures:
@@ -133,15 +156,15 @@ site/profiles/consul/
 Static files go under `files` while scripts go under `scripts`. Profile-specific data can be stored in `data.sh`
 
 !!! Note
-    When using the `stdlib.file` resource, you can use the `--source` option to copy files to their destination. The `--source` option is able to reference any file on the system. It's recommended to use `$profile_files/file.conf` when "sourcing" a file.
+    When using the `os.file` resource, you can use the `--source` option to copy files to their destination. The `--source` option is able to reference any file on the system. It's recommended to use `$profile_files/file.conf` when "sourcing" a file.
 
-The `stdlib.profile` function is similar to `stdlib.data`: it takes a single argument, which is the name of a profile. The following translations are possible:
+The `waffles.profile` function is similar to `waffles.data`: it takes a single argument, which is the name of a profile. The following translations are possible:
 
 ```shell
-stdlib.profile common/users    => site/profiles/common/scripts/users.sh
-stdlib.profile common/packages => site/profiles/common/scripts/packages.sh
-stdlib.profile memcached       => site/profiles/memcached/scripts/init.sh
-stdlib.profile memcached/utils => site/profiles/memcached/scripts/utils.sh
+waffles.profile common/users    => site/profiles/common/scripts/users.sh
+waffles.profile common/packages => site/profiles/common/scripts/packages.sh
+waffles.profile memcached       => site/profiles/memcached/scripts/init.sh
+waffles.profile memcached/utils => site/profiles/memcached/scripts/utils.sh
 ```
 
 ### Git Profiles
@@ -149,7 +172,7 @@ stdlib.profile memcached/utils => site/profiles/memcached/scripts/utils.sh
 Waffles supports the ability to store profiles in a git repository. To use this feature, include the following in the role:
 
 ```shell
-stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack --branch dev
+git.profile https://github.com/jtopjian/waffles-profile-openstack --branch dev
 ```
 
 This will clone https://github.com/jtopjian/waffles-profile-openstack as `$WAFFLES_SITE_DIR/profiles/openstack` with the `dev` branch checked out.
@@ -157,24 +180,24 @@ This will clone https://github.com/jtopjian/waffles-profile-openstack as `$WAFFL
 Once the above is declared, profile scripts can be referenced like normal:
 
 ```shell
-stdlib.profile openstack/keystone
+waffles.profile openstack/keystone
 ```
 
 Profile names are based on the repository name. Waffles will split the repository name by dashes (`-`) and use the last portion of the name.
 
-`stdlib.git_profile` has the following syntax:
+`git.profile` has the following syntax:
 
 ```
-stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack
-stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack --branch dev
-stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack --tag 0.5.1
-stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack --commit 023a83
+git.profile https://github.com/jtopjian/waffles-profile-openstack
+git.profile https://github.com/jtopjian/waffles-profile-openstack --branch dev
+git.profile https://github.com/jtopjian/waffles-profile-openstack --tag 0.5.1
+git.profile https://github.com/jtopjian/waffles-profile-openstack --commit 023a83
 ```
 
 If you are pushing to a remote node and the remote node does not have access to the git repository, you can check out the repository on the Waffles "server" and then push it to the remote node by using `--push`:
 
 ```
-stdlib.git_profile https://github.com/jtopjian/waffles-profile-openstack --branch dev --push true
+git.profile https://github.com/jtopjian/waffles-profile-openstack --branch dev --push true
 ```
 
 ### The Hosts Profile
@@ -206,7 +229,7 @@ Each subdirectory of the `host_files` profile is an individual host or node, nam
 Inside your role, you can enable this special profile by doing:
 
 ```shell
-stdlib.profile host_files
+waffles.profile host_files
 ```
 !!! Warning
     This means that `host_files` is a reserved name.
@@ -234,19 +257,19 @@ A very simple role could look like this:
 
 ```shell
 # Reads data from site/data/common.sh
-stdlib.data common
+waffles.data common
 
 # Reads data from site/data/memcached.sh
-stdlib.data memcached
+waffles.data memcached
 
 # Reads site/profiles/common/scripts/users.sh
-stdlib.profile common/users
+waffles.profile common/users
 
 # Reads site/profiles/common/scripts/packages.sh
-stdlib.profile common/packages
+waffles.profile common/packages
 
 # Reads site/profiles/memcached/scripts/init.sh
-stdlib.profile memcached
+waffles.profile memcached
 ```
 ## Applying Roles
 

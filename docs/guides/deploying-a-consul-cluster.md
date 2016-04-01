@@ -51,8 +51,8 @@ data_consul_config=(
 In order to successfully execute the other profiles, we'll need to ensure the Consul server has a few base packages installed. Create `site/profiles/common/scripts/packages.sh` with the following contents:
 
 ```shell
-stdlib.apt --package wget
-stdlib.apt --package software-properties-common
+apt.pkg --package wget
+apt.pkg --package software-properties-common
 ```
 
 #### Consul
@@ -68,17 +68,17 @@ $ mkdir -p site/profiles/consul/scripts
 Next, make the repo profile script, located at `site/profiles/consul/scripts/install.sh`:
 
 ```shell
-stdlib.apt --package unzip
+apt.pkg --package unzip
 
-stdlib.useradd --user consul --homedir /var/lib/consul --createhome true
-stdlib.directory --name /etc/consul.d --owner consul --group consul
+os.useradd --user consul --homedir /var/lib/consul --createhome true
+os.directory --name /etc/consul.d --owner consul --group consul
 
 if [[ ! -f /usr/local/bin/consul ]]; then
-  stdlib.mute pushd /tmp
-  stdlib.capture_error wget https://dl.bintray.com/mitchellh/consul/${data_consul_version}_linux_amd64.zip
-  stdlib.capture_error unzip ${data_consul_version}_linux_amd64.zip
-  stdlib.capture_error mv consul /usr/local/bin
-  stdlib.mute popd
+  exec.mute pushd /tmp
+  exec.capture_error wget https://dl.bintray.com/mitchellh/consul/${data_consul_version}_linux_amd64.zip
+  exec.capture_error unzip ${data_consul_version}_linux_amd64.zip
+  exec.capture_error mv consul /usr/local/bin
+  exec.mute popd
 fi
 ```
 
@@ -94,13 +94,13 @@ Note: the way this script determines if Consul is installed is by the presence o
 Next, make the Consul server script, located at `sites/profiles/consul/scripts/server.sh`:
 
 ```shell
-stdlib.file --name /etc/init/consul.conf --source "$profile_files/consul.conf"
+os.file --name /etc/init/consul.conf --source "$profile_files/consul.conf"
 
 for key in "${!data_consul_config[@]}"; do
   augeas.json_dict --file /etc/consul.d/config.json --path / --key "$key" --value "${data_consul_config[$key]}"
 done
 
-stdlib.upstart --name consul --state running
+service.upstart --name consul --state running
 
 hostname=$(hostname)
 if [[ $hostname == $data_consul_bootstrap_node ]]; then
@@ -116,9 +116,9 @@ fi
 
 Here are some notes on the above:
 
-* `stdlib.file` is able to copy a static file from `site/profiles/consul/files`. It is _highly_ recommended to bundle your static files into the profile that they are being called from. This ensures that they get copied to the remote node during remote deployment. Alternatively, while there are not yet resources for commands such as `scp` or `wget`, you could use them similarly to how the Consul zip file was downloaded.
+* `os.file` is able to copy a static file from `site/profiles/consul/files`. It is _highly_ recommended to bundle your static files into the profile that they are being called from. This ensures that they get copied to the remote node during remote deployment. Alternatively, while there are not yet resources for commands such as `scp` or `wget`, you could use them similarly to how the Consul zip file was downloaded.
 * `augeas.json_dict` is an Augeas-based resource that allows JSON files to be built on the command-line. In order to use Augeas, it must be installed. See the next section.
-* `stdlib.upstart` ensures that the Consul service is running.
+* `service.upstart` ensures that the Consul service is running.
 * Finally, the `for` loop will run if the node is the bootstrap node. It'll loop through all other existing nodes and join them. The existing nodes must be up and running first, which is why the bootstrap node was set to the last node in the cluster.
 
 Finally, create `site/profiles/consul/files/consul.conf` with the following content:
@@ -152,8 +152,8 @@ end script
 To install Augeas, create `site/profiles/augeas/scripts/install_apt.sh` with the following content:
 
 ```shell
-stdlib.apt_ppa --ppa raphink/augeas
-stdlib.apt --package augeas-tools --version latest
+apt.ppa --ppa raphink/augeas
+apt.pkg --package augeas-tools --version latest
 ```
 
 ### Roles
@@ -161,19 +161,13 @@ stdlib.apt --package augeas-tools --version latest
 Finally, combine the above Data and Profiles to build the role, located at `site/roles/consul.sh`:
 
 ```shell
-stdlib.enable_augeas
+waffles.data consul
 
-stdlib.data consul
-
-stdlib.profile common/packages
-stdlib.profile augeas/install_apt
-stdlib.profile consul/install
-stdlib.profile consul/server
+waffles.profile common/packages
+waffles.profile augeas/install_apt
+waffles.profile consul/install
+waffles.profile consul/server
 ```
-
-The `stdlib.enable_augeas` function is a special function that will source all of the relevant Augeas functions and resources located under `lib`.
-
-The rest of the role should be self-explanatory.
 
 ## Run
 

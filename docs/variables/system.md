@@ -10,7 +10,7 @@ Returns the path to the profile files directory.
 echo $profile_files
 /etc/waffles/site/profiles/memcached/files
 
-stdlib.file --name /tmp/foo.txt --source "$profile_files/foo.txt"
+os.file --name /tmp/foo.txt --source "$profile_files/foo.txt"
 ```
 
 ## profile_name

@@ -3,24 +3,26 @@
 Waffles is a simple configuration management and deployment system written in Bash.
 
 ```shell
+#!/usr/local/bin/wafflescript
+
 # Install memcached
-stdlib.apt --package memcached --version latest
+apt.pkg --package memcached --version latest
 
 # Set the listen option
-stdlib.file_line --name memcached.conf/listen --file /etc/memcached.conf --line "-l $data_memcached_server_listen" --match "^-l"
+file.line --file /etc/memcached.conf --line "-l 0.0.0.0" --match "^-l"
 
 # Determine the amount of memory available and use half of that for memcached
 memory_bytes=$(terminus System.Memory.Total 2>/dev/null)
 memory=$(( $memory_bytes / 1024 / 1024 / 2 ))
 
 # Set the memory available to memcached
-stdlib.file_line --name memcached.conf/memory --file /etc/memcached.conf --line "-m $memory" --match "^-m"
+file.line --file /etc/memcached.conf --line "-m $memory" --match "^-m"
 
 # Manage the memcached service
-stdlib.sysvinit --name memcached
+service.sysv --name memcached
 
-if [[ $stdlib_state_change == true ]]; then
-  stdlib.mute /etc/init.d/memcached restart
+if [[ $waffles_state_changed == true ]]; then
+  exec.mute /etc/init.d/memcached restart
 fi
 ```
 
