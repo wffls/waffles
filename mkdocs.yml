@@ -16,7 +16,6 @@ pages:
   - Usage: 'usage.md'
   - Modules: 'modules.md'
   - Functions:
-    - 'Types': 'functions/types.md'
     - 'system': 'functions/system.md'
     - 'catalog': 'functions/catalog.md'
     - 'options': 'functions/options.md'
