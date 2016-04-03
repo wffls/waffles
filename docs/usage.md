@@ -8,6 +8,7 @@ You can run Waffles in two different ways:
 
 * Wafflescripts: a convenient way to create simple shell scripts that take advantage of Waffles's rich library of functions and resources.
 * Data, Roles, and Profiles (DRP): enables the design of reusable components that can then be composed into various roles. These roles can then be pushed to remote nodes for easy provisioning.
+* Waffleseeds: The same as DRP, but bundles all files that are part of a role into a single, executable file.
 
 ## Wafflescripts
 
@@ -298,3 +299,15 @@ The benefit of this method is that only the data and profiles referenced in the 
 
 !!! Note
     At this time, both the Waffles server and destination node must have rsync and installed.
+
+## Waffleseeds
+
+Waffleseeds follow the same principles as Data, Roles, and Profiles with one key difference: Instead of executing the Role in real-time, all files that the role needs are bundled into a single, executable file. This file can then be copied to any remote node and executed.
+
+To compile a Waffleseed file, do the following:
+
+```shell
+$ waffleseed.sh -r web
+```
+
+The result will be a file called `web.ws` in the current directory.
