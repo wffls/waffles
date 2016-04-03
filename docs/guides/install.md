@@ -2,11 +2,7 @@
 
 [TOC]
 
-## Description
-
-This guide will show how to install and use Waffles.
-
-## Steps
+## Installation
 
 * Clone the repository to a directory of your choice and install:
 
@@ -16,9 +12,9 @@ $ cd .waffles
 $ make install
 ```
 
-There are two ways to use Waffles: via Wafflescripts or using Roles and Profiles.
+There are two ways to use Waffles: via Wafflescripts or using Data, Roles and Profiles (DRP).
 
-### Wafflescript
+## Wafflescript
 
 Create and execute a shell script similar to the following:
 
@@ -47,7 +43,7 @@ if [[ $waffles_state_changed == true ]]; then
 fi
 ```
 
-### Roles and Profiles
+## Data, Roles, and Profiles (DRP)
 
 * Create a data file:
 

@@ -7,7 +7,7 @@
 You can run Waffles in two different ways:
 
 * Wafflescripts: a convenient way to create simple shell scripts that take advantage of Waffles's rich library of functions and resources.
-* Data, Roles, and Profiles: enables the design of reusable components that can then be composed into various roles. These roles can then be pushed to remote nodes for easy provisioning.
+* Data, Roles, and Profiles (DRP): enables the design of reusable components that can then be composed into various roles. These roles can then be pushed to remote nodes for easy provisioning.
 
 ## Wafflescripts
 
@@ -23,9 +23,9 @@ apt.pkg --package memcached --version latest
 echo "Goodbye, World!"
 ```
 
-The rest of this document will describe Waffles by using the Data, Roles, and Profiles method. All functions described throughout this document can be used in a Wafflescript. It is up to the user to determine the most appropriate execution method to use.
+## Data, Roles, and Profiles (DRP)
 
-## The "site" directory
+### The "site" directory
 
 All of your Data, Roles, and Profiles will go under the "site" directory. By default, this directory is `waffles/site`, but you can change it by setting `WAFFLES_SITE_DIR` in either:
 
@@ -35,7 +35,7 @@ All of your Data, Roles, and Profiles will go under the "site" directory. By def
 !!! Note
     See the [Environment Variables](/guides/environment-vars) Guide for more information.
 
-## Data
+### Data
 
 Data files are stored in `site/data`. They're regular Bash scripts and it's only by convention that you store "data", and not programming logic, in these files.
 
@@ -68,7 +68,7 @@ data_user_info=(
 !!! Warning
     Bash associative arrays _must_ be declared as global variables. This is because all files are sourced inside a Bash function and, for whatever reason, associative arrays are not visible outside of a function (unlike all other Bash variable types).
 
-### Referencing Data
+#### Referencing Data
 
 Once you've created some "data" in a data file, you can refer to it by doing the following:
 
@@ -80,7 +80,7 @@ echo $data_memcached_listen
 
 `waffles.data` is a function that takes a single argument: the name of a data file.
 
-### Data Structure
+#### Data Structure
 
 The placement of data files is flexible. You can do any of the following:
 
@@ -92,7 +92,7 @@ waffles.data memcached    => site/data/memcached.sh
 waffles.data memcached    => site/data/memcached/init.sh
 ```
 
-### Hierarchial Data
+#### Hierarchial Data
 
 By declaring multiple data files in your role, you can create a hierarchy of data. For example:
 
@@ -110,7 +110,7 @@ Finally, you can reference data from a previously declared data file. You can't,
 !!! Note
     See the [Referencing Data from Data](/guides/referencing-data-from-data) and [Overriding Data](/guides/override-data) Guides for more information.
 
-### Profile Data
+#### Profile Data
 
 Profile-specific data can be stored in `profile_name/data.sh`. This enables data unique to the profile, but generic to the site, to be bundled within the profile and stored in a repository outside of `$WAFFLES_SITE_DIR`.
 
@@ -130,7 +130,7 @@ declare -Ag data_openstack_keystone_settings=(
 )
 ```
 
-## Profiles
+### Profiles
 
 Profiles are small snippets of bash scripts stored under `site/profiles`. They are meant to be distinct units of work that accomplish a single task.
 
@@ -139,7 +139,7 @@ For example, you may have a Profile that installs the `memcached` package, a Pro
 !!! Warning
     It's possible to call Profiles from other Profiles, but that's not an encouraged practice.
 
-### Profile Structure
+#### Profile Structure
 
 Profiles have a standard structure to them:
 
@@ -167,7 +167,7 @@ waffles.profile memcached       => site/profiles/memcached/scripts/init.sh
 waffles.profile memcached/utils => site/profiles/memcached/scripts/utils.sh
 ```
 
-### Git Profiles
+#### Git Profiles
 
 Waffles supports the ability to store profiles in a git repository. To use this feature, include the following in the role:
 
@@ -200,7 +200,7 @@ If you are pushing to a remote node and the remote node does not have access to 
 git.profile https://github.com/jtopjian/waffles-profile-openstack --branch dev --push true
 ```
 
-### The Hosts Profile
+#### The Hosts Profile
 
 Waffles supports an optional special profile called `host_files`, located at `site/profiles/host_files`. The purpose of this profile is to provide an area where files and scripts specific to individual hosts can be stored. This is beneficial because, normally, the entire profile is copied to each node that uses the profile. If you are storing files such as SSL certs in a profile, all SSL certs would be then copied to all hosts that share the profile.
 
@@ -234,7 +234,7 @@ waffles.profile host_files
 !!! Warning
     This means that `host_files` is a reserved name.
 
-## Roles
+### Roles
 
 A "role" is a name that identifies a unique configuration set. Examples of roles could be:
 
@@ -271,11 +271,12 @@ waffles.profile common/packages
 # Reads site/profiles/memcached/scripts/init.sh
 waffles.profile memcached
 ```
-## Applying Roles
+
+### Applying Roles
 
 Waffles supports two ways of applying roles:
 
-### Local Execution
+#### Local Execution
 
 You can run `waffles.sh` directly on a node and Waffles will apply the role to that node. For example:
 
@@ -285,7 +286,7 @@ $ waffles.sh -r memcached
 
 This is most useful when you copy the entire contents of the `waffles` directory to a node, log into the node, and manually run `waffles.sh`.
 
-### Remote Execution (push)
+#### Remote Execution (push)
 
 It's possible to run Waffles on a remote node by pushing the configuration via rsync and SSH. To do this, use the `-s <server>` flag. For example:
 
