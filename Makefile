@@ -1,7 +1,7 @@
 SHELL=/bin/bash
 
 install:
-	[[ -L /usr/local/bin/wafflescript ]] || ln -s waffles.sh /usr/local/bin/wafflescript
+	[[ -L /usr/local/bin/wafflescript ]] || ln -s wafflescript /usr/local/bin/
 
 uninstall:
 	[[ -L /usr/local/bin/wafflescript ]] && rm /usr/local/bin/wafflescript
