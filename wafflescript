@@ -9,6 +9,12 @@ if [[ -f ~/.waffles/waffles.conf ]]; then
   source ~/.waffles/waffles.conf
 fi
 
+upstreamconf__=$(dirname $(readlink -e $BASH_SOURCE) )/waffles.conf
+if [[ -f $upstreamconf__ ]]; then
+  source $upstreamconf__
+fi
+unset upstreamconf__
+
 # If CONFIG_FILE or WAFFLES_CONFIG_FILE is set, prefer it
 if [[ -n $CONFIG_FILE ]]; then
   source "$CONFIG_FILE"
