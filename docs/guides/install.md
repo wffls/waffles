@@ -21,7 +21,6 @@ Create and execute a shell script similar to the following:
 ```shell
 #!/usr/local/bin/wafflescript
 
-apt.pkg --package memcached --version latest
 # Install memcached
 apt.pkg --package memcached --version latest
 
