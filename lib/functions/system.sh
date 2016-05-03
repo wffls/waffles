@@ -165,6 +165,37 @@ function waffles.include {
 }
 
 
+# waffles.stack imports a bundle of waffles profiles into the role.
+function waffles.stack {
+  if [[ $# -gt 0 ]]; then
+    local _stack_path
+    local _file
+    local _host
+    local profile_name
+    local profile_path
+    if [[ $1 =~ [/] ]]; then
+      string.split "$1" '/'
+      profile_name="${__split[0]}"
+      _file="${__split[1]}"
+    else
+      log.debug "Invalid stack $1"
+      return
+    fi
+
+    profile_path="$WAFFLES_SITE_DIR/profiles/$profile_name"
+
+    if [[ -f "$profile_path/stacks/${_file}.sh" ]]; then
+      _script_path="$profile_path/stacks/${_file}.sh"
+    else
+      log.debug "Invalid stack $1"
+      return
+    fi
+
+    waffles.include "$_script_path"
+  fi
+}
+
+
 # waffles.profile is a shortcut to run scripts in "$WAFFLES_SITE_DIR/profiles"
 # If running in REMOTE mode, a list of profiles to copy is built
 function waffles.profile {
@@ -564,5 +595,20 @@ function waffles.build_ini_file {
       value="${_config[$setting]}"
       file.ini --file "$_file" --section "$section" --option "$option" --value "$value"
     done
+  fi
+}
+
+
+# waffles.pushd is an alias for exec.mute pushd
+function waffles.pushd {
+  if [[ $# -eq 1 ]]; then
+    exec.mute pushd $1
+  fi
+}
+
+# waffles.popd is an alias for exec.mute popd
+function waffles.popd {
+  if [[ $# -eq 1 ]]; then
+    exec.mute popd $1
   fi
 }
