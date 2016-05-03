@@ -235,6 +235,36 @@ waffles.profile host_files
 !!! Warning
     This means that `host_files` is a reserved name.
 
+#### Stacks
+
+Stacks are a way of combining profile scripts within a profile. For example, let's say you create a [Consul](http://consul.io) profile that has the following scripts:
+
+  * `scripts/install.sh`
+  * `scripts/configure_client.sh`
+  * `scripts/configure_server.sh`
+
+In each role, you find yourself applying the same thing over and over:
+
+```shell
+waffles.data consul
+waffles.profile consul/install
+waffles.profile consul/configure_client
+```
+
+To minimize the amount of repeated code, create a stack in the profile called `profiles/consul/stacks/client.sh` with the contents:
+
+```shell
+waffles.data consul
+waffles.profile consul/install
+waffles.profile consul/configure_client
+```
+
+And in your role, have:
+
+```shell
+waffles.stack consul/client
+```
+
 ### Roles
 
 A "role" is a name that identifies a unique configuration set. Examples of roles could be:

@@ -284,6 +284,14 @@ Runs a command as another user via sudo:
 exec.sudo username tar xzvf foobar.tar.gz
 ```
 
+## waffles.popd
+
+An alias for `exec.mute popd $1`
+
+## waffles.pushd
+
+An alias for `exec.mute pushd $1`
+
 ## waffles.title
 
 Sets a title context. This is usually used internally. Whenever a new profile script is run, Waffles will set the title automatically to `profile_name/script_name`.
