@@ -4,7 +4,7 @@
 
 ## Execution Methods
 
-You can run Waffles in two different ways:
+You can run Waffles in three different ways:
 
 * Wafflescripts: a convenient way to create simple shell scripts that take advantage of Waffles's rich library of functions and resources.
 * Data, Roles, and Profiles (DRP): enables the design of reusable components that can then be composed into various roles. These roles can then be pushed to remote nodes for easy provisioning.
