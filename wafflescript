@@ -5,11 +5,11 @@ if [[ -f "/etc/waffles/waffles.conf" ]]; then
   source /etc/waffles/waffles.conf
 fi
 
-upstreamconf__=$(dirname $(readlink -e $BASH_SOURCE) )/waffles.conf
-if [[ -f $upstreamconf__ ]]; then
-  source $upstreamconf__
+_upstreamconf=$(dirname $(readlink -e $BASH_SOURCE) )/waffles.conf
+if [[ -f $_upstreamconf ]]; then
+  source $_upstreamconf
 fi
-unset upstreamconf__
+unset _upstreamconf
 
 # If CONFIG_FILE or WAFFLES_CONFIG_FILE is set, prefer it
 if [[ -n $CONFIG_FILE ]]; then
