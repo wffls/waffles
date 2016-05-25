@@ -223,7 +223,7 @@ function waffles.profile {
       fi
 
       # Make sure _host was found, or return early
-      if [[ -z $host ]]; then
+      if [[ -z $_host ]]; then
         return
       fi
       profile_name="host_files/$_host"
