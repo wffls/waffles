@@ -20,34 +20,34 @@ function waffles.color {
 function log.debug {
   if waffles.debug ; then
     if waffles.color ; then
-      echo -e "${log_color_blue}(debug) ${waffles_title}${waffles_subtitle}${log_color_reset}${@}" >&2
+      echo -e "${log_color_blue}$(date +%H:%M:%S) (debug) ${waffles_title}${waffles_subtitle}${log_color_reset}${@}" >&2
     else
-      echo -e "(debug) ${waffles_title}${waffles_subtitle}${@}" >&2
+      echo -e "$(date +%H:%M:%S) (debug) ${waffles_title}${waffles_subtitle}${@}" >&2
     fi
   fi
 }
 
 function log.info {
   if waffles.color ; then
-    echo -e "${log_color_green}(info)  ${waffles_title}${waffles_subtitle}${log_color_reset}${@}" >&2
+    echo -e "${log_color_green}$(date +%H:%M:%S) (info)  ${waffles_title}${waffles_subtitle}${log_color_reset}${@}" >&2
   else
-    echo -e "(info)  ${waffles_title}${waffles_subtitle}${@}" >&2
+    echo -e "$(date +%H:%M:%S) (info)  ${waffles_title}${waffles_subtitle}${@}" >&2
   fi
 }
 
 function log.warn {
   if waffles.color ; then
-    echo -e "${log_color_yellow}(warn)  ${waffles_title}${waffles_subtitle}${log_color_reset}${@}" >&2
+    echo -e "${log_color_yellow}$(date +%H:%M:%S) (warn)  ${waffles_title}${waffles_subtitle}${log_color_reset}${@}" >&2
   else
-    echo -e "(warn)  ${waffles_title}${waffles_subtitle}${@}" >&2
+    echo -e "$(date +%H:%M:%S) (warn)  ${waffles_title}${waffles_subtitle}${@}" >&2
   fi
 }
 
 function log.error {
   if waffles.color ; then
-    echo -e "${log_color_red}(error) ${waffles_title}${waffles_subtitle}${log_color_reset}${@}" >&2
+    echo -e "${log_color_red}$(date +%H:%M:%S) (error) ${waffles_title}${waffles_subtitle}${log_color_reset}${@}" >&2
   else
-    echo -e "(error) ${waffles_title}${waffles_subtitle}${@}" >&2
+    echo -e "$(date +%H:%M:%S) (error) ${waffles_title}${waffles_subtitle}${@}" >&2
   fi
 }
 
