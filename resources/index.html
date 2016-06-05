@@ -266,8 +266,6 @@
                 
                     <li><a class="toctree-l4" href="#location">Location</a></li>
                 
-                    <li><a class="toctree-l4" href="#enabling-non-standard-resources">Enabling Non-Standard Resources</a></li>
-                
                     <li><a class="toctree-l4" href="#anatomy-of-a-resource">Anatomy of a Resource</a></li>
                 
                     <li><a class="toctree-l4" href="#state-changes">State Changes</a></li>
@@ -741,11 +739,10 @@
 <ul>
 <li><a href="#waffles-resources">Waffles Resources</a><ul>
 <li><a href="#location">Location</a></li>
-<li><a href="#enabling-non-standard-resources">Enabling Non-Standard Resources</a></li>
 <li><a href="#anatomy-of-a-resource">Anatomy of a Resource</a><ul>
 <li><a href="#header">Header</a></li>
 <li><a href="#function-resourcename">function resource.name</a></li>
-<li><a href="#function-stdlibresourceprocess">function stdlib.resource.process</a></li>
+<li><a href="#function-wafflesresourceprocess">function waffles.resource.process</a></li>
 <li><a href="#function-resourcenamex">function resource.name.x</a></li>
 <li><a href="#function-resourcenameread">function resource.name.read</a></li>
 <li><a href="#function-resourcenamecreate">function resource.name.create</a></li>
@@ -761,28 +758,7 @@
 </div>
 <p>This document will cover how resources are used in Waffles.</p>
 <h2 id="location">Location</h2>
-<p>All resources are stored in the <code>$WAFFLES_DIR/lib</code> directory:</p>
-<ul>
-<li>The Standard Library of resources is located in <code>$WAFFLES_DIR/lib/resources</code>.</li>
-<li>Apache-based resources are located in <code>$WAFFLES_DIR/lib/apache</code>.</li>
-<li>Augeas-based resources are located in <code>$WAFFLES_DIR/lib/augeas</code>.</li>
-<li>Consul-based resources are located in <code>$WAFFLES_DIR/lib/consul</code>.</li>
-<li>Keepalived-based resources are located in <code>$WAFFLES_DIR/lib/keepalived</code>.</li>
-<li>MySQL-based resources are located in <code>$WAFFLES_DIR/lib/mysql</code>.</li>
-<li>Nginx-based resources are located in <code>$WAFFLES_DIR/lib/nginx</code>.</li>
-<li>RabbitMQ-based resources are located in <code>$WAFFLES_DIR/lib/rabbitmq</code>.</li>
-</ul>
-<h2 id="enabling-non-standard-resources">Enabling Non-Standard Resources</h2>
-<p>By default, only the Standard Library is enabled in Waffles. To enable the other resources, use the following functions:</p>
-<ul>
-<li>Apache: <code>stdlib.enable_apache</code></li>
-<li>Augeas: <code>stdlib.enable_augeas</code></li>
-<li>Consul: <code>stdlib.enable_consul</code></li>
-<li>Keepalived: <code>stdlib.enable_keepalived</code></li>
-<li>MySQL: <code>stdlib.enable_mysql</code></li>
-<li>Nginx: <code>stdlib.enable_nginx</code></li>
-<li>RabbitMQ: <code>stdlib.enable_rabbitmq</code></li>
-</ul>
+<p>All resources are stored in the <code>$WAFFLES_DIR/lib/resources</code> directory.</p>
 <h2 id="anatomy-of-a-resource">Anatomy of a Resource</h2>
 <h3 id="header">Header</h3>
 <p>Each resource has a detailed comment header. This header describes what the resource does, what parameters it takes, how to use it, and any comments. The comment header is very important as this is where the resource documentation is generated from.</p>
@@ -791,21 +767,21 @@
 <p>The first thing done inside this function is to call a "subtitle" with <code>waffles.subtitle</code>. Subtitles serve two purposes:</p>
 <ol>
 <li>They set the name to be printed when running Waffles.</li>
-<li>They reset an internal flag for changes made in the resource. This flag is called <code>stdlib_resource_change</code>. See the "State Changes" section for more details.</li>
+<li>They reset an internal flag for changes made in the resource. This flag is called <code>waffles_resource_changed</code>. See the "State Changes" section for more details.</li>
 </ol>
 <p>Next, an <code>options</code> variable is declared. It is important that this variable is declared in each resource. If not, then the resource will share variables with the last called resource. After the <code>options</code> variable is declared, any parameters for the resource are declared. Finally, variables are checked via <code>options.parse_options</code>. All logic related to <code>options</code> can be found in <code>$WAFFLES_DIR/lib/options.sh</code>.</p>
 <p>After options, any local variables are defined.</p>
 <p>Next, any optional custom logic is defined. This usually includes local variables just for the resource or ensuring that correctly formatted parameters were given.</p>
-<p>Next, <code>stdlib.resource.process</code> is called.</p>
-<h3 id="function-stdlibresourceprocess">function stdlib.resource.process</h3>
+<p>Next, <code>waffles.resource.process</code> is called.</p>
+<h3 id="function-wafflesresourceprocess">function waffles.resource.process</h3>
 <p>This is a centralized function that was introduced to help reduce repeated code in all resources. It does the following:</p>
 <ul>
 <li>A catalog entry is made.</li>
-<li><code>stdlib.resource.read</code> is called, which in turn calls <code>calling_resource.read</code>.</li>
+<li><code>waffles.resource.read</code> is called, which in turn calls <code>calling_resource.read</code>.</li>
 <li>A comparison is made of the resource state versus the state that the resource should be in.</li>
-<li>Depending on the results of the above, <code>stdlib.resource.x</code> is called, which in turn calls <code>calling_resource.x</code>.</li>
+<li>Depending on the results of the above, <code>waffles.resource.x</code> is called, which in turn calls <code>calling_resource.x</code>.</li>
 </ul>
-<p>Each of the <code>stdlib.resource.x</code> functions do a few other things like determine if a resource change was made and how many changes were made throughout the entire run. In the future, these functions may also generate summary reports of the run.</p>
+<p>Each of the <code>waffles.resource.x</code> functions do a few other things like determine if a resource change was made and how many changes were made throughout the entire run. In the future, these functions may also generate summary reports of the run.</p>
 <h3 id="function-resourcenamex">function resource.name.x</h3>
 <p>The rest of the resource is made up of four standard functions:</p>
 <ul>
@@ -817,26 +793,26 @@
 <p>Some resources contain extra functions, but they always tie back into those standard four. Sometimes <code>function.name.update</code> just calls <code>delete</code> and <code>create</code>.</p>
 <p>If you create a resource that conforms to those four functions, it'll work just fine in Waffles.</p>
 <h3 id="function-resourcenameread">function resource.name.read</h3>
-<p>The <code>read</code> function determines the current state of the resource. For example, <code>stdlib.apt.read</code> determines if the package is installed, and if so, what version is installed.</p>
+<p>The <code>read</code> function determines the current state of the resource. For example, <code>pkg.apt.read</code> determines if the package is installed, and if so, what version is installed.</p>
 <h3 id="function-resourcenamecreate">function resource.name.create</h3>
-<p>The <code>create</code> function does whatever is required to create the the resource. For example, <code>stdlib.apt.create</code> installs a package via <code>apt</code> and <code>stdlib.file_line.create</code> adds a line to a given file either by <code>echo</code> or <code>sed</code>.</p>
+<p>The <code>create</code> function does whatever is required to create the the resource. For example, <code>apt.pkg.create</code> installs a package via <code>apt</code> and <code>os.file_line.create</code> adds a line to a given file either by <code>echo</code> or <code>sed</code>.</p>
 <p>It's important to try to stick with a core philosophy of Waffles: use standard nix utilities for the creation of resources.</p>
 <h3 id="function-resourcenameupdate">function resource.name.update</h3>
 <p>If the work required to update a resource is different than creating a resource, use the <code>update</code> function. However, if it's easier to simply delete the resource and recreate it, then do that instead of an update function. Just don't use that method as an excuse.</p>
 <h3 id="function-resourcenamedelete">function resource.name.delete</h3>
-<p>This function deletes the resource. For example, <code>stdlib.apt.delete</code> will actually remove the package.</p>
+<p>This function deletes the resource. For example, <code>apt.pkg.delete</code> will actually remove the package.</p>
 <h2 id="state-changes">State Changes</h2>
-<p>After you call a resource, you can check the status of the <code>stdlib_resource_change</code> flag. If it is true, then a change happened when you called the resource. For example:</p>
-<pre><code class="shell">stdlib.apt --package sl --version latest
+<p>After you call a resource, you can check the status of the <code>waffles_resource_changed</code> flag. If it is true, then a change happened when you called the resource. For example:</p>
+<pre><code class="shell">apt.pkg --package sl --version latest
 
-if [[ $stdlib_resource_change == &quot;true&quot; ]]; then
+if [[ $waffles_resource_changed == &quot;true&quot; ]]; then
   log.info &quot;Package sl was installed or upgraded.&quot;
 fi
 </code></pre>
 
-<p>Similar to <code>stdlib_resource_change</code> is <code>stdlib_state_change</code>. <code>stdlib_state_change</code> works in the exact same way, but it is reset when a call to <code>waffles.title</code> is made. You usually use <code>waffles.title</code> at the beginning of Profiles.</p>
+<p>Similar to <code>waffles_resource_changed</code> is <code>waffles_state_changed</code>. <code>waffles_state_changed</code> works in the exact same way, but it is reset when a call to <code>waffles.title</code> is made (which happens internally at the beginning of each call to <code>waffles.profile</code>).</p>
 <h2 id="examples">Examples</h2>
-<p>Use the Standard Library and Augeas resources as examples of how resources are built.</p>
+<p>See <code>lib/resources</code> for a wide variety of examples.</p>
               
             </div>
           </div>
