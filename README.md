@@ -19,7 +19,7 @@ memory=$(( $memory_bytes / 1024 / 1024 / 2 ))
 file.line --file /etc/memcached.conf --line "-m $memory" --match "^-m"
 
 # Manage the memcached service
-service.sysvinit --name memcached
+service.sysv --name memcached
 
 if [[ $waffles_state_changed == true ]]; then
   exec.mute /etc/init.d/memcached restart

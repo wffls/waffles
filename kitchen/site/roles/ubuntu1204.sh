@@ -36,7 +36,7 @@ log.info "ini"
 file.ini --file /root/test.ini --section foobar --option foo --value bar
 file.ini --file /root/test.ini --section foobar --option baz --value __none__
 
-log.info "sysvinit"
+log.info "sysv"
 service.sysv --name memcached
 
 log.info "git"
