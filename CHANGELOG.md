@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.23.0 Unreleased
+
+0.22 introduced two new ways of using Waffles: `wafflescript` and Waffleseeds. Since there are now several ways of using Waffles, it is on the verge of suffering from an identity crisis. The upcoming release(s) may introduce a more opinionated workflow to cope with this.
+
+## 0.22.0 June 4, 2016
+
+### Major Update
+
+The concept of `stdlib` was removed from Waffles. See [this commit](https://github.com/jtopjian/waffles/commit/fbe51753e446755018007a69fa10f1ed7950e670) for details. You can use the `contrib/legacy_migration.sh` script to convert your work. For now, all old `stdlib.*` resource calls should be caught and a warning will be printed. This will be removed in a future release.
+
+### Features
+
+* New Feature: `wafflescript`: Run a Waffles script by using `#!/usr/local/bin/wafflescript` as the interpreter.
+* New Feature: Waffleseeds: Compile a Waffles Role into a self-contained executable.
+* New Feature: Stacks: Profiles can combine several scripts into a stack located in `profile_name/stacks/stack_name.sh`.
+* Removed Feature: `stdlib.enable_*` functions have been removed. *Possible breakage*.
+* New Feature: Default remote dir is now `~/.waffles`.
+* New Feature: Timestamps in logs.
+* New Functions: `waffles.pushd` and `waffles.popd`
+
 ## 0.21.0 March 5, 2016
 
 * New Resource: `stdlib.symlink`.
@@ -7,7 +27,7 @@
 * New Feature: `$profile_name`, `$profile_path`, `$profile_file` variables.
 * New Feature: All output goes to STDOUT.
 * New Feature: `stdlib.file_line` no longer requires a `--name` parameter. *Possible breakage*.
-* New Feature: `stdlib.debconf` no longer requires a `--name` parameter. *Possible breakage.
+* New Feature: `stdlib.debconf` no longer requires a `--name` parameter. *Possible breakage*.
 * New Feature: Toggle color output.
 * Fixed: zero-prefixed permissions (750 -> 0750)
 * Fixed: several `stdlib.ini` fixes.
