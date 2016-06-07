@@ -48,6 +48,12 @@ legacy[stdlib.array_join]="array.join"
 legacy[stdlib.array_contains]="array.contains"
 legacy[stdlib.hash_keys]="hash.keys"
 legacy[stdlib.build_ini_file]="waffles.build_ini_file"
+legacy[stdlib.options.create_option]="waffles.options.create_option"
+legacy[stdlib.options.parse_options]="waffles.options.parse_options"
+legacy[stdlib.resource.process]="waffles.resource.process"
+legacy[stdlib.profile]="waffles.profile"
+legacy[stdlib_state_change]="waffles_state_changed"
+legacy[stdlib_current_state]="waffles_resource_current_state"
 
 for key in "${!legacy[@]}"; do
   value="${legacy[$key]}"
