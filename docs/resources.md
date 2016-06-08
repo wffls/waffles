@@ -57,7 +57,7 @@ If you create a resource that conforms to those four functions, it'll work just 
 
 ### function resource.name.read
 
-The `read` function determines the current state of the resource. For example, `pkg.apt.read` determines if the package is installed, and if so, what version is installed.
+The `read` function determines the current state of the resource. For example, `apt.pkg.read` determines if the package is installed, and if so, what version is installed.
 
 ### function resource.name.create
 
