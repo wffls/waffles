@@ -793,7 +793,7 @@
 <p>Some resources contain extra functions, but they always tie back into those standard four. Sometimes <code>function.name.update</code> just calls <code>delete</code> and <code>create</code>.</p>
 <p>If you create a resource that conforms to those four functions, it'll work just fine in Waffles.</p>
 <h3 id="function-resourcenameread">function resource.name.read</h3>
-<p>The <code>read</code> function determines the current state of the resource. For example, <code>pkg.apt.read</code> determines if the package is installed, and if so, what version is installed.</p>
+<p>The <code>read</code> function determines the current state of the resource. For example, <code>apt.pkg.read</code> determines if the package is installed, and if so, what version is installed.</p>
 <h3 id="function-resourcenamecreate">function resource.name.create</h3>
 <p>The <code>create</code> function does whatever is required to create the the resource. For example, <code>apt.pkg.create</code> installs a package via <code>apt</code> and <code>os.file_line.create</code> adds a line to a given file either by <code>echo</code> or <code>sed</code>.</p>
 <p>It's important to try to stick with a core philosophy of Waffles: use standard nix utilities for the creation of resources.</p>
