@@ -1,9 +1,10 @@
 # Waffles!
 
-Waffles is a simple configuration management and deployment system written in Bash.
+Waffles is a suite of Bash scripts to manage resources in a server.
 
 ```shell
-#!/usr/local/bin/wafflescript
+#!/bin/bash
+source /opt/waffles/init.sh
 
 # Install memcached
 apt.pkg --package memcached --version latest
