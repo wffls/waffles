@@ -1,8 +1,8 @@
 # Changelog
 
-## 0.23.0 Unreleased
+## 0.22.1 Unreleased
 
-0.22 introduced two new ways of using Waffles: `wafflescript` and Waffleseeds. Since there are now several ways of using Waffles, it is on the verge of suffering from an identity crisis. The upcoming release(s) may introduce a more opinionated workflow to cope with this.
+* Fixed: `os.symlink` has been modified so the options make more sense.
 
 ## 0.22.0 June 4, 2016
 
