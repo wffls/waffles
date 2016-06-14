@@ -1,0 +1,1 @@
+../../../provision/shell/ubuntu1204.sh
