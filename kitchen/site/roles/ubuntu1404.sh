@@ -45,4 +45,4 @@ git.repo --name /root/.dotfiles --source https://github.com/jtopjian/dotfiles
 
 log.info "symlink"
 os.file --name /usr/local/bin/foo
-os.symlink --source /usr/local/bin/foo --destination /usr/bin/foo
+os.symlink --name /usr/bin/foo --target /usr/local/bin/foo
