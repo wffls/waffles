@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.0 June 14, 2016
+## 0.30.0 June 14, 2016
 
 ### Major Update
 
