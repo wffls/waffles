@@ -1,8 +1,20 @@
 # Changelog
 
-## 0.23.0 Unreleased
+## 0.3.0 June 14, 2016
 
-0.22 introduced two new ways of using Waffles: `wafflescript` and Waffleseeds. Since there are now several ways of using Waffles, it is on the verge of suffering from an identity crisis. The upcoming release(s) may introduce a more opinionated workflow to cope with this.
+### Major Update
+
+This commit is a major refactor of Waffles.
+
+This repository can be considered Waffles "core". It contains the core functionality of Waffles as a suite of Bash scripts. These scripts can be sourced into any Bash script and then used to manage resources. The `init.sh` script can also be source on the command-line and the user can interactively execute the Waffles-based resources.
+
+Functionality that has been removed from this repository (data, profiles, stacks) will appear in separate repositories.
+
+The previous incarnation of Waffles exists under the `0.22` branch. This branch will be maintained for a short time and will receive patches where appropriate.
+
+### Fixes
+
+* `os.symlink` heavily rewritten so options make more sense.
 
 ## 0.22.0 June 4, 2016
 
