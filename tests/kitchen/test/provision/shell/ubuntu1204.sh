@@ -50,7 +50,14 @@ git.repo --name /root/.dotfiles --source https://github.com/jtopjian/dotfiles
 
 log.info "symlink"
 os.file --name /usr/local/bin/foo
-os.symlink --source /usr/local/bin/foo --destination /usr/bin/foo
+os.symlink --name /usr/bin/foo --target /usr/local/bin/foo
+
+log.info "symlink removal"
+touch /usr/local/bin/foo2
+if [[ -z $BUSSER_ROOT ]]; then
+  ln -s /usr/local/bin/foo2 /usr/bin/foo2
+fi
+os.symlink --state absent --name /usr/bin/foo2
 
 if [[ -n $BUSSER_ROOT ]]; then
   if [[ $waffles_total_changes -gt 0 ]]; then

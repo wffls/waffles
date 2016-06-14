@@ -9,22 +9,22 @@
 # === Parameters
 #
 # * state: The state of the resource. Required. Default: present.
-# * destination: The destination link. Required. namevar.
-# * source: Source file. Required.
+# * name: The name of the link. Required. namevar.
+# * target: The target of the link.
 #
 # === Example
 #
 # ```shell
-# os.symlink --source /usr/local/bin/foo --destination /usr/bin/foo
+# os.symlink --name /usr/local/man --target /usr/share/man
 # ```
 #
 function os.symlink {
 
   # Resource Options
   local -A options
-  waffles.options.create_option state       "present"
-  waffles.options.create_option source      "__required__"
-  waffles.options.create_option destination "__required__"
+  waffles.options.create_option state  "present"
+  waffles.options.create_option name   "__required__"
+  waffles.options.create_option target
   waffles.options.parse_options "$@"
   if [[ $? != 0 ]]; then
     return $?
@@ -32,22 +32,32 @@ function os.symlink {
 
 
   # Internal Resource Configuration
-  if [[ ! -f ${options[source]} ]]; then
-    log.error "${options[source]} does not exist."
-    return 1
+  if [[ ${options[state]} != "absent" ]]; then
+    local _err
+    if [[ -z ${options[target]} ]]; then
+      log.error "target is required unless symlink is being removed."
+      _err=true
+    elif [[ ! -e ${options[target]} ]]; then
+      log.error "${options[target]} does not exist."
+      _err=true
+    fi
+
+    if [[ -n $_err ]]; then
+      return 1
+    fi
   fi
 
   # Process the resource
-  waffles.resource.process "os.symlink" "${options[destination]}"
+  waffles.resource.process "os.symlink" "${options[name]}"
 }
 
 function os.symlink.read {
-  if [[ ! -e ${options[destination]} ]]; then
+  if [[ ! -e ${options[name]} ]]; then
     waffles_resource_current_state="absent"
     return
   fi
 
-  _stats=$(stat -c"%U:%G:%a:%F" "${options[destination]}")
+  _stats=$(stat -c"%U:%G:%a:%F" "${options[name]}")
   string.split "$_stats" ':'
   _owner="${__split[0]}"
   _group="${__split[1]}"
@@ -55,7 +65,7 @@ function os.symlink.read {
   _type="${__split[3]}"
 
   if [[ $_type != "symbolic link" ]]; then
-    log.error "${options[destination]} exists and is not a symbolic link."
+    log.error "${options[name]} exists and is not a symbolic link."
     waffles_resource_current_state="error"
     return
   fi
@@ -64,7 +74,7 @@ function os.symlink.read {
 }
 
 function os.symlink.create {
-  exec.capture_error ln -s "${options[source]}" "${options[destination]}"
+  exec.capture_error ln -s "${options[target]}" "${options[name]}"
 }
 
 function os.symlink.update {
@@ -73,5 +83,5 @@ function os.symlink.update {
 }
 
 function os.symlink.delete {
-  exec.capture_error rm "${options[destination]}"
+  exec.capture_error rm "${options[name]}"
 }
