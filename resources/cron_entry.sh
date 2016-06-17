@@ -9,7 +9,7 @@
 # === Parameters
 #
 # * state: The state of the resource. Required. Default: present.
-# * name: A single-word name for the cron. Required. namevar.
+# * name: A single-word name for the cron. Required.
 # * user: The user to run the cron job as. Default: root.
 # * cmd: The command to run. Required.
 # * minute: The minute field of the cron. Default: *.

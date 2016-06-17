@@ -9,7 +9,7 @@
 # === Parameters
 #
 # * state: The state of the resource. Required. Default: present.
-# * name: An arbitrary name for the rule. Required. namevar.
+# * name: An arbitrary name for the rule. Required.
 # * priority: An arbitrary number to give the rule priority. Required. Default 100.
 # * table: The table to add the rule to.. Required. Default: filter.
 # * chain: The chain to add the rule to. Required. Default: INPUT.

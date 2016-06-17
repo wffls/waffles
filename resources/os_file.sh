@@ -12,7 +12,7 @@
 # * owner: The owner of the file Default: root.
 # * group: The group of the file Default: root.
 # * mode: The perms/mode of the file Default: 0640.
-# * name: The destination file. Required. namevar.
+# * name: The destination file. Required.
 # * content: STDIN content for the file. Optional.
 # * source: Source file to copy. Optional.
 #

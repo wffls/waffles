@@ -9,7 +9,7 @@
 # === Parameters
 #
 # * state: The state of the service. Required. Default: running.
-# * name: The name of the service. Required. namevar.
+# * name: The name of the service. Required.
 #
 # === Example
 #

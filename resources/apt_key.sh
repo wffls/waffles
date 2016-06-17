@@ -9,7 +9,7 @@
 # === Parameters
 #
 # * state: The state of the resource. Required. Default: present.
-# * name: An arbitrary name. Required. namevar.
+# * name: An arbitrary name. Required.
 # * key: The key to import. Required if no remote_keyfile.
 # * keyserver: The key server. Required if no remote_keyfile.
 # * remote_keyfile: A remote key to import. Required if no key or keyserver.

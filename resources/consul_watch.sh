@@ -9,7 +9,7 @@
 # === Parameters
 #
 # * state: The state of the resource. Required. Default: present.
-# * name: The name of the watch. Required. namevar.
+# * name: The name of the watch. Required.
 # * type: The type of watch: key, keyprefix, services, nodes, service, checks, event. Required.
 # * key: A key to monitor when using type "key". Optional.
 # * prefix: A prefix to monitor when using type "keyprefix". Optional.
