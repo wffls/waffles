@@ -1,10 +1,11 @@
 # == Name
 #
-# sudo.cmd
+# sudoers.cmd
 #
 # === Description
 #
-# Provides an easy way to give a user sudo access to a single command.
+# Provides an easy way to give a user sudo access to a single command
+# defined in a sudoers.d file.
 #
 # === Parameters
 #
@@ -16,10 +17,10 @@
 # === Example
 #
 # ```shell
-# sudo.cmd --user consul --command /usr/local/bin/consul_build_hosts_file.sh
+# sudoers.cmd --user consul --command /usr/local/bin/consul_build_hosts_file.sh
 # ```
 #
-function sudo.cmd {
+function sudoers.cmd {
 
   # Resource Options
   local -A options
@@ -57,10 +58,10 @@ function sudo.cmd {
   fi
 
   # Process the resource
-  waffles.resource.process "sudo.cmd" "$_name"
+  waffles.resource.process "sudoers.cmd" "$_name"
 }
 
-function sudo.cmd.read {
+function sudoers.cmd.read {
   if [[ ! -f "$_file" ]]; then
     waffles_resource_current_state="absent"
     return
@@ -75,15 +76,15 @@ function sudo.cmd.read {
   waffles_resource_current_state="present"
 }
 
-function sudo.cmd.create {
+function sudoers.cmd.create {
   os.file --name "$_file" --owner root --group root --mode 440 --content "$_line"
 }
 
-function sudo.cmd.update {
-  sudo.cmd.delete
-  sudo.cmd.create
+function sudoers.cmd.update {
+  sudoers.cmd.delete
+  sudoers.cmd.create
 }
 
-function sudo.cmd.delete {
+function sudoers.cmd.delete {
   exec.capture_error rm "$_file"
 }
