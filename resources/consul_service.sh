@@ -9,7 +9,7 @@
 # === Parameters
 #
 # * state: The state of the resource. Required. Default: present.
-# * name: The name of the service. Required. namevar.
+# * name: The name of the service. Required.
 # * id: A unique ID for the service. Optional.
 # * tag: Tags to describe the service. Optional. Multi-var.
 # * address: The address of the service. Optional.

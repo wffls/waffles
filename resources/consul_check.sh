@@ -9,7 +9,7 @@
 # === Parameters
 #
 # * state: The state of the resource. Required. Default: present.
-# * name: The name of the check Required. namevar.
+# * name: The name of the check Required.
 # * id: A unique ID for the check. Optional.
 # * service_id: A service to tie the check to. Optional.
 # * notes: Notes about the check. Optional.

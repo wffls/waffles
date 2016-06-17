@@ -9,7 +9,7 @@
 # === Parameters
 #
 # * state: The state of the resource. Required. Default: present.
-# * group: The group. Required. namevar.
+# * group: The group. Required.
 # * gid: The gid of the group. Optional.
 #
 # === Example

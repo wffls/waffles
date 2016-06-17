@@ -9,7 +9,7 @@
 # === Parameters
 #
 # * state: The state of the resource. Required. Default: present.
-# * user: The user Required. namevar.
+# * user: The user Required.
 # * uid: The uid of the user Optional.
 # * gid: The gid of the user Optional.
 # * createhome: Whether to create the homedir. Default: false.

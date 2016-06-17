@@ -9,7 +9,7 @@
 # === Parameters
 #
 # * state: The state of the resource. Required. Default: present.
-# * name: The name of the link. Required. namevar.
+# * name: The name of the link. Required.
 # * target: The target of the link.
 #
 # === Example
