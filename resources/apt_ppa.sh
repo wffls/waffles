@@ -19,6 +19,8 @@
 # ```
 #
 function apt.ppa {
+  # Declare the resource
+  waffles_resource="apt.pp"
 
   if ! waffles.command_exists apt-add-repository ; then
     log.error "Cannot find apt-add-repository command."
@@ -37,7 +39,7 @@ function apt.ppa {
 
 
   # Process the resource
-  waffles.resource.process "apt.ppa" "${options[ppa]}"
+  waffles.resource.process $waffles_resource "${options[ppa]}"
 }
 
 function apt.ppa.read {

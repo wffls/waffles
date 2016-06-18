@@ -18,6 +18,8 @@
 # ```
 #
 function service.upstart {
+  # Declare the resource
+  waffles_resource="service.upstart"
 
   # Resource Options
   local -A options
@@ -30,7 +32,7 @@ function service.upstart {
 
 
   # Process the resource
-  waffles.resource.process "service.upstart" "${options[name]}"
+  waffles.resource.process $waffles_resource "${options[name]}"
 }
 
 function service.upstart.read {

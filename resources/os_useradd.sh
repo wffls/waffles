@@ -35,6 +35,8 @@
 # flag, it's best to delete the user and recreate it.
 #
 function os.useradd {
+  # Declare the resource
+  waffles_resource="os.useradd"
 
   # Resource Options
   local -A options
@@ -70,7 +72,7 @@ function os.useradd {
   fi
 
   # Process the resource
-  waffles.resource.process "os.useradd" "${options[user]}"
+  waffles.resource.process $waffles_resource "${options[user]}"
 }
 
 function os.useradd.read {

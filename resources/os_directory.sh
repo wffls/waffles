@@ -24,6 +24,8 @@
 # ```
 #
 function os.directory {
+  # Declare the resource
+  waffles_resource="os.directory"
 
   # Resource Options
   local -A options
@@ -58,7 +60,7 @@ function os.directory {
   fi
 
   # Process the resource
-  waffles.resource.process "os.directory" "${options[name]}"
+  waffles.resource.process $waffles_resource "${options[name]}"
 }
 
 function os.directory.read {

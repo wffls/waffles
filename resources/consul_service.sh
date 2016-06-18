@@ -35,6 +35,9 @@
 # ```
 #
 function consul.service {
+  # Declare the resource
+  waffles_resource="consul.service"
+
   # Resource Options
   local -A options
   local -a tag
@@ -83,7 +86,7 @@ function consul.service {
   fi
 
   # Process the resource
-  waffles.resource.process "consul.service" "$_name"
+  waffles.resource.process $waffles_resource "$_name"
 }
 
 function consul.service.read {

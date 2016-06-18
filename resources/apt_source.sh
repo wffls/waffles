@@ -24,6 +24,8 @@
 # ```
 #
 function apt.source {
+  # Declare the resource
+  waffles_resource="apt.source"
 
   # Resource Options
   local -A options
@@ -41,7 +43,7 @@ function apt.source {
 
 
   # Process the resource
-  waffles.resource.process "apt.source" "${options[name]}"
+  waffles.resource.process $waffles_resource "${options[name]}"
 }
 
 function apt.source.read {

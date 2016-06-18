@@ -19,6 +19,8 @@
 # ```
 #
 function os.symlink {
+  # Declare the resource
+  waffles_resource="os.symlink"
 
   # Resource Options
   local -A options
@@ -48,7 +50,7 @@ function os.symlink {
   fi
 
   # Process the resource
-  waffles.resource.process "os.symlink" "${options[name]}"
+  waffles.resource.process $waffles_resource "${options[name]}"
 }
 
 function os.symlink.read {

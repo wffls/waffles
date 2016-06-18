@@ -20,6 +20,8 @@
 # ```
 #
 function mysql.database {
+  # Declare the resource
+  waffles_resource="mysql.database"
 
   # Resource Options
   local -A options
@@ -38,7 +40,7 @@ function mysql.database {
   local _collate
 
   # Process the resource
-  waffles.resource.process "mysql.database" "${options[name]}"
+  waffles.resource.process $waffles_resource "${options[name]}"
 }
 
 function mysql.database.read {

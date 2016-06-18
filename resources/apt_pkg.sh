@@ -19,6 +19,8 @@
 # ```
 #
 function apt.pkg {
+  # Declare the resource
+  waffles_resource="apt.pkg"
 
   # Resource Options
   local -A options
@@ -45,7 +47,7 @@ function apt.pkg {
   fi
 
   # Process the resource
-  waffles.resource.process "apt.pkg" "${options[package]}"
+  waffles.resource.process $waffles_resource "${options[package]}"
 }
 
 function apt.pkg.read {

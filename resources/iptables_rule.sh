@@ -23,6 +23,8 @@
 # ```
 #
 function iptables.rule {
+  # Declare the resource
+  waffles_resource="iptables.rule"
 
   # Resource Options
   local -A options
@@ -43,7 +45,7 @@ function iptables.rule {
   local rule="${options[chain]} ${options[rule]} -m comment --comment \"${options[priority]} ${options[name]}\" -j ${options[action]}"
 
   # Process the resource
-  waffles.resource.process "iptables.rule" "$rule"
+  waffles.resource.process $waffles_resource "$rule"
 }
 
 function iptables.rule.read {

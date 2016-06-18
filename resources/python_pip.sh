@@ -34,6 +34,8 @@
 # This resource is heavily based on puppet-python
 #
 function python.pip {
+  # Declare the resource
+  waffles_resource="python.pip"
 
   # Resource Options
   local -A options
@@ -137,7 +139,7 @@ function python.pip {
   fi
 
   # Process the resource
-  waffles.resource.process "python.pip" "${options[name]}"
+  waffles.resource.process $waffles_resource "${options[name]}"
 }
 
 function python.pip.read {

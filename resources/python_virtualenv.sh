@@ -31,6 +31,9 @@
 # This resource is heavily based on puppet-python
 #
 function python.virtualenv {
+  # Declare the resource
+  waffles_resource="python.virtualenv"
+
   # Resource Options
   local -A options
   waffles.options.create_option state        "present"
@@ -106,7 +109,7 @@ function python.virtualenv {
   _log="$_venv/pip.log"
 
   # Process the resource
-  waffles.resource.process "python.virtualenv" "${options[name]}"
+  waffles.resource.process $waffles_resource "${options[name]}"
 }
 
 function python.virtualenv.read {

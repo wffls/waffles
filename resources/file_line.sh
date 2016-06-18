@@ -21,6 +21,8 @@
 # ```
 #
 function file.line {
+  # Declare the resource
+  waffles_resource="file_line"
 
   # Resource Options
   local -A options
@@ -38,7 +40,7 @@ function file.line {
   local _name="${options[file]}/${options[line]}"
 
   # Process the resource
-  waffles.resource.process "file.line" "$_name"
+  waffles.resource.process $waffles_resource "$_name"
 }
 
 function file.line.read {

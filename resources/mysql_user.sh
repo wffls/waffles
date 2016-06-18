@@ -22,6 +22,8 @@
 # ```
 #
 function mysql.user {
+  # Declare the resource
+  waffles_resource="mysql.user"
 
   # Resource Options
   local -A options
@@ -47,7 +49,7 @@ function mysql.user {
   fi
 
   # Process the resource
-  waffles.resource.process "mysql.user" "$_name"
+  waffles.resource.process $waffles_resource "$_name"
 }
 
 function mysql.user.read {

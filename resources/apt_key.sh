@@ -22,6 +22,9 @@
 #
 function apt.key {
 
+  # Declare the resource title
+  waffles_resource="apt.key"
+
   # Resource Options
   local -A options
   waffles.options.create_option state "present"
@@ -35,7 +38,7 @@ function apt.key {
   fi
 
   # Process the resource
-  waffles.resource.process "apt.key" "${options[name]}"
+  waffles.resource.process $waffles_resource "${options[name]}"
 }
 
 function apt.key.read {
@@ -55,11 +58,11 @@ function apt.key.create {
     else
       local _remote_file="${options[remote_keyfile]}"
       local _local_file=${_remote_file##*/}
-      exec.mute pushd /tmp
+      waffles.pushd /tmp
       exec.capture_error wget "$_remote_file"
       exec.capture_error apt-key add "$_local_file"
       exec.mute rm "$_remote_file"
-      exec.mute popd
+      waffles.popd
     fi
   else
     exec.capture_error apt-key adv --keyserver ${options[keyserver]} --recv-keys ${options[key]}

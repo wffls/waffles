@@ -26,6 +26,9 @@
 # ```
 #
 function consul.template {
+  # Declare the resource
+  waffles_resource="apt.source"
+
   # Resource Options
   local -A options
   waffles.options.create_option state       "present"
@@ -70,7 +73,7 @@ function consul.template {
   fi
 
   # Process the resource
-  waffles.resource.process "consul.template" "$_name"
+  waffles.resource.process $waffles_resource "$_name"
 }
 
 function consul.template.read {

@@ -21,6 +21,8 @@
 # ```
 #
 function mysql.grant {
+  # Declare the resource
+  waffles_resource="mysql.grant"
 
   # Resource Options
   local -A options
@@ -54,7 +56,7 @@ function mysql.grant {
   fi
 
   # Process the resource
-  waffles.resource.process "mysql.grant" "$_name"
+  waffles.resource.process $waffles_resource "$_name"
 }
 
 function mysql.grant.read {
