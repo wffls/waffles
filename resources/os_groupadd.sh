@@ -19,6 +19,8 @@
 # ```
 #
 function os.groupadd {
+  # Declare the resource
+  waffles_resource="os.groupadd"
 
   # Resource Options
   local -A options
@@ -35,7 +37,7 @@ function os.groupadd {
   local group_info _gid
 
   # Process the resource
-  waffles.resource.process "os.groupadd" "${options[group]}"
+  waffles.resource.process $waffles_resource "${options[group]}"
 }
 
 function os.groupadd.read {

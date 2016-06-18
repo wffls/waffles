@@ -33,6 +33,9 @@
 # ```
 #
 function consul.check {
+  # Declare the resource
+  waffles_resource="consul.check"
+
   # Resource Options
   local -A options
   waffles.options.create_option state      "present"
@@ -74,7 +77,7 @@ function consul.check {
   fi
 
   # Process the resource
-  waffles.resource.process "consul.check" "$_name"
+  waffles.resource.process $waffles_resource "$_name"
 }
 
 function consul.check.read {

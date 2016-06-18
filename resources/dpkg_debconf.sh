@@ -22,6 +22,9 @@
 # ```
 #
 function dpkg.debconf {
+  # Declare the resource
+  waffles_resource="dpkg.debconf"
+
   # Resource Options
   local -A options
   waffles.options.create_option state    "present"
@@ -53,7 +56,7 @@ function dpkg.debconf {
   _name="${options[package]}/${options[question]}/${options[vtype]}"
 
   # Process the resource
-  waffles.resource.process "dpkg.debconf" "$_name"
+  waffles.resource.process $waffles_resource "$_name"
 }
 
 function dpkg.debconf.read {

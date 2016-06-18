@@ -35,6 +35,9 @@
 # ```
 #
 function consul.watch {
+  # Declare the resource
+  waffles_resource="consul.watch"
+
   # Resource Options
   local -A options
   waffles.options.create_option state      "present"
@@ -84,7 +87,7 @@ function consul.watch {
   fi
 
   # Process the resource
-  waffles.resource.process "consul.watch" "$_name"
+  waffles.resource.process $waffles_resource "$_name"
 }
 
 function consul.watch.read {

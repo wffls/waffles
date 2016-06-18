@@ -23,6 +23,8 @@
 # ```
 #
 function os.file {
+  # Declare the resource
+  waffles_resource="os.file"
 
   # Resource Options
   local -A options
@@ -56,7 +58,7 @@ function os.file {
   fi
 
   # Process the resource
-  waffles.resource.process "os.file" "${options[name]}"
+  waffles.resource.process $waffles_resource "${options[name]}"
 }
 
 function os.file.read {

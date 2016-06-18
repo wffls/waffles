@@ -21,6 +21,9 @@
 # ```
 #
 function file.ini {
+  # Declare the resource
+  waffles_resource="apt.source"
+
 
   # Resource Options
   local -A options
@@ -39,7 +42,7 @@ function file.ini {
   local name="${options[file]}/${options[section]}/${options[option]}"
 
   # Process the resource
-  waffles.resource.process "file.ini" "$name"
+  waffles.resource.process $waffles_resource "$name"
 }
 
 function file.ini.read {

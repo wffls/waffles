@@ -23,6 +23,9 @@
 # ```
 #
 function ip6tables.rule {
+  # Declare the resource
+  waffles_resource="ip6tables.rule"
+
 
   # Resource Options
   local -A options
@@ -43,7 +46,7 @@ function ip6tables.rule {
   local rule="${options[chain]} ${options[rule]} -m comment --comment \"${options[priority]} ${options[name]}\" -j ${options[action]}"
 
   # Process the resource
-  waffles.resource.process "ip6tables.rule" "$rule"
+  waffles.resource.process $waffles_resource "$rule"
 }
 
 function ip6tables.rule.read {

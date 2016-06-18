@@ -29,6 +29,8 @@
 # Add support for prefix info such as PATH, MAILTO.
 #
 function cron.entry {
+  # Declare the resource
+  waffles_resource="cron.entry"
 
   # Resource Options
   local -A options
@@ -52,7 +54,7 @@ function cron.entry {
   local _entry
 
   # Process the resource
-  waffles.resource.process "cron.entry" "$entry"
+  waffles.resource.process $waffles_resource "$entry"
 }
 
 function cron.entry.read {

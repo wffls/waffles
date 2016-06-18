@@ -21,6 +21,8 @@
 # ```
 #
 function sudoers.cmd {
+  # Declare the resource
+  waffles_resource="sudoers.cmd"
 
   # Resource Options
   local -A options
@@ -58,7 +60,7 @@ function sudoers.cmd {
   fi
 
   # Process the resource
-  waffles.resource.process "sudoers.cmd" "$_name"
+  waffles.resource.process $waffles_resource "$_name"
 }
 
 function sudoers.cmd.read {

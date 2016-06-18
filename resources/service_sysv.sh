@@ -18,6 +18,8 @@
 # ```
 #
 function service.sysv {
+  # Declare the resource
+  waffles_resource="service.sysv"
 
   # Resource Options
   local -A options
@@ -30,7 +32,7 @@ function service.sysv {
 
 
   # Process the resource
-  waffles.resource.process "service.sysv" "${options[name]}"
+  waffles.resource.process $waffles_resource "${options[name]}"
 }
 
 function service.sysv.read {

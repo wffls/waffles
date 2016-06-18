@@ -1,25 +1,14 @@
 # waffles_resource_current_state holds the state of the last run resource
 declare -g waffles_resource_current_state
 
-# waffles_state_changed returns true if the state of any resource in a script
-# or profile was changed.
-declare -g waffles_state_changed
-
 # waffles_resource_changed returns true if the state of the last run resource
 # changed. This resets every time a new resource is declared.
 declare -g waffles_resource_changed
-
-# waffles_total_changes returns the number of resource changes that have
-# happened throughout the script.
-declare -g waffles_total_changes
 
 function waffles.resource.process {
   if [[ $# -eq 2 ]]; then
     local _resource_type="$1"
     local _resource_name="$2"
-
-    # Set the subtitle for logging
-    waffles.subtitle "$_resource_type"
 
     # Read the resource's state
     waffles.resource.read
@@ -60,33 +49,28 @@ function waffles.resource.process {
       esac
     fi
 
-    # unset the subtitle
-    waffles.subtitle
+    # unset the resource
+    waffles_resource=
   fi
 }
 
 function waffles.resource.read {
-  waffles_resource_current_state=""
+  waffles_resource_current_state=
+  waffles_resource_changed=
   "${_resource_type}.read"
 }
 
 function waffles.resource.create {
   "${_resource_type}.create"
-  waffles_state_changed="true"
   waffles_resource_changed="true"
-  waffles_total_changes=$(( waffles_total_changes+1 ))
 }
 
 function waffles.resource.update {
   "${_resource_type}.update"
-  waffles_state_changed="true"
   waffles_resource_changed="true"
-  waffles_total_changes=$(( waffles_total_changes+1 ))
 }
 
 function waffles.resource.delete {
   "${_resource_type}.delete"
-  waffles_state_changed="true"
   waffles_resource_changed="true"
-  waffles_total_changes=$(( waffles_total_changes+1 ))
 }

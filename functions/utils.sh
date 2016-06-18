@@ -7,25 +7,6 @@ function waffles.debug {
   [[ -n $WAFFLES_DEBUG ]]
 }
 
-# waffles.title is a section/subsection currently being run
-function waffles.title {
-  waffles_title=""
-  waffles_subtitle=""
-  if [[ -n $@ ]]; then
-    waffles_title="$@ "
-  fi
-  waffles_state_changed="false"
-  waffles_resource_changed="false"
-}
-
-function waffles.subtitle {
-  waffles_subtitle=""
-  if [[ -n $@ ]]; then
-    waffles_subtitle="$@ "
-  fi
-  waffles_resource_changed="false"
-}
-
 # waffles.include is a more intelligent "source".
 # It will warn if the file does not exist, rather than erroring.
 function waffles.include {

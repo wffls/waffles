@@ -34,6 +34,9 @@
 # * branch
 #
 function git.repo {
+  # Declare the resource
+  waffles_resource="git.repo"
+
   # Resource Options
   local -A options
   waffles.options.create_option state   "present"
@@ -78,14 +81,14 @@ function git.repo {
   fi
 
   # Process the resource
-  waffles.resource.process "git.repo" "${options[name]}"
+  waffles.resource.process $waffles_resource "${options[name]}"
 }
 
 function git.repo.read {
   local _current_state
 
   if [[ -f "${options[name]}/.git/config" ]]; then
-    exec.mute pushd "${options[name]}"
+    waffles.pushd "${options[name]}"
 
     # First check if state is set to "latest"
     if [[ ${options[state]} == "latest" ]]; then
@@ -125,7 +128,7 @@ function git.repo.read {
         _current_state="update"
       fi
     fi
-    exec.mute popd
+    waffles.popd
 
     # Check if the uid / gid are out of sync
     user_info=$(getent passwd "${options[owner]}")
@@ -150,7 +153,7 @@ function git.repo.read {
 
 function git.repo.create {
   exec.capture_error git clone --quiet "${options[source]}" "${options[name]}"
-  exec.mute pushd "${options[name]}"
+  waffles.pushd "${options[name]}"
 
   # if a commit was given, check it out
   if [[ -n ${options[commit]} ]]; then
@@ -164,7 +167,7 @@ function git.repo.create {
   else
     exec.capture_error git checkout "${options[branch]}"
   fi
-  exec.mute popd
+  waffles.popd
 
 
   # Make sure the owner and group are corrent
@@ -173,7 +176,7 @@ function git.repo.create {
 
 function git.repo.update {
   # If state is set to "latest", do a git pull
-  exec.mute pushd "${options[name]}"
+  waffles.pushd "${options[name]}"
   if [[ ${options[state]} == "latest" ]]; then
     if [[ -n ${options[branch]} ]]; then
       exec.capture_error git checkout "${options[branch]}"
@@ -194,7 +197,7 @@ function git.repo.update {
     exec.capture_error git checkout "${options[branch]}"
   fi
 
-  exec.mute popd
+  waffles.popd
 
   # Make sure the owner and group are corrent
   exec.capture_error chown -R $_uid:$_gid "${options[name]}"
