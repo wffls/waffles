@@ -5,6 +5,9 @@ declare -g waffles_resource_current_state
 # changed. This resets every time a new resource is declared.
 declare -g waffles_resource_changed
 
+# waffles_total_changes keeps track of how many resources have been changed.
+declare -g waffles_total_changes
+
 function waffles.resource.process {
   if [[ $# -eq 2 ]]; then
     local _resource_type="$1"
@@ -63,14 +66,17 @@ function waffles.resource.read {
 function waffles.resource.create {
   "${_resource_type}.create"
   waffles_resource_changed="true"
+  waffles_total_changes=$(( waffles_total_changes+1 ))
 }
 
 function waffles.resource.update {
   "${_resource_type}.update"
   waffles_resource_changed="true"
+  waffles_total_changes=$(( waffles_total_changes+1 ))
 }
 
 function waffles.resource.delete {
   "${_resource_type}.delete"
   waffles_resource_changed="true"
+  waffles_total_changes=$(( waffles_total_changes+1 ))
 }
