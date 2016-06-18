@@ -1,6 +1,6 @@
 # Waffles!
 
-Waffles is a suite of Bash scripts to manage resources in a server in an
+Waffles is a suite of Bash scripts to manage server resources in in an
 idempotent fashion.
 
 ## Installation and Usage
@@ -36,7 +36,8 @@ file.line --file /etc/memcached.conf --line "-m $memory" --match "^-m"
 # Manage the memcached service
 service.sysv --name memcached
 
-if [[ $waffles_state_changed == true ]]; then
+# If any changes happened, restart memcached
+if [[ -n $waffles_total_changes ]]; then
   exec.mute /etc/init.d/memcached restart
 fi
 ```
