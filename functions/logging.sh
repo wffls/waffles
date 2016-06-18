@@ -1,3 +1,7 @@
+# Colors and Styles
+declare waffles_log_color_bold='\e[1m'
+declare waffles_log_color_reset='\e[0m'
+
 function log.debug {
   if waffles.debug ; then
     log._log debug "$@"
