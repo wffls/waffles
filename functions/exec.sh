@@ -1,6 +1,6 @@
 # exec.mute turns off command output.
 # If run in DEBUG, the command being executed will be logged.
-function exec.mute {
+exec.mute() {
   if waffles.noop ; then
     log.info "(noop) $@"
   else
@@ -13,7 +13,7 @@ function exec.mute {
 # exec.capture_error will report back anything on fd 2.
 # unfortunately a lot of noise usually ends up on fd 2,
 # so this could be a little buggy.
-function exec.capture_error {
+exec.capture_error() {
   if waffles.noop ; then
     log.info "(noop) $@"
   else
@@ -33,7 +33,7 @@ function exec.capture_error {
 # exec.sudo runs a command as another user via sudo
 # $1 = user
 # $@ = command
-function exec.sudo {
+exec.sudo() {
   if [[ $# -gt 1 ]]; then
     local _user
     array.shift "$@" _user

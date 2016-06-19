@@ -34,7 +34,7 @@
 # exists and you choose to change it into a system using with the `--system`
 # flag, it's best to delete the user and recreate it.
 #
-function os.useradd {
+os.useradd() {
   # Declare the resource
   waffles_resource="os.useradd"
 
@@ -75,7 +75,7 @@ function os.useradd {
   waffles.resource.process $waffles_resource "${options[user]}"
 }
 
-function os.useradd.read {
+os.useradd.read() {
   getent passwd "${options[user]}" &> /dev/null
   if [[ $? != 0 ]]; then
     waffles_resource_current_state="absent"
@@ -151,7 +151,7 @@ function os.useradd.read {
   waffles_resource_current_state="present"
 }
 
-function os.useradd.create {
+os.useradd.create() {
   declare -a create_args
   if [[ -n ${options[uid]} ]]; then
     create_args+=("-u ${options[uid]}")
@@ -193,7 +193,7 @@ function os.useradd.create {
   fi
 }
 
-function os.useradd.update {
+os.useradd.update() {
   declare -a update_args
   if [[ -n ${options[uid]} && ${options[uid]} != $_uid ]]; then
     update_args+=("-u ${options[uid]}")
@@ -236,6 +236,6 @@ function os.useradd.update {
   fi
 }
 
-function os.useradd.delete {
+os.useradd.delete() {
   exec.capture_error userdel -f "${options[user]}"
 }

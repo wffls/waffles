@@ -20,7 +20,7 @@
 # mysql.grant --user nova --host localhost --database nova --privileges "SELECT, UPDATE, DELETE"
 # ```
 #
-function mysql.grant {
+mysql.grant() {
   # Declare the resource
   waffles_resource="mysql.grant"
 
@@ -59,7 +59,7 @@ function mysql.grant {
   waffles.resource.process $waffles_resource "$_name"
 }
 
-function mysql.grant.read {
+mysql.grant.read() {
 
   # TODO: Better handling of privileges
 
@@ -80,16 +80,16 @@ function mysql.grant.read {
 
 }
 
-function mysql.grant.create {
+mysql.grant.create() {
   exec.capture_error "mysql -NBe \"GRANT ${options[privileges]} on ${options[database]}.* to $_name\""
 }
 
-function mysql.grant.update {
+mysql.grant.update() {
   mysql.grant.delete
   mysql.grant.create
 }
 
-function mysql.grant.delete {
+mysql.grant.delete() {
   exec.capture_error "mysql -NBe \"REVOKE GRANT OPTION ON ${options[database]}.* FROM $_name\""
   exec.capture_error "mysql -NBe \"REVOKE ALL ON ${options[database]}.* FROM $_name\""
 }

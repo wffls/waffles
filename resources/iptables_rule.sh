@@ -22,7 +22,7 @@
 # iptables.rule --priority 100 --name "allow all from 192.168.1.0/24" --rule "-m tcp -s 192.168.1.0/24" --action ACCEPT
 # ```
 #
-function iptables.rule {
+iptables.rule() {
   # Declare the resource
   waffles_resource="iptables.rule"
 
@@ -48,7 +48,7 @@ function iptables.rule {
   waffles.resource.process $waffles_resource "$rule"
 }
 
-function iptables.rule.read {
+iptables.rule.read() {
   iptables -t "${options[table]}" -S "${options[chain]}" | grep -q "comment \"${options[priority]} ${options[name]}\""
   if [[ $? != 0 ]]; then
     waffles_resource_current_state="absent"
@@ -64,7 +64,7 @@ function iptables.rule.read {
   waffles_resource_current_state="present"
 }
 
-function iptables.rule.create {
+iptables.rule.create() {
   local rulenum=0
   local added="false"
 
@@ -93,13 +93,13 @@ function iptables.rule.create {
   fi
 }
 
-function iptables.rule.update {
+iptables.rule.update() {
   local _rule=$(iptables -S -t ${options[table]} "${options[chain]}" | grep "comment \"${options[priority]} ${options[name]}\"" | sed -e 's/^-A/-D/')
   exec.capture_error "iptables -t ${options[table]} $_rule"
   exec.capture_error "iptables -t ${options[table]} $rule"
 }
 
-function iptables.rule.delete {
+iptables.rule.delete() {
   local _rule=$(iptables -S -t ${options[table]} "${options[chain]}" | grep "comment \"${options[priority]} ${options[name]}\"" | sed -e 's/^-A/-D/')
   exec.capture_error "iptables -t ${options[table]} $_rule"
 }

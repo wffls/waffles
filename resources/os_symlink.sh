@@ -18,7 +18,7 @@
 # os.symlink --name /usr/local/man --target /usr/share/man
 # ```
 #
-function os.symlink {
+os.symlink() {
   # Declare the resource
   waffles_resource="os.symlink"
 
@@ -53,7 +53,7 @@ function os.symlink {
   waffles.resource.process $waffles_resource "${options[name]}"
 }
 
-function os.symlink.read {
+os.symlink.read() {
   if [[ ! -e ${options[name]} ]]; then
     waffles_resource_current_state="absent"
     return
@@ -75,15 +75,15 @@ function os.symlink.read {
   waffles_resource_current_state="present"
 }
 
-function os.symlink.create {
+os.symlink.create() {
   exec.capture_error ln -s "${options[target]}" "${options[name]}"
 }
 
-function os.symlink.update {
+os.symlink.update() {
   os.symlink.delete
   os.symlink.create
 }
 
-function os.symlink.delete {
+os.symlink.delete() {
   exec.capture_error rm "${options[name]}"
 }

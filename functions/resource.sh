@@ -8,7 +8,7 @@ declare -g waffles_resource_changed
 # waffles_total_changes keeps track of how many resources have been changed.
 declare -g waffles_total_changes
 
-function waffles.resource.process {
+waffles.resource.process() {
   if [[ $# -eq 2 ]]; then
     local _resource_type="$1"
     local _resource_name="$2"
@@ -57,25 +57,25 @@ function waffles.resource.process {
   fi
 }
 
-function waffles.resource.read {
+waffles.resource.read() {
   waffles_resource_current_state=
   waffles_resource_changed=
   "${_resource_type}.read"
 }
 
-function waffles.resource.create {
+waffles.resource.create() {
   "${_resource_type}.create"
   waffles_resource_changed="true"
   waffles_total_changes=$(( waffles_total_changes+1 ))
 }
 
-function waffles.resource.update {
+waffles.resource.update() {
   "${_resource_type}.update"
   waffles_resource_changed="true"
   waffles_total_changes=$(( waffles_total_changes+1 ))
 }
 
-function waffles.resource.delete {
+waffles.resource.delete() {
   "${_resource_type}.delete"
   waffles_resource_changed="true"
   waffles_total_changes=$(( waffles_total_changes+1 ))

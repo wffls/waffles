@@ -23,7 +23,7 @@
 #                   --distribution trusty --component main
 # ```
 #
-function apt.source {
+apt.source() {
   # Declare the resource
   waffles_resource="apt.source"
 
@@ -46,7 +46,7 @@ function apt.source {
   waffles.resource.process $waffles_resource "${options[name]}"
 }
 
-function apt.source.read {
+apt.source.read() {
   if [[ -f "/etc/apt/sources.list.d/${options[name]}.list" ]]; then
     waffles_resource_current_state="present"
     return
@@ -55,7 +55,7 @@ function apt.source.read {
   waffles_resource_current_state="absent"
 }
 
-function apt.source.create {
+apt.source.create() {
   os.file --name "/etc/apt/sources.list.d/${options[name]}.list" --content "deb ${options[uri]} ${options[distribution]} ${options[component]}" --owner root --group root
   if [[ ${options[include_src]} == "true" ]]; then
     os.file --name "/etc/apt/sources.list.d/${options[name]}-src.list" --content "deb-src ${options[uri]} ${options[distribution]} ${options[component]}" --owner root --group root
@@ -66,7 +66,7 @@ function apt.source.create {
   fi
 }
 
-function apt.source.delete {
+apt.source.delete() {
   exec.capture_error rm "/etc/apt/sources.list.d/${options[name]}.list"
 
   if [[ ${options[refresh]} == "true" ]]; then

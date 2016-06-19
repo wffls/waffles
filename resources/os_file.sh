@@ -22,7 +22,7 @@
 # os.file --name /etc/foobar --content "Hello, World!"
 # ```
 #
-function os.file {
+os.file() {
   # Declare the resource
   waffles_resource="os.file"
 
@@ -61,7 +61,7 @@ function os.file {
   waffles.resource.process $waffles_resource "${options[name]}"
 }
 
-function os.file.read {
+os.file.read() {
   if [[ ! -f ${options[name]} ]]; then
     waffles_resource_current_state="absent"
     return
@@ -114,7 +114,7 @@ function os.file.read {
   waffles_resource_current_state="present"
 }
 
-function os.file.create {
+os.file.create() {
   if [[ -n ${options[source]} ]]; then
     exec.capture_error cp "${options[source]}" "${options[name]}"
     exec.capture_error chmod ${options[mode]} "${options[name]}"
@@ -135,7 +135,7 @@ function os.file.create {
   fi
 }
 
-function os.file.update {
+os.file.update() {
   if [[ ${options[owner]} != $_owner ]]; then
     exec.capture_error chown ${options[owner]} "${options[name]}"
   fi
@@ -164,6 +164,6 @@ function os.file.update {
   fi
 }
 
-function os.file.delete {
+os.file.delete() {
   exec.capture_error rm -f "${options[name]}"
 }

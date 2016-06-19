@@ -20,7 +20,7 @@
 # rabbitmq.user_permission --user_permission root --password password
 # ```
 #
-function rabbitmq.user_permissions {
+rabbitmq.user_permissions() {
   # Declare the resource
   waffles_resource="rabbitmq.user_permissions"
 
@@ -51,7 +51,7 @@ function rabbitmq.user_permissions {
   waffles.resource.process $waffles_resource "${options[user]}"
 }
 
-function rabbitmq.user_permissions.read {
+rabbitmq.user_permissions.read() {
 
   local _permissions=$(rabbitmqctl -q list_permissions -p $_vhost 2>/dev/null | grep $_user)
   if [[ -z $_permissions ]]; then
@@ -80,14 +80,14 @@ function rabbitmq.user_permissions.read {
   waffles_resource_current_state="present"
 }
 
-function rabbitmq.user_permissions.create {
+rabbitmq.user_permissions.create() {
   exec.capture_error "rabbitmqctl set_permissions -p $_vhost $_user '${options[conf]}' '${options[write]}' '${options[read]}'"
 }
 
-function rabbitmq.user_permissions.update {
+rabbitmq.user_permissions.update() {
   rabbitmq.user_permissions.create
 }
 
-function rabbitmq.user_permissions.delete {
+rabbitmq.user_permissions.delete() {
   exec.capture_error "rabbitmqctl clear_permissions -p $_vhost $_user"
 }

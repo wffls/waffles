@@ -18,7 +18,7 @@
 # apt.ppa --ppa ppa:chris-lea/redis-server
 # ```
 #
-function apt.ppa {
+apt.ppa() {
   # Declare the resource
   waffles_resource="apt.pp"
 
@@ -42,7 +42,7 @@ function apt.ppa {
   waffles.resource.process $waffles_resource "${options[ppa]}"
 }
 
-function apt.ppa.read {
+apt.ppa.read() {
   local _repo_file_name="$(echo ${options[ppa]} | sed -e "s|[/:]|-|" -e "s|\.|_|")-*.list"
   if [ -f /etc/apt/sources.list.d/$_repo_file_name ]; then
     waffles_resource_current_state="present"
@@ -52,7 +52,7 @@ function apt.ppa.read {
   waffles_resource_current_state="absent"
 }
 
-function apt.ppa.create {
+apt.ppa.create() {
   exec.capture_error apt-add-repository -y ppa:${options[ppa]}
 
   if [[ ${options[refresh]} == "true" ]]; then
@@ -60,7 +60,7 @@ function apt.ppa.create {
   fi
 }
 
-function apt.ppa.delete {
+apt.ppa.delete() {
   exec.capture_error apt-add-repository -y -r ppa:${options[ppa]}
 
   if [[ ${options[refresh]} == "true" ]]; then

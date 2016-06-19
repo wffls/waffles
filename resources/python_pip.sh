@@ -33,7 +33,7 @@
 #
 # This resource is heavily based on puppet-python
 #
-function python.pip {
+python.pip() {
   # Declare the resource
   waffles_resource="python.pip"
 
@@ -142,7 +142,7 @@ function python.pip {
   waffles.resource.process $waffles_resource "${options[name]}"
 }
 
-function python.pip.read {
+python.pip.read() {
   local _current_state
 
   $_pip freeze | grep -i -q $_package_regex
@@ -159,7 +159,7 @@ function python.pip.read {
 
 }
 
-function python.pip.create {
+python.pip.create() {
   local _cmd
 
   if [[ -n $_source ]]; then
@@ -172,11 +172,11 @@ function python.pip.create {
 
 }
 
-function python.pip.update {
+python.pip.update() {
   python.pip.create
 }
 
-function python.pip.delete {
+python.pip.delete() {
   local _cmd
 
   _cmd="echo y | $_pip --log $_log uninstall ${options[uninstall_args]} ${options[name]}"

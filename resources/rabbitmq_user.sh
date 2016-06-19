@@ -19,7 +19,7 @@
 # rabbitmq.user --user root --password password
 # ```
 #
-function rabbitmq.user {
+rabbitmq.user() {
   # Declare the resource
   waffles_resource="rabbitmq.user"
 
@@ -38,7 +38,7 @@ function rabbitmq.user {
   waffles.resource.process $waffles_resource "${options[user]}"
 }
 
-function rabbitmq.user.read {
+rabbitmq.user.read() {
 
   rabbitmqctl -q list_users 2>/dev/null | grep -q ${options[user]}
   if [[ $? == 1 ]]; then
@@ -75,7 +75,7 @@ function rabbitmq.user.read {
   waffles_resource_current_state="present"
 }
 
-function rabbitmq.user.create {
+rabbitmq.user.create() {
   exec.capture_error "rabbitmqctl add_user ${options[user]} ${options[password]}"
 
   if [[ ${options[admin]} == "true" ]]; then
@@ -83,7 +83,7 @@ function rabbitmq.user.create {
   fi
 }
 
-function rabbitmq.user.update {
+rabbitmq.user.update() {
   exec.capture_error "rabbitmqctl change_password ${options[user]} ${options[password]}"
 
   if [[ ${options[admin]} != $_admin_status ]]; then
@@ -96,6 +96,6 @@ function rabbitmq.user.update {
   fi
 }
 
-function rabbitmq.user.delete {
+rabbitmq.user.delete() {
   exec.capture_error "rabbitmqctl delete_user ${options[user]}"
 }

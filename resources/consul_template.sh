@@ -25,7 +25,7 @@
 #                 --destination /etc/hosts
 # ```
 #
-function consul.template {
+consul.template() {
   # Declare the resource
   waffles_resource="apt.source"
 
@@ -76,7 +76,7 @@ function consul.template {
   waffles.resource.process $waffles_resource "$_name"
 }
 
-function consul.template.read {
+consul.template.read() {
   if [[ ! -f $_file ]]; then
     waffles_resource_current_state="absent"
     return
@@ -94,21 +94,21 @@ function consul.template.read {
   waffles_resource_current_state="present"
 }
 
-function consul.template.create {
+consul.template.create() {
   _template=$(consul.template.build_template)
   os.file --name "$_file" --content "$_template" --owner "${options[file_owner]}" --group "${options[file_group]}" --mode "${options[file_mode]}"
 }
 
-function consul.template.update {
+consul.template.update() {
   consul.template.delete
   consul.template.create
 }
 
-function consul.template.delete {
+consul.template.delete() {
   exec.capture_error rm "$_file"
 }
 
-function consul.template.build_template {
+consul.template.build_template() {
   _template="{}"
 
   for _o in "${_simple_options[@]}"; do

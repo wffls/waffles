@@ -34,7 +34,7 @@
 #              --handler "/usr/local/bin/build_hosts_file.sh"
 # ```
 #
-function consul.watch {
+consul.watch() {
   # Declare the resource
   waffles_resource="consul.watch"
 
@@ -90,7 +90,7 @@ function consul.watch {
   waffles.resource.process $waffles_resource "$_name"
 }
 
-function consul.watch.read {
+consul.watch.read() {
   if [[ ! -f $_file ]]; then
     waffles_resource_current_state="absent"
     return
@@ -108,7 +108,7 @@ function consul.watch.read {
   waffles_resource_current_state="present"
 }
 
-function consul.watch.create {
+consul.watch.create() {
   if [[ ! -d $_dir ]]; then
     exec.capture_error mkdir -p "$_dir"
   fi
@@ -117,16 +117,16 @@ function consul.watch.create {
   os.file --name "$_file" --content "$_watch" --owner "${options[file_owner]}" --group "${options[file_group]}" --mode "${options[file_mode]}"
 }
 
-function consul.watch.update {
+consul.watch.update() {
   consul.watch.delete
   consul.watch.create
 }
 
-function consul.watch.delete {
+consul.watch.delete() {
   os.file --state absent --name "$_file"
 }
 
-function consul.watch.build_watch {
+consul.watch.build_watch() {
   _watch='{"watches":[]}'
   _options=""
 

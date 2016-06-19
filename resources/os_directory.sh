@@ -23,7 +23,7 @@
 # os.directory --source "$profile_files/mydir" --name /var/lib/mydir
 # ```
 #
-function os.directory {
+os.directory() {
   # Declare the resource
   waffles_resource="os.directory"
 
@@ -63,7 +63,7 @@ function os.directory {
   waffles.resource.process $waffles_resource "${options[name]}"
 }
 
-function os.directory.read {
+os.directory.read() {
   if [[ ! -d "${options[name]}" ]]; then
     waffles_resource_current_state="absent"
     return
@@ -108,7 +108,7 @@ function os.directory.read {
   waffles_resource_current_state="present"
 }
 
-function os.directory.create {
+os.directory.create() {
   if [[ -n ${options[source]} ]]; then
     exec.capture_error rsync -a "${options[source]}/" "${options[name]}"
     exec.capture_error chmod $_recurse ${options[mode]} "${options[name]}"
@@ -120,7 +120,7 @@ function os.directory.create {
   fi
 }
 
-function os.directory.update {
+os.directory.update() {
   if [[ ${options[owner]} != $_owner ]]; then
     exec.capture_error chown $_recurse ${options[owner]} "${options[name]}"
   fi
@@ -138,6 +138,6 @@ function os.directory.update {
   fi
 }
 
-function os.directory.delete {
+os.directory.delete() {
   exec.capture_error rm -rf "${options[name]}"
 }

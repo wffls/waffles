@@ -32,7 +32,7 @@
 #              --interval "60s"
 # ```
 #
-function consul.check {
+consul.check() {
   # Declare the resource
   waffles_resource="consul.check"
 
@@ -80,7 +80,7 @@ function consul.check {
   waffles.resource.process $waffles_resource "$_name"
 }
 
-function consul.check.read {
+consul.check.read() {
   if [[ ! -f $_file ]]; then
     waffles_resource_current_state="absent"
     return
@@ -98,7 +98,7 @@ function consul.check.read {
   waffles_resource_current_state="present"
 }
 
-function consul.check.create {
+consul.check.create() {
   if [[ ! -d $_dir ]]; then
     exec.capture_error mkdir -p "$_dir"
   fi
@@ -107,16 +107,16 @@ function consul.check.create {
   os.file --name "$_file" --content "$_service" --owner "${options[file_owner]}" --group "${options[file_group]}" --mode "${options[file_mode]}"
 }
 
-function consul.check.update {
+consul.check.update() {
   consul.check.delete
   consul.check.create
 }
 
-function consul.check.delete {
+consul.check.delete() {
   os.file -state absent --name "$_file"
 }
 
-function consul.check.build_check {
+consul.check.build_check() {
   _check="{}"
 
   # Build simple options

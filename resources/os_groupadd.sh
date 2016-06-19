@@ -18,7 +18,7 @@
 # os.groupadd --group jdoe --gid 999
 # ```
 #
-function os.groupadd {
+os.groupadd() {
   # Declare the resource
   waffles_resource="os.groupadd"
 
@@ -40,7 +40,7 @@ function os.groupadd {
   waffles.resource.process $waffles_resource "${options[group]}"
 }
 
-function os.groupadd.read {
+os.groupadd.read() {
   group_info=$(getent group "${options[group]}")
   if [[ $? != 0 ]]; then
     waffles_resource_current_state="absent"
@@ -57,7 +57,7 @@ function os.groupadd.read {
   waffles_resource_current_state="present"
 }
 
-function os.groupadd.create {
+os.groupadd.create() {
   declare -a create_args
 
   if [[ -n ${options[gid]} ]]; then
@@ -67,7 +67,7 @@ function os.groupadd.create {
   exec.capture_error groupadd ${create_args[@]} "${options[group]}"
 }
 
-function os.groupadd.update {
+os.groupadd.update() {
   declare -a update_args
 
   if [[ -n ${options[gid]} && ${options[gid]} != $_gid ]]; then
@@ -78,6 +78,6 @@ function os.groupadd.update {
   exec.capture_error groupmod ${create_args[@]} "${options[group]}"
 }
 
-function os.groupadd.delete {
+os.groupadd.delete() {
   exec.capture_error groupdel -f "${options[group]}"
 }
