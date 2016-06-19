@@ -20,7 +20,7 @@
 # sudoers.cmd --user consul --command /usr/local/bin/consul_build_hosts_file.sh
 # ```
 #
-function sudoers.cmd {
+sudoers.cmd() {
   # Declare the resource
   waffles_resource="sudoers.cmd"
 
@@ -63,7 +63,7 @@ function sudoers.cmd {
   waffles.resource.process $waffles_resource "$_name"
 }
 
-function sudoers.cmd.read {
+sudoers.cmd.read() {
   if [[ ! -f "$_file" ]]; then
     waffles_resource_current_state="absent"
     return
@@ -78,15 +78,15 @@ function sudoers.cmd.read {
   waffles_resource_current_state="present"
 }
 
-function sudoers.cmd.create {
+sudoers.cmd.create() {
   os.file --name "$_file" --owner root --group root --mode 440 --content "$_line"
 }
 
-function sudoers.cmd.update {
+sudoers.cmd.update() {
   sudoers.cmd.delete
   sudoers.cmd.create
 }
 
-function sudoers.cmd.delete {
+sudoers.cmd.delete() {
   exec.capture_error rm "$_file"
 }

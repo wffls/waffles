@@ -20,7 +20,7 @@
 # apt.key --name "foobar" --key 1C4CBDCDCD2EFD2A
 # ```
 #
-function apt.key {
+apt.key() {
 
   # Declare the resource title
   waffles_resource="apt.key"
@@ -41,7 +41,7 @@ function apt.key {
   waffles.resource.process $waffles_resource "${options[name]}"
 }
 
-function apt.key.read {
+apt.key.read() {
   apt-key export ${options[key]} 2>/dev/null | grep -q "BEGIN PGP"
   if [[ $? == 0 ]]; then
     waffles_resource_current_state="present"
@@ -50,7 +50,7 @@ function apt.key.read {
   waffles_resource_current_state="absent"
 }
 
-function apt.key.create {
+apt.key.create() {
   if [[ -n ${options[remote_keyfile]} ]]; then
     if ! waffles.command_exists wget ; then
       log.error "wget not installed. Unable to obtain remote keyfile."
@@ -69,6 +69,6 @@ function apt.key.create {
   fi
 }
 
-function apt.key.delete {
+apt.key.delete() {
   exec.capture_error apt-key del ${options[key]}
 }

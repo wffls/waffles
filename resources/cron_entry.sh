@@ -28,7 +28,7 @@
 #
 # Add support for prefix info such as PATH, MAILTO.
 #
-function cron.entry {
+cron.entry() {
   # Declare the resource
   waffles_resource="cron.entry"
 
@@ -57,7 +57,7 @@ function cron.entry {
   waffles.resource.process $waffles_resource "$entry"
 }
 
-function cron.entry.read {
+cron.entry.read() {
   _entry=$(crontab -u "${options[user]}" -l 2> /dev/null | grep "# ${options[name]}$")
   if [[ -z $_entry ]]; then
     waffles_resource_current_state="absent"
@@ -72,7 +72,7 @@ function cron.entry.read {
   waffles_resource_current_state="present"
 }
 
-function cron.entry.create {
+cron.entry.create() {
   local _script
   read -r -d '' _script<<EOF
 (
@@ -83,11 +83,11 @@ EOF
   exec.capture_error "$_script"
 }
 
-function cron.entry.update {
+cron.entry.update() {
   cron.entry.create
 }
 
-function cron.entry.delete {
+cron.entry.delete() {
   local _script
   read -r -d '' _script<<EOF
 (

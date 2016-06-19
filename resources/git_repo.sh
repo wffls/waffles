@@ -33,7 +33,7 @@
 # * tag
 # * branch
 #
-function git.repo {
+git.repo() {
   # Declare the resource
   waffles_resource="git.repo"
 
@@ -84,7 +84,7 @@ function git.repo {
   waffles.resource.process $waffles_resource "${options[name]}"
 }
 
-function git.repo.read {
+git.repo.read() {
   local _current_state
 
   if [[ -f "${options[name]}/.git/config" ]]; then
@@ -151,7 +151,7 @@ function git.repo.read {
   fi
 }
 
-function git.repo.create {
+git.repo.create() {
   exec.capture_error git clone --quiet "${options[source]}" "${options[name]}"
   waffles.pushd "${options[name]}"
 
@@ -174,7 +174,7 @@ function git.repo.create {
   exec.capture_error chown -R $_uid:$_gid "${options[name]}"
 }
 
-function git.repo.update {
+git.repo.update() {
   # If state is set to "latest", do a git pull
   waffles.pushd "${options[name]}"
   if [[ ${options[state]} == "latest" ]]; then
@@ -203,6 +203,6 @@ function git.repo.update {
   exec.capture_error chown -R $_uid:$_gid "${options[name]}"
 }
 
-function git.repo.delete {
+git.repo.delete() {
   os.directory --name "${options[name]}" --state absent
 }

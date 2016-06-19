@@ -17,7 +17,7 @@
 # service.upstart --name memcached
 # ```
 #
-function service.upstart {
+service.upstart() {
   # Declare the resource
   waffles_resource="service.upstart"
 
@@ -35,7 +35,7 @@ function service.upstart {
   waffles.resource.process $waffles_resource "${options[name]}"
 }
 
-function service.upstart.read {
+service.upstart.read() {
   if [[ ! -f "/etc/init/${options[name]}.conf" ]]; then
     log.error "/etc/init/${options[name]}.conf does not exist."
     waffles_resource_current_state="error"
@@ -51,14 +51,14 @@ function service.upstart.read {
   waffles_resource_current_state="running"
 }
 
-function service.upstart.create {
+service.upstart.create() {
   exec.capture_error start ${options[name]}
 }
 
-function service.upstart.update {
+service.upstart.update() {
   exec.capture_error restart ${options[name]}
 }
 
-function service.upstart.delete {
+service.upstart.delete() {
   exec.capture_error stop ${options[name]}
 }

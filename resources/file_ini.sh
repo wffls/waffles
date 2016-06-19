@@ -20,7 +20,7 @@
 # file.ini --file /etc/nova/nova.conf --section DEFAULT --option debug --value True
 # ```
 #
-function file.ini {
+file.ini() {
   # Declare the resource
   waffles_resource="apt.source"
 
@@ -45,7 +45,7 @@ function file.ini {
   waffles.resource.process $waffles_resource "$name"
 }
 
-function file.ini.read {
+file.ini.read() {
   if [[ ! -f ${options[file]} ]]; then
     waffles_resource_current_state="absent"
     return
@@ -64,7 +64,7 @@ function file.ini.read {
   waffles_resource_current_state="present"
 }
 
-function file.ini.create {
+file.ini.create() {
   if waffles.noop ; then
     log.info "(noop) Would have added $name."
   else
@@ -72,7 +72,7 @@ function file.ini.create {
   fi
 }
 
-function file.ini.update {
+file.ini.update() {
   if waffles.noop ; then
     log.info "(noop) Would have changed $name."
   else
@@ -80,7 +80,7 @@ function file.ini.update {
   fi
 }
 
-function file.ini.delete {
+file.ini.delete() {
   if waffles.noop ; then
     log.info "(noop) Would have changed $name."
   else
@@ -90,7 +90,7 @@ function file.ini.delete {
 
 # The following were modified from
 # https://raw.githubusercontent.com/openstack-dev/devstack/master/inc/ini-config
-function file.ini.ini_get_option {
+file.ini.ini_get_option() {
   local _line
   local _option=$(echo ${options[option]} | sed -e 's/[\/&]/\\&/g' | sed -e 's/[][]/\\&/g')
   if [[ ${options[section]} != "__none__" ]]; then
@@ -103,7 +103,7 @@ function file.ini.ini_get_option {
 
 }
 
-function file.ini.ini_option_has_value {
+file.ini.ini_option_has_value() {
   local _line
   local _value=$(echo ${options[value]} | sed -e 's/[\/&]/\\&/g' | sed -e 's/[][]/\\&/g')
   local _option=$(echo ${options[option]} | sed -e 's/[\/&]/\\&/g' | sed -e 's/[][]/\\&/g')
@@ -124,7 +124,7 @@ function file.ini.ini_option_has_value {
   [[ -n $_line ]]
 }
 
-function file.ini.inidelete {
+file.ini.inidelete() {
   [[ -z ${options[option]} ]] && return
   if [[ ${options[section]} != "__none__" ]]; then
     sed -i -e "/^\[${options[section]}\]/,/^\[.*\]/ { /^${options[option]}[ \t]*=/ d; }" "${options[file]}"
@@ -133,7 +133,7 @@ function file.ini.inidelete {
   fi
 }
 
-function file.ini.iniset {
+file.ini.iniset() {
   [[ -z ${options[option]} ]] && return
   local _value=$(echo ${options[value]} | sed -e 's/[\/&]/\\&/g' | sed -e 's/[][]/\\&/g')
   local _option=$(echo ${options[option]} | sed -e 's/[\/&]/\\&/g' | sed -e 's/[][]/\\&/g')

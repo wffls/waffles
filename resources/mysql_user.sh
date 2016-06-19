@@ -21,7 +21,7 @@
 # mysql.user --user root --password password
 # ```
 #
-function mysql.user {
+mysql.user() {
   # Declare the resource
   waffles_resource="mysql.user"
 
@@ -52,7 +52,7 @@ function mysql.user {
   waffles.resource.process $waffles_resource "$_name"
 }
 
-function mysql.user.read {
+mysql.user.read() {
 
   # TODO
   #local _user_query="SELECT MAX_USER_CONNECTIONS, MAX_CONNECTIONS, MAX_QUESTIONS, MAX_UPDATES, PASSWORD /*!50508 , PLUGIN */ FROM mysql.user WHERE CONCAT(user, '@', host) = '${options[user]}@${options[host]}'"
@@ -74,14 +74,14 @@ function mysql.user.read {
   waffles_resource_current_state="present"
 }
 
-function mysql.user.create {
+mysql.user.create() {
   exec.capture_error "mysql -NBe \"CREATE USER '${options[user]}'@'${options[host]}' IDENTIFIED BY PASSWORD '${password}'\""
 }
 
-function mysql.user.update {
+mysql.user.update() {
   exec.capture_error "mysql -NBe \"SET PASSWORD FOR '${options[user]}'@'${options[host]}' = '${password}'\""
 }
 
-function mysql.user.delete {
+mysql.user.delete() {
   exec.capture_error "mysql -NBe \"DROP USER '${options[user]}'@'${options[host]}'\""
 }

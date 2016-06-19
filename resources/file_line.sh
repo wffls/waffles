@@ -20,9 +20,9 @@
 #                  --line "-l 0.0.0.0" --match "^-l"
 # ```
 #
-function file.line {
+file.line() {
   # Declare the resource
-  waffles_resource="file_line"
+  waffles_resource="file.line"
 
   # Resource Options
   local -A options
@@ -43,7 +43,7 @@ function file.line {
   waffles.resource.process $waffles_resource "$_name"
 }
 
-function file.line.read {
+file.line.read() {
   if [[ ! -f ${options[file]} ]]; then
     waffles_resource_current_state="absent"
     return
@@ -66,7 +66,7 @@ function file.line.read {
   waffles_resource_current_state="present"
 }
 
-function file.line.create {
+file.line.create() {
   if [[ ! -f ${options[file]} ]]; then
     if [[ -n ${options[match]} ]]; then
       log.warn "${options[file]} does not exist. Cannot match on an empty file. Proceeding without matching."
@@ -83,11 +83,11 @@ function file.line.create {
   fi
 }
 
-function file.line.update {
+file.line.update() {
   file.line.create
 }
 
-function file.line.delete {
+file.line.delete() {
   local _replacement=$(echo ${options[line]} | sed -e 's/[\/&]/\\&/g')
   exec.capture_error "sed -i -e '/^${options[line]}$/d' '${options[file]}'"
 }

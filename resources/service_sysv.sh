@@ -17,7 +17,7 @@
 # service.sysv --name memcached
 # ```
 #
-function service.sysv {
+service.sysv() {
   # Declare the resource
   waffles_resource="service.sysv"
 
@@ -35,7 +35,7 @@ function service.sysv {
   waffles.resource.process $waffles_resource "${options[name]}"
 }
 
-function service.sysv.read {
+service.sysv.read() {
   if [[ ! -f "/etc/init.d/${options[name]}" ]]; then
     log.error "/etc/init.d/${options[name]} does not exist."
     return 1
@@ -50,14 +50,14 @@ function service.sysv.read {
   waffles_resource_current_state="present"
 }
 
-function service.sysv.create {
+service.sysv.create() {
   exec.capture_error /etc/init.d/${options[name]} start
 }
 
-function service.sysv.update {
+service.sysv.update() {
   exec.capture_error /etc/init.d/${options[name]} restart
 }
 
-function service.sysv.delete {
+service.sysv.delete() {
   exec.capture_error /etc/init.d/${options[name]} stop
 }

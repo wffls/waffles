@@ -30,7 +30,7 @@
 #
 # This resource is heavily based on puppet-python
 #
-function python.virtualenv {
+python.virtualenv() {
   # Declare the resource
   waffles_resource="python.virtualenv"
 
@@ -112,7 +112,7 @@ function python.virtualenv {
   waffles.resource.process $waffles_resource "${options[name]}"
 }
 
-function python.virtualenv.read {
+python.virtualenv.read() {
   if [[ -f "$_venv/bin/activate" ]]; then
     waffles_resource_current_state="present"
   else
@@ -120,7 +120,7 @@ function python.virtualenv.read {
   fi
 }
 
-function python.virtualenv.create {
+python.virtualenv.create() {
   local _cmd _wheel
 
   os.directory --name $_venv --owner $_user --group $_group --mode ${options[mode]}
@@ -142,11 +142,11 @@ function python.virtualenv.create {
   fi
 }
 
-function python.virtualenv.update {
+python.virtualenv.update() {
   python.virtualenv.create
 }
 
-function python.virtualenv.delete {
+python.virtualenv.delete() {
   local _cmd
 
   exec.capture_error rm -rf "$_venv"

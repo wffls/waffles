@@ -22,7 +22,7 @@
 # ip6tables.rule --priority 100 --name "allow all from 192.168.1.0/24" --rule "-m tcp -s 192.168.1.0/24" --action ACCEPT
 # ```
 #
-function ip6tables.rule {
+ip6tables.rule() {
   # Declare the resource
   waffles_resource="ip6tables.rule"
 
@@ -49,7 +49,7 @@ function ip6tables.rule {
   waffles.resource.process $waffles_resource "$rule"
 }
 
-function ip6tables.rule.read {
+ip6tables.rule.read() {
   ip6tables -t "${options[table]}" -S "${options[chain]}" | grep -q "comment \"${options[priority]} ${options[name]}\""
   if [[ $? != 0 ]]; then
     waffles_resource_current_state="absent"
@@ -65,7 +65,7 @@ function ip6tables.rule.read {
   waffles_resource_current_state="present"
 }
 
-function ip6tables.rule.create {
+ip6tables.rule.create() {
   local rulenum=0
   local added="false"
 
@@ -94,13 +94,13 @@ function ip6tables.rule.create {
   fi
 }
 
-function ip6tables.rule.update {
+ip6tables.rule.update() {
   local _rule=$(ip6tables -S -t ${options[table]} "${options[chain]}" | grep "comment \"${options[priority]} ${options[name]}\"" | sed -e 's/^-A/-D/')
   exec.capture_error "ip6tables -t ${options[table]} $_rule"
   exec.capture_error "ip6tables -t ${options[table]} $rule"
 }
 
-function ip6tables.rule.delete {
+ip6tables.rule.delete() {
   local _rule=$(ip6tables -S -t ${options[table]} "${options[chain]}" | grep "comment \"${options[priority]} ${options[name]}\"" | sed -e 's/^-A/-D/')
   exec.capture_error "ip6tables -t ${options[table]} $_rule"
 }

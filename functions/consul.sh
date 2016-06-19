@@ -2,7 +2,7 @@
 # Options:
 #   service. Required. Defaults to "all".
 # Results are stored in __consul_nodes hash.
-function consul.get_nodes {
+consul.get_nodes() {
   declare -Ag __consul_nodes
   local -A options
   waffles.options.create_option service "all"
@@ -52,7 +52,7 @@ function consul.get_nodes {
 
 # get_services returns a list of services.
 # Results are saved to consul_services array.
-function consul.get_services {
+consul.get_services() {
   if ! waffles.command_exists curl ; then
     log.error "Cannot find curl."
     return 1
@@ -67,7 +67,7 @@ function consul.get_services {
 #   path: The path to query. Defaults to /v1/kv.
 #   key: The key to query. Required.
 #   raw: Whether to return a raw result. Defaults to "true".
-function consul.get_kv {
+consul.get_kv() {
   if ! waffles.command_exists curl ; then
     log.error "Cannot find curl."
     return 1
@@ -102,7 +102,7 @@ function consul.get_kv {
 #   key: The key to set. Required.
 #   value: The value to set. Required.
 #   flags: Additional flags.
-function consul.set_kv {
+consul.set_kv() {
   if ! waffles.command_exists curl ; then
     log.error "Cannot find curl."
     return 1
@@ -135,7 +135,7 @@ function consul.set_kv {
 #   server: The consul server to use. Defaults to localhost:8500
 #   path: The path to the key. Defaults to /v1/kv.
 #   key: The key to delete. Required.
-function consul.delete_kv {
+consul.delete_kv() {
   if ! waffles.command_exists curl ; then
     log.error "Cannot find curl."
     return 1

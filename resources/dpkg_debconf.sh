@@ -21,7 +21,7 @@
 #                --vtype password --value mypassword
 # ```
 #
-function dpkg.debconf {
+dpkg.debconf() {
   # Declare the resource
   waffles_resource="dpkg.debconf"
 
@@ -59,7 +59,7 @@ function dpkg.debconf {
   waffles.resource.process $waffles_resource "$_name"
 }
 
-function dpkg.debconf.read {
+dpkg.debconf.read() {
   local _dc=$(echo get ${options[question]} | debconf-communicate ${options[package]} 2>/dev/null)
   if [[ $_dc =~ ^10 ]]; then
     waffles_resource_current_state="absent"
@@ -72,7 +72,7 @@ function dpkg.debconf.read {
   fi
 }
 
-function dpkg.debconf.create {
+dpkg.debconf.create() {
   local _script
   read -r -d '' _script<<EOF
 echo ${options[package]} ${options[question]} ${options[vtype]} "${options[value]}" | debconf-set-selections
@@ -80,12 +80,12 @@ EOF
   exec.capture_error "$_script"
 }
 
-function dpkg.debconf.update {
+dpkg.debconf.update() {
   dpkg.debconf.delete
   dpkg.debconf.create
 }
 
-function dpkg.debconf.delete {
+dpkg.debconf.delete() {
   local _script
   read -r -d '' _script<<EOF
 echo RESET ${options[question]} | debconf-communicate ${options[package]}

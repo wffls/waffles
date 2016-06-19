@@ -2,30 +2,29 @@
 declare waffles_log_color_bold='\e[1m'
 declare waffles_log_color_reset='\e[0m'
 
-function log.debug {
+log.debug() {
   if waffles.debug ; then
     log._log debug "$@"
   fi
 }
 
-function log.info {
+log.info() {
   log._log info "$@"
 }
 
-function log.warn {
+log.warn() {
   log._log warn "$@"
 }
 
-function log.error {
+log.error() {
   log._log error "$@"
 }
 
-function log._log {
-  local _log_level="$1"
-  shift
+log._log() {
+  local _log_level="$1"; shift
 
   if [[ -n $waffles_resource ]]; then
-    waffles_resource="${waffles_resource} "
+    _log_level=" ${_log_level}"
   fi
 
   echo "${waffles_resource}${_log_level}: ${@}" >&2

@@ -4,7 +4,7 @@
 # $1 = string
 # $2 = delimiter
 declare -ax __split
-function string.split {
+string.split() {
   if [[ -z $2 ]]; then
     echo "$1"
   fi
@@ -26,7 +26,7 @@ function string.split {
 
 # string.trim trims whitespace from a string
 # $1 = string
-function string.trim {
+string.trim() {
   if [[ $# -gt 0 ]]; then
     shopt -s extglob
     local _trim="$1"

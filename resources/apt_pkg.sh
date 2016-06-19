@@ -18,7 +18,7 @@
 # apt.pkg --package tmux --version latest
 # ```
 #
-function apt.pkg {
+apt.pkg() {
   # Declare the resource
   waffles_resource="apt.pkg"
 
@@ -50,7 +50,7 @@ function apt.pkg {
   waffles.resource.process $waffles_resource "${options[package]}"
 }
 
-function apt.pkg.read {
+apt.pkg.read() {
   # check to see if it's a valid package
   # apt-cache is handling stderr weird
   # return 1 so installation attempt does not happen
@@ -98,7 +98,7 @@ function apt.pkg.read {
   waffles_resource_current_state="present"
 }
 
-function apt.pkg.create {
+apt.pkg.create() {
   export DEBIAN_FRONTEND=noninteractive
   export APT_LISTBUGS_FRONTEND=none
   export APT_LISTCHANGES_FRONTEND=none
@@ -108,11 +108,11 @@ function apt.pkg.create {
   unset APT_LISTCHANGES_FRONTEND
 }
 
-function apt.pkg.update {
+apt.pkg.update() {
   apt.pkg.create
 }
 
-function apt.pkg.delete {
+apt.pkg.delete() {
   export DEBIAN_FRONTEND=noninteractive
   export APT_LISTBUGS_FRONTEND=none
   export APT_LISTCHANGES_FRONTEND=none

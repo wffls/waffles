@@ -1,4 +1,4 @@
-function waffles.options.create_option {
+waffles.options.create_option() {
   if [[ -n $2 ]]; then
     if [[ $2 == "__required__" ]]; then
       options[$1/required]=1
@@ -9,14 +9,14 @@ function waffles.options.create_option {
   fi
 }
 
-function waffles.options.create_mv_option {
+waffles.options.create_mv_option() {
   if [[ -n $1 ]]; then
     waffles.options.create_option "$1" "$2"
     options[$1/mv]=1
   fi
 }
 
-function waffles.options.parse_options {
+waffles.options.parse_options() {
   while [ $# -gt 0 ]; do
     log.debug "option $1, value $2"
     if [[ $2 =~ ^-- ]]; then

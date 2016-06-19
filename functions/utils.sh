@@ -1,15 +1,15 @@
 # These commands are simple helpers to detect how Waffles was run.
-function waffles.noop {
+waffles.noop() {
   [[ -n $WAFFLES_NOOP ]]
 }
 
-function waffles.debug {
+waffles.debug() {
   [[ -n $WAFFLES_DEBUG ]]
 }
 
 # waffles.include is a more intelligent "source".
 # It will warn if the file does not exist, rather than erroring.
-function waffles.include {
+waffles.include() {
   if [[ $# -gt 0 ]]; then
     if [[ -f $1 ]]; then
       source -- "$1"
@@ -32,7 +32,7 @@ function waffles.include {
 #     [DEFAULT/verbose]="true"
 #     [DEFAULT/debug]="true"
 #   )
-function waffles.build_ini_file {
+waffles.build_ini_file() {
   if [[ $# -eq 2 ]]; then
     local -n _config="$1"
     local _file="$2"
@@ -48,26 +48,26 @@ function waffles.build_ini_file {
 }
 
 # waffles.dir is a clean way of getting the current dir of the script being run.
-function waffles.dir {
+waffles.dir() {
   if [[ $# -gt 0 ]]; then
     echo $(readlink -f "${1%/*}")
   fi
 }
 
 # waffles.command_exists is a simple alias for `which`
-function waffles.command_exists {
+waffles.command_exists() {
   which $1 &>/dev/null
 }
 
 # waffles.pushd is an alias for exec.mute pushd
-function waffles.pushd {
+waffles.pushd() {
   if [[ $# -eq 1 ]]; then
     exec.mute pushd $1
   fi
 }
 
 # waffles.popd is an alias for exec.mute popd
-function waffles.popd {
+waffles.popd() {
   if [[ $# -eq 1 ]]; then
     exec.mute popd $1
   fi

@@ -19,7 +19,7 @@
 # mysql.database --name mydb
 # ```
 #
-function mysql.database {
+mysql.database() {
   # Declare the resource
   waffles_resource="mysql.database"
 
@@ -43,7 +43,7 @@ function mysql.database {
   waffles.resource.process $waffles_resource "${options[name]}"
 }
 
-function mysql.database.read {
+mysql.database.read() {
 
   # TODO
   #local _database_query="SELECT MAX_USER_CONNECTIONS, MAX_CONNECTIONS, MAX_QUESTIONS, MAX_UPDATES, PASSWORD /*!50508 , PLUGIN */ FROM mysql.name WHERE CONCAT(name, '@', host) = '${options[name]}@${options[host]}'"
@@ -70,11 +70,11 @@ function mysql.database.read {
   waffles_resource_current_state="present"
 }
 
-function mysql.database.create {
+mysql.database.create() {
   exec.capture_error  "mysql -NBe \"CREATE DATABASE IF NOT EXISTS \\\`${options[name]}\\\` CHARACTER SET \\\`${options[charset]}\\\` COLLATE \\\`${options[collate]}\\\`\""
 }
 
-function mysql.database.update {
+mysql.database.update() {
   if [[ $_charset != ${options[charset]} ]]; then
     exec.capture_error "mysql -NBe \"ALTER DATABASE \`${options[name]}\` CHARACTER SET \`${options[charset]}\`\""
   fi
@@ -84,6 +84,6 @@ function mysql.database.update {
   fi
 }
 
-function mysql.database.delete {
+mysql.database.delete() {
   exec.capture_error "mysql -NBe \"DROP DATABASE IF EXISTS \\\`${options[name]}\\\`\""
 }

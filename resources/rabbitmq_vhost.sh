@@ -17,7 +17,7 @@
 # rabbitmq.vhost --vhost openstack
 # ```
 #
-function rabbitmq.vhost {
+rabbitmq.vhost() {
   # Declare the resource
   waffles_resource="rabbitmq.vhost"
 
@@ -31,7 +31,7 @@ function rabbitmq.vhost {
   waffles.resource.process $waffles_resource "${options[vhost]}"
 }
 
-function rabbitmq.vhost.read {
+rabbitmq.vhost.read() {
 
   rabbitmqctl -q list_vhosts 2>/dev/null | grep -q ${options[vhost]}
   if [[ $? == 1 ]]; then
@@ -42,10 +42,10 @@ function rabbitmq.vhost.read {
   waffles_resource_current_state="present"
 }
 
-function rabbitmq.vhost.create {
+rabbitmq.vhost.create() {
   exec.capture_error "rabbitmqctl add_vhost ${options[vhost]}"
 }
 
-function rabbitmq.vhost.delete {
+rabbitmq.vhost.delete() {
   exec.capture_error "rabbitmqctl delete_vhost ${options[vhost]}"
 }

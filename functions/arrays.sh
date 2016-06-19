@@ -2,7 +2,7 @@
 
 # array.length returns the length of an array
 # $1 = array
-function array.length {
+array.length() {
   local -n _arr="$1"
   echo "${#_arr[@]:-0}"
 }
@@ -10,7 +10,7 @@ function array.length {
 # array.push adds elements to the end of an array
 # $1 = array
 # $2+ = elements to push
-function array.push {
+array.push() {
   local -n _arr=$1
   shift
 
@@ -23,7 +23,7 @@ function array.push {
 # array.pop pops the last element from an array
 # $1 = array
 # $2 = optional variable to pop to
-function array.pop {
+array.pop() {
   local -n _arr="$1"
   local _arr_length=$(array.length $1)
   local _arr_element
@@ -44,7 +44,7 @@ function array.pop {
 # array.shift pops the first element from an array
 # $1 = array
 # $2 = optional variable to pop to
-function array.shift {
+array.shift() {
   local -n _arr="$1"
   local _arr_length=$(array.length $1)
 
@@ -65,7 +65,7 @@ function array.shift {
 # array.unshift adds elements to the beginning of an array
 # $1 = array
 # $2+ = elements
-function array.unshift {
+array.unshift() {
   local -n _arr="$1"
   shift
 
@@ -80,7 +80,7 @@ function array.unshift {
 # array.join joins an array into a string
 # $1 = array
 # $2 = delimiter
-function array.join {
+array.join() {
   if [[ $# -eq 2 ]]; then
     local -n _arr="$1"
     local _delim="$2"
@@ -103,7 +103,7 @@ function array.join {
 # array.contains checks if an element exists in an array
 # $1 = array
 # $2 = needle
-function array.contains {
+array.contains() {
   if [[ $# -eq 2 ]]; then
     local -n _arr="$1"
     local _needle="$2"
@@ -123,7 +123,7 @@ function array.contains {
 # hash.keys returns the keys of a hash / assoc array
 # $1 = hash/associative array
 # $2 = array to store keys
-function hash.keys {
+hash.keys() {
   if [[ $# -eq 2 ]]; then
     local -n _hash="$1"
     local -n _keys="$2"

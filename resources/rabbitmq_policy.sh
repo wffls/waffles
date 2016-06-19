@@ -20,7 +20,7 @@
 # rabbitmq.policy --name openstack-ha --vhost openstack --policy '{"ha-mode":"all"}'
 # ```
 #
-function rabbitmq.policy {
+rabbitmq.policy() {
   # Declare the resource
   waffles_resource="rabbitmq.policy"
 
@@ -41,7 +41,7 @@ function rabbitmq.policy {
   waffles.resource.process $waffles_resource "${options[name]}"
 }
 
-function rabbitmq.policy.read {
+rabbitmq.policy.read() {
 
   local _policy=$(rabbitmqctl -q list_policies -p ${options[vhost]} 2>/dev/null | grep ${options[name]})
   if [[ -z $_policy ]]; then
@@ -71,14 +71,14 @@ function rabbitmq.policy.read {
   waffles_resource_current_state="present"
 }
 
-function rabbitmq.policy.create {
+rabbitmq.policy.create() {
   exec.capture_error "rabbitmqctl set_policy -p ${options[vhost]} ${options[name]} '${options[queues]}' '${options[policy]}'"
 }
 
-function rabbitmq.policy.update {
+rabbitmq.policy.update() {
   rabbitmq.policy.create
 }
 
-function rabbitmq.policy.delete {
+rabbitmq.policy.delete() {
   exec.capture_error "rabbitmqctl clear_policy -p ${options[vhost]} ${options[name]}"
 }
