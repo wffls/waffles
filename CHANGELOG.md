@@ -1,6 +1,8 @@
 # Changelog
 
-## 0.30.1 Unreleased
+## 0.30.2 Unreleased
+
+## 0.30.1 June 19, 2016
 
 * Renamed `sudo.cmd` to `sudoers.cmd`
 
