@@ -22,7 +22,7 @@
 #
 file.line() {
   # Declare the resource
-  waffles_resource="file_line"
+  waffles_resource="file.line"
 
   # Resource Options
   local -A options
