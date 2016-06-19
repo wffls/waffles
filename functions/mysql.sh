@@ -1,4 +1,4 @@
-mysql.database_exists?() {
+mysql.database_exists() {
   if [[ $# -gt 0 ]]; then
     log.debug "Checking if MySQL Database $1 exists."
     local _database_query="SELECT count(*) FROM information_schema.schemata WHERE information_schema.schemata.schema_name = '$1'"
