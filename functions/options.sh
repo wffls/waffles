@@ -47,7 +47,7 @@ waffles.options.parse_options() {
       else
         echo "$line"
       fi
-    done < <(sed -e '/^function/q' -r -e 's/^#\ ?//' "$WAFFLES_DIR/resources/${_resource}.sh" | grep -v ^function | grep -v ^\`)
+    done < <(sed -e '/() {$/q' -r -e 's/^#\ ?//' "$WAFFLES_DIR/resources/${_resource}.sh" | grep -v "\(\) {$" | grep -v ^\`)
     return 1
   fi
 
