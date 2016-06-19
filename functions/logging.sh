@@ -21,11 +21,10 @@ log.error() {
 }
 
 log._log() {
-  local _log_level="$1"
-  shift
+  local _log_level="$1"; shift
 
   if [[ -n $waffles_resource ]]; then
-    waffles_resource="${waffles_resource} "
+    _log_level=" ${_log_level}"
   fi
 
   echo "${waffles_resource}${_log_level}: ${@}" >&2
