@@ -16,7 +16,7 @@
 #
 # === Example
 #
-# ```shell
+# ```bash
 # apt.key --name "foobar" --key 1C4CBDCDCD2EFD2A
 # ```
 #

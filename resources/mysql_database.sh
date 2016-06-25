@@ -15,7 +15,7 @@
 #
 # === Example
 #
-# ```shell
+# ```bash
 # mysql.database --name mydb
 # ```
 #

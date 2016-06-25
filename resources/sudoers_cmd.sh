@@ -16,7 +16,7 @@
 #
 # === Example
 #
-# ```shell
+# ```bash
 # sudoers.cmd --user consul --command /usr/local/bin/consul_build_hosts_file.sh
 # ```
 #

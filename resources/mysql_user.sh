@@ -17,7 +17,7 @@
 #
 # === Example
 #
-# ```shell
+# ```bash
 # mysql.user --user root --password password
 # ```
 #

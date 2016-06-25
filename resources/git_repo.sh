@@ -19,7 +19,7 @@
 #
 # === Example
 #
-# ```shell
+# ```bash
 # git.repo --state latest --name /root/.dotfiles --source https://github.com/jtopjian/dotfiles
 # ```
 #

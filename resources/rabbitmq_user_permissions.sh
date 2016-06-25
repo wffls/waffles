@@ -16,7 +16,7 @@
 #
 # === Example
 #
-# ```shell
+# ```bash
 # rabbitmq.user_permission --user_permission root --password password
 # ```
 #

@@ -19,7 +19,7 @@
 #
 # === Example
 #
-# ```shell
+# ```bash
 # os.directory --source "$profile_files/mydir" --name /var/lib/mydir
 # ```
 #

@@ -15,7 +15,7 @@
 #
 # === Example
 #
-# ```shell
+# ```bash
 # rabbitmq.user --user root --password password
 # ```
 #

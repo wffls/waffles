@@ -16,7 +16,7 @@
 #
 # === Example
 #
-# ```shell
+# ```bash
 # file.ini --file /etc/nova/nova.conf --section DEFAULT --option debug --value True
 # ```
 #

@@ -18,7 +18,7 @@
 #
 # === Example
 #
-# ```shell
+# ```bash
 # iptables.rule --priority 100 --name "allow all from 192.168.1.0/24" --rule "-m tcp -s 192.168.1.0/24" --action ACCEPT
 # ```
 #

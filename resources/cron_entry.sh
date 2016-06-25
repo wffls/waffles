@@ -20,7 +20,7 @@
 #
 # === Example
 #
-# ```shell
+# ```bash
 # cron.entry --name foobar --cmd /path/to/some/report --minute "*/5"
 # ```
 #

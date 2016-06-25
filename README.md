@@ -7,7 +7,7 @@ idempotent fashion.
 
 To install Waffles, just clone the git repo and source the `init.sh` file:
 
-```shell
+```bash
 $ git clone https://github.com/wffls/waffles /opt/waffles
 $ source /opt/waffles/init.sh
 $ apt.pkg --help
@@ -16,7 +16,7 @@ $ apt.pkg --help
 You can integrate Waffles into a Bash script by sourcing the `init.sh` file
 within the script:
 
-```shell
+```bash
 #!/bin/bash
 source /opt/waffles/init.sh
 
@@ -60,7 +60,7 @@ Acceptance tests are used to verify resources work correctly.
 [Test Kitchen](http://kitchen.ci/) and Docker are used to run the suite of
 tests. You can create a testing environment by roughly doing:
 
-```shell
+```bash
 apt-get update
 apt-get install -y ruby
 wget -qO- https://get.docker.com/
@@ -74,7 +74,7 @@ kitchen init --driver=kitchen-docker
 
 Then execute test suites by:
 
-```shell
+```bash
 $ cd tests/kitchen
 $ kitchen test ubuntu1404-ubuntu-1404
 ```
