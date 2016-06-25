@@ -28,7 +28,7 @@
 #
 # === Example
 #
-# ```shell
+# ```bash
 # consul.watch --name nodes \
 #              --type nodes \
 #              --handler "/usr/local/bin/build_hosts_file.sh"

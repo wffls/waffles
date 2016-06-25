@@ -25,7 +25,7 @@
 #
 # === Example
 #
-# ```shell
+# ```bash
 # consul.check --name mysql \
 #              --check "/usr/local/bin/check_mysql.sh" \
 #              --type "script" \

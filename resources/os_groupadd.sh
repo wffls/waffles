@@ -14,7 +14,7 @@
 #
 # === Example
 #
-# ```shell
+# ```bash
 # os.groupadd --group jdoe --gid 999
 # ```
 #

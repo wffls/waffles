@@ -18,7 +18,7 @@
 #
 # === Example
 #
-# ```shell
+# ```bash
 # apt.source --name lxc --uri http://ppa.launchpad.net/ubuntu-lxc/stable/ubuntu \
 #                   --distribution trusty --component main
 # ```

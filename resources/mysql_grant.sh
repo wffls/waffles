@@ -16,7 +16,7 @@
 #
 # === Example
 #
-# ```shell
+# ```bash
 # mysql.grant --user nova --host localhost --database nova --privileges "SELECT, UPDATE, DELETE"
 # ```
 #

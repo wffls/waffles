@@ -23,7 +23,7 @@
 #
 # === Example
 #
-# ```shell
+# ```bash
 # python.pip --name minilanguage
 # python.pip --name minilanguage --version 0.3.0
 # python.pip --name minilanguage --version latest

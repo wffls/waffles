@@ -16,7 +16,7 @@
 #
 # === Example
 #
-# ```shell
+# ```bash
 # rabbitmq.policy --name openstack-ha --vhost openstack --policy '{"ha-mode":"all"}'
 # ```
 #

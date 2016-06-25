@@ -14,7 +14,7 @@
 #
 # === Example
 #
-# ```shell
+# ```bash
 # apt.pkg --package tmux --version latest
 # ```
 #

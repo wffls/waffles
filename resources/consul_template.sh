@@ -20,7 +20,7 @@
 #
 # === Example
 #
-# ```shell
+# ```bash
 # consul.template --name hosts \
 #                 --destination /etc/hosts
 # ```

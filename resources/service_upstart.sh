@@ -13,7 +13,7 @@
 #
 # === Example
 #
-# ```shell
+# ```bash
 # service.upstart --name memcached
 # ```
 #

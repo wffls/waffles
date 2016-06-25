@@ -15,7 +15,7 @@
 #
 # === Example
 #
-# ```shell
+# ```bash
 # file.line --file /etc/memcached.conf \
 #                  --line "-l 0.0.0.0" --match "^-l"
 # ```

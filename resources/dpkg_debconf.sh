@@ -16,7 +16,7 @@
 #
 # === Example
 #
-# ```shell
+# ```bash
 # dpkg.debconf --package mysql-server --question mysql-server/root_password
 #                --vtype password --value mypassword
 # ```

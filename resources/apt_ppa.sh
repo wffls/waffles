@@ -14,7 +14,7 @@
 #
 # === Example
 #
-# ```shell
+# ```bash
 # apt.ppa --ppa ppa:chris-lea/redis-server
 # ```
 #

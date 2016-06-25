@@ -18,7 +18,7 @@
 #
 # === Example
 #
-# ```shell
+# ```bash
 # os.file --name /etc/foobar --content "Hello, World!"
 # ```
 #

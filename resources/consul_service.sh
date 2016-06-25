@@ -26,7 +26,7 @@
 #
 # === Example
 #
-# ```shell
+# ```bash
 # consul.service --name mysql \
 #                --port 3306 \
 #                --check_type "script" \

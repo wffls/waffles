@@ -14,7 +14,7 @@
 #
 # === Example
 #
-# ```shell
+# ```bash
 # os.symlink --name /usr/local/man --target /usr/share/man
 # ```
 #

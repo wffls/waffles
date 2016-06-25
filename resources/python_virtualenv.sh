@@ -22,7 +22,7 @@
 # * pip_args: Extra pip args. Optional.
 # === Example
 #
-# ```shell
+# ```bash
 # python.virtualenv --name foo
 # ```
 #
