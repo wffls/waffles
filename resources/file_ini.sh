@@ -22,7 +22,7 @@
 #
 file.ini() {
   # Declare the resource
-  waffles_resource="apt.source"
+  waffles_resource="file.ini"
 
 
   # Resource Options
