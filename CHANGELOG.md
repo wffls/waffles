@@ -1,6 +1,11 @@
 # Changelog
 
-## 0.30.2 Unreleased
+## 0.30.3 Unreleased
+
+## 0.30.2 July 2, 2016
+
+* Fixed typo in `file.ini` resource.
+* Added `WAFFLES_NO_HELP` environment variable which will prevent `--help` test from printing. This is due to incompatibilities with `wafflescript` at the moment.
 
 ## 0.30.1 June 19, 2016
 
