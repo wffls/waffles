@@ -40,18 +40,20 @@ waffles.options.parse_options() {
 
   # Special case for --help
   if [[ ${options[help]+isset} ]]; then
-    local _resource="${FUNCNAME[1]//./_}"
-    while read -r line; do
-      if [[ $line =~ ^= ]]; then
-        echo -e "${waffles_log_color_bold}${line}${waffles_log_color_reset}"
-      else
-        echo "$line"
-      fi
-    done < <(sed -e '/() {$/q' -r -e 's/^#\ ?//' "$WAFFLES_DIR/resources/${_resource}.sh" | grep -v "\(\) {$" | grep -v ^\`)
+    if [[ -z $WAFFLES_NO_HELP ]]; then
+      local _resource="${FUNCNAME[1]//./_}"
+      while read -r line; do
+        if [[ $line =~ ^= ]]; then
+          echo -e "${waffles_log_color_bold}${line}${waffles_log_color_reset}"
+        else
+          echo "$line"
+        fi
+      done < <(sed -e '/() {$/q' -r -e 's/^#\ ?//' "$WAFFLES_DIR/resources/${_resource}.sh" | grep -v "\(\) {$" | grep -v ^\`)
+    fi
     return 1
   fi
 
-   for opt in "${!options[@]}"; do
+  for opt in "${!options[@]}"; do
     if [[ ${options[$opt/required]+isset} ]] && [[ ${options[$opt]} == "__required__" || -z ${options[$opt]} ]]; then
       log.error "Missing required option: $opt"
       return 1
