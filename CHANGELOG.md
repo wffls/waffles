@@ -2,7 +2,7 @@
 
 ## 0.30.3 Unreleased
 
-* Fixed a typo in apt_ppa.sh [#173]
+* Fixed a typo in apt_ppa.sh [GH-173]
 
 ## 0.30.2 July 2, 2016
 
