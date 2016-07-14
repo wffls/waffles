@@ -20,7 +20,7 @@
 #
 apt.ppa() {
   # Declare the resource
-  waffles_resource="apt.pp"
+  waffles_resource="apt.ppa"
 
   if ! waffles.command_exists apt-add-repository ; then
     log.error "Cannot find apt-add-repository command."
