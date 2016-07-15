@@ -37,6 +37,12 @@ python.pip() {
   # Declare the resource
   waffles_resource="python.pip"
 
+  # Check if all dependencies are installed
+  local _wrd=("getent" "pip" "sudo")
+  if ! waffles.resource.check_dependencies "${_wrd[@]}" ; then
+    return 1
+  fi
+
   # Resource Options
   local -A options
   waffles.options.create_option state       "present"
@@ -83,23 +89,13 @@ python.pip() {
 
   # Make sure `pip` exists
   if [[ "${options[virtualenv]}" == "system" ]]; then
-    if ! waffles.command_exists pip ; then
-      log.error "Cannot find pip command."
-      return 1
-    else
-      _pip="pip"
-      _log="/tmp/pip.log"
-      _cwd="/"
-    fi
+    _pip="pip"
+    _log="/tmp/pip.log"
+    _cwd="/"
   else
-    if [[ ! -f "${options[virtualenv]}/bin/pip" ]]; then
-      log.error "Cannot find pip comand"
-      return 1
-    else
-      _pip="${options[virtualenv]}/bin/pip"
-      _log="${options[virtualenv]}/pip.log"
-      _cwd="${options[virtualenv]}"
-    fi
+    _pip="${options[virtualenv]}/bin/pip"
+    _log="${options[virtualenv]}/pip.log"
+    _cwd="${options[virtualenv]}"
   fi
 
   # Build the pip package string

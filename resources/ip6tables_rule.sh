@@ -26,6 +26,11 @@ ip6tables.rule() {
   # Declare the resource
   waffles_resource="ip6tables.rule"
 
+  # Check if all dependencies are installed
+  local _wrd=("ip6tables" "grep" "sed")
+  if ! waffles.resource.check_dependencies "${_wrd[@]}" ; then
+    return 1
+  fi
 
   # Resource Options
   local -A options

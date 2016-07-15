@@ -29,6 +29,12 @@ consul.template() {
   # Declare the resource
   waffles_resource="apt.source"
 
+  # Check if all dependencies are installed
+  local _wrd=("jsed" "consul")
+  if ! waffles.resource.check_dependencies "${_wrd[@]}" ; then
+    return 1
+  fi
+
   # Resource Options
   local -A options
   waffles.options.create_option state       "present"
@@ -52,16 +58,6 @@ consul.template() {
   local _simple_options=(destination source command)
 
   # Internal Resource configuration
-  if ! waffles.command_exists jsed ; then
-    log.error "Cannot find jsed"
-    return 1
-  fi
-
-  if ! waffles.command_exists consul ; then
-    log.error "Cannot find consul"
-    return 1
-  fi
-
   if [[ -z ${options[file]} ]]; then
     _file="/etc/consul/template/conf.d/${options[name]}.json"
   else

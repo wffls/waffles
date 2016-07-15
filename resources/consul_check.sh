@@ -36,6 +36,12 @@ consul.check() {
   # Declare the resource
   waffles_resource="consul.check"
 
+  # Check if all dependencies are installed
+  local _wrd=("jsed")
+  if ! waffles.resource.check_dependencies "${_wrd[@]}" ; then
+    return 1
+  fi
+
   # Resource Options
   local -A options
   waffles.options.create_option state      "present"
@@ -49,14 +55,13 @@ consul.check() {
   waffles.options.create_option interval
   waffles.options.create_option ttl
   waffles.options.create_option file
-  waffles.options.create_option    file_owner "root"
-  waffles.options.create_option    file_group "root"
-  waffles.options.create_option    file_mode  "640"
+  waffles.options.create_option file_owner "root"
+  waffles.options.create_option file_group "root"
+  waffles.options.create_option file_mode  "640"
   waffles.options.parse_options "$@"
   if [[ $? != 0 ]]; then
     return $?
   fi
-
 
   # Local Variables
   local _file
@@ -65,11 +70,6 @@ consul.check() {
   local _simple_options=(name id notes token interval ttl)
 
   # Internal Resource configuration
-  if ! waffles.command_exists jsed ; then
-    log.error "Cannot find jsed"
-    return 1
-  fi
-
   if [[ -z ${options[file]} ]]; then
     _file="/etc/consul/agent/conf.d/check-${options[name]}.json"
   else

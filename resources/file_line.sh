@@ -17,12 +17,18 @@
 #
 # ```bash
 # file.line --file /etc/memcached.conf \
-#                  --line "-l 0.0.0.0" --match "^-l"
+#           --line "-l 0.0.0.0" --match "^-l"
 # ```
 #
 file.line() {
   # Declare the resource
   waffles_resource="file.line"
+
+  # Check if all dependencies are installed
+  local _wrd=("sed" "grep")
+  if ! waffles.resource.check_dependencies "${_wrd[@]}" ; then
+    return 1
+  fi
 
   # Resource Options
   local -A options
