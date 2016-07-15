@@ -81,4 +81,4 @@ $ kitchen test ubuntu1404-ubuntu-1404
 
 ## More Information
 
-See [waffles.terrarum.net](http://waffles.terrarum.net) for more information.
+See [wffls.github.io](http://wffls.github.io) for more information.
