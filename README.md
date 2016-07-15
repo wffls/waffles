@@ -1,6 +1,6 @@
 # Waffles!
 
-Waffles is a suite of Bash scripts to manage server resources in in an
+Waffles is a suite of Bash scripts to manage server resources in an
 idempotent fashion.
 
 ## Installation and Usage
