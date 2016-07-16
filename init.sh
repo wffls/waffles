@@ -1,6 +1,5 @@
-if [[ -z $WAFFLES_DIR ]]; then
-  WAFFLES_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-fi
+
+WAFFLES_DIR=${WAFFLES_DIR:-$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )}
 
 # Functions
 source "$WAFFLES_DIR/functions/arrays.sh"
