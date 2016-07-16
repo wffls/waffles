@@ -84,11 +84,10 @@ apt.pkg.read() {
   fi
 
   # check to see if it's installed at all
-  exec.mute dpkg -s ${options[package]}
-  if [[ $? == 1 ]]; then
+  exec.mute dpkg -s ${options[package]} || {
     waffles_resource_current_state="absent"
     return
-  fi
+  }
 
   _installed=$(/usr/bin/apt-cache policy ${options[package]} | grep Installed | cut -d: -f2- | sed -e 's/^[[:space:]]//g')
   _candidate=$(/usr/bin/apt-cache policy ${options[package]} | grep Candidate | cut -d: -f2- | sed -e 's/^[[:space:]]//g')
