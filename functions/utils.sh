@@ -1,10 +1,10 @@
 # These commands are simple helpers to detect how Waffles was run.
 waffles.noop() {
-  [[ -n $WAFFLES_NOOP ]]
+  [[ -n ${WAFFLES_NOOP:-} ]]
 }
 
 waffles.debug() {
-  [[ -n $WAFFLES_DEBUG ]]
+  [[ -n ${WAFFLES_DEBUG:-} ]]
 }
 
 # waffles.include is a more intelligent "source".
