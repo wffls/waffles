@@ -1,11 +1,12 @@
 waffles.options.create_option() {
-  if [[ -n $2 ]]; then
-    if [[ $2 == "__required__" ]]; then
-      options[$1/required]=1
-    fi
-    options[$1]="$2"
-  else
+  if [[ $# -ge 1 ]]; then
     options[$1]=
+    if [[ $# -ge 2 ]]; then
+      if [[ $2 == "__required__" ]]; then
+        options[$1/required]=1
+      fi
+      options[$1]="$2"
+    fi
   fi
 }
 
