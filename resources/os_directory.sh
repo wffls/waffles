@@ -27,12 +27,6 @@ os.directory() {
   # Declare the resource
   waffles_resource="os.directory"
 
-  # Check if all dependencies are installed
-  local _wrd=("rsync")
-  if ! waffles.resource.check_dependencies "${_wrd[@]}" ; then
-    return 1
-  fi
-
   # Resource Options
   local -A options
   waffles.options.create_option state     "present"
@@ -48,6 +42,15 @@ os.directory() {
     return $?
   fi
 
+  # Check if all dependencies are installed
+  # This is done out of order of other resources to allow os.directory
+  # to run without rsync unless the --source option is used.
+  if [[ -n ${options[source]} ]]; then
+    local _wrd=("rsync")
+    if ! waffles.resource.check_dependencies "${_wrd[@]}" ; then
+      return 1
+    fi
+  fi
 
   # Local Variables
   local _owner _group _mode _source _directory _recurse _rsync _parent
