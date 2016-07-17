@@ -34,6 +34,12 @@ python.virtualenv() {
   # Declare the resource
   waffles_resource="python.virtualenv"
 
+  # Check if all dependencies are installed
+  local _wrd=("getent" "virtualenv" "sudo")
+  if ! waffles.resource.check_dependencies "${_wrd[@]}" ; then
+    return 1
+  fi
+
   # Resource Options
   local -A options
   waffles.options.create_option state        "present"
@@ -60,12 +66,6 @@ python.virtualenv() {
   local _group_info=$(getent group "${options[group]}")
 
   # Internal Resource Configuration
-  # Ensure virtualenv exists
-  if ! waffles.command_exists virtualenv ; then
-    log.error "python not found."
-    return 1
-  fi
-
   # Make sure the user exists
   if [[ -n "$_user_info" ]]; then
     string.split "$_user_info" ':'

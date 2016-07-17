@@ -2,7 +2,7 @@
 source /root/.waffles/init.sh
 source /etc/lsb-release
 
-log.info "apt-get update"
+log.info "apt-get update "
 exec.mute apt-get update
 
 log.info "groupadd"
@@ -17,6 +17,7 @@ os.useradd --user foobar --system true
 log.info "packages"
 apt.pkg --package memcached
 apt.pkg --package cron
+apt.pkg --package rsync
 
 log.info "apt-key and apt-source"
 apt.key --name rabbitmq --key 056E8E56 --remote_keyfile https://www.rabbitmq.com/rabbitmq-signing-key-public.asc

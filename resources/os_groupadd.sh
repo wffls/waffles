@@ -22,6 +22,12 @@ os.groupadd() {
   # Declare the resource
   waffles_resource="os.groupadd"
 
+  # Check if all dependencies are installed
+  local _wrd=("getent" "groupadd" "groupmod" "groupdel")
+  if ! waffles.resource.check_dependencies "${_wrd[@]}" ; then
+    return 1
+  fi
+
   # Resource Options
   local -A options
   waffles.options.create_option state "present"
@@ -31,7 +37,6 @@ os.groupadd() {
   if [[ $? != 0 ]]; then
     return $?
   fi
-
 
   # Local Variables
   local group_info _gid

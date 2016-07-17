@@ -25,6 +25,12 @@ dpkg.debconf() {
   # Declare the resource
   waffles_resource="dpkg.debconf"
 
+  # Check if all dependencies are installed
+  local _wrd=("debconf-set-selections" "debconf-communicate")
+  if ! waffles.resource.check_dependencies "${_wrd[@]}" ; then
+    return 1
+  fi
+
   # Resource Options
   local -A options
   waffles.options.create_option state    "present"
@@ -42,11 +48,6 @@ dpkg.debconf() {
   local _value _name
 
   # Internal Resource Configuration
-  if ! waffles.command_exists "debconf-set-selections" ; then
-    log.error "Cannot find command: debconf-set-selections."
-    return 1
-  fi
-
   if [[ -n ${options[unseen]} ]]; then
     _unseen="-u"
   else

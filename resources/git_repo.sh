@@ -37,6 +37,12 @@ git.repo() {
   # Declare the resource
   waffles_resource="git.repo"
 
+  # Check if all dependencies are installed
+  local _wrd=("git" "getent" "grep")
+  if ! waffles.resource.check_dependencies "${_wrd[@]}" ; then
+    return 1
+  fi
+
   # Resource Options
   local -A options
   waffles.options.create_option state   "present"
@@ -59,11 +65,6 @@ git.repo() {
   local _group_info=$(getent group "${options[group]}")
 
   # Internal Resource Configuration
-  if ! waffles.command_exists git ; then
-    log.error "Cannot find git command."
-    return 1
-  fi
-
   if [[ -n $_user_info ]]; then
     string.split "$_user_info" ':'
     _uid="${__split[2]}"

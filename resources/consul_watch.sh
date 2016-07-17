@@ -38,6 +38,12 @@ consul.watch() {
   # Declare the resource
   waffles_resource="consul.watch"
 
+  # Check if all dependencies are installed
+  local _wrd=("jsed" "consul")
+  if ! waffles.resource.check_dependencies "${_wrd[@]}" ; then
+    return 1
+  fi
+
   # Resource Options
   local -A options
   waffles.options.create_option state      "present"
@@ -62,23 +68,11 @@ consul.watch() {
     return $?
   fi
 
-
   # Local Variables
   local _file
   local _name="${options[name]}"
   local _dir=$(dirname "${options[file]}")
   local _simple_options=(type handler token datacenter key prefix service tag passingonly)
-
-  # Internal Resource configuration
-  if ! waffles.command_exists jsed ; then
-    log.error "Cannot find jsed"
-    return 1
-  fi
-
-  if ! waffles.command_exists consul ; then
-    log.error "Cannot find consul"
-    return 1
-  fi
 
   if [[ -z ${options[file]} ]]; then
     _file="/etc/consul/agent/conf.d/watch-${options[name]}.json"

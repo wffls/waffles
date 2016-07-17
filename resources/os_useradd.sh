@@ -24,8 +24,8 @@
 # === Example
 #
 # ```bash
-# os.useradd --user jdoe --uid 999 --createhome true --homedir /home/jdoe
-#                --shell /bin/bash --comment "John Doe"
+# os.useradd --user jdoe --uid 999 --createhome true --homedir /home/jdoe \
+#            --shell /bin/bash --comment "John Doe"
 # ```
 #
 # === Notes
@@ -37,6 +37,12 @@
 os.useradd() {
   # Declare the resource
   waffles_resource="os.useradd"
+
+  # Check if all dependencies are installed
+  local _wrd=("getent" "useradd" "usermod" "userdel")
+  if ! waffles.resource.check_dependencies "${_wrd[@]}" ; then
+    return 1
+  fi
 
   # Resource Options
   local -A options

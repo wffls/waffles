@@ -25,6 +25,12 @@ mysql.user() {
   # Declare the resource
   waffles_resource="mysql.user"
 
+  # Check if all dependencies are installed
+  local _wrd=("mysql")
+  if ! waffles.resource.check_dependencies "${_wrd[@]}" ; then
+    return 1
+  fi
+
   # Resource Options
   local -A options
   waffles.options.create_option state    "present"

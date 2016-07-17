@@ -22,8 +22,9 @@ apt.ppa() {
   # Declare the resource
   waffles_resource="apt.ppa"
 
-  if ! waffles.command_exists apt-add-repository ; then
-    log.error "Cannot find apt-add-repository command."
+  # Check if all dependencies are installed
+  local _wrd=("apt-add-repository" "apt-get" "sed")
+  if ! waffles.resource.check_dependencies "${_wrd[@]}" ; then
     return 1
   fi
 

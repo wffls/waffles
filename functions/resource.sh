@@ -8,6 +8,17 @@ declare -g waffles_resource_changed
 # waffles_total_changes keeps track of how many resources have been changed.
 declare -g waffles_total_changes
 
+waffles.resource.check_dependencies() {
+  while [[ $# -gt 0 ]]; do
+    if ! waffles.command_exists $1 ; then
+      log.error "resource dependency not installed: $1"
+      return 1
+    fi
+
+    shift
+  done
+}
+
 waffles.resource.process() {
   if [[ $# -eq 2 ]]; then
     local _resource_type="$1"
