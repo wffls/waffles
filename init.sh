@@ -5,6 +5,7 @@ fi
 # Functions
 source "$WAFFLES_DIR/functions/arrays.sh"
 source "$WAFFLES_DIR/functions/exec.sh"
+source "$WAFFLES_DIR/functions/ini_file.sh"
 source "$WAFFLES_DIR/functions/logging.sh"
 source "$WAFFLES_DIR/functions/options.sh"
 source "$WAFFLES_DIR/functions/resource.sh"

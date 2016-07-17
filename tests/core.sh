@@ -139,3 +139,5 @@ if [[ $? == 0 ]]; then
 else
   log.error FAIL
 fi
+
+source "$CUR_DIR/ini_file.sh"
