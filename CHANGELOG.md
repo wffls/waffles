@@ -2,8 +2,10 @@
 
 ## 0.30.3 Unreleased
 
-* Fixed a typo in apt_ppa.sh [GH-173]
-* Have resources check for dependent commands. Error early if missing. [GH-176]
+* resource: Fixed a typo in apt_ppa.sh [GH-173]
+* core: Have resources check for dependent commands. Error early if missing. [GH-176]
+* core: Added a new function ini_file in functions/ini_file.sh (@brakarov) [GH-180]
+* resource: `file.ini` has been rewritten to take advantage of new ini functions (@brakarov) [GH-180]
 
 ## 0.30.2 July 2, 2016
 
