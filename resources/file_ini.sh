@@ -96,82 +96,19 @@ file.ini.delete() {
 # The following were modified from
 # https://raw.githubusercontent.com/openstack-dev/devstack/master/inc/ini-config
 file.ini.ini_get_option() {
-  local _line
-  local _option=$(echo ${options[option]} | sed -e 's/[\/&]/\\&/g' | sed -e 's/[][]/\\&/g')
-  if [[ ${options[section]} != "__none__" ]]; then
-    _line=$(sed -ne "/^\[${options[section]}\]/,/^\[.*\]/ { /^${_option}\([ \t]*=\|$\)/ p; }" "${options[file]}")
-  else
-    _line=$(sed -ne "/^${_option}[ \t]*/ p;"  "${options[file]}")
-  fi
-
+  local _line=$(ini_file.get_option "${options[file]}" "${options[section]}" "${options[option]}")
   [[ -n $_line ]]
-
 }
 
 file.ini.ini_option_has_value() {
-  local _line
-  local _value=$(echo ${options[value]} | sed -e 's/[\/&]/\\&/g' | sed -e 's/[][]/\\&/g')
-  local _option=$(echo ${options[option]} | sed -e 's/[\/&]/\\&/g' | sed -e 's/[][]/\\&/g')
-  if [[ ${options[section]} != "__none__" ]]; then
-    if [[ ${options[value]} == "__none__" ]]; then
-      _line=$(sed -ne "/^\[${options[section]}\]/,/^\[.*\]/ { /^${_option}$/ p; }" "${options[file]}")
-    else
-      _line=$(sed -ne "/^\[${options[section]}\]/,/^\[.*\]/ { /^${_option}[ \t]*=[ \t]*${_value}$/ p; }" "${options[file]}")
-    fi
-  else
-    if [[ ${options[value]} == "__none__" ]]; then
-      _line=$(sed -ne "/^${_option}$/ p;" "${options[file]}")
-    else
-      _line=$(sed -ne "/^${_option}[ \t]*=[ \t]*${_value}$/ p;" "${options[file]}")
-    fi
-  fi
-
+  local _line=$(ini_file.option_has_value "${options[file]}" "${options[section]}" "${options[option]}" "${options[value]}")
   [[ -n $_line ]]
 }
 
 file.ini.inidelete() {
-  [[ -z ${options[option]} ]] && return
-  if [[ ${options[section]} != "__none__" ]]; then
-    sed -i -e "/^\[${options[section]}\]/,/^\[.*\]/ { /^${options[option]}[ \t]*=/ d; }" "${options[file]}"
-  else
-    sed -i -e "/^${options[option]}[ \t]*=/ d;" "${options[file]}"
-  fi
+  ini_file.remove "${options[file]}" "${options[section]}" "${options[option]}"
 }
 
 file.ini.iniset() {
-  [[ -z ${options[option]} ]] && return
-  local _value=$(echo ${options[value]} | sed -e 's/[\/&]/\\&/g' | sed -e 's/[][]/\\&/g')
-  local _option=$(echo ${options[option]} | sed -e 's/[\/&]/\\&/g' | sed -e 's/[][]/\\&/g')
-  if [[ ${options[section]} != "__none__" ]]; then
-    # Add the section if it doesn't exist
-    if ! grep -q "^\[${options[section]}\]" "${options[file]}" 2>/dev/null; then
-      echo -e "\n[${options[section]}]" >>"${options[file]}"
-    fi
-
-    if [[ $waffles_resource_current_state != "absent" ]]; then
-      file.ini.inidelete
-    fi
-
-    if [[ $_value == "__none__" ]]; then
-      # Add it
-      sed -i -e "/^\[${options[section]}\]/ a\\
-${_option}
-" "${options[file]}"
-    else
-      # Add it
-      sed -i -e "/^\[${options[section]}\]/ a\\
-${_option} = $_value
-" "${options[file]}"
-    fi
-  else
-    if [[ $waffles_resource_current_state != "absent" ]]; then
-      file.ini.inidelete
-    fi
-
-    if ! grep -q "^${options[option]}" "${options[file]}" 2>/dev/null; then
-      echo "${options[option]} = ${options[value]}" >>"${options[file]}"
-    else
-      sed -i "1s/^/${options[option]} = $_value\n/" ${options[file]}
-    fi
-  fi
+  ini_file.set "${options[file]}" "${options[section]}" "${options[option]}" "${options[option]}"
 }
