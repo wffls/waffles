@@ -135,5 +135,14 @@ else
   log.error FAIL
 fi
 
+ini_file.set "${INIFILE_TMP}" "section 1" "opt" "a section 1 option - modified"
+# cat "${INIFILE_TMP}"
+if [[ $(md5sum "${INIFILE_TMP}" | cut -d' ' -f1) == "3f4219e759fa8872b28f1a5ade908a29" ]]; then
+  log.info OK
+else
+  log.error FAIL
+fi
+# md5sum "${INIFILE_TMP}"
+
 rm -rf "${INIFILE_TMP}"
 unset INIFILE_TMP

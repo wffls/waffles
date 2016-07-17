@@ -91,6 +91,10 @@ ini_file.set() {
     return 1
   fi
 
+  if [[ -n $(ini_file.get_option "${_file}" "${_section}" "${_option}") ]]; then
+    ini_file.remove "${_file}" "${_section}" "${_option}"
+  fi
+
   [[ -z ${_option} ]] && return
   local _value=$(echo ${_value} | sed -e 's/[\/&]/\\&/g' | sed -e 's/[][]/\\&/g')
   local _option=$(echo ${_option} | sed -e 's/[\/&]/\\&/g' | sed -e 's/[][]/\\&/g')
