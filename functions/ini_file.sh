@@ -61,6 +61,14 @@ ini_file.option_has_value() {
   fi
 }
 
+ini_file.has_section() {
+  # Parameters
+  local _file=$1
+  local _section=$2
+
+  [[ -n $(grep "^\[${_section}\]" ${_file} 2>/dev/null) ]]
+}
+
 ini_file.remove() {
   # Parameters
   local _file=$1
@@ -79,6 +87,18 @@ ini_file.remove() {
   fi
 }
 
+ini_file.remove_section() {
+  # Parameters
+  local _file=$1
+  local _section=$2
+
+  if [ ! -f "${_file}" ]; then
+    return 1
+  fi
+
+  sed -i -e "/^\[${_section}\]/ d;" "${_file}"
+}
+
 ini_file.set() {
   # Parameters
   local _file=$1
@@ -87,7 +107,6 @@ ini_file.set() {
   local _value=$4
 
   if [ ! -f "${_file}" ]; then
-    echo ""
     return 1
   fi
 
@@ -129,3 +148,13 @@ ${_option}=${_value}
   fi
 }
 
+ini_file.beautify() {
+  # Parameters
+  local _file=$1
+  # Remove all empty lines
+  sed -i '/^$/d' "${_file}"
+  # Insert an empty line before every '['
+  sed -i '/^\[/{x;p;x;}' "${_file}"
+  # Remove all leading lines
+  sed -i '/./,$!d' "${_file}"
+}
