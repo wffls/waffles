@@ -6,6 +6,9 @@
 * core: Have resources check for dependent commands. Error early if missing. [GH-176]
 * core: Added a new function ini_file in functions/ini_file.sh (@brakarov) [GH-180]
 * resource: `file.ini` has been rewritten to take advantage of new ini functions (@brakarov) [GH-180]
+* resource: New `dnf.pkg` resource (@brakarov) [GH-175]
+* resource: New `dnf.copr` resource (@brakarov) [GH-175]
+* resource: New `dnf.repo` resource (@brakarov) [GH-175]
 
 ## 0.30.2 July 2, 2016
 
