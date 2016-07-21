@@ -94,6 +94,34 @@ else
 fi
 unset x
 
+log.info "ini_file.has_section"
+###############################
+
+if ini_file.has_section "${INIFILE_TMP}" "section 1"; then
+  log.info OK
+else
+  log.error FAIL
+fi
+
+if ! ini_file.has_section "${INIFILE_TMP}" "section 3"; then
+  log.info OK
+else
+  log.error FAIL
+fi
+
+log.info "ini_file.remove_section"
+##################################
+
+ini_file.remove_section "${INIFILE_TMP}" "section 1"
+# md5sum "${INIFILE_TMP}"
+# cat "${INIFILE_TMP}"
+if [[ $(md5sum "${INIFILE_TMP}" | cut -d' ' -f1) == "fab7710592ad0507929240d15630ce8c" ]]; then
+  log.info OK
+else
+  log.error FAIL
+fi
+create_tmp_file
+
 log.info "ini_file.remove"
 ##########################
 
@@ -143,6 +171,38 @@ else
   log.error FAIL
 fi
 # md5sum "${INIFILE_TMP}"
+
+log.info "ini_file.beautify"
+############################
+
+cat <<-"EOF" > "${INIFILE_TMP}"
+
+
+opt=a global option
+
+singleglobal
+
+
+[section 1]
+
+opt=a section 1 option
+
+
+
+[section 2]
+
+opt=a section 2 option
+
+
+EOF
+ini_file.beautify "${INIFILE_TMP}"
+# md5sum "${INIFILE_TMP}"
+# cat "${INIFILE_TMP}"
+if [[ $(md5sum "${INIFILE_TMP}" | cut -d' ' -f1) == "6058b1cd274bc6742cd1fde7e11e04a6" ]]; then
+  log.info OK
+else
+  log.error FAIL
+fi
 
 rm -rf "${INIFILE_TMP}"
 unset INIFILE_TMP
