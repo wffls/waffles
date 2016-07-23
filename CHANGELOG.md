@@ -2,13 +2,13 @@
 
 ## 0.30.3 Unreleased
 
-* resource: Fixed a typo in apt_ppa.sh [GH-173]
+* resource: Fixed a typo in apt_ppa.sh (@gbraekmans) [GH-173]
 * core: Have resources check for dependent commands. Error early if missing. [GH-176]
-* core: Added a new function ini_file in functions/ini_file.sh (@brakarov) [GH-180]
-* resource: `file.ini` has been rewritten to take advantage of new ini functions (@brakarov) [GH-180]
-* resource: New `dnf.pkg` resource (@brakarov) [GH-175]
-* resource: New `dnf.copr` resource (@brakarov) [GH-175]
-* resource: New `dnf.repo` resource (@brakarov) [GH-175]
+* core: Added a new function ini_file in functions/ini_file.sh (@gbraekmans) [GH-180]
+* resource: `file.ini` has been rewritten to take advantage of new ini functions (@gbraekmans) [GH-180]
+* resource: New `dnf.pkg` resource (@gbraekmans) [GH-175]
+* resource: New `dnf.copr` resource (@gbraekmans) [GH-175]
+* resource: New `dnf.repo` resource (@gbraekmans) [GH-175]
 
 ## 0.30.2 July 2, 2016
 
