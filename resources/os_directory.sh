@@ -142,7 +142,7 @@ os.directory.update() {
     exec.capture_error chmod $_recurse ${options[mode]} "${options[name]}"
   fi
 
-  if [[ -n $_rsync ]]; then
+  if [[ -n ${_rsync:-} ]]; then
     exec.capture_error rsync -a "${options[source]}/" "${options[name]}"
   fi
 }
