@@ -28,7 +28,7 @@ os.file() {
 
   # Check if all dependencies are installed
   local _wrd=()
-  if ! waffles.resource.check_dependencies "${_wrd[@]}" ; then
+  if ! waffles.resource.check_dependencies "${_wrd[@]:-}" ; then
     return 1
   fi
 
