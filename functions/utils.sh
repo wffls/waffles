@@ -56,7 +56,9 @@ waffles.dir() {
 
 # waffles.command_exists is a simple alias for `which`
 waffles.command_exists() {
-  which $1 &>/dev/null
+  if [[ $# -gt 0 ]]; then
+    which $1 &>/dev/null
+  fi
 }
 
 # waffles.pushd is an alias for exec.mute pushd
