@@ -60,3 +60,10 @@ waffles.options.parse_options() {
     fi
   done
 }
+
+waffles.options.is_bool() {
+  if [[ $1 == "true" || $1 == "false" ]]; then
+    return 0
+  fi
+  return 1
+}
