@@ -1,3 +1,6 @@
+# waffles.options.create_option creates a standard option to declare.
+# If the value is __require__, Waffles will throw an error if the user did not
+# specify a value.
 waffles.options.create_option() {
   if [[ -n $2 ]]; then
     if [[ $2 == "__required__" ]]; then
@@ -9,6 +12,9 @@ waffles.options.create_option() {
   fi
 }
 
+# waffles.options.create_mv_option declares a "multi-value" option. The user is
+# able to specify this option more than once. Fictional example:
+# mail.alias --name root --destination john --destination jane
 waffles.options.create_mv_option() {
   if [[ -n $1 ]]; then
     waffles.options.create_option "$1" "$2"
@@ -16,6 +22,37 @@ waffles.options.create_mv_option() {
   fi
 }
 
+# waffles.options.create_bool_option declares a boolean option. The user can
+# only specify "true" or "false" for the value.
+waffles.options.create_bool_option() {
+  if [[ $# -ne 2 ]]; then
+    log.error "Boolean options must have a default value. $1 is missing one."
+    return 1
+  fi
+
+  waffles.options.create_option "$1" "$2"
+  options[$1/bool]=1
+}
+
+# waffles.options.parse_options parses the options that a use specified.
+# Options and values are parsed as pairs, read in as $1 and $2.
+#
+# If $2 is found to start with "--" it is considered an error since the most
+# likely case is the user forgetting to specify a value. For example:
+# mail.alias --name root --destination --destination jane
+#
+# If the option is a boolean option, an error will be thrown if the value is
+# not true or false.
+#
+# If the option is a multi-value option, options are added to an array named
+# after the option. For example:
+# mail.alias --name root --destination john --destination jane
+# $destination will be an array that contains john and jane.
+# $destination must be pre-declared. See consul_service for a full example.
+#
+# If --help is given, read in the resource source code, parse it, and print the
+# header documentation. This is disabled if WAFFLES_NO_HELP is set since it can
+# be tricky to read in Waffles source scripts in temporary directories.
 waffles.options.parse_options() {
   while [ $# -gt 0 ]; do
     log.debug "option $1, value $2"
@@ -28,6 +65,14 @@ waffles.options.parse_options() {
     fi
 
     local _opt_key=${1//--}
+
+    if [[ ${options[$_opt_key/bool]+isset} ]]; then
+      if [[ $2 != "true" && $2 != "false" ]]; then
+        log.error "$_opt_key must be true or false"
+        return 1
+      fi
+    fi
+
     if [[ ${options[$_opt_key/mv]+isset} ]]; then
       array.push $_opt_key "$2"
       options[$_opt_key]="__set__"
