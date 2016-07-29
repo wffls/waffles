@@ -23,7 +23,7 @@ service.systemd() {
   waffles_resource="service.systemd"
 
   # Check if all dependencies are installed
-  local _wrd=("systemctl")
+  local _wrd=("systemctl grep")
   if ! waffles.resource.check_dependencies "${_wrd[@]}" ; then
     return 1
   fi
@@ -78,6 +78,9 @@ service.systemd.read() {
   fi
 }
 
+service.systemd.create() {
+  service.systemd.update
+}
 service.systemd.update() {
   if [[ -n ${options[enabled]} ]]; then
     if [[ ${options[enabled]} == "true" ]]; then
@@ -92,10 +95,6 @@ service.systemd.update() {
   elif ! systemctl -q is-active ${options[name]} && [[ ${options[state]} != "stopped" ]]; then
     exec.capture_error systemctl start ${options[name]}
   fi
-}
-
-service.systemd.create() {
-  service.systemd.update
 }
 service.systemd.delete() {
   service.systemd.update
