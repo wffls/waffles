@@ -1,3 +1,13 @@
+# Identical Platforms and Suites are defined because the purpose of the tests
+# are two-fold:
+#
+# 1. Make sure the individual resources run without error.
+#    This is done in the provisioning script of the platform.
+#
+# 2. Run the entire test again to make sure no changes are required.
+#    This is done in the includes portion of the suite.
+#
+# If anyone knows a better way to do this, please let me know. :)
 ---
 driver:
   name: docker
@@ -19,6 +29,9 @@ platforms:
   - name: ubuntu-14.04-mysql
     provisioner:
       script: test/provision/shell/ubuntu1404_mysql.sh
+  - name: ubuntu-14.04-augeas
+    provisioner:
+      script: test/provision/shell/ubuntu1404_augeas.sh
 
 suites:
   - name: ubuntu1204
@@ -30,3 +43,6 @@ suites:
   - name: ubuntu1404_mysql
     includes:
       - ubuntu-14.04-mysql
+  - name: ubuntu1404_augeas
+    includes:
+      - ubuntu-14.04-augeas
