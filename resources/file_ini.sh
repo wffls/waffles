@@ -9,7 +9,7 @@
 # === Parameters
 #
 # * state: The state of the resource. Required. Default: present.
-# * file: The ini file. Required.
+# * file: The ini file. Required. This file _must_ exist already.
 # * section: The ini file section. Use "__none__" to not use a section. Required.
 # * option: The ini file setting/option. Required.
 # * value: The value of the option. Use "__none__" to not set a value. Required.
@@ -42,6 +42,11 @@ file.ini() {
     return $?
   fi
 
+  # Ensure the file exists. Exit early if it doesn't.
+  if [[ ! -f "${options[file]}" ]]; then
+    log.error "${options[file]} does not exist."
+    return 1
+  fi
 
   # Local Variables
   local name="${options[file]}/${options[section]}/${options[option]}"
@@ -51,11 +56,6 @@ file.ini() {
 }
 
 file.ini.read() {
-  if [[ ! -f ${options[file]} ]]; then
-    waffles_resource_current_state="absent"
-    return
-  fi
-
   if ! file.ini.ini_get_option ; then
     waffles_resource_current_state="absent"
     return
@@ -101,8 +101,7 @@ file.ini.ini_get_option() {
 }
 
 file.ini.ini_option_has_value() {
-  local _line=$(ini_file.option_has_value "${options[file]}" "${options[section]}" "${options[option]}" "${options[value]}")
-  [[ -n $_line ]]
+  ini_file.option_has_value "${options[file]}" "${options[section]}" "${options[option]}" "${options[value]}"
 }
 
 file.ini.inidelete() {
@@ -110,5 +109,5 @@ file.ini.inidelete() {
 }
 
 file.ini.iniset() {
-  ini_file.set "${options[file]}" "${options[section]}" "${options[option]}" "${options[option]}"
+  ini_file.set "${options[file]}" "${options[section]}" "${options[option]}" "${options[value]}"
 }
