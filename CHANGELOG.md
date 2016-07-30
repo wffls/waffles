@@ -9,6 +9,7 @@
 * resource: New `dnf.pkg` resource (@gbraekmans) [GH-175]
 * resource: New `dnf.copr` resource (@gbraekmans) [GH-175]
 * resource: New `dnf.repo` resource (@gbraekmans) [GH-175]
+* resource: Re-added `augeas.generic` resource [GH-189]
 
 ## 0.30.2 July 2, 2016
 
