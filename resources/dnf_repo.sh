@@ -9,7 +9,7 @@
 # === Parameters
 #
 # * state: The state of the resource. Required. Default: present.
-# * file: name of the file in /etc/yum.repos.d/. Required.
+# * file: name of the file in /etc/yum.repos.d/. Required. The file _must_ exist already.
 # * name: name of the repo. Required.
 # * description: A short description of the repo. Optional.
 # * baseurl: URL location of the repo. Optional.
@@ -50,6 +50,12 @@ dnf.repo() {
     return $?
   fi
 
+  # Ensure the file exists. Exit early if it doesn't.
+  if [[ ! -f "/etc/yum.repos.d/${options[file]}" ]]; then
+    log.error "/etc/yum.repos.d/${options[file]} does not exist."
+    return 1
+  fi
+
   local _conf_names=(name baseurl enabled skip_if_unavailable gpgkey gpgcheck)
   local _resource_names=(description baseurl enabled skip gpgkey gpgcheck)
 
@@ -58,11 +64,6 @@ dnf.repo() {
 }
 
 dnf.repo.read() {
-  if [[ ! -f "/etc/yum.repos.d/${options[file]}" ]]; then
-    waffles_resource_current_state="absent"
-    return
-  fi
-
   if ! ini_file.has_section "/etc/yum.repos.d/${options[file]}" "${options[name]}"; then
     waffles_resource_current_state="absent"
     return
