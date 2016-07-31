@@ -38,6 +38,7 @@ log.info "file.line"
 file.line --file /etc/memcached.conf --line "-m 128" --match "^-m"
 
 log.info "ini"
+os.file --name /root/test.ini
 file.ini --file /root/test.ini --section foobar --option foo --value bar
 file.ini --file /root/test.ini --section foobar --option baz --value __none__
 
