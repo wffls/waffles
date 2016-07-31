@@ -60,6 +60,9 @@ if [[ -z $BUSSER_ROOT ]]; then
 fi
 os.symlink --state absent --name /usr/bin/foo2
 
+log.info "ruby gems"
+apt.pkg --package ruby1.9.1
+ruby.gem --name thor --version 0.19.0
 
 if [[ -n $BUSSER_ROOT ]]; then
   if [[ $waffles_total_changes -gt 0 ]]; then
