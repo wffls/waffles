@@ -10,6 +10,7 @@
 #
 # * state: The state of the resource. Required. Default: present.
 # * package: The name of the package. Required.
+# * name: Alias for package.
 # * version: The version of the package. Leave empty for first version found. Set to "latest" to always update.
 #
 # === Example
@@ -30,8 +31,9 @@ apt.pkg() {
 
   # Resource Options
   local -A options
-  waffles.options.create_option state   "present"
-  waffles.options.create_option package "__required__"
+  waffles.options.create_option state    "present"
+  waffles.options.create_option package
+  waffles.options.create_option name
   waffles.options.create_option version
   waffles.options.parse_options "$@"
   if [[ $? != 0 ]]; then
@@ -44,6 +46,20 @@ apt.pkg() {
   local _version
 
   # Internal Resource Configuration
+  if [[ -z ${options[package]} ]] && [[ -z ${options[name]} ]]; then
+    log.error "Either one of --package or --name must be used."
+    return 1
+  fi
+
+  if [[ -n ${options[package]} ]] && [[ -n ${options[name]} ]]; then
+    log.error "Only one of --package or --name can be used."
+    return 1
+  fi
+
+  if [[ -z ${options[package]} ]]; then
+    options[package]=${options[name]}
+  fi
+
   if [[ -z ${options[version]} ]]; then
     _version=""
   elif [[ ${options[version]} == "latest" ]]; then
