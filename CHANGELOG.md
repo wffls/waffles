@@ -12,6 +12,7 @@
 * resource: Re-added `augeas.generic` resource [GH-189]
 * resource: New `ruby.gem` resource [GH-192]
 * resource: Added overwrite option to `os.symlink` [GH-193]
+* resource: Added `--name` parameter to `apt.pkg` as an alias to `--package` [GH-194]
 
 ## 0.30.2 July 2, 2016
 
