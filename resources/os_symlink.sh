@@ -10,7 +10,8 @@
 #
 # * state: The state of the resource. Required. Default: present.
 # * name: The name of the link. Required.
-# * target: The target of the link.
+# * target: The target of the link. Optional.
+# * overwrite: Overwrite the link if it already exists. Optional. Defaults to false.
 #
 # === Example
 #
@@ -30,8 +31,9 @@ os.symlink() {
 
   # Resource Options
   local -A options
-  waffles.options.create_option state  "present"
-  waffles.options.create_option name   "__required__"
+  waffles.options.create_option state     "present"
+  waffles.options.create_option name      "__required__"
+  waffles.options.create_option overwrite "false"
   waffles.options.create_option target
   waffles.options.parse_options "$@"
   if [[ $? != 0 ]]; then
@@ -60,6 +62,8 @@ os.symlink() {
 }
 
 os.symlink.read() {
+  local _target
+
   if [[ ! -e ${options[name]} ]]; then
     waffles_resource_current_state="absent"
     return
@@ -75,7 +79,19 @@ os.symlink.read() {
   if [[ $_type != "symbolic link" ]]; then
     log.error "${options[name]} exists and is not a symbolic link."
     waffles_resource_current_state="error"
-    return
+    return 1
+  fi
+
+  _target=$(readlink "${options[name]}")
+  if [[ -n ${options[target]} ]] && [[ "$_target" != "${options[target]}" ]]; then
+    if [[ "${options[overwrite]}" == "false" ]]; then
+      log.error "${options[name]} already points to $_target. Use --overwrite true to overwrite."
+      waffles_resource_current_state="error"
+      return 1
+    else
+      waffles_resource_current_state="update"
+      return
+    fi
   fi
 
   waffles_resource_current_state="present"

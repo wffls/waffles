@@ -60,6 +60,15 @@ if [[ -z $BUSSER_ROOT ]]; then
 fi
 os.symlink --state absent --name /usr/bin/foo2
 
+log.info "symlink overwrite"
+touch /usr/local/bin/foo3
+touch /usr/local/bin/foo4
+if [[ -z $BUSSER_ROOT ]]; then
+  ln -s /usr/local/bin/foo3 /usr/bin/foo3
+fi
+os.symlink --name /usr/bin/foo3 --target /usr/local/bin/foo4 --overwrite true
+
+
 log.info "ruby gems"
 apt.pkg --package ruby1.9.1
 ruby.gem --name thor --version 0.19.0
