@@ -58,24 +58,14 @@ certain functions work correctly.
 
 Acceptance tests are used to verify resources work correctly.
 [Test Kitchen](http://kitchen.ci/) and Docker are used to run the suite of
-tests. You can create a testing environment by roughly doing:
+tests. Use the [install.sh](https://github.com/wffls/waffles/blob/master/tests/kitchen/install.sh)
+Waffles script to set up Test Kitchen and all other requirements on an
+Ubuntu-based system.
+
+Then execute test suites by doing:
 
 ```bash
-apt-get update
-apt-get install -y ruby
-wget -qO- https://get.docker.com/
-gem install test-kitchen
-gem install kitchen-docker
-gem install busser-bash
-gem install busser-bats
-gem install busser-serverspec
-kitchen init --driver=kitchen-docker
-```
-
-Then execute test suites by:
-
-```bash
-$ cd tests/kitchen
+$ cd /root/.waffles/tests/kitchen
 $ kitchen test ubuntu1404-ubuntu-1404
 ```
 
