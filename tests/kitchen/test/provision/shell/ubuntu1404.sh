@@ -16,7 +16,8 @@ os.useradd --user foobar --system true
 
 log.info "packages"
 apt.pkg --package memcached
-apt.pkg --package cron
+apt.pkg --name cron
+apt.pkg --name sl
 
 log.info "apt-key and apt-source"
 apt.key --name rabbitmq --key 056E8E56 --remote_keyfile https://www.rabbitmq.com/rabbitmq-signing-key-public.asc
@@ -67,7 +68,6 @@ if [[ -z $BUSSER_ROOT ]]; then
   ln -s /usr/local/bin/foo3 /usr/bin/foo3
 fi
 os.symlink --name /usr/bin/foo3 --target /usr/local/bin/foo4 --overwrite true
-
 
 log.info "ruby gems"
 apt.pkg --package ruby1.9.1
