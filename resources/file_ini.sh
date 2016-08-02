@@ -70,27 +70,15 @@ file.ini.read() {
 }
 
 file.ini.create() {
-  if waffles.noop ; then
-    log.info "(noop) Would have added $name."
-  else
-    file.ini.iniset
-  fi
+  ini_file.set "${options[file]}" "${options[section]}" "${options[option]}" "${options[value]}"
 }
 
 file.ini.update() {
-  if waffles.noop ; then
-    log.info "(noop) Would have changed $name."
-  else
-    file.ini.iniset
-  fi
+  ini_file.set "${options[file]}" "${options[section]}" "${options[option]}" "${options[value]}"
 }
 
 file.ini.delete() {
-  if waffles.noop ; then
-    log.info "(noop) Would have changed $name."
-  else
-    file.ini.inidelete
-  fi
+  ini_file.remove "${options[file]}" "${options[section]}" "${options[option]}"
 }
 
 # The following were modified from
@@ -102,12 +90,4 @@ file.ini.ini_get_option() {
 
 file.ini.ini_option_has_value() {
   ini_file.option_has_value "${options[file]}" "${options[section]}" "${options[option]}" "${options[value]}"
-}
-
-file.ini.inidelete() {
-  ini_file.remove "${options[file]}" "${options[section]}" "${options[option]}"
-}
-
-file.ini.iniset() {
-  ini_file.set "${options[file]}" "${options[section]}" "${options[option]}" "${options[value]}"
 }
