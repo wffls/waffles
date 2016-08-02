@@ -81,9 +81,9 @@ ini_file.remove() {
 
   [[ -z ${_option} ]] && return
   if [[ ${_section} != "__none__" ]]; then
-    sed -i -e "/^\[${_section}\]/,/^\[.*\]/ { /^${_option}[ \t]*/ d; }" "${_file}"
+    exec.capture_error "sed -i -e \"/^\[${_section}\]/,/^\[.*\]/ { /^${_option}[ \t]*/ d; }\" \"${_file}\""
   else
-    sed -i -e "/^${_option}[ \t]*/ d;" "${_file}"
+    exec.capture_error "sed -i -e \"/^${_option}[ \t]*/ d;\" \"${_file}\""
   fi
 }
 
@@ -96,7 +96,7 @@ ini_file.remove_section() {
     return 1
   fi
 
-  sed -i -e "/^\[${_section}\]/ d;" "${_file}"
+  exec.capture_error "sed -i -e \"/^\[${_section}\]/ d;\" \"${_file}\""
 }
 
 ini_file.set() {
@@ -117,23 +117,30 @@ ini_file.set() {
   [[ -z ${_option} ]] && return
   local _value=$(echo ${_value} | sed -e 's/[\/&]/\\&/g' | sed -e 's/[][]/\\&/g')
   local _option=$(echo ${_option} | sed -e 's/[\/&]/\\&/g' | sed -e 's/[][]/\\&/g')
+  local _cmd
   if [[ ${_section} != "__none__" ]]; then
     # Add the section if it doesn't exist
     if ! grep -q "^\[${_section}\]" "${_file}" 2>/dev/null; then
-      echo -e "\n[${_section}]" >>"${_file}"
+      exec.capture_error "echo -e \"\n[${_section}]\" >>\"${_file}\""
     fi
 
     if [[ $_value == "__none__" ]]; then
       # Add it
-      sed -i -e "/^\[${_section}\]/ a\\
+      read -r -d '' _cmd<<EOF
+sed -i -e "/^\[${_section}\]/ a\\
 ${_option}
 " "${_file}"
+EOF
     else
       # Add it
-      sed -i -e "/^\[${_section}\]/ a\\
+      read -r -d '' _cmd<<EOF
+sed -i -e "/^\[${_section}\]/ a\\
 ${_option}=${_value}
 " "${_file}"
+EOF
     fi
+
+    exec.capture_error "$_cmd"
   else
     local _newval="${_option}"
     if [[ $_value != "__none__" ]]; then
@@ -141,9 +148,9 @@ ${_option}=${_value}
     fi
     # if there are sections insert before the first section
     if [[ -n $(grep "^\[" "${_file}" 2>/dev/null) ]]; then
-      sed -i "0,/^\[/{s/^\[/${_newval}\n&/}" "${_file}"
+      exec.capture_error "sed -i \"0,/^\[/{s/^\[/${_newval}\n&/}\" \"${_file}\""
     else # append to file
-      echo "${_newval}" >> "${_file}"
+      exec.capture_error "echo \"${_newval}\" >> \"${_file}\""
     fi
   fi
 }
