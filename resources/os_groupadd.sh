@@ -62,7 +62,7 @@ os.groupadd.read() {
 }
 
 os.groupadd.create() {
-  declare -a create_args
+  declare -a create_args=()
 
   if [[ -n ${options[gid]} ]]; then
     create_args+=("-g ${options[gid]}")
