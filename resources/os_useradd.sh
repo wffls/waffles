@@ -96,7 +96,7 @@ os.useradd.read() {
     _homedir="${__split[5]}"
     _shell="${__split[6]}"
 
-    passwd_info=$(getent shadow "$user")
+    passwd_info=$(getent shadow "${options[user]}")
     string.split "$passwd_info" ':'
     _passwd="${__split[1]}"
     _pw_change="${__split[2]}"
