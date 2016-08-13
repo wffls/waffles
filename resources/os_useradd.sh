@@ -82,11 +82,10 @@ os.useradd() {
 }
 
 os.useradd.read() {
-  getent passwd "${options[user]}" &> /dev/null
-  if [[ $? != 0 ]]; then
+  getent passwd "${options[user]}" &> /dev/null || {
     waffles_resource_current_state="absent"
     return
-  fi
+  }
 
   user_info=$(getent passwd "${options[user]}")
   if [[ -n $user_info ]]; then
@@ -158,7 +157,8 @@ os.useradd.read() {
 }
 
 os.useradd.create() {
-  declare -a create_args
+  declare -a create_args=()
+
   if [[ -n ${options[uid]} ]]; then
     create_args+=("-u ${options[uid]}")
   fi
@@ -192,7 +192,7 @@ os.useradd.create() {
   fi
 
   log.debug "Creating user ${options[user]}"
-  exec.capture_error useradd $_createhome ${create_args[@]} "${options[user]}"
+  exec.capture_error useradd $_createhome ${create_args[@]:-} "${options[user]}"
 
   if [[ -n ${options[sudo]} && ${options[sudo]} == "true" ]]; then
     exec.capture_error echo "${options[user]} ALL=(ALL) NOPASSWD:ALL" > "/etc/sudoers.d/${options[user]}"
