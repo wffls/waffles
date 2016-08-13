@@ -68,7 +68,7 @@ os.groupadd.create() {
     create_args+=("-g ${options[gid]}")
   fi
 
-  exec.capture_error groupadd ${create_args[@]} "${options[group]}"
+  exec.capture_error groupadd ${create_args[@]:-} "${options[group]}"
 }
 
 os.groupadd.update() {
