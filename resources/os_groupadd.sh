@@ -46,11 +46,10 @@ os.groupadd() {
 }
 
 os.groupadd.read() {
-  group_info=$(getent group "${options[group]}")
-  if [[ $? != 0 ]]; then
+  group_info=$(getent group "${options[group]}") || {
     waffles_resource_current_state="absent"
     return
-  fi
+  }
   string.split "$group_info" ':'
   _gid="${__split[2]}"
 
