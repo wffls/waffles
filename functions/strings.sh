@@ -5,23 +5,24 @@
 # $2 = delimiter
 declare -ax __split
 string.split() {
-  if [[ -z $2 ]]; then
-    echo "$1"
-  fi
+  if [[ $# -eq 2 ]]; then
+    __split=()
+    if [[ -n $1 ]]; then
+      log.debug "Running split: string $1, delimiter $2"
+      local _string="$1"
+      local _delim="$2"
 
-  __split=()
-  local _string="$1"
-  local _delim="$2"
-
-  while true ; do
-    if [[ ! $_string == *"$_delim"* ]]; then
-      __split+=("$_string")
-      break
-    else
-      __split+=("${_string%%$_delim*}")
-      _string="${_string#*$_delim}"
+      while true ; do
+        if [[ ! $_string == *"$_delim"* ]]; then
+          __split+=("$_string")
+          break
+        else
+          __split+=("${_string%%$_delim*}")
+          _string="${_string#*$_delim}"
+        fi
+      done
     fi
-  done
+  fi
 }
 
 # string.trim trims whitespace from a string
