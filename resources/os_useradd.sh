@@ -65,10 +65,27 @@ os.useradd() {
 
 
   # Local Variables
-  local  user_info passwd_info
-  local _user _uid _gid _comment _homedir _shell _sudo _createhome
-  local _passwd _pw_change _pw_min_age _pw_max_age _pw_warn _pw_inact _acc_expires
-  local _groups
+  local _user_info=""
+  local _passwd_info=""
+
+  local _user=""
+  local _uid=""
+  local _gid=""
+  local _comment=""
+  local _homedir=""
+  local _shell=""
+  local _sudo=""
+  local _createhome=""
+
+  local _passwd=""
+  local _pw_change=""
+  local _pw_min_age=""
+  local _pw_max_age=""
+  local _pw_warn=""
+  local _pw_inact=""
+  local _acc_expires=""
+
+  declare -a _groups=()
 
   # Internal Resource configuration
   if [[ ${options[createhome]} == "true" ]]; then
@@ -87,17 +104,17 @@ os.useradd.read() {
     return
   }
 
-  user_info=$(getent passwd "${options[user]}")
-  if [[ -n $user_info ]]; then
-    string.split "$user_info" ':'
+  _user_info=$(getent passwd "${options[user]}")
+  if [[ -n $_user_info ]]; then
+    string.split "$_user_info" ':'
     _uid="${__split[2]}"
     _gid="${__split[3]}"
     _comment="${__split[4]}"
     _homedir="${__split[5]}"
     _shell="${__split[6]}"
 
-    passwd_info=$(getent shadow "${options[user]}")
-    string.split "$passwd_info" ':'
+    _passwd_info=$(getent shadow "${options[user]}")
+    string.split "$_passwd_info" ':'
     _passwd="${__split[1]}"
     _pw_change="${__split[2]}"
     _pw_min_age="${__split[3]}"
@@ -106,7 +123,7 @@ os.useradd.read() {
     _pw_inact="${__split[6]}"
     _acc_expire="${__split[7]}"
 
-    _groups=$(id -nG "${options[user]}")
+    _groups=($(id -nG "${options[user]}"))
   fi
 
   if [[ -n ${options[uid]} && ${options[uid]} != $_uid ]]; then
@@ -134,16 +151,17 @@ os.useradd.read() {
     return
   fi
 
-  string.split "${options[groups]}" ','
-  declare group_update=false
-  for i in "${__split[@]}"; do
-    echo "$_groups" | grep -q "$i"
-    if [[ $? != 0 ]]; then
-      group_update=true
-    fi
-  done
+  local _group_update=false
+  if [[ -n ${options[groups]} ]]; then
+    string.split "${options[groups]}" ','
+    for i in "${__split[@]}"; do
+      if ! array.contains _groups $i ; then
+        _group_update=true
+      fi
+    done
+  fi
 
-  if [[ $group_update == "true" ]]; then
+  if [[ $_group_update == "true" ]]; then
     waffles_resource_current_state="update"
     return
   fi
@@ -157,42 +175,42 @@ os.useradd.read() {
 }
 
 os.useradd.create() {
-  declare -a create_args=()
+  declare -a _create_args=()
 
   if [[ -n ${options[uid]} ]]; then
-    create_args+=("-u ${options[uid]}")
+    _create_args+=("-u ${options[uid]}")
   fi
 
   if [[ -n ${options[gid]} ]]; then
-    create_args+=("-g ${options[gid]}")
+    _create_args+=("-g ${options[gid]}")
   fi
 
   if [[ -n ${options[homedir]} ]]; then
-    create_args+=("-d ${options[homedir]}")
+    _create_args+=("-d ${options[homedir]}")
   fi
 
   if [[ -n ${options[shell]} ]]; then
-    create_args+=("-s ${options[shell]}")
+    _create_args+=("-s ${options[shell]}")
   fi
 
   if [[ -n ${options[passwd]} ]]; then
-    create_args+=("-p \"${options[passwd]}\"")
+    _create_args+=("-p \"${options[passwd]}\"")
   fi
 
   if [[ -n ${options[comment]} ]]; then
-    create_args+=("-c \"${options[comment]}\"")
+    _create_args+=("-c \"${options[comment]}\"")
   fi
 
   if [[ -n ${options[groups]} ]]; then
-    create_args+=("-G ${options[groups]}")
+    _create_args+=("-G ${options[groups]}")
   fi
 
   if [[ ${options[system]} == "true" ]]; then
-    create_args+=("-r")
+    _create_args+=("-r")
   fi
 
   log.debug "Creating user ${options[user]}"
-  exec.capture_error useradd $_createhome ${create_args[@]:-} "${options[user]}"
+  exec.capture_error useradd $_createhome ${_create_args[@]:-} "${options[user]}"
 
   if [[ -n ${options[sudo]} && ${options[sudo]} == "true" ]]; then
     exec.capture_error echo "${options[user]} ALL=(ALL) NOPASSWD:ALL" > "/etc/sudoers.d/${options[user]}"
@@ -200,42 +218,43 @@ os.useradd.create() {
 }
 
 os.useradd.update() {
-  declare -a update_args
+  declare -a _update_args
   if [[ -n ${options[uid]} && ${options[uid]} != $_uid ]]; then
-    update_args+=("-u ${options[uid]}")
+    _update_args+=("-u ${options[uid]}")
   fi
 
   if [[ -n ${options[gid]} && ${options[gid]} != $_gid ]]; then
-    update_args+=("-g ${options[gid]}")
+    _update_args+=("-g ${options[gid]}")
   fi
 
   if [[ -n ${options[homedir]} && ${options[homedir]} != $_homedir ]]; then
-    update_args+=("-d ${options[homedir]}")
+    _update_args+=("-d ${options[homedir]}")
   fi
 
   if [[ -n ${options[shell]} && ${options[shell]} != $_shell ]]; then
-    update_args+=("-s ${options[shell]}")
+    _update_args+=("-s ${options[shell]}")
   fi
 
   if [[ -n ${options[passwd]} && ${options[passwd]} != $_passwd ]]; then
-    update_args+=("-p ${options[passwd]}")
+    _update_args+=("-p ${options[passwd]}")
   fi
 
-  string.split "${options[groups]}" ','
-  declare group_update=false
-  for i in "${__split[@]}"; do
-    echo "$_groups" | grep -q "$i"
-    if [[ $? != 0 ]]; then
-      group_update=true
-    fi
-  done
+  local _group_update=false
+  if [[ -n ${options[groups]} ]]; then
+    string.split "${options[groups]}" ','
+    for i in "${__split[@]}"; do
+      if ! array.contains _groups $i ; then
+        _group_update=true
+      fi
+    done
+  fi
 
-  if [[ $group_update == "true" ]]; then
-    update_args+=("-G ${options[groups]}")
+  if [[ $_group_update == "true" ]]; then
+    _update_args+=("-G ${options[groups]}")
   fi
 
   log.debug "Updating user ${options[user]}"
-  exec.capture_error usermod "${update_args[@]}" "${options[user]}"
+  exec.capture_error usermod "${_update_args[@]}" "${options[user]}"
 
   if [[ ${options[sudo]} == "true" && ! -f "/etc/sudoers.d/${options[user]}" ]]; then
     exec.capture_error echo "${options[user]} ALL=(ALL) NOPASSWD:ALL" > "/etc/sudoers.d/${options[user]}"
