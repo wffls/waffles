@@ -1,3 +1,6 @@
+# waffles_resource holds the current resource being processed.
+declare -g waffles_resource=""
+
 # waffles_resource_current_state holds the state of the last run resource
 declare -g waffles_resource_current_state
 
