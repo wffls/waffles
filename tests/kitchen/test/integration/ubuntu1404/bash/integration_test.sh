@@ -1,23 +1,75 @@
 #!/bin/bash
+set -eu
 source /root/.waffles/init.sh
 source /etc/lsb-release
 
-log.info "apt-get update "
-exec.mute apt-get update
+WAFFLES_DEBUG=1
 
-log.info "groupadd"
-os.groupadd --group memcache --gid 999
+if [[ -z ${BUSSER_ROOT:-} ]]; then
+  log.info "apt-get update"
+  exec.mute apt-get update
+  exit 0
+fi
 
-log.info "useradd"
-os.useradd --user memcache --gid 999 --uid 999 --homedir /var/lib/memcached
+for t in /root/.waffles/resources/tests/*.sh; do
+  source $t
 
-log.info "foobar"
-os.useradd --user foobar --system true
+  _resource=$(basename $t | sed -e 's/_test.sh//g' -e 's/_/./g')
+  log.info "Running CRUD tests for $_resource"
+
+  log.info "Running create tests"
+  create
+  _create_changes=$waffles_total_changes
+
+  log.info "Verifying resources were successfully created"
+  create
+  _post_create_changes=$waffles_total_changes
+
+  if [[ $_post_create_changes -gt $_create_changes ]]; then
+    log.error "Changes happened on the system"
+    exit 1
+  fi
+
+  log.info "Running update tests"
+  update
+  _update_changes=$waffles_total_changes
+
+  log.info "Verifying resources were successfully updated"
+  update
+  _post_update_changes=$waffles_total_changes
+
+  if [[ $_post_update_changes -gt $_update_changes ]]; then
+    log.error "Changes happened on the system"
+    exit 1
+  fi
+
+  log.info "Running delete tests"
+  delete
+  _delete_changes=$waffles_total_changes
+
+  log.info "Verifying resources were successfully deleted"
+  delete
+  _post_delete_changes=$waffles_total_changes
+
+  if [[ $_post_delete_changes -gt $_delete_changes ]]; then
+    log.error "Changes happened on the system"
+    exit 1
+  fi
+done
+
+exit 0
 
 log.info "packages"
 apt.pkg --package memcached
 apt.pkg --name cron
 apt.pkg --name sl
+
+log.info "directory"
+if [[ -z ${BUSSER_ROOT:-} ]]; then
+  mkdir /opt/foo
+  chmod 0700 /opt/foo
+fi
+os.directory --name /opt/foo --mode 0755
 
 log.info "apt-key and apt-source"
 apt.key --name rabbitmq --key 056E8E56 --remote_keyfile https://www.rabbitmq.com/rabbitmq-signing-key-public.asc
@@ -28,9 +80,6 @@ apt.source --name percona --uri http://repo.percona.com/apt --distribution $DIST
 
 log.info "cron"
 cron.entry --name foobar --cmd ls --minute "*/5" --hour 4
-
-log.info "directory"
-os.directory --name /opt/puppetlabs/agent/facts.d --parent true
 
 log.info "file"
 os.file --name /opt/puppetlabs/agent/facts.d/role.txt --content "role=memcache"
