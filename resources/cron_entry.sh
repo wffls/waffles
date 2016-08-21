@@ -57,36 +57,33 @@ cron.entry() {
 
   # Local Variables
   local entry="${options[minute]} ${options[hour]} ${options[dom]} ${options[month]} ${options[dow]} ${options[cmd]} # ${options[name]}"
-  local _entry
+  local _entry=""
 
   # Process the resource
-  waffles.resource.process $waffles_resource "$entry"
+  waffles.resource.process $waffles_resource "${options[name]}"
 }
 
 cron.entry.read() {
-  _entry=$(crontab -u "${options[user]}" -l 2> /dev/null | grep "# ${options[name]}$")
-  if [[ -z $_entry ]]; then
-    waffles_resource_current_state="absent"
-    return
+  local _wrcs=""
+
+  _entry=$(crontab -u "${options[user]}" -l 2> /dev/null | grep "# ${options[name]}$") || {
+    _wrcs="absent"
+  }
+
+  if [[ -z $_wrcs && $entry != $_entry ]]; then
+    _wrcs="update"
   fi
 
-  if [[ $entry != $_entry ]]; then
-    waffles_resource_current_state="update"
-    return
+  if [[ -z $_wrcs ]]; then
+    _wrcs="present"
   fi
 
-  waffles_resource_current_state="present"
+  waffles_resource_current_state="$_wrcs"
 }
 
 cron.entry.create() {
-  local _script
-  read -r -d '' _script<<EOF
-(
-  crontab -u "${options[user]}" -l 2> /dev/null | grep -v "# ${options[name]}$" 2> /dev/null || true
-  echo "$entry"
-) | crontab -u "${options[user]}" -
-EOF
-  exec.capture_error "$_script"
+  local _script="(crontab -u \"${options[user]}\" -l 2> /dev/null | grep -v \"\# ${options[name]}$\" 2> /dev/null || true; echo \"$entry\") | crontab -u \"${options[user]}\" -"
+  exec.capture_error $_script
 }
 
 cron.entry.update() {
@@ -94,11 +91,6 @@ cron.entry.update() {
 }
 
 cron.entry.delete() {
-  local _script
-  read -r -d '' _script<<EOF
-(
-  crontab -u "${options[user]}" -l 2> /dev/null | grep -v "# ${options[name]}$" 2> /dev/null || true
-) | crontab -u "${options[user]}" -
-EOF
+  local _script="(crontab -u \"${options[user]}\" -l 2> /dev/null | grep -v \"\# ${options[name]}$\" 2> /dev/null || true) | crontab -u \"${options[user]}\" -"
   exec.capture_error "$_script"
 }
