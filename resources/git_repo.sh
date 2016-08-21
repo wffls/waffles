@@ -60,11 +60,13 @@ git.repo() {
 
 
   # Local Variables
-  local _uid _gid
-  local _user_info=$(getent passwd "${options[owner]}")
-  local _group_info=$(getent group "${options[group]}")
+  local _uid=""
+  local _gid=""
+  local _user_info=""
+  local _group_info=""
 
   # Internal Resource Configuration
+  _user_info=$(getent passwd "${options[owner]}") || true
   if [[ -n $_user_info ]]; then
     string.split "$_user_info" ':'
     _uid="${__split[2]}"
@@ -73,6 +75,7 @@ git.repo() {
     _uid=0
   fi
 
+  _group_info=$(getent group "${options[group]}") || true
   if [[ -n $_group_info ]]; then
     string.split "$_group_info" ':'
     _gid="${__split[2]}"
@@ -86,70 +89,78 @@ git.repo() {
 }
 
 git.repo.read() {
-  local _current_state
+  local _wrcs=""
+  local _return_code=""
+  local _commit=""
+  local _branch=""
+  local _tag=""
+  local _user_check=""
+  local _group_check=""
 
   if [[ -f "${options[name]}/.git/config" ]]; then
     waffles.pushd "${options[name]}"
 
     # First check if state is set to "latest"
     if [[ ${options[state]} == "latest" ]]; then
-      exec.mute git remote update
-      git status -uno | grep -q up-to-date
-      if [[ $? -eq 0 ]]; then
-        _current_state="present"
+      exec.mute git remote update || {
+        log.error "Unable to update repository"
+        waffles_resource_current_sttate="error"
+        return 1
+      }
+
+      _return_code=$(git status -uno | grep -q up-to-date && echo $?) || true
+      if [[ $_return_code == 0 ]]; then
+        _wrcs="present"
       else
-        _current_state="update"
+        _wrcs="update"
       fi
 
     # Next check if a commit was specified.
     # See if the repo is currently at that commit
     elif [[ -n ${options[commit]} ]]; then
-      local _commit=$(git rev-parse HEAD)
-      if [[ ${options[commit]} =~ ^${_commit} ]]; then
-        _current_state="present"
+      _commit=$(git rev-parse HEAD) || true
+      if [[ -n $_commit && $_commit =~ ^${options[commit]} ]]; then
+        _wrcs="present"
       else
-        _current_state="update"
+        _wrcs="update"
       fi
 
     # If a commit was not specified, check for a tag
     elif [[ -n ${options[tag]} ]]; then
-      local _tag=$(git describe --always --tag)
-      if [[ ${options[tag]} == $_tag ]]; then
-        _current_state="present"
+      _tag=$(git describe --always --tag) || true
+      if [[ -n $_tag && ${options[tag]} == $_tag ]]; then
+        _wrcs="present"
       else
-        _current_state="update"
+        _wrcs="update"
       fi
 
     # Finally, check for a branch, defaulting to "master"
     else
-      local _branch=$(git rev-parse --abbrev-ref HEAD)
-      if [[ ${options[branch]} == "$_branch" ]]; then
-        _current_state="present"
+      _branch=$(git rev-parse --abbrev-ref HEAD) || true
+      if [[ -n $_branch && ${options[branch]} == "$_branch" ]]; then
+        _wrcs="present"
       else
-        _current_state="update"
+        _wrcs="update"
       fi
     fi
     waffles.popd
 
-    # Check if the uid / gid are out of sync
-    user_info=$(getent passwd "${options[owner]}")
-
-    local _user_check=$(find "${options[name]}" ! -uid $_uid 2> /dev/null)
+    _user_check=$(find "${options[name]}" ! -uid $_uid 2> /dev/null) || true
     if [[ -n $_user_check ]]; then
-      _current_state="update"
+      _wrcs="update"
     fi
 
-    local _group_check=$(find "${options[name]}" ! -gid $_gid 2> /dev/null)
+    _group_check=$(find "${options[name]}" ! -gid $_gid 2> /dev/null) || true
     if [[ -n $_group_check ]]; then
-      _current_state="update"
+      _wrcs="update"
     fi
   fi
 
-  if [[ -n $_current_state ]]; then
-    waffles_resource_current_state="$_current_state"
-  else
-    waffles_resource_current_state="absent"
+  if [[ -z $_wrcs ]]; then
+    _wrcs="absent"
   fi
+
+  waffles_resource_current_state="$_wrcs"
 }
 
 git.repo.create() {
