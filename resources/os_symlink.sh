@@ -24,7 +24,7 @@ os.symlink() {
   waffles_resource="os.symlink"
 
   # Check if all dependencies are installed
-  local _wrd=()
+  local _wrd=("")
   if ! waffles.resource.check_dependencies "${_wrd[@]}" ; then
     return 1
   fi
@@ -43,7 +43,7 @@ os.symlink() {
 
   # Internal Resource Configuration
   if [[ ${options[state]} != "absent" ]]; then
-    local _err
+    local _err=""
     if [[ -z ${options[target]} ]]; then
       log.error "target is required unless symlink is being removed."
       _err=true
