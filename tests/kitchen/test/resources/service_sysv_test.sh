@@ -1,19 +1,19 @@
-service.sysv.test.setup() {
+setup() {
   apt.pkg --name memcached
 }
 
-service.sysv.test.create() {
+create() {
   service.sysv --name memcached --state running
 }
 
-service.sysv.test.update() {
+update() {
   return
 }
 
-service.sysv.test.delete() {
+delete() {
   service.sysv --name memcached --state stopped
 }
 
-service.sysv.test.teardown() {
+teardown() {
   apt.pkg --name memcached --state absent
 }

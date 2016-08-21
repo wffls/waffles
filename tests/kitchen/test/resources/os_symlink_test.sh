@@ -1,26 +1,26 @@
-os.symlink.test.setup() {
+setup() {
   os.file --name /usr/local/bin/foo1
   os.file --name /usr/local/bin/foo2
   os.file --name /usr/local/bin/foo3
 }
 
-os.symlink.test.create() {
+create() {
   os.symlink --name /usr/bin/foo1 --target /usr/local/bin/foo1
   os.symlink --name /usr/bin/foo2 --target /usr/local/bin/foo2
   os.symlink --name /usr/bin/foo3 --target /usr/local/bin/foo3
 }
 
-os.symlink.test.update() {
+update() {
   os.symlink --name /usr/bin/foo2 --target /usr/local/bin/foo3 --overwrite true
 }
 
-os.symlink.test.delete() {
+delete() {
   os.symlink --name /usr/bin/foo1 --state absent
   os.symlink --name /usr/bin/foo2 --state absent
   os.symlink --name /usr/bin/foo3 --state absent
 }
 
-os.symlink.test.teardown() {
+teardown() {
   os.file --name /usr/local/bin/foo1 --state absent
   os.file --name /usr/local/bin/foo2 --state absent
   os.file --name /usr/local/bin/foo3 --state absent

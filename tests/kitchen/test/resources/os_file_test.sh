@@ -1,19 +1,19 @@
-os.file.test.setup() {
+setup() {
   return
 }
 
-os.file.test.create() {
+create() {
   os.file --name /root/role.txt --mode 0644 --content "role=memcache"
 }
 
-os.file.test.update() {
+update() {
   os.file --name /root/role.txt --mode 0640 --content "role=memcached"
 }
 
-os.file.test.delete() {
+delete() {
   os.file --name /root/role.txt --state absent
 }
 
-os.file.test.teardown() {
+teardown() {
   return
 }

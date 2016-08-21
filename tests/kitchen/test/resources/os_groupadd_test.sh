@@ -1,19 +1,19 @@
-os.groupadd.test.setup() {
+setup() {
   return
 }
 
-os.groupadd.test.create() {
+create() {
   os.groupadd --group jdoe --gid 999
 }
 
-os.groupadd.test.update() {
+update() {
   os.groupadd --group jdoe --gid 998
 }
 
-os.groupadd.test.delete() {
+delete() {
   os.groupadd --state absent --group jdoe
 }
 
-os.groupadd.test.teardown() {
+teardown() {
   return
 }

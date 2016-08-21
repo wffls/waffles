@@ -16,5 +16,3 @@ ruby.gem --name kitchen-docker
 ruby.gem --name busser-bash
 ruby.gem --name busser-bats
 ruby.gem --name busser-serverspec
-
-git.repo --name /root/.waffles --source https://github.com/wffls/waffles

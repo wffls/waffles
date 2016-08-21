@@ -1,19 +1,19 @@
-cron.entry.test.setup() {
+setup() {
   return
 }
 
-cron.entry.test.create() {
+create() {
   cron.entry --name foobar --cmd ls --minute "*/5" --hour 4
 }
 
-cron.entry.test.update() {
+update() {
   cron.entry --name foobar --cmd ls --minute "*/5" --hour 5
 }
 
-cron.entry.test.delete() {
+delete() {
   cron.entry --name foobar --state absent --cmd ls --minute "*/5" --hour 5
 }
 
-cron.entry.test.teardown() {
+teardown() {
   return
 }

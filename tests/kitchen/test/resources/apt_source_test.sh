@@ -1,19 +1,19 @@
-apt.source.test.setup() {
+setup() {
   return
 }
 
-apt.source.test.create() {
+create() {
   apt.source --name rabbitmq --uri http://www.rabbitmq.com/debian/ --distribution testing --component main --include_src false
 }
 
-apt.source.test.update() {
+update() {
   apt.source --name rabbitmq --uri http://www.rabbitmq.com/debian/ --distribution testing --component main --include_src true
 }
 
-apt.source.test.delete() {
+delete() {
   apt.source --name rabbitmq --state absent --uri http://www.rabbitmq.com/debian/ --distribution testing --component main --include_src false
 }
 
-apt.source.test.teardown() {
+teardown() {
   return
 }

@@ -1,25 +1,25 @@
-file.ini.test.setup() {
+setup() {
   os.file --name /root/test.ini
 }
 
-file.ini.test.create() {
+create() {
   file.ini --file /root/test.ini --section __none__ --option global --value setting
   file.ini --file /root/test.ini --section foobar --option foo --value bar
   file.ini --file /root/test.ini --section foobar --option baz --value __none__
 }
 
-file.ini.test.update() {
+update() {
   file.ini --file /root/test.ini --section __none__ --option global --value setting2
   file.ini --file /root/test.ini --section foobar --option foo --value bar
   file.ini --file /root/test.ini --section foobar --option baz --value __none__
 }
 
-file.ini.test.delete() {
+delete() {
   file.ini --file /root/test.ini --section __none__ --option global --value setting2 --state absent
   file.ini --file /root/test.ini --section foobar --option foo --value bar2 --state absent
   file.ini --file /root/test.ini --section foobar --option baz --value __none__2 --state absent
 }
 
-file.ini.test.teardown() {
+teardown() {
   os.file --name /root/test.ini --state absent
 }
