@@ -27,7 +27,7 @@ dnf.copr() {
   if ! waffles.command_exists ${_dnf_cmd} ; then
     if [ -f /usr/lib/yum-plugins/copr.py ]; then
       log.error "yum needs the package 'yum-plugin-copr' for copr support"
-      return 1
+      return 2
     fi
     _dnf_cmd="yum"
   fi

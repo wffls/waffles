@@ -26,7 +26,7 @@ rabbitmq.user() {
   # Check if all dependencies are installed
   local _wrd=("rabbitmqctl" "grep")
   if ! waffles.resource.check_dependencies "${_wrd[@]}" ; then
-    return 1
+    return 2
   fi
 
   # Resource Options

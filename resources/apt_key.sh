@@ -28,7 +28,7 @@ apt.key() {
   # Check if all dependencies are installed
   local _wrd=("wget" "apt-key" "grep" "curl" "gpg")
   if ! waffles.resource.check_dependencies "${_wrd[@]}" ; then
-    return 1
+    return 2
   fi
 
   # Resource Options

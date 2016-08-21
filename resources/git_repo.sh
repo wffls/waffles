@@ -40,7 +40,7 @@ git.repo() {
   # Check if all dependencies are installed
   local _wrd=("git" "getent" "grep")
   if ! waffles.resource.check_dependencies "${_wrd[@]}" ; then
-    return 1
+    return 2
   fi
 
   # Resource Options
@@ -104,7 +104,7 @@ git.repo.read() {
     if [[ ${options[state]} == "latest" ]]; then
       exec.mute git remote update || {
         log.error "Unable to update repository"
-        waffles_resource_current_sttate="error"
+        waffles_resource_current_state="error"
         return 1
       }
 

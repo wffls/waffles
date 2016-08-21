@@ -39,7 +39,7 @@ service.sysv.read() {
   local _wrcs=""
   if [[ ! -f "/etc/init.d/${options[name]}" ]]; then
     log.error "/etc/init.d/${options[name]} does not exist."
-    return 1
+    return 2
   else
     exec.mute /etc/init.d/${options[name]} status || {
       _wrcs="absent"
