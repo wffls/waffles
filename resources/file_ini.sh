@@ -56,17 +56,23 @@ file.ini() {
 }
 
 file.ini.read() {
+  local _wrcs=""
+
   if ! file.ini.ini_get_option ; then
-    waffles_resource_current_state="absent"
-    return
+    _wrcs="absent"
   fi
 
-  if ! file.ini.ini_option_has_value ; then
-    waffles_resource_current_state="update"
-    return
+  if [[ -z $_wrcs ]]; then
+    if ! file.ini.ini_option_has_value ; then
+      _wrcs="update"
+    fi
   fi
 
-  waffles_resource_current_state="present"
+  if [[ -z $_wrcs ]]; then
+    _wrcs="present"
+  fi
+
+  waffles_resource_current_state="$_wrcs"
 }
 
 file.ini.create() {
@@ -81,8 +87,6 @@ file.ini.delete() {
   ini_file.remove "${options[file]}" "${options[section]}" "${options[option]}"
 }
 
-# The following were modified from
-# https://raw.githubusercontent.com/openstack-dev/devstack/master/inc/ini-config
 file.ini.ini_get_option() {
   local _line=$(ini_file.get_option "${options[file]}" "${options[section]}" "${options[option]}")
   [[ -n $_line ]]
