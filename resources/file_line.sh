@@ -50,26 +50,32 @@ file.line() {
 }
 
 file.line.read() {
+  local _wrcs=""
+
   if [[ ! -f ${options[file]} ]]; then
-    waffles_resource_current_state="absent"
-    return
+    _wrcs="absent"
   fi
 
-  exec.mute "grep -qx -- '${options[line]}' '${options[file]}'"
-  if [[ $? == 1 ]]; then
-    waffles_resource_current_state="absent"
-    return
+  if [[ -z $_wrcs ]]; then
+    exec.mute "grep -qx -- '${options[line]}' '${options[file]}'" || {
+      _wrcs="absent"
+    }
   fi
 
-  if [[ -n ${options[match]} ]]; then
-    exec.mute "sed -n -e '/${options[match]}/p' '${options[file]}'"
-    if [[ $? == 1 ]]; then
-      log.error "No match for ${options[match]} in ${options[file]}"
-      return 1
+  if [[ -z $_wrcs ]]; then
+    if [[ -n ${options[match]} ]]; then
+      exec.mute "sed -n -e '/${options[match]}/p' '${options[file]}'" || {
+        log.error "No match for ${options[match]} in ${options[file]}"
+        return 1
+      }
     fi
   fi
 
-  waffles_resource_current_state="present"
+  if [[ -z $_wrcs ]]; then
+    _wrcs="present"
+  fi
+
+  waffles_resource_current_state="$_wrcs"
 }
 
 file.line.create() {
