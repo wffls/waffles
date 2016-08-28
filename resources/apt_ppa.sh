@@ -38,14 +38,20 @@ apt.ppa() {
     return $?
   fi
 
+  # Local Variables
+  local _source_file_name=""
+  _source_file_name="$(echo ${options[ppa]} | sed -e "s|[/:]|-|" -e "s|\.|_|")" || true
+  if [[ -z $_source_file_name ]]; then
+    log.error "Unable to determine the name of the sources.list file"
+    return 1
+  fi
 
   # Process the resource
   waffles.resource.process $waffles_resource "${options[ppa]}"
 }
 
 apt.ppa.read() {
-  local _repo_file_name="$(echo ${options[ppa]} | sed -e "s|[/:]|-|" -e "s|\.|_|")-*.list"
-  if [ -f /etc/apt/sources.list.d/$_repo_file_name ]; then
+  if [ -f /etc/apt/sources.list.d/${_source_file_name}-*.list ]; then
     waffles_resource_current_state="present"
     return
   fi
@@ -57,14 +63,15 @@ apt.ppa.create() {
   exec.capture_error apt-add-repository -y ppa:${options[ppa]}
 
   if [[ ${options[refresh]} == "true" ]]; then
-    exec.mute apt-get update
+    exec.mute apt-get update || true
   fi
 }
 
 apt.ppa.delete() {
   exec.capture_error apt-add-repository -y -r ppa:${options[ppa]}
+  exec.capture_error rm /etc/apt/sources.list.d/${_source_file_name}-*.list
 
   if [[ ${options[refresh]} == "true" ]]; then
-    exec.mute apt-get update
+    exec.mute apt-get update || true
   fi
 }
