@@ -11,9 +11,13 @@ waffles.options.create_option() {
 }
 
 waffles.options.create_mv_option() {
-  if [[ -n $1 ]]; then
-    waffles.options.create_option "$1" "$2"
+  if [[ $# -ge 1 ]]; then
     options[$1/mv]=1
+    if [[ $# -ge 2 ]]; then
+      waffles.options.create_option "$1" "$2"
+    else
+      waffles.options.create_option "$1"
+    fi
   fi
 }
 
