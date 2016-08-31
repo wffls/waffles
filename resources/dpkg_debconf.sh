@@ -18,7 +18,7 @@
 #
 # ```bash
 # dpkg.debconf --package mysql-server --question mysql-server/root_password
-#                --vtype password --value mypassword
+#              --vtype password --value mypassword
 # ```
 #
 dpkg.debconf() {
@@ -38,6 +38,7 @@ dpkg.debconf() {
   waffles.options.create_option question "__required__"
   waffles.options.create_option vtype    "__required__"
   waffles.options.create_option value    "__required__"
+  waffles.options.create_option unseen
   waffles.options.parse_options "$@"
   if [[ $? != 0 ]]; then
     return $?
@@ -45,7 +46,9 @@ dpkg.debconf() {
 
 
   # Local Variables
-  local _value _name
+  local _value=""
+  local _name=""
+  local _unseen=""
 
   # Internal Resource Configuration
   if [[ -n ${options[unseen]} ]]; then
@@ -61,12 +64,15 @@ dpkg.debconf() {
 }
 
 dpkg.debconf.read() {
-  local _dc=$(echo get ${options[question]} | debconf-communicate ${options[package]} 2>/dev/null)
-  if [[ $_dc =~ ^10 ]]; then
+  local _result=""
+  local _trimmed=""
+  _result=$(echo get ${options[question]} | debconf-communicate ${options[package]} 2>/dev/null) || true
+  _trimmed=$(string.trim "$_result")
+  if [[ $_trimmed =~ ^10 ]]; then
     waffles_resource_current_state="absent"
-  elif [[ $_dc == "0" ]]; then
+  elif [[ $_trimmed == "0" ]]; then
     waffles_resource_current_state="absent"
-  elif [[ $_dc == "0 ${options[value]}" ]]; then
+  elif [[ $_trimmed == "0 ${options[value]}" ]]; then
     waffles_resource_current_state="present"
   else
     waffles_resource_current_state="update"
@@ -74,10 +80,8 @@ dpkg.debconf.read() {
 }
 
 dpkg.debconf.create() {
-  local _script
-  read -r -d '' _script<<EOF
-echo ${options[package]} ${options[question]} ${options[vtype]} "${options[value]}" | debconf-set-selections
-EOF
+  local _script=""
+  _script="echo ${options[package]} ${options[question]} ${options[vtype]} \"${options[value]}\" | debconf-set-selections"
   exec.capture_error "$_script"
 }
 
@@ -87,9 +91,7 @@ dpkg.debconf.update() {
 }
 
 dpkg.debconf.delete() {
-  local _script
-  read -r -d '' _script<<EOF
-echo RESET ${options[question]} | debconf-communicate ${options[package]}
-EOF
+  local _script=""
+  _script="echo RESET ${options[question]} | debconf-communicate ${options[package]}"
   exec.capture_error "$_script"
 }
