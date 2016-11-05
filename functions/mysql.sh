@@ -13,13 +13,19 @@ mysql.database_exists() {
 
 mysql.mycnf() {
   local -A options
-  waffles.options.create_option state    "present"
-  waffles.options.create_option filename "__required__"
-  waffles.options.create_option user     "__required__"
-  waffles.options.create_option socket   "/var/run/mysqld/mysqld.sock"
+  waffles.options.create_option state      "present"
+  waffles.options.create_option filename   "__required__"
+  waffles.options.create_option file_owner "root"
+  waffles.options.create_option file_group "root"
+  waffles.options.create_option user       "__required__"
+  waffles.options.create_option socket     "/var/run/mysqld/mysqld.sock"
   waffles.options.create_option host
   waffles.options.create_option password
   waffles.options.parse_options "$@"
+
+  if [[ ! -f "${options[filename]}" ]]; then
+    os.file --name "${options[filename]}" --owner "${options[file_owner]}" --group "${options[file_group]}" --mode 0640
+  fi
 
   file.ini --file "${options[filename]}" --section client --option user --value "${options[user]}"
   if [[ -n "${options[host]}" ]]; then

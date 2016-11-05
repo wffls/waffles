@@ -5,22 +5,33 @@
 # $2 = delimiter
 declare -ax __split
 string.split() {
+  if [[ $# -eq 1 ]]; then
+    # If only one argument, split by a single space.
+    __split=()
+    log.debug "Running split: string $1, delimiter ' '"
+    __split=($1)
+  fi
+
   if [[ $# -eq 2 ]]; then
     __split=()
     if [[ -n $1 ]]; then
-      log.debug "Running split: string $1, delimiter $2"
+      log.debug "Running split: string $1, delimiter '$2'"
       local _string="$1"
-      local _delim="$2"
 
-      while true ; do
-        if [[ ! $_string == *"$_delim"* ]]; then
-          __split+=("$_string")
-          break
-        else
-          __split+=("${_string%%$_delim*}")
-          _string="${_string#*$_delim}"
-        fi
-      done
+      if [[ "$2" -eq " " ]]; then
+        # A blank space was passed in
+        __split=($1)
+      else
+        while true ; do
+          if [[ ! $_string == *"$_delim"* ]]; then
+            __split+=("$_string")
+            break
+          else
+            __split+=("${_string%%$_delim*}")
+            _string="${_string#*$_delim}"
+          fi
+        done
+      fi
     fi
   fi
 }
