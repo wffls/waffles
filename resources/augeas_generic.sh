@@ -89,6 +89,7 @@
 #   --onlyif "*/ipaddr[. = '3.3.3.3'] size -lt 1"
 # ```
 #
+
 function augeas.generic {
 
   # Declare the resource title
@@ -97,13 +98,13 @@ function augeas.generic {
   # Check if all dependencies are installed
   local _wrd=("augtool" "grep" "sed")
   if ! waffles.resource.check_dependencies "${_wrd[@]}" ; then
-    return 1
+    return 2
   fi
 
   # Resource Options
   local -A options
-  local -a command
-  local -a lens_path
+  local -a command=()
+  local -a lens_path=()
   waffles.options.create_option state        "present"
   waffles.options.create_option name         "__required__"
   waffles.options.create_option lens         "__required__"
@@ -123,6 +124,7 @@ function augeas.generic {
   local _file_path="/files$_file"
   local _lens="${options[lens]}"
   local -a _augeas_init=()
+  local _lens_path=""
 
   # Internal Resource Configuration
   if [[ $(array.length lens_path) -gt 0 ]]; then
@@ -143,9 +145,10 @@ function augeas.generic {
 function augeas.generic.read {
   local _test _return _return_expected _commands _pid _error _testpath
   local _path _function _operator _comparison _c
-  local -a _result
-  local -a _parts
+  local -a _parts=()
   local -a _augeas_commands=( "${_augeas_init[@]}" )
+  local _error=""
+  local -a _result=()
 
   # If `onlyif` or `notif` was specified, check and see the result of the command.
   if [[ -n ${options[onlyif]} ]] || [[ -n ${options[notif]} ]]; then
@@ -159,7 +162,7 @@ function augeas.generic.read {
 
     # Remove possible surrounding quotes
     array.pop _parts _comparison
-    _comparison=$(echo $_comparison | sed -e 's/^"//' -e 's/"$//' -e "s/^'//" -e "s/'$//")
+    _comparison=$(echo $_comparison | sed -e 's/^"//' -e 's/"$//' -e "s/^'//" -e "s/'$//") || true
 
     array.pop _parts _operator
     array.pop _parts _function
@@ -268,7 +271,11 @@ function augeas.generic.read {
 }
 
 function augeas.generic.create {
-  local _result _return _c _pid
+  local _result=""
+  local _return=""
+  local _c=""
+  local _pid=""
+  local _error=""
   local -a _augeas_commands=( "${_augeas_init[@]}" )
 
   # Run the set of commands and see if they were successful.
@@ -311,7 +318,6 @@ function augeas.generic.create {
 }
 
 function augeas.generic.update {
-  augeas.generic.delete
   augeas.generic.create
 }
 
@@ -331,9 +337,10 @@ function augeas.generic.test_size {
 
 function augeas.generic.test_path_or_result {
   local _match="false"
-  local _part _c
+  local _part=""
+  local _c=""
 
-  for r in "${_result[@]}"; do
+  for r in "${_result[@]+"${_result[@]}"}"; do
     string.split "$r" " = "
     if [[ $_function == "path" ]]; then
       _part="${__split[0]}"

@@ -30,7 +30,7 @@ apt.source() {
   # Check if all dependencies are installed
   local _wrd=("apt-get")
   if ! waffles.resource.check_dependencies "${_wrd[@]}" ; then
-    return 1
+    return 2
   fi
 
   # Resource Options
@@ -53,12 +53,25 @@ apt.source() {
 }
 
 apt.source.read() {
+  local _wrcs=""
+
   if [[ -f "/etc/apt/sources.list.d/${options[name]}.list" ]]; then
-    waffles_resource_current_state="present"
-    return
+    _wrcs="present"
   fi
 
-  waffles_resource_current_state="absent"
+  if [[ ${options[include_src]} == "true" ]]; then
+    if [[ -f "/etc/apt/sources.list.d/${options[name]}-src.list" ]]; then
+      _wrcs="present"
+    else
+      _wrcs="absent"
+    fi
+  fi
+
+  if [[ -z $_wrcs ]]; then
+    _wrcs="absent"
+  fi
+
+  waffles_resource_current_state="$_wrcs"
 }
 
 apt.source.create() {
@@ -72,8 +85,19 @@ apt.source.create() {
   fi
 }
 
+apt.source.update() {
+  apt.source.delete
+  apt.source.create
+}
+
 apt.source.delete() {
-  exec.capture_error rm "/etc/apt/sources.list.d/${options[name]}.list"
+  if [[ -f "/etc/apt/sources.list.d/${options[name]}.list" ]]; then
+    exec.capture_error rm "/etc/apt/sources.list.d/${options[name]}.list"
+  fi
+
+  if [[ ${options[include_src]} == "true" && -f "/etc/apt/sources.list.d/${options[name]}-src.list" ]]; then
+    exec.capture_error rm "/etc/apt/sources.list.d/${options[name]}-src.list"
+  fi
 
   if [[ ${options[refresh]} == "true" ]]; then
     exec.mute apt-get update

@@ -40,7 +40,7 @@ python.pip() {
   # Check if all dependencies are installed
   local _wrd=("getent" "pip" "sudo")
   if ! waffles.resource.check_dependencies "${_wrd[@]}" ; then
-    return 1
+    return 2
   fi
 
   # Resource Options
@@ -64,9 +64,20 @@ python.pip() {
 
 
   # Local Variables
-  local _user _group _cwd _pip _package _package_regex _pypi_index _editable _wheel _log _source _latest
   local _user_info=$(getent passwd "${options[owner]}")
   local _group_info=$(getent group "${options[group]}")
+  local _user=""
+  local _group=""
+  local _cwd=""
+  local _pip=""
+  local _package=""
+  local _package_regex=""
+  local _pypi_index=""
+  local _editable=""
+  local _wheel=""
+  local _log=""
+  local _source=""
+  local _latest=""
 
   # Internal Resource Configuration
 

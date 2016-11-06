@@ -1,3 +1,6 @@
+# waffles_resource holds the current resource being processed.
+declare -g waffles_resource=""
+
 # waffles_resource_current_state holds the state of the last run resource
 declare -g waffles_resource_current_state
 
@@ -6,7 +9,7 @@ declare -g waffles_resource_current_state
 declare -g waffles_resource_changed
 
 # waffles_total_changes keeps track of how many resources have been changed.
-declare -g waffles_total_changes
+declare -g waffles_total_changes=0
 
 waffles.resource.check_dependencies() {
   while [[ $# -gt 0 ]]; do
@@ -77,17 +80,17 @@ waffles.resource.read() {
 waffles.resource.create() {
   "${_resource_type}.create"
   waffles_resource_changed="true"
-  waffles_total_changes=$(( waffles_total_changes+1 ))
+  waffles_total_changes=$(( $waffles_total_changes+1 ))
 }
 
 waffles.resource.update() {
   "${_resource_type}.update"
   waffles_resource_changed="true"
-  waffles_total_changes=$(( waffles_total_changes+1 ))
+  waffles_total_changes=$(( $waffles_total_changes+1 ))
 }
 
 waffles.resource.delete() {
   "${_resource_type}.delete"
   waffles_resource_changed="true"
-  waffles_total_changes=$(( waffles_total_changes+1 ))
+  waffles_total_changes=$(( $waffles_total_changes+1 ))
 }

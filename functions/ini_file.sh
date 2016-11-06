@@ -5,13 +5,13 @@ ini_file.get_option() {
   local _file=$1
   local _section=$2
   local _option=$3
+  local _line=""
 
   if [ ! -f "${_file}" ]; then
-    echo ""
+    echo $_line
     return 1
   fi
 
-  local _line
   _option=$(echo ${_option} | sed -e 's/[\/&]/\\&/g' | sed -e 's/[][]/\\&/g')
   if [[ ${_section} != "__none__" ]]; then
     _line=$(sed -ne "/^\[${_section}\]/,/^\[.*\]/ { /^${_option}\([ \t]*=\|$\)/ p; }" "${_file}")
@@ -19,10 +19,6 @@ ini_file.get_option() {
     _line=$(sed "/^\[/q" "${_file}" | sed -ne "/^${_option}[ \t]*/ p;")
   fi
 
-  if [[ -z $_line ]]; then
-    echo ""
-    return 2
-  fi
   echo $_line
 }
 
@@ -76,10 +72,11 @@ ini_file.remove() {
   local _option=$3
 
   if [ ! -f "${_file}" ]; then
-    return 1
+    return
   fi
 
   [[ -z ${_option} ]] && return
+
   if [[ ${_section} != "__none__" ]]; then
     exec.capture_error "sed -i -e \"/^\[${_section}\]/,/^\[.*\]/ { /^${_option}[ \t]*/ d; }\" \"${_file}\""
   else
@@ -126,28 +123,26 @@ ini_file.set() {
 
     if [[ $_value == "__none__" ]]; then
       # Add it
-      read -r -d '' _cmd<<EOF
-sed -i -e "/^\[${_section}\]/ a\\
+      _cmd="sed -i -e \"/^\[${_section}\]/ a\\
 ${_option}
-" "${_file}"
-EOF
+\" \"${_file}\""
     else
       # Add it
-      read -r -d '' _cmd<<EOF
-sed -i -e "/^\[${_section}\]/ a\\
+      _cmd="sed -i -e \"/^\[${_section}\]/ a\\
 ${_option}=${_value}
-" "${_file}"
-EOF
+\" \"${_file}\""
     fi
-
     exec.capture_error "$_cmd"
   else
     local _newval="${_option}"
     if [[ $_value != "__none__" ]]; then
       _newval="${_option}=${_value}"
     fi
+
     # if there are sections insert before the first section
-    if [[ -n $(grep "^\[" "${_file}" 2>/dev/null) ]]; then
+    local _result=""
+    _result=$(grep "^\[" "${_file}" 2>/dev/null) || true
+    if [[ -n $_result ]]; then
       exec.capture_error "sed -i \"0,/^\[/{s/^\[/${_newval}\n&/}\" \"${_file}\""
     else # append to file
       exec.capture_error "echo \"${_newval}\" >> \"${_file}\""

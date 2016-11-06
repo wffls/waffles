@@ -36,18 +36,21 @@ service.sysv() {
 }
 
 service.sysv.read() {
+  local _wrcs=""
   if [[ ! -f "/etc/init.d/${options[name]}" ]]; then
     log.error "/etc/init.d/${options[name]} does not exist."
-    return 1
+    return 2
   else
-    exec.mute /etc/init.d/${options[name]} status
-    if [[ $? != 0 ]]; then
-      waffles_resource_current_state="absent"
-      return
-    fi
+    exec.mute /etc/init.d/${options[name]} status || {
+      _wrcs="absent"
+    }
   fi
 
-  waffles_resource_current_state="present"
+  if [[ -z $_wrcs ]]; then
+    _wrcs="present"
+  fi
+
+  waffles_resource_current_state="$_wrcs"
 }
 
 service.sysv.create() {

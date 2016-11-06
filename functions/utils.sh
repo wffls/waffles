@@ -1,10 +1,10 @@
 # These commands are simple helpers to detect how Waffles was run.
 waffles.noop() {
-  [[ -n $WAFFLES_NOOP ]]
+  [[ -n ${WAFFLES_NOOP:-} ]]
 }
 
 waffles.debug() {
-  [[ -n $WAFFLES_DEBUG ]]
+  [[ -n ${WAFFLES_DEBUG:-} ]]
 }
 
 # waffles.include is a more intelligent "source".
@@ -56,7 +56,9 @@ waffles.dir() {
 
 # waffles.command_exists is a simple alias for `which`
 waffles.command_exists() {
-  which $1 &>/dev/null
+  if [[ $# -gt 0 ]]; then
+    which $1 &>/dev/null
+  fi
 }
 
 # waffles.pushd is an alias for exec.mute pushd

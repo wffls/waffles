@@ -28,8 +28,8 @@ os.file() {
 
   # Check if all dependencies are installed
   local _wrd=()
-  if ! waffles.resource.check_dependencies "${_wrd[@]}" ; then
-    return 1
+  if ! waffles.resource.check_dependencies "${_wrd[@]:-}" ; then
+    return 2
   fi
 
   # Resource Options
@@ -48,7 +48,12 @@ os.file() {
 
 
   # Local Variables
-  local _owner _group _mode _name md5 _md5
+  local _owner=""
+  local _group=""
+  local _mode=""
+  local _name=""
+  local md5=""
+  local _md5=""
 
   # Internal Resource Configuration
   if [[ -n ${options[source]} && -n ${options[content]} ]]; then
@@ -68,56 +73,58 @@ os.file() {
 }
 
 os.file.read() {
+  local _wrcs=""
+
   if [[ ! -f ${options[name]} ]]; then
-    waffles_resource_current_state="absent"
-    return
+    _wrcs="absent"
   fi
 
-  _stats=$(stat -c"%U:%G:%a:%F" "${options[name]}")
-  string.split "$_stats" ':'
-  _owner="${__split[0]}"
-  _group="${__split[1]}"
-  _mode="${__split[2]}"
-  _type="${__split[3]}"
-  _md5=$(md5sum "${options[name]}" | cut -d' ' -f1)
+  if [[ -z $_wrcs ]]; then
+    _stats=$(stat -c"%U:%G:%a:%F" "${options[name]}")
+    string.split "$_stats" ':'
+    _owner="${__split[0]}"
+    _group="${__split[1]}"
+    _mode="${__split[2]}"
+    _type="${__split[3]}"
 
-  if [[ -n ${options[source]} ]]; then
-    md5=$(md5sum "${options[source]}" | cut -d' ' -f1)
-  fi
-
-  if [[ -n ${options[content]} ]]; then
-    md5=$(echo "${options[content]}" | md5sum | cut -d' ' -f1)
-  fi
-
-  if [[ $_type != "regular file" ]] && [[ $_type != "regular empty file" ]]; then
-    log.error "${options[name]} is not a regular file."
-    waffles_resource_current_state="error"
-    return
-  fi
-
-  if [[ ${options[owner]} != $_owner ]]; then
-    waffles_resource_current_state="update"
-    return
-  fi
-
-  if [[ ${options[group]} != $_group ]]; then
-    waffles_resource_current_state="update"
-    return
-  fi
-
-  if [[ ${options[mode]} != $_mode ]] && [[ ${options[mode]} != "0${_mode}" ]]; then
-    waffles_resource_current_state="update"
-    return
-  fi
-
-  if [[ -n $md5 ]]; then
-    if [[ $md5 != $_md5 ]]; then
-      waffles_resource_current_state="update"
+    if [[ $_type != "regular file" ]] && [[ $_type != "regular empty file" ]]; then
+      log.error "${options[name]} is not a regular file."
+      waffles_resource_current_state="error"
       return
+    fi
+
+    if [[ ${options[owner]} != $_owner ]]; then
+      _wrcs="update"
+    fi
+
+    if [[ ${options[group]} != $_group ]]; then
+      _wrcs="update"
+    fi
+
+    if [[ ${options[mode]} != $_mode ]] && [[ ${options[mode]} != "0${_mode}" ]]; then
+      _wrcs="update"
+    fi
+
+    _md5=$(md5sum "${options[name]}" | cut -d' ' -f1) || true
+
+    if [[ -n ${options[source]} ]]; then
+      md5=$(md5sum "${options[source]}" | cut -d' ' -f1) || true
+    fi
+
+    if [[ -n ${options[content]} ]]; then
+      md5=$(echo "${options[content]}" | md5sum | cut -d' ' -f1) || true
+    fi
+
+    if [[ -n $md5 && $md5 != $_md5 ]]; then
+      _wrcs="update"
     fi
   fi
 
-  waffles_resource_current_state="present"
+  if [[ -z $_wrcs ]]; then
+    _wrcs="present"
+  fi
+
+  waffles_resource_current_state="$_wrcs"
 }
 
 os.file.create() {
@@ -127,12 +134,10 @@ os.file.create() {
     exec.capture_error chown ${options[owner]}:${options[group]} "${options[name]}"
   else
     if [[ -n ${options[content]} ]]; then
-      echo "${options[content]}" > "${options[name]}"
-      local _ret="$?"
-      if [[ $_ret != 0 ]]; then
+      echo "${options[content]}" > "${options[name]}" || {
         log.error "Errors occurred writing content to file."
         return $_ret
-      fi
+      }
     else
       exec.capture_error touch "${options[name]}"
     fi
@@ -156,12 +161,10 @@ os.file.update() {
 
   if [[ -n $_md5 && $md5 != $_md5 ]]; then
     if [[ -n ${options[content]} ]]; then
-      echo "${options[content]}" > "${options[name]}"
-      local _ret="$?"
-      if [[ $_ret != 0 ]]; then
+      echo "${options[content]}" > "${options[name]}" || {
         log.error "Errors occurred writing content to file."
         return $_ret
-      fi
+      }
     fi
 
     if [[ -n ${options[source]} ]]; then

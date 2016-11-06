@@ -48,12 +48,19 @@ os.directory() {
   if [[ -n ${options[source]} ]]; then
     local _wrd=("rsync")
     if ! waffles.resource.check_dependencies "${_wrd[@]}" ; then
-      return 1
+      return 2
     fi
   fi
 
   # Local Variables
-  local _owner _group _mode _source _directory _recurse _rsync _parent
+  local _owner=""
+  local _group=""
+  local _mode=""
+  local _source=""
+  local _directory=""
+  local _recurse=""
+  local _rsync=""
+  local _parent=""
 
   # Internal Resource Configuration
   if [[ ${options[recurse]} == "true" ]]; then
@@ -73,48 +80,51 @@ os.directory() {
 }
 
 os.directory.read() {
+  local _wrcs=""
+
   if [[ ! -d "${options[name]}" ]]; then
-    waffles_resource_current_state="absent"
-    return
+    _wrcs="absent"
   fi
 
-  _stats=$(stat -c"%U:%G:%a:%F" "${options[name]}")
-  string.split "$_stats" ':'
-  _owner="${__split[0]}"
-  _group="${__split[1]}"
-  _mode="${__split[2]}"
-  _type="${__split[3]}"
+  if [[ -z $_wrcs ]]; then
+    _stats=$(stat -c"%U:%G:%a:%F" "${options[name]}")
+    string.split "$_stats" ':'
+    _owner="${__split[0]}"
+    _group="${__split[1]}"
+    _mode="${__split[2]}"
+    _type="${__split[3]}"
 
-  if [[ $_type != "directory" ]]; then
-    log.error "${options[name]} is not a regular directory"
-    waffles_resource_current_state="error"
-    return
-  fi
-
-  if [[ ${options[owner]} != $_owner ]]; then
-    waffles_resource_current_state="update"
-    return
-  fi
-
-  if [[ ${options[group]} != $_group ]]; then
-    waffles_resource_current_state="update"
-    return
-  fi
-
-  if [[ ${options[mode]} != $_mode ]] && [[ ${options[mode]} != "0${_mode}" ]]; then
-    waffles_resource_current_state="update"
-    return
-  fi
-
-  if [[ -n ${options[source]} ]]; then
-    _rsync=$(rsync -ani "${options[source]}/" "${options[name]}")
-    if [[ -n $_rsync ]]; then
-      waffles_resource_current_state="update"
+    if [[ $_type != "directory" ]]; then
+      log.error "${options[name]} is not a regular directory"
+      waffles_resource_current_state="error"
       return
     fi
   fi
 
-  waffles_resource_current_state="present"
+  if [[ -z $_wrcs && ${options[owner]} != $_owner ]]; then
+    _wrcs="update"
+  fi
+
+  if [[ -z $_wrcs && ${options[group]} != $_group ]]; then
+    _wrcs="update"
+  fi
+
+  if [[ -z $_wrcs && ${options[mode]} != $_mode ]] && [[ ${options[mode]} != "0${_mode}" ]]; then
+    _wrcs="update"
+  fi
+
+  if [[ -z $_wrcs && -n ${options[source]} ]]; then
+    _rsync=$(rsync -ani "${options[source]}/" "${options[name]}")
+    if [[ -n $_rsync ]]; then
+      _wrcs="update"
+    fi
+  fi
+
+  if [[ -z $_wrcs ]]; then
+    _wrcs="present"
+  fi
+
+  waffles_resource_current_state="$_wrcs"
 }
 
 os.directory.create() {

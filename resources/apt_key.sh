@@ -26,9 +26,9 @@ apt.key() {
   waffles_resource="apt.key"
 
   # Check if all dependencies are installed
-  local _wrd=("wget" "apt-key" "grep")
+  local _wrd=("wget" "apt-key" "grep" "curl" "gpg")
   if ! waffles.resource.check_dependencies "${_wrd[@]}" ; then
-    return 1
+    return 2
   fi
 
   # Resource Options
@@ -43,33 +43,70 @@ apt.key() {
     return $?
   fi
 
+  # Local Variables
+  local _key="foo"
+  local _fingerprint=""
+
   # Process the resource
   waffles.resource.process $waffles_resource "${options[name]}"
 }
 
 apt.key.read() {
-  apt-key export ${options[key]} 2>/dev/null | grep -q "BEGIN PGP"
-  if [[ $? == 0 ]]; then
-    waffles_resource_current_state="present"
-    return
+  local _exported=""
+  local _waffles_resource_current_state="absent"
+
+  if [[ -n ${options[remote_keyfile]} ]]; then
+    _key=$(apt.key.get_remote_keyfile "${options[remote_keyfile]}")
+    _fingerprint=$(apt.key.get_fingerprint_from_key "$_key")
+    if [[ -n $_fingerprint ]]; then
+      _exported=$(apt-key export $_fingerprint 2>/dev/null) || true
+      if [[ -n $_exported ]]; then
+        _waffles_resource_current_state="present"
+      fi
+    fi
+  else
+    _key=$(apt-key export ${options[key]} 2>/dev/null) || {
+      _waffles_resource_current_state="absent"
+    }
+
+    if [[ $_key =~ "BEGIN PGP" ]]; then
+      _waffles_resource_current_state="present"
+    fi
   fi
-  waffles_resource_current_state="absent"
+
+  waffles_resource_current_state="$_waffles_resource_current_state"
 }
 
 apt.key.create() {
   if [[ -n ${options[remote_keyfile]} ]]; then
-    local _remote_file="${options[remote_keyfile]}"
-    local _local_file=${_remote_file##*/}
-    waffles.pushd /tmp
-    exec.capture_error wget "$_remote_file"
-    exec.capture_error apt-key add "$_local_file"
-    exec.mute rm "$_remote_file"
-    waffles.popd
+    exec.capture_error "echo \"$_key\" | apt-key add -"
   else
     exec.capture_error apt-key adv --keyserver ${options[keyserver]} --recv-keys ${options[key]}
   fi
 }
 
 apt.key.delete() {
-  exec.capture_error apt-key del ${options[key]}
+  if [[ -n ${options[remote_keyfile]} ]]; then
+    exec.capture_error apt-key del "$_fingerprint"
+  else
+    exec.capture_error apt-key del ${options[key]}
+  fi
+}
+
+apt.key.get_remote_keyfile() {
+  local _key=""
+  if [[ $# -eq 1 ]]; then
+    _key=$(curl -s https://www.rabbitmq.com/rabbitmq-release-signing-key.asc) || true
+  fi
+
+  echo "$_key"
+}
+
+apt.key.get_fingerprint_from_key() {
+  local _fingerprint=""
+  if [[ $# -eq 1 ]]; then
+    _fingerprint=$(echo "$1" | gpg --with-fingerprint 2>/dev/null | grep ^pub | cut -d/ -f2 | cut -d" " -f1) || true
+  fi
+
+  echo "$_fingerprint"
 }

@@ -35,16 +35,17 @@ else
   log.error FAIL
 fi
 
-x=$(ini_file.get_option "${INIFILE_TMP}" "__none__" "globalnotexist")
-if [[ "$?" -eq 2 && -z "$x" ]]; then
+_return_code=0
+x=$(ini_file.get_option "${INIFILE_TMP}" "__none__" "globalnotexist") || _return_code="$?"
+if [[ "$_return_code" -eq 0 && -z "$x" ]]; then
   log.info OK
 else
   log.error FAIL
 fi
 unset x
 
-x=$(ini_file.get_option "${INIFILE_TMP}-not_exist" "__none__" "global")
-if [[ "$?" -eq 1 && -z "$x" ]]; then
+x=$(ini_file.get_option "${INIFILE_TMP}-not_exist" "__none__" "global") || _return_code="$?"
+if [[ "$_return_code" -eq 1 && -z "$x" ]]; then
   log.info OK
 else
   log.error FAIL

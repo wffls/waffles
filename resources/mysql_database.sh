@@ -26,7 +26,7 @@ mysql.database() {
   # Check if all dependencies are installed
   local _wrd=("mysql")
   if ! waffles.resource.check_dependencies "${_wrd[@]}" ; then
-    return 1
+    return 2
   fi
 
   # Resource Options
@@ -50,7 +50,6 @@ mysql.database() {
 }
 
 mysql.database.read() {
-
   # TODO
   #local _database_query="SELECT MAX_USER_CONNECTIONS, MAX_CONNECTIONS, MAX_QUESTIONS, MAX_UPDATES, PASSWORD /*!50508 , PLUGIN */ FROM mysql.name WHERE CONCAT(name, '@', host) = '${options[name]}@${options[host]}'"
 
@@ -61,7 +60,7 @@ mysql.database.read() {
     return
   fi
 
-  string.split $_database_result ' '
+  string.split "$_database_result"
   _charset="${__split[0]}"
   _collate="${__split[1]}"
 

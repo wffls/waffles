@@ -26,7 +26,7 @@ ruby.gem() {
   # Check if all dependencies are installed
   local _wrd=("gem" "grep")
   if ! waffles.resource.check_dependencies "${_wrd[@]}" ; then
-    return 1
+    return 2
   fi
 
   # Resource Options
@@ -42,8 +42,8 @@ ruby.gem() {
 
 
   # Local Variables
-  local _current_version
-  local _latest_version
+  local _current_version=""
+  local _latest_version=""
   local _gem_list_cmd="gem list"
   local _gem_install_cmd="gem install --no-rdoc --no-ri"
   local _gem_uninstall_cmd="gem uninstall"
@@ -58,33 +58,35 @@ ruby.gem() {
 }
 
 ruby.gem.read() {
-  local _current_state
+  local _wrcs=""
 
-  _current_version=$($_gem_list_cmd ^${options[name]}$ | grep ^${options[name]} | tr -d \(\), | cut -d" " -f2)
+  _current_version=$($_gem_list_cmd ^${options[name]}$ | grep ^${options[name]} | tr -d \(\), | cut -d" " -f2) || true
   if [[ -z $_current_version ]]; then
-    _current_state="absent"
+    _wrcs="absent"
   else
     if [[ -n ${options[version]} ]]; then
       if [[ ${options[version]} == "latest" ]]; then
-        _latest_version=$($_gem_list_cmd -r ^${options[name]}$ | grep ^${options[name]} | cut -d" " -f2 | tr -d \(\))
+        _latest_version=$($_gem_list_cmd -r ^${options[name]}$ | grep ^${options[name]} | cut -d" " -f2 | tr -d \(\)) || {
+          log.error "Unable to determine latest version of gem."
+          waffles_resource_current_state="error"
+          return 1
+        }
         if [[ $_latest_version != $_current_version ]]; then
-          _current_state="update"
+          _wrcs="update"
         fi
       else
         if [[ $_current_version != "${options[version]}" ]]; then
-          log.info $_current_version
-          log.info ${options[version]}
-          _current_state="update"
+          _wrcs="update"
         fi
       fi
     fi
   fi
 
-  if [[ -n $_current_state ]]; then
-    waffles_resource_current_state=$_current_state
-  else
-    waffles_resource_current_state="present"
+  if [[ -z $_wrcs ]]; then
+    _wrcs="present"
   fi
+
+  waffles_resource_current_state="$_wrcs"
 }
 
 ruby.gem.create() {
@@ -106,6 +108,8 @@ ruby.gem.update() {
 ruby.gem.delete() {
   if [[ -n ${options[version]} ]]; then
     _gem_uninstall_cmd="$_gem_uninstall_cmd -v ${options[version]}"
+  else
+    _gem_uninstall_cmd="$_gem_uninstall_cmd -a"
   fi
 
   exec.capture_error "$_gem_uninstall_cmd ${options[name]}"

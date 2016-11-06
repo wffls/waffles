@@ -1,1 +1,0 @@
-../../../provision/shell/ubuntu1404_mysql.sh

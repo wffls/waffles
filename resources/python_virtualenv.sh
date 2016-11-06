@@ -37,7 +37,7 @@ python.virtualenv() {
   # Check if all dependencies are installed
   local _wrd=("getent" "virtualenv" "sudo")
   if ! waffles.resource.check_dependencies "${_wrd[@]}" ; then
-    return 1
+    return 2
   fi
 
   # Resource Options
@@ -61,9 +61,15 @@ python.virtualenv() {
 
 
   # Local Variables
-  local _user _group _pypi_index _system_pkg _pip _venv _log _wheel
   local _user_info=$(getent passwd "${options[owner]}")
   local _group_info=$(getent group "${options[group]}")
+  local _user=""
+  local _group=""
+  local _pypi_index=""
+  local _system_pkg=""
+  local _pip=""
+  local _venv=""
+  local _log=""
 
   # Internal Resource Configuration
   # Make sure the user exists
@@ -121,7 +127,8 @@ python.virtualenv.read() {
 }
 
 python.virtualenv.create() {
-  local _cmd _wheel
+  local _cmd=""
+  local _wheel=""
 
   os.directory --name $_venv --owner $_user --group $_group --mode ${options[mode]}
   exec.capture_error sudo -u $_user -g $_group "${options[environment]}" virtualenv $_system_pkg -p python $_venv
@@ -133,11 +140,11 @@ python.virtualenv.create() {
     fi
 
     _cmd="$_pip --log $_log install $_pypi_index $_wheel --upgrade pip ${options[distribute]}"
-    exec.capture_error sudo -u $_user -g $_group $_environment sh -c "cd $_venv ; $_cmd"
+    exec.capture_error sudo -u $_user -g $_group "${options[environment]}" sh -c "cd $_venv ; $_cmd"
 
     if [[ -n "${options[requirements]}" ]]; then
       _cmd="$_pip --log $_log install $_pypi_index $_wheel -r ${options[requirements]} ${options[pip_args]}"
-      exec.capture_error sudo -u $_user -g $_group $_environment sh -c "cd $_venv ; $_cmd"
+      exec.capture_error sudo -u $_user -g $_group "${options[environment]}" sh -c "cd $_venv ; $_cmd"
     fi
   fi
 }

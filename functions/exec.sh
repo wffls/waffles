@@ -19,14 +19,12 @@ exec.capture_error() {
   else
     local _err
     log.info "Running \"$@\""
-    _err=$(eval "$@" 2>&1 >/dev/null)
-    if [[ $? != 0 ]]; then
+
+    _err=$(eval "$@" 2>&1 >/dev/null) || {
       log.error "Errors occurred:"
       log.error "$_err"
       return $?
-    else
-      return 0
-    fi
+    }
   fi
 }
 
