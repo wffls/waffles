@@ -64,6 +64,8 @@ python.pip() {
 
 
   # Local Variables
+  local _user_info=$(getent passwd "${options[owner]}")
+  local _group_info=$(getent group "${options[group]}")
   local _user=""
   local _group=""
   local _cwd=""
@@ -76,8 +78,6 @@ python.pip() {
   local _log=""
   local _source=""
   local _latest=""
-  local _user_info=$(getent passwd "${options[owner]}")
-  local _group_info=$(getent group "${options[group]}")
 
   # Internal Resource Configuration
 
