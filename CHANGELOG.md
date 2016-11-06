@@ -5,6 +5,7 @@
 * resource: Fixed a typo in apt_ppa.sh (@gbraekmans) [GH-173]
 * core: Have resources check for dependent commands. Error early if missing. [GH-176]
 * core: Added a new function ini_file in functions/ini_file.sh (@gbraekmans) [GH-180]
+* core: Lots of updates and fixes to support running in `set -eu` mode (@multicast) [GH-198]
 * resource: `file.ini` has been rewritten to take advantage of new ini functions (@gbraekmans) [GH-180]
 * resource: New `dnf.pkg` resource (@gbraekmans) [GH-175]
 * resource: New `dnf.copr` resource (@gbraekmans) [GH-175]
