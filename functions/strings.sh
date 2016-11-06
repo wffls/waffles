@@ -18,10 +18,11 @@ string.split() {
       log.debug "Running split: string $1, delimiter '$2'"
       local _string="$1"
 
-      if [[ "$2" -eq " " ]]; then
+      if [[ "$2" == " " ]]; then
         # A blank space was passed in
         __split=($1)
       else
+        local _delim="$2"
         while true ; do
           if [[ ! $_string == *"$_delim"* ]]; then
             __split+=("$_string")
