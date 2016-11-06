@@ -1,6 +1,8 @@
 # Changelog
 
-## 0.30.3 Unreleased
+## 0.30.4 Unreleased
+
+## 0.30.3 November 6, 2016
 
 * resource: Fixed a typo in apt_ppa.sh (@gbraekmans) [GH-173]
 * core: Have resources check for dependent commands. Error early if missing. [GH-176]
