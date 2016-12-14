@@ -13,7 +13,7 @@ if [[ ! -f /tmp/waffles_resource.txt ]]; then
 fi
 
 declare _resource="$(cat /tmp/waffles_resource.txt)"
-declare _resource_test_path="/opt/waffles/tests/kitchen/test/resources/${_resource}"
+declare _resource_test_path="/opt/waffles/tests/kitchen/resources/${_resource}"
 
 if [[ ! -f $_resource_test_path ]]; then
   log.error "Test file for ${_resource} not found. It needs to be in ${_resource_test_path}."

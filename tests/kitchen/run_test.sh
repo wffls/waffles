@@ -11,14 +11,14 @@ if [[ $? != 0 ]]; then
 fi
 
 if [[ ${options[resource]} == "all" ]]; then
-  for _r in test/resources/*.sh; do
+  for _r in resources/*.sh; do
     WAFFLES_RESOURCE="$_r" kitchen test ${options[platform]}
   done
 
 else
   declare _resource_test="${options[resource]//./_}"
   _resource_test="${_resource_test}_test.sh"
-  if [[ ! -f test/resources/$_resource_test ]]; then
+  if [[ ! -f resources/$_resource_test ]]; then
     log.error "Resource ${options[resource]} not found."
     exit 1
   else
