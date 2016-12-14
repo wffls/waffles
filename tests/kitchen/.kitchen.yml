@@ -24,10 +24,10 @@ driver_config:
 platforms:
   - name: ubuntu-12.04
     provisioner:
-      script: test/provision/shell/ubuntu1204.sh
+      script: _run_test.sh
   - name: ubuntu-14.04
     provisioner:
-      script: test/run_test.sh
+      script: _run_test.sh
 
 suites:
   - name: default

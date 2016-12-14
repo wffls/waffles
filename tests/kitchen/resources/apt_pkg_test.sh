@@ -1,9 +1,9 @@
 _apt_pkg_name="${apt_pkg_name:-openssl}"
-_apt_pkg_install_version="${apt_pkg_install_version:-1.0.1f-1ubuntu2}"
+_apt_pkg_install_version="${apt_pkg_install_version:-1.0.1f-1ubuntu2.21}"
 _apt_pkg_update_version="${apt_pkg_update_version:-latest}"
 
 setup() {
-  return
+  apt-get update -qq
 }
 
 create() {
