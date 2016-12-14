@@ -66,7 +66,7 @@ tests. Use the [install.sh](https://github.com/wffls/waffles/blob/master/tests/k
 Waffles script to set up Test Kitchen and all other requirements on an
 Ubuntu-based system.
 
-Test files can be found in `tests/kitchen/test/resources`. Each resource test
+Test files can be found in `tests/kitchen/resources`. Each resource test
 requires 5 functions:
 
 * setup
