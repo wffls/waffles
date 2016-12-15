@@ -54,7 +54,6 @@ cron.entry() {
     return $?
   fi
 
-
   # Local Variables
   local entry="${options[minute]} ${options[hour]} ${options[dom]} ${options[month]} ${options[dow]} ${options[cmd]} # ${options[name]}"
   local _entry=""
