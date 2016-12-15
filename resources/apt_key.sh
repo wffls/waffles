@@ -44,7 +44,7 @@ apt.key() {
   fi
 
   # Local Variables
-  local _key="foo"
+  local _key=""
   local _fingerprint=""
 
   # Process the resource
@@ -96,7 +96,7 @@ apt.key.delete() {
 apt.key.get_remote_keyfile() {
   local _key=""
   if [[ $# -eq 1 ]]; then
-    _key=$(curl -s https://www.rabbitmq.com/rabbitmq-release-signing-key.asc) || true
+    _key=$(curl -s "$1") || true
   fi
 
   echo "$_key"
