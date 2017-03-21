@@ -1,6 +1,11 @@
 # Changelog
 
-## 0.30.4 Unreleased
+## 0.30.5 Unreleased
+
+## 0.30.4 March 20, 2017
+
+* resource: Fixed bus in apt_key.sh
+* core: Updated unit and acceptance test
 
 ## 0.30.3 November 6, 2016
 
